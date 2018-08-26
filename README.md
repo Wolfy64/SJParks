@@ -14,8 +14,7 @@ anyUser(for now) interacts with userDashboard (frontEnd's web app) to push notif
 
 ## userDashboard
 1. Choose the Park. (Park1, Park2). Defines a list of userResidents to notify.
-2. Choose the Issue. (Issue 1, Issue 2). Concatenates the title to our text message.
-3. Input the Update and Submit. (Send the data to Twilio and voila! Everyone's notified!)
+2. Input the Update and Submit. (Send the data to Twilio and voila! Everyone's notified!)
 
 # Defining Responsibilities
 1. Responsible for Twilio - Irina. DUE: 08/24/18 - Initiated Git repo with Twilio API's and node modules.
