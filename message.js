@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const messageSender = require('../lib/messageSender');
+const User = require('./models/Subscriber');
+const messageSender = require('./lib/messageSender');
 
 // Create a function to handle Twilio SMS / MMS webhook requests
 exports.webhook = function(request, response) {
