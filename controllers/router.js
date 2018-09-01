@@ -3,7 +3,7 @@
  */
 
 const pages = require('./pages');
-const message = require('./message');
+const message = require('../message');
 
    // Map routes to controller functions
 module.exports = function(app) {
