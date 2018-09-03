@@ -1,4 +1,5 @@
-const User = require('../models/user');
+const Subscriber = require('../models/Subscriber');
+const Subscription = require('../models/Subscription')
 const messageSender = require('../lib/messageSender');
 
 // Create a function to handle Twilio SMS / MMS webhook requests
@@ -7,25 +8,17 @@ exports.webhook = function(request, response) {
   const phone = request.body.From;
 
   // Try to find a user with the given phone number
-  User.findOne({
-    phone: phone,
-  }, function(err, sub) {
+  Subscriber.findOne({phone: phone,}, function(err, sub) {
     if (err) return respond('Derp! Please text back again later.');
 
     if (!sub) {
       // If there's no user associated with this phone number,
       // create one
-      const newUser = new User({
-          phone: phone,
-      });
+      const newSubscriber = new Subscriber({ phone: phone,});
 
-      newUser.save(function(err, newSub) {
-        if (err || !newSub)
-          return respond('We couldn\'t sign you up - try again.');
-
-        // We're signed up but not subscribed - prompt to subscribe
-        respond('Thanks for contacting us! Text "subscribe" to ' +
-           'receive updates via text message.');
+      newSubscriber.save(function(err, newSub) {
+        if (err || !newSub) return respond('We couldn\'t sign you up - please try again.');
+        processMessage(newSubscriber);
       });
     } else {
       // For an existing user, process any input message they sent and
@@ -42,28 +35,33 @@ exports.webhook = function(request, response) {
 
     // Conditional logic to do different things based on the command from
     // the user
-    if (msg === 'subscribe' || msg === 'unsubscribe') {
-      // If the user has elected to subscribe for messages, flip the bit
-      // and indicate that they have done so.
-      user.subscribed = msg === 'subscribe';
-      user.save(function(err) {
-        if (err)
-          return respond('We could not subscribe you - please try '
-              + 'again.');
+    if (msg === 'park1' || msg === 'park2') {
+      //Check if already subscribed
+      Subscription.findOne({phone: phone, park: msg,}, function(err, sub) {
+        if (err) return respond('Derp! Please text back again later.');
 
-        // Otherwise, our subscription has been updated
-        let responseMessage = 'You are now subscribed for updates.';
-        if (!user.subscribed)
-          responseMessage = 'You have unsubscribed. Text "subscribe"'
-              + ' to start receiving updates again.';
-
-        respond(responseMessage);
+        if(!sub) {
+          const newSubscription = new Subscription({ phone: phone, park: msg,});
+          newSubscription.save(function(err, newSub) {
+            if (err || !newSub) return respond('We couldn\'t subscribe you to ' + msg + ' - please try again.');
+            respond('Thanks for subscribing to '+msg+' - We\'ll keep you...');
+          })
+        } else respond('You\'re already subscribed to ' + msg + ' - but we love the enthusiasm!');
+      });
+    } else if (msg === 'stop') {
+      Subscription.deleteMany({phone: phone,}, function(err) {
+        if (err) return respond('Derp! Please text back again later.');
+        user.subscribed = false;
+        user.save(function(err){
+          if (err) return respond('Derp! Please text back again later.');
+          respond('You have unsubscribed to park notifications.')
+        })
       });
     } else {
       // If we don't recognize the command, text back with the list of
       // available commands
       const responseMessage = 'Sorry, we didn\'t understand that. '
-        + 'available commands are: subscribe or unsubscribe';
+        + 'available commands are: Park1 or Park2 or Stop';
 
       respond(responseMessage);
     }
@@ -79,6 +77,8 @@ exports.webhook = function(request, response) {
   }
 };
 
+
+// TODO
 // Handle form submission
 exports.sendMessages = function(request, response) {
   // Get message info from form submission
@@ -86,7 +86,7 @@ exports.sendMessages = function(request, response) {
   const imageUrl = request.body.imageUrl;
 
   // Send messages to all users
-  User.find({
+  Subscriber.find({
     subscribed: true,
   }).then((users) => {
     messageSender.sendMessageToUsers(users, message, imageUrl);
