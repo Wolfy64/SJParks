@@ -1,17 +1,17 @@
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-//const session = require('express-session');
-//const flash = require('connect-flash');
-//const morgan = require('morgan');
+const session = require('express-session');
+const flash = require('connect-flash');
+const morgan = require('morgan');
 const config = require('./config');
 
 // Create Express web app
 const app = express();
-//app.set('view engine', 'jade');
+//app.set('view engine', 'html');
 
 // Use morgan for HTTP request logging
-//app.use(morgan('combined'));
+app.use(morgan('combined'));
 
 // Serve static assets
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,14 +22,14 @@ app.use(bodyParser.urlencoded({
 }));
 
 // Create and manage HTTP sessions for all requests
-/*app.use(session({
+app.use(session({
     secret: config.secret,
     resave: true,
     saveUninitialized: true,
-}));*/
+}));
 
 // Use connect-flash to persist informational messages across redirects
-//app.use(flash());
+app.use(flash());
 
 // Configure application routes
 require('./controllers/router')(app);
