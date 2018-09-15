@@ -4,6 +4,8 @@
 
 const pages = require('./pages');
 const message = require('./message');
+const test = require('./send_sms');
+
 
    // Map routes to controller functions
 module.exports = function(app) {
@@ -15,5 +17,5 @@ module.exports = function(app) {
    app.get('/', pages.showForm);
 
     // Handle form submission and send messages to subscribers
-   app.post('/message/send', message.sendMessages);
+   app.post('/message/send', test.sendMessages);
  };
