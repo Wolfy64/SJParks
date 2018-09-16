@@ -17,8 +17,15 @@ module.exports = function(app) {
      // Render a page that will allow an administrator to send out a message
      // to all subscribers
    app.get('/admin', pages.showForm);
+<<<<<<< HEAD
      //Render a login screen to with which an administrator can log in
    app.get('/login', pages.loginform);
+=======
+
+   //Render a login screen to with which an administrator can log in
+   app.get('/login', pages.loginform);
+
+>>>>>>> Login page
     // Handle form submission and send messages to subscribers
    app.post('/message/send', test.sendMessages);
  };

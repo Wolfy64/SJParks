@@ -24,6 +24,7 @@ exports.showForm = function(request, response) {
 );
 };
 
+<<<<<<< HEAD
 exports.aboutPage = function(request, response) {
     // Render form, with any success or error flash messages
     console.log('launching aboutPage');
@@ -66,6 +67,8 @@ exports.aboutPage = function(request, response) {
 );
 };
 
+=======
+>>>>>>> Login page
 // Render a form to collect Login Information and grant access to site
 exports.loginform = function(request, response) {
     // Render form, with any success or error flash messages
@@ -74,11 +77,21 @@ exports.loginform = function(request, response) {
 <html>
     <head>
         <title>Administrator Login</title>
+<<<<<<< HEAD
          <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
             body {font-family: Arial, Helvetica, sans-serif;}
             form {border: 3px solid #f1f1f1;}
              input[type=text], input[type=password] {
+=======
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {font-family: Arial, Helvetica, sans-serif;}
+            form {border: 3px solid #f1f1f1;}
+
+            input[type=text], input[type=password] {
+>>>>>>> Login page
                 width: 100%;
                 padding: 12px 20px;
                 margin: 8px 0;
@@ -86,7 +99,12 @@ exports.loginform = function(request, response) {
                 border: 1px solid #ccc;
                 box-sizing: border-box;
             }
+<<<<<<< HEAD
              button {
+=======
+
+            button {
+>>>>>>> Login page
                 background-color: #4CAF50;
                 color: white;
                 padding: 14px 20px;
@@ -95,30 +113,37 @@ exports.loginform = function(request, response) {
                 cursor: pointer;
                 width: 100%;
             }
-             button:hover {
+
+            button:hover {
                 opacity: 0.8;
             }
-             .cancelbtn {
+
+            .cancelbtn {
                 width: auto;
                 padding: 10px 18px;
                 background-color: #f44336;
             }
-             .imgcontainer {
+
+            .imgcontainer {
                 text-align: center;
                 margin: 24px 0 12px 0;
             }
-             img.avatar {
+
+            img.avatar {
                 width: 40%;
                 border-radius: 50%;
             }
-             .container {
+
+            .container {
                 padding: 16px;
             }
-             span.psw {
+
+            span.psw {
                 float: right;
                 padding-top: 16px;
             }
-             /* Change styles for span and cancel button on extra small screens */
+
+            /* Change styles for span and cancel button on extra small screens */
             @media screen and (max-width: 300px) {
                 span.psw { 
                     display: block;
@@ -130,7 +155,8 @@ exports.loginform = function(request, response) {
             }
         </style>
     </head>
-     <body>    
+
+    <body>    
     <form action="/admin">
       <div class="imgcontainer">
         <img src="/img/logo.jpg" alt="Logo" class="avatar">
