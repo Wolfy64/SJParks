@@ -1,6 +1,10 @@
+console.log('Running index.js')
+
 const http = require('http');
 const mongoose = require('mongoose');
+console.log('Testing config')
 const config = require('./config');
+console.log('Passed config')
 
 
 // Initialize database connection - throws if database connection can't be

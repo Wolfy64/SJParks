@@ -9,6 +9,7 @@ const config = require('./config');
 // Create Express web app
 const app = express();
 //app.set('view engine', 'html');
+app.set('view engine', 'pug');
 
 // Use morgan for HTTP request logging
 app.use(morgan('combined'));
