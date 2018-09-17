@@ -5,17 +5,19 @@ exports.showForm = function(request, response) {
     response.send(`
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Admin Dashboard - SJParks</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
         <style>
             body{
                 font-family: Ubuntu, sans-serif;
-                padding: 20px;
+                margin: 30px 0;
             }
             .wrapper{
                 margin: 0 auto;
-                max-width: 500px
+                max-width: 500px;
+                margin: 20px;
             }
             h1{
                 font-weight: 600;
@@ -27,11 +29,7 @@ exports.showForm = function(request, response) {
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-            }
-            .header img {
-                width: 100px;
-                height: 100px;
-                margin: 0 20px;
+                margin: 0 auto;
             }
             .logo{
                 display: flex;
@@ -40,6 +38,7 @@ exports.showForm = function(request, response) {
             }
             textarea{
                 margin-top: 20px;
+                max-width: 100%;
             }
             input{
                 margin-top: 5px
@@ -49,8 +48,7 @@ exports.showForm = function(request, response) {
 
     <body>
         <div class="header">
-            <div class="logo"><h1>SJParks</h1>
-                <img src="/controllers/img/logo.svg" class="col-md-4" /></div>
+            <h1>SJParks</h1>
             <p>Administrative Dashboard</p>
         </div>
         <hr>
@@ -76,6 +74,7 @@ exports.aboutPage = function(request, response) {
     response.send(`
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>SJ Parks</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
@@ -99,7 +98,7 @@ exports.aboutPage = function(request, response) {
                 margin-bottom: 30px;
             }
             .jumbo{
-                background-color: rgba(92, 178, 5, 0.5);
+                background-color: rgba(92, 178, 5, 1);
                 background-blend-mode: screen;
                 padding: 20px;
                 color: white;
@@ -110,9 +109,7 @@ exports.aboutPage = function(request, response) {
                 height: 70vh;
             }
             .jumbo-image{
-                background-image: url(/controllers/img/robert-collins-333411-unsplash.jpg);
-                background-size: cover;
-                background-attachment: scroll;
+                
             }
             .container{
                 margin: 100px 0;
@@ -135,6 +132,14 @@ exports.aboutPage = function(request, response) {
                 align-items: center;
                 text-align: center;
             }
+            .about{
+                display: flex;
+                justify-content: space-between;
+            }
+            .description{
+                margin-bottom: 40px;
+            }
+            
             
         </style>
     </head>
@@ -142,7 +147,6 @@ exports.aboutPage = function(request, response) {
     <body>
         <section class="jumbo-image">
             <div class="jumbo">
-                <img src="controllers/img/tree-42476.svg" style="width: 80px">
                 <h1 class="">SJParks</h1>
                 <hr style="width: 30%; border-color: #F9F9F9">
                 <p class="tag">Informed is involved</p>
@@ -151,17 +155,11 @@ exports.aboutPage = function(request, response) {
         
         <div class="wrapper">
         <section class="row about container">
-            <div class="col-md-7">
+            <div class="description col-md-7">
                 <h2>Text Notification Service</h2>
                 <p>Have you visited the park only to find out that it is closed for maintenance, or even worse, open and unsafe? We provide a solution for you to stay informed.</p> 
                 <p>All it takes is a keyword of the park, and you're in to receive instant updates.</p>
             </div>
-            <div class="col-md-4 screenshot">
-                <img src="controllers/img/screenshot1.png">
-            </div>
-            
-        </section>
-        <section class="row about container">
             <div class="col-md-4">
                 <h2>Why subscribe?</h2>
                 <ol>
@@ -180,10 +178,15 @@ exports.aboutPage = function(request, response) {
         <hr>
         <section class="feedback container">
             <p class="">Got feedback? We'd love to hear from you!</p> 
-            <a href="https://goo.gl/forms/FRNp5ZGnJHeyvCrT2" class="btn btn-success">Launch the Survey</a>
-        </section>
+            <a href="https://goo.gl/forms/FRNp5ZGnJHeyvCrT2" class="btn btn-success" target="_blank">Launch the Survey</a>
+            </section>
         </div>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
     </body>
+    
 </html>`
 );
 };
@@ -196,9 +199,13 @@ exports.loginform = function(request, response) {
 <html>
     <head>
         <title>Administrator Login</title>
-         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            body {font-family: Arial, Helvetica, sans-serif;}
+            body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 500px;
+            margin: 20vh auto;
+            }
             form {border: 3px solid #f1f1f1;}
              input[type=text], input[type=password] {
                 width: 100%;
@@ -254,7 +261,7 @@ exports.loginform = function(request, response) {
      <body>    
     <form action="/admin">
       <div class="imgcontainer">
-        <img src="controllers/img/logo.svg" alt="Logo" class="avatar">
+        <img src="controllers/img/logo.svg" alt="Logo" class="avatar" style="display: none" />
       </div>
     
       <div class="container">
