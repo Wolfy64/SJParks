@@ -6,19 +6,65 @@ exports.showForm = function(request, response) {
 <html>
     <head>
         <title>Admin Dashboard - SJParks</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <style>
+            body{
+                font-family: Ubuntu, sans-serif;
+                padding: 20px;
+            }
+            .wrapper{
+                margin: 0 auto;
+                max-width: 500px
+            }
+            h1{
+                font-weight: 600;
+                font-size: 2.5em;
+                text-align: right;
+            }
+            .header {
+                display: flex; 
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+            .header img {
+                width: 100px;
+                height: 100px;
+                margin: 0 20px;
+            }
+            .logo{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            textarea{
+                margin-top: 20px;
+            }
+            input{
+                margin-top: 5px
+            }
+        </style>
     </head>
 
     <body>
-        <h1>SJParks</h1>
+        <div class="header">
+            <div class="logo"><h1>SJParks</h1>
+                <img src="/controllers/img/logo.svg" class="col-md-4" /></div>
+            <p>Administrative Dashboard</p>
+        </div>
+        <hr>
+        <section class="wrapper">
         <form action='/message/send' method='POST'>
-            <input type="checkbox" name="parkID" value="hack" style="display:none" checked><br>
+            <input type="checkbox" name="parkID" value="hack" style="display:none" checked>
+            <br>
             <input type="checkbox" name="parkID" value="park1"> Park1<br>
             <input type="checkbox" name="parkID" value="park2"> Park2<br>
             <input type="checkbox" name="parkID" value="park3"> Park3<br>
-            <textarea rows="4" cols="50" id="message" name="message"></textarea>
-            <input type="submit" class="send-message" id="send_message">
+            <textarea rows="4" cols="50" id="message" name="message"></textarea> <br>
+            <input type="submit" class="btn btn-success send-message" id="send_message">
         </form>
+        </section>
     </body>
 </html>`
 );
@@ -37,30 +83,106 @@ exports.aboutPage = function(request, response) {
             body{
                 font-family: Ubuntu, sans-serif;
             }
+            .wrapper{
+                max-width: 900px;
+                margin: 0 auto;
+            }
             h1{
                 font-weight: 600;
+                font-size: 2.5em;
+                text-align: center;
             }
-            .jumbotron{
-                background-color: darkgreen;
+            h2{
+                font-weight: 600;
+                font-size: 2.5em;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .jumbo{
+                background-color: rgba(92, 178, 5, 0.5);
+                background-blend-mode: screen;
                 padding: 20px;
                 color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 70vh;
+            }
+            .jumbo-image{
+                background-image: url(/controllers/img/robert-collins-333411-unsplash.jpg);
+                background-size: cover;
+                background-attachment: scroll;
+            }
+            .container{
+                margin: 100px 0;
+            }
+            .screenshot{
+                display: flex;
+                justify-content: center;
+                align-content: center;
+            }
+            .screenshot img{
+                margin-top: 30px;
+                max-height: 400px;
+            }
+            li{
+                margin-top: 10px;
+            }
+            .feedback{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
             }
             
         </style>
     </head>
 
     <body>
-        <section class="jumbotron">
-        <h1 class="centered">SJParks</h1>
-        <div class="container">
-            <p class="">Have you visited the park only to find out that it is closed for maintenance, or even worse, open and unsafe? We provide a solution for you to stay informed about...</p> 
-            <ol>
-                <li>Urgent updates that instantaniously come directly from San Jose Parks Administration.</li>
-                <li>Events at the parks that you subscribed to by texting the keyword to (831) 777-4596.</li>
-            </ol>
-            <p>Get involved in San Jose community!</p>
-        </div>
+        <section class="jumbo-image">
+            <div class="jumbo">
+                <img src="controllers/img/tree-42476.svg" style="width: 80px">
+                <h1 class="">SJParks</h1>
+                <hr style="width: 30%; border-color: #F9F9F9">
+                <p class="tag">Informed is involved</p>
+            </div>
         </section>
+        
+        <div class="wrapper">
+        <section class="row about container">
+            <div class="col-md-7">
+                <h2>Text Notification Service</h2>
+                <p>Have you visited the park only to find out that it is closed for maintenance, or even worse, open and unsafe? We provide a solution for you to stay informed.</p> 
+                <p>All it takes is a keyword of the park, and you're in to receive instant updates.</p>
+            </div>
+            <div class="col-md-4 screenshot">
+                <img src="controllers/img/screenshot1.png">
+            </div>
+            
+        </section>
+        <section class="row about container">
+            <div class="col-md-4">
+                <h2>Why subscribe?</h2>
+                <ol>
+                    <li>Urgent updates come to your phone directly from San Jose Parks Administration.</li>
+                    <li>Know about events at the parks you plan to visit.</li>
+                    <li>Get involved in San Jose community.</li>
+                </ol>
+            </div>
+        </section>
+        <hr>
+        <section class="locations container">
+            <p class=""></p> 
+            <p>Currently, the project is in development stage. On-ground testing is going to launch on September 29, 2018</p>
+            
+        </section>
+        <hr>
+        <section class="feedback container">
+            <p class="">Got feedback? We'd love to hear from you!</p> 
+            <a href="" class="btn btn-success">Launch the Survey</a>
+        </section>
+        </div>
     </body>
 </html>`
 );
@@ -108,8 +230,7 @@ exports.loginform = function(request, response) {
                 margin: 24px 0 12px 0;
             }
              img.avatar {
-                width: 40%;
-                border-radius: 50%;
+                width: 30%;
             }
              .container {
                 padding: 16px;
@@ -133,7 +254,7 @@ exports.loginform = function(request, response) {
      <body>    
     <form action="/admin">
       <div class="imgcontainer">
-        <img src="/img/logo.jpg" alt="Logo" class="avatar">
+        <img src="controllers/img/logo.svg" alt="Logo" class="avatar">
       </div>
     
       <div class="container">
@@ -147,8 +268,8 @@ exports.loginform = function(request, response) {
       </div>
     
       <div class="container" style="background-color:#f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
+        <button type="button" class="cancelbtn" style="display: none">Cancel</button>
+        <span class="psw" style="display: none">Forgot <a href="#">password?</a></span>
       </div>
     </form>
     

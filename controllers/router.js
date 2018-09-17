@@ -4,7 +4,7 @@
 
 const pages = require('./pages');
 const message = require('./message');
-const test = require('./send_sms');
+const send_sms = require('./send_sms');
 
 
    // Map routes to controller functions
@@ -20,5 +20,5 @@ module.exports = function(app) {
      //Render a login screen to with which an administrator can log in
    app.get('/login', pages.loginform);
     // Handle form submission and send messages to subscribers
-   app.post('/message/send', test.sendMessages);
+   app.post('/message/send', send_sms.sendMessages);
  };
