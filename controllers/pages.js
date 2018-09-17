@@ -12,8 +12,10 @@ exports.showForm = function(request, response) {
     <body>
         <h1>SJParks</h1>
         <form action='/message/send' method='POST'>
-            <input type="checkbox" name="parkID" value="PARK1"> Park1<br>
-            <input type="checkbox" name="parkID" value="PARK2"> Park2<br>
+            <input type="checkbox" name="parkID" value="hack" style="display:none" checked><br>
+            <input type="checkbox" name="parkID" value="park1"> Park1<br>
+            <input type="checkbox" name="parkID" value="park2"> Park2<br>
+            <input type="checkbox" name="parkID" value="park3"> Park3<br>
             <textarea rows="4" cols="50" id="message" name="message"></textarea>
             <input type="submit" class="send-message" id="send_message">
         </form>
