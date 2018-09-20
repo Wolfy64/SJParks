@@ -140,29 +140,6 @@ exports.loginform = function(request, response) {
             }
         </style>
     </head>
-<<<<<<< HEAD
-     <body>    
-        <form action="/admin">
-            <div class="imgcontainer">
-                <img src="/img/logo.jpg" alt="Logo" class="avatar">
-            </div>
-            
-            <div class="container">
-                <label for="uname"><b>Username</b></label>
-                <input type="text" placeholder="Enter Username" name="uname" required>
-            
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-                    
-                <button type="submit" >Login</button>
-            </div>
-            
-            <div class="container" style="background-color:#f1f1f1">
-                <button type="button" class="cancelbtn">Cancel</button>
-                <span class="psw">Forgot <a href="#">password?</a></span>
-            </div>
-        </form>
-=======
 
     <body>    
     <form action="/admin">
@@ -186,7 +163,6 @@ exports.loginform = function(request, response) {
       </div>
     </form>
     
->>>>>>> 0adc2db66e8c66d4924e60c9870589dcff874c38
     </body>
 </html>`
 );
