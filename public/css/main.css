@@ -1,0 +1,138 @@
+body {
+    font-family: Ubuntu, Arial, sans-serif;
+    margin: 30px auto;
+    font-family: Ubuntu, sans-serif;
+}
+.wrapper{
+    max-width: 900px;
+    margin: 20px auto;
+}
+h1{
+    font-weight: 600;
+    font-size: 2.5em;
+    text-align: center;
+}
+h2{
+    font-weight: 600;
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+form {border: 3px solid #f1f1f1;}
+     input[type=text], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+}
+ button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+}
+ button:hover {
+        opacity: 0.8;
+}
+ .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+}
+ .imgcontainer {
+        text-align: center;
+        margin: 24px 0 12px 0;
+}
+img.avatar {
+        width: 30%;
+}
+.container {
+        padding: 16px;
+}
+ span.psw {
+        float: right;
+        padding-top: 16px;
+}
+
+.jumbo{
+    background-color: rgba(92, 178, 5, 0.5);
+    background-blend-mode: screen;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+.jumbo-image{
+    background-image: url(../img/robert-collins-333411-unsplash.jpg);
+    background-size: cover;
+}
+.container{
+    margin: 100px 0;
+}
+.screenshot{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+.screenshot img{
+    margin-top: 30px;
+    max-height: 400px;
+}
+li{
+    margin-top: 10px;
+}
+.feedback{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.about{
+    display: flex;
+    justify-content: space-between;
+}
+.description{
+    margin-bottom: 40px;
+}
+
+h1{
+    font-weight: 600;
+    font-size: 2.5em;
+    text-align: right;
+}
+.header {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+textarea{
+    margin-top: 20px;
+    max-width: 100%;
+}
+input{
+    margin-top: 5px
+}
+@media screen and (max-width: 300px) {
+    span.psw { 
+            display: block;
+            float: none;
+        }
+    .cancelbtn {
+            width: 100%;
+        }
+    }
