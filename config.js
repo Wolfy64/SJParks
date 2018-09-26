@@ -4,8 +4,8 @@ console.log('Testing config 1')
 
 const cfg = {};
 
-// HTTP Port to run our web application
-cfg.port = 1337;
+// HTTP Port for sjparks.c0d3.com
+cfg.port = 9601;
 
 // A random string that will help generate secure one-time passwords and
 // HTTP sessions
