@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Admin Dashboard - SJParks</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+
+    <body>
+        <div class="header">
+            <h1>SJParks</h1>
+            <p>Administrative Dashboard</p>
+        </div>
+        <hr>
+        <section class="wrapper">
+        <form action='/message/send' method='POST'>
+            <input type="checkbox" name="parkID" value="hack" style="display:none" checked>
+            <br>
+            <input type="checkbox" name="parkID" value="park1"> Park1<br>
+            <input type="checkbox" name="parkID" value="park2"> Park2<br>
+            <input type="checkbox" name="parkID" value="park3"> Park3<br>
+            <textarea rows="4" cols="50" id="message" name="message"></textarea> <br>
+            <input type="submit" class="btn btn-success send-message" id="send_message">
+        </form>
+        </section>
+    </body>
+</html>
