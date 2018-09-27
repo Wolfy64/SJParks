@@ -1,19 +1,36 @@
-const admin = require('../models/Administrator');
+var bcrypt = require('bcrypt');
+
+const user = require('../models/User');
 
 // authorize the login information
+
+//register: storing name, email and password and redirecting to home page after signup
+exports.newAdmin = function (request, response) {
+    const saltRounds = 16;
+    bcrypt.hash(request.body.psw + request.body.uname, saltRounds, function (err, hash) {
+        user.create({
+            username:request.body.usname,
+            password:hash,
+            admin:request.body.isAdmin,
+            notes:request.body.eNts
+        }).then(function(data) {
+            if (data) {
+                response.redirect('/login');
+            }
+        });
+   });
+}
+
 exports.validate = function(request, response) {
-    const usrname = request.body.uname;
+    const username = request.body.uname;
     const password = request.body.psw; 
 
-    admin.findOne({Username:usrname,Password:password,}, function(err, admin) {
-        return err || !admin ? respond('Access NOT granted. Try Again.') : response.redirect('/admin');
+    user.findOne({Username:username,Password:password,}, function(err, user) {
+        return err || !user.admin ? response.redirect('/login') : response.redirect('/user');
 
 
     });
-    // if( attempt == 0){
-    //     document.getElementById("uname").disabled = true;
-    //     document.getElementById("psw").disabled = true;
-    //     document.getElementById("submit").disabled = true;
-    //     return false;
-    //     }
+
 }
+
+

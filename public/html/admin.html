@@ -11,18 +11,53 @@
         <div class="header">
             <h1>SJParks</h1>
             <p>Administrative Dashboard</p>
+            <!-- <p>{Current Session Usernmae}</p> -->
         </div>
         <hr>
         <section class="wrapper">
-        <form action='/message/send' method='POST'>
-            <input type="checkbox" name="parkID" value="hack" style="display:none" checked>
-            <br>
-            <input type="checkbox" name="parkID" value="park1"> Park1<br>
-            <input type="checkbox" name="parkID" value="park2"> Park2<br>
-            <input type="checkbox" name="parkID" value="park3"> Park3<br>
-            <textarea rows="4" cols="50" id="message" name="message"></textarea> <br>
-            <input type="submit" class="btn btn-success send-message" id="send_message">
-        </form>
+            <form action='/message/send' method='POST'>
+                <input type="checkbox" name="parkID" value="hack" style="display:none" checked>
+                <br>
+                <input type="checkbox" name="parkID" value="park1"> Park1<br>
+                <input type="checkbox" name="parkID" value="park2"> Park2<br>
+                <input type="checkbox" name="parkID" value="park3"> Park3<br>
+                <textarea rows="4" cols="50" id="message" name="message"></textarea> <br>
+                <input type="submit" class="btn btn-success send-message" id="send_message">
+            </form>
         </section>
+        <hr>
+        <br>
+
+        <!-- Add New User Form-->
+        <section class="wrapper"> 
+            <h1> Add New User </h1> 
+
+            <form action="/admin" name = "crtNwUsr">
+                <!-- Logo
+                <div class="imgcontainer">
+                    <img src="controllers/img/logo.svg" alt="Logo" class="avatar" style="display: none" />
+                </div> -->
+                
+                <div class="container" style="background-color:#ebe7e7">
+                    <input type="text" placeholder="New Username" name="usname" required>
+
+                    <input type="password" placeholder="New Password" name="pssw" required>
+
+                    <input type="password" placeholder="Confirm New Password" name="cpssw" required>
+
+                    <!-- Nto sure how to center the Place Holder -->
+                    <textarea rows="10" cols="50" id="Notes(Entry)" name="eNts" placeholder="Admin Entry Notes"></textarea> 
+
+                    <!-- Not sure how to change text color -->
+                    <input type="checkbox" name="isAdmin" value=true> isAdministrator<br>
+                </div>
+
+                <div class="container" style="background-color:#f1f1f1">   
+                    <button type="submit" id = "crtBtn">Create New Admin</button>
+                    <button type="button" class="cnclBtn">Cancel</button>
+                    <!-- <button type="button" class="cnclBtn" style="display: none">Cancel</button> -->
+                </div> 
+            </form>
+       </section>
     </body>
 </html>
