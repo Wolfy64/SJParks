@@ -27,10 +27,12 @@ cfg.twilioNumber = process.env.TWILIO_NUMBER;
 
 // MongoDB connection string - MONGO_URL is for local dev,
 // MONGOLAB_URI is for the MongoLab add-on for Heroku deployment
-cfg.mongoUrl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017'; // default
+// cfg.mongoUrl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017'; // default
+cfg.mongoUrl = 'mongodb://localhost:4000';
 
 // MongoDB connection string for test purposes
-cfg.mongoUrlTest = 'mongodb://localhost:27017';
+// cfg.mongoUrlTest = 'mongodb://localhost:27017';
+cfg.mongoUrlTest = 'mongodb://localhost:4000';
 
 // Export configuration object
 module.exports = cfg;
