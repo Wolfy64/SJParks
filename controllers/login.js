@@ -3,8 +3,6 @@ var bcrypt = require('bcrypt');
 const user = require('../models/User');
 const saltRounds = 16;
 
-// authorize the login information
-
 //register: storing name, email and password and redirecting to home page after signup
 exports.newUser = function (request, response) {
 
@@ -33,20 +31,21 @@ exports.newUser = function (request, response) {
     });
 }
 
+// authorize the login information
 exports.validate = function (request, response) {
     const username = request.body.uname;
     const password = request.body.psw;
 
-        bcrypt.hash(request.body.psw + request.body.uname, saltRounds, function (err, hash) {
+    bcrypt.hash(request.body.psw + request.body.uname, saltRounds, function (err, hash) {
 
-            user.findOne({
-                Username: username,
-                Password: password,
-            }, function (err, user) {
-                return err || !user.admin ? response.redirect('/login') : response.redirect('/user');
+        user.findOne({
+            Username: username,
+            Password: password,
+        }, function (err, user) {
+            return err || !user.admin ? response.redirect('/login') : response.redirect('/user');
 
 
-            });
         });
+    });
 
 }
