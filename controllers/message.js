@@ -1,6 +1,5 @@
 const Subscriber = require('../models/Subscriber');
 const Subscription = require('../models/Subscription');
-const messageSender = require('../lib/messageSender');
 
 // Create a function to handle Twilio SMS / MMS webhook requests
 exports.webhook = function(request, response) {
@@ -35,7 +34,7 @@ exports.webhook = function(request, response) {
 
     // Conditional logic to do different things based on the command from
     // the user
-    if (msg === 'park1' || msg === 'park2') {
+    if (msg === 'park1' || msg === 'park2' || msg === 'park3') {
       //Check if already subscribed
       Subscription.findOne({phone: phone, park: msg,}, function(err, sub) {
         if (err) return respond('Derp! Please text back again later.');
