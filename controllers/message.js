@@ -89,7 +89,7 @@ exports.sendMessages = function(request, response) {
   Subscriber.find({
     subscribed: true,
   }).then((users) => {
-    messageSender.sendMessageToUsers(users, message, imageUrl);
+    messageSender.sendMessageToSubscribers(users, message, imageUrl);
   }).then(() => {
     request.flash('successes', 'Messages on their way!');
     response.redirect('/');
