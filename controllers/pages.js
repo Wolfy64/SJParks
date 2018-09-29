@@ -10,6 +10,6 @@ exports.aboutPage = function(request, response) {
 
 // Render a form to collect Login Information and grant access to site
 exports.loginform = function(request, response) {
-    // Render form, with any success or error flash messages
+// Render form, with any success or error flash messages
     response.sendFile(path.join(__dirname + '/..' + '/public/html/login.html'));
 };
