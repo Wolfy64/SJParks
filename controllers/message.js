@@ -47,16 +47,7 @@ exports.webhook = function(request, response) {
           })
         } else respond('You\'re already subscribed to ' + msg + ' - but we love the enthusiasm!');
       });
-    } else if (msg === 'stop') {
-      Subscription.deleteMany({phone: phone,}, function(err) {
-        if (err) return respond('Derp! Please text back again later.');
-        user.subscribed = false;
-        user.save(function(err){
-          if (err) return respond('Derp! Please text back again later.');
-          respond('You have unsubscribed to park notifications.')
-        })
-      });
-    } else {
+    } else if (msg === 'stop' || msg === 'start') {} else {
       // If we don't recognize the command, text back with the list of
       // available commands
       const responseMessage = 'Sorry, we didn\'t understand that. '

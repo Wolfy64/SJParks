@@ -9,15 +9,6 @@ const accountSid = cfg.accountSid;
 const authToken = cfg.authToken; 
 const client = require('twilio')(accountSid, authToken);
 
-const getSelected = (input, i = 0, result=[]) => {
-    let parkList = [].concat(input);
-    if(i===parkList.length) return result.filter((value, index, self)=>{ 
-    return self.indexOf(value) === index;
-});
-  result = result.concat(phones[parkList[0]])
-return getSelected (parkList, i+1, result) 
-}
-
 exports.sendMessages = function(request, response) {
   // Get message info from form submission
   const message = request.body.message;
@@ -45,7 +36,8 @@ exports.sendMessages = function(request, response) {
         </html>`)
   } else {
     // TODO prettify response with message displayed
-    response.send(` Message was sent to ${parkID}: ${getSelected(parkID)} <a href="/">Go Back</a>`)
+    response.send(` <p>Message was sent</p>  
+      <a href="/">Go Back</a>`)
   
     // Send messages to all users subscribed to parks in Parks
     Subscription.find({
