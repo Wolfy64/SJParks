@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 var secret = require('../config').secret;
@@ -24,8 +24,12 @@ const UserSchema = new mongoose.Schema({
     notes:{type: String, default: "Nothing to note"},
 
     parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }],
+    //for easy referene to issues
+    //issues:[{ type: Schema.Types.ObjectId, ref: 'Issue' }]
+    
+    salt: String,
 
-    issues:[{ type: Schema.Types.ObjectId, ref: 'Message' }]
+    hash: String
 
 }, {timestamps: true});
 
@@ -48,7 +52,7 @@ UserSchema.methods.validPassword = function(password) {
 }
 
 // add 'Unique' validation to this schema
-UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+// UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
