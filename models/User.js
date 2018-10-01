@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
 // TODO Creat Virtual Fields for optimization
 UserSchema.virtual('name').get(function () { return this.last_name + ', ' + this.first_name; });
 
-UserSchema.virtual('activeSUBS').get(function () { 
+//UserSchema.virtual('activeSUBS').get(function () { 
 //     return this.phone + '{' + this.parks + ' }' 
 // }   );
 
