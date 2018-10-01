@@ -1,5 +1,7 @@
-const Subscriber = require('../models/Subscriber');
+const User = require('../models/User');
 const Subscription = require('../models/Subscription');
+const messageSender = require('../lib/messageSender')
+
 
 // Create a function to handle Twilio SMS / MMS webhook requests
 exports.webhook = function(request, response) {
@@ -7,17 +9,17 @@ exports.webhook = function(request, response) {
   const phone = request.body.From;
 
   // Try to find a user with the given phone number
-  Subscriber.findOne({phone: phone,}, function(err, sub) {
+  User.findOne({phone: phone,}, function(err, sub) {
     if (err) return respond('Derp! Please text back again later.');
 
     if (!sub) {
       // If there's no user associated with this phone number,
       // create one
-      const newSubscriber = new Subscriber({ phone: phone,});
+      const newUser = new User({ phone: phone,});
 
-      newSubscriber.save(function(err, newSub) {
+      newUser.save(function(err, newSub) {
         if (err || !newSub) return respond('We couldn\'t sign you up - please try again.');
-        processMessage(newSubscriber);
+        processMessage(newUser);
       });
     } else {
       // For an existing user, process any input message they sent and
@@ -76,10 +78,10 @@ exports.sendMessages = function(request, response) {
   const imageUrl = request.body.imageUrl;
 
   // Send messages to all users
-  Subscriber.find({
+User.find({
     subscribed: true,
   }).then((users) => {
-    messageSender.sendMessageToSubscribers(users, message, imageUrl);
+    messageSender.sendMessageTUsers(users, message, imageUrl);
   }).then(() => {
     request.flash('successes', 'Messages on their way!');
     response.redirect('/');
