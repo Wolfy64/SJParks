@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 // var jwt = require('jsonwebtoken');
 // var secret = require('../config').secret;
@@ -22,11 +22,25 @@ const UserSchema = new mongoose.Schema({
     email: {type: String, lowercase: true, required: [true, "you must enter an email"], unique: true,
         match: [/\S+@\S+\.\S+/, 'is invalid'], index: true}, 
     
+<<<<<<< HEAD
     //phone: {type: String, match: [ /(+\n+)+\n+\-\n+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
 
     parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }]
     //for easy referene to issues
     //issues:[{ type: Schema.Types.ObjectId, ref: 'Issue' }]
+=======
+    phone: {type: String, default: "(999) 999 - 9999", unique: true} ,
+    
+    notes:{type: String, default: "Nothing to note"},
+
+    parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }],
+    //for easy referene to issues
+    //issues:[{ type: Schema.Types.ObjectId, ref: 'Issue' }]
+    
+    salt: String,
+
+    hash: String
+>>>>>>> Data architecture overhaul
 
 }, {timestamps: true});
 
@@ -54,7 +68,7 @@ UserSchema.methods.validate_password = function(password) {
 }
 
 // add 'Unique' validation to this schema
-UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+// UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

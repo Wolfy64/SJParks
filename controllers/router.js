@@ -11,15 +11,22 @@ const admin = require('./admin');
 
 // Map routes to controller functions
 module.exports = function(app) {
+<<<<<<< HEAD
 
   // Twilio SMS webhook route
   app.post('/message', message.webhook);
 
+=======
+  // Twilio SMS webhook route
+  app.post('/message', message.webhook);
+
+>>>>>>> Data architecture overhaul
   // Render a userResident page about the project to find out more 
   app.get('/', pages.aboutPage);
     
   // Render a page that will allow an administrator to send out a message
   // to all subscribers
+<<<<<<< HEAD
   app.get('/admin', login.requireLogin, pages.showForm);//
 
   // Handle new user form submission 
@@ -42,4 +49,19 @@ module.exports = function(app) {
 
 
   
+=======
+  app.get('/admin', pages.showForm);
+
+  // Render a login screen with which an administrator can log in
+  app.get('/login', pages.loginform);
+
+  // Handle form submission and send messages to subscribers
+  app.post('/message/send', send_sms.sendMessages);
+
+  // Handle new user form submission 
+  app.post('/login/signup', login.newUser);
+
+  // Handle new park form submission
+  app.post('/admin/new_park', admin.createPark);
+>>>>>>> Data architecture overhaul
  };
