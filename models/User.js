@@ -34,9 +34,9 @@ const UserSchema = new mongoose.Schema({
 // TODO Creat Virtual Fields for optimization
 UserSchema.virtual('name').get(function () { return this.last_name + ', ' + this.first_name; });
 
-//UserSchema.virtual('activeSUBS').get(function () { 
-//     return this.phone + '{' + this.parks + ' }' 
-// }   );
+UserSchema.virtual('activeSUBS').get(function () { 
+    return this.phone + '{' + this.parks + ' }' 
+}   );
 
 //schema methods
 // sets the password with a hash
@@ -52,7 +52,7 @@ UserSchema.methods.validPassword = function(password) {
 }
 
 // add 'Unique' validation to this schema
-UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+// UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

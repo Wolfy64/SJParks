@@ -13,14 +13,12 @@ exports.validate = function (request, response) {
         if(user.validPassword(request.body.psw) && user.username === usrnm || user.valid  ){
         return err || !user.admin ? response.redirect('/') : response.redirect('/admin');}
     });
+}
 
 exports.requireLogin = function (req, res, next) {
     console.log('#####################################################');
     console.log(req.query);
     console.log('#####################################################');
-    if (!req.user) {
-      res.redirect('/login');
-    } else {
-      next();
-    }
-  };
+    if (!req.user) res.redirect('/login');
+    else next();
+}
