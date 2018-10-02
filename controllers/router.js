@@ -19,7 +19,7 @@ module.exports = function(app) {
     
   // Render a page that will allow an administrator to send out a message
   // to all subscribers
-  app.get('/admin', pages.showForm);
+  app.get('/admin', login.requireLogin, pages.showForm);//
 
   // Render a login screen with which an administrator can log in
   app.get('/login', pages.loginform);
@@ -32,4 +32,7 @@ module.exports = function(app) {
 
   // Handle new park form submission
   app.post('/admin/new_park', admin.createPark);
+
+
+  
  };
