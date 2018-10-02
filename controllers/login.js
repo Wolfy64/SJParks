@@ -1,7 +1,7 @@
 // var bcrypt = require('bcrypt');
+var crypto = require('crypto')
 
 const user = require('../models/User');
-const saltRounds = 16;
 
 //register: storing name, email and password and redirecting to home page after signup
 exports.newUser = function (request, response) {
@@ -46,3 +46,14 @@ exports.validate = function (request, response) {
     // });
 
 }
+
+exports.requireLogin = function (req, res, next) {
+    console.log('#####################################################');
+    console.log(req.query);
+    console.log('#####################################################');
+    if (!req.user) {
+      res.redirect('/login');
+    } else {
+      next();
+    }
+  };

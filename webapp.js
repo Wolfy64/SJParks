@@ -5,6 +5,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const config = require('./config');
+const User = require('./models/User');
 
 // Create Express web app
 const app = express();
@@ -51,6 +52,24 @@ app.use(function(err, request, response, next) {
     response.status(500);
     response.sendFile(path.join(__dirname, 'public', '500.html'));
 });
+
+// Session
+// app.use(function(req, res, next) {
+//     if (req.session && req.session.user) {
+//       User.findOne({ username: req.session.user.username }, function(err, user) {
+//         if (user) {
+//           req.user = user;
+//           delete req.user.password; // delete the password from the session
+//           req.session.user = user;  //refresh the session value
+//           res.locals.user = user;
+//         }
+//         // finishing processing the middleware and run the route
+//         next();
+//       });
+//     } else {
+//       next();
+//     }
+//   });
 
 // Export Express app
 module.exports = app;
