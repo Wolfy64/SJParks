@@ -34,7 +34,7 @@ exports.webhook = function(request, response) {
 
     // Conditional logic to do different things based on the command from
     // the user
-    if (msg === 'park1' || msg === 'park2' || msg === 'park3') {
+    if (msg === 'bh' || msg === 'rose' || msg === 'dm') {
       //Check if already subscribed
       Subscription.findOne({phone: phone, park: msg,}, function(err, sub) {
         if (err) return respond('Derp! Please text back again later.');
@@ -42,8 +42,8 @@ exports.webhook = function(request, response) {
         if(!sub) {
           const newSubscription = new Subscription({ phone: phone, park: msg,});
           newSubscription.save(function(err, newSub) {
-            if (err || !newSub) return respond('We couldn\'t subscribe you to ' + msg + ' - please try again.');
-            respond('Thanks for subscribing to '+msg+' - We\'ll keep you...');
+            if (err || !newSub) return respond('We couldn\'t subscribe you - please try again.');
+            respond('Thanks for subscribing to SJParks Notifications');
           })
         } else respond('You\'re already subscribed to ' + msg + ' - but we love the enthusiasm!');
       });
@@ -51,7 +51,7 @@ exports.webhook = function(request, response) {
       // If we don't recognize the command, text back with the list of
       // available commands
       const responseMessage = 'Sorry, we didn\'t understand that. '
-        + 'available commands are: Park1 or Park2 or Stop';
+        + 'available commands are: ROSE - Municipal Rose Garden, BH - Bramhall Park, DM - Del Monte Park or STOP';
 
       respond(responseMessage);
     }
