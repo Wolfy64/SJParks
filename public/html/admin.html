@@ -26,66 +26,7 @@
                 <input type="submit" class="btn btn-success send-message" id="send_message">
             </form>
         </section>
-        <hr>
-        <br>
-
-        <!-- Add New User Form-->
-        <section class="wrapper"> 
-            <h1> Add New User </h1> 
-            <!-- Not sure if 'action="/login.newUser.js"' is the correct syntax -->
-            <form action="/lib/newUser.js" method = "POST">
-                <!-- <div class="imgcontainer">
-                    <img src="controllers/img/logo.svg" alt="Logo" class="avatar" style="display: none" />
-                </div> -->
-                
-                <div class="container" style="background-color:#ebe7e7">
-                    <input type="text" placeholder="New Username" name="usname" required>
-                    <input type="password" placeholder="New Password" name="pssw" required>
-                    <input type="password" placeholder="Confirm New Password" name="cpssw" required>
-
-                    <!-- Not sure how to change text color -->
-                    <input type="checkbox" name="isAdmin" value=true> isAdministrator<br>
-
-                    <!-- Nto sure how to center the Place Holder -->
-                    <textarea rows="10" cols="50" id="Notes(Entry)" name="eNts" placeholder="Admin Entry Notes"></textarea> 
-                </div>
-                
-                <div class="container" style="background-color:#f1f1f1">   
-                    <button type="submit" class="btn btn-outline-success" id = "crtBtn">Create New User</button>
-                    <button type="submit" class="btn cancelbtn" >Clear All</button>
-                    <!-- <button type="button" class="cnclBtn" style="display: none">Cancel</button> -->
-                </div>
-            </form>
        </section>
-
-       
-        <!-- Add New Park Form-->
-        <section class="wrapper"> 
-            <h1> Add New Park </h1> 
-            <!-- Not sure if 'action="/login.newUser.js"' is the correct syntax -->
-            <form action="/lib/newPark.js" method = "POST">
-                <!-- <div class="imgcontainer">
-                    <img src="controllers/img/logo.svg" alt="Logo" class="avatar" style="display: none" />
-                </div> -->
-                
-                <div class="container" style="background-color:#ebe7e7">
-                    <input type="text" placeholder="New Username" name="usname" required>
-                    <input type="password" placeholder="New Password" name="pssw" required>
-                    <input type="password" placeholder="Confirm New Password" name="cpssw" required>
-
-                    <!-- Not sure how to change text color -->
-                    <input type="checkbox" name="isAdmin" value=true> isAdministrator<br>
-
-                    <!-- Nto sure how to center the Place Holder -->
-                    <textarea rows="10" cols="50" id="Notes(Entry)" name="eNts" placeholder="Admin Entry Notes"></textarea> 
-                </div>
-                
-                <div class="container" style="background-color:#f1f1f1">   
-                    <button type="submit" class="btn btn-outline-success" id = "crtBtn">Create New User</button>
-                    <button type="submit" class="btn cancelbtn" >Clear All</button>
-                    <!-- <button type="button" class="cnclBtn" style="display: none">Cancel</button> -->
-                </div>
-            </form>
        </section>
     </body>
 </html>
