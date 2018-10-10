@@ -28,6 +28,14 @@ app.use(session({
     secret: config.secret,
     resave: true,
     saveUninitialized: true,
+    cookie: {
+        //maxAge: 2 * 24 * 60 * 60 * 1000,
+        //activeDuration: 5 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        ephemeral: true,
+        user: false
+    }
 }));
 
 // Use connect-flash to persist informational messages across redirects
@@ -54,22 +62,10 @@ app.use(function(err, request, response, next) {
 });
 
 // Session
-// app.use(function(req, res, next) {
-//     if (req.session && req.session.user) {
-//       User.findOne({ username: req.session.user.username }, function(err, user) {
-//         if (user) {
-//           req.user = user;
-//           delete req.user.password; // delete the password from the session
-//           req.session.user = user;  //refresh the session value
-//           res.locals.user = user;
-//         }
-//         // finishing processing the middleware and run the route
-//         next();
-//       });
-//     } else {
-//       next();
-//     }
-//   });
+app.use('/admin', function(err, req, res, next) {
+    console.log(err);
+    res.redirect('/login');
+});
 
 // Export Express app
 module.exports = app;

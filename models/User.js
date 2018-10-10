@@ -45,8 +45,14 @@ UserSchema.methods.setPassword = function(password){
     this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
   };
 
+<<<<<<< HEAD
 //validate password
 UserSchema.methods.validPassword = function(password) {
+=======
+UserSchema.methods.validate_password = function(password) {
+    this.salt = crypto.randomBytes(16).toString('hex');
+    this.hash = crypto.pbkdf2Sync('DippedInParks', this.salt, 10000, 512, 'sha512').toString('hex');
+>>>>>>> Lgin Sessin
     var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.password === hash;
 }

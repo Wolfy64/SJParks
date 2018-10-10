@@ -10,17 +10,30 @@ const admin = require('./admin');
 
 
 // Map routes to controller functions
+<<<<<<< HEAD
 module.exports = function(app) {;
 
   // Render a login screen with which an administrator can log in
   app.get('/login', pages.loginform);
+=======
+module.exports = function(app) {
+
+  function requireLogin(req, res, next) {
+    console.log('requireLogin',req.session);
+    if (req.session.user) next();
+    else res.redirect('/login'); //next(new Error('Not logged in.'));
+}
+
+  // Twilio SMS webhook route
+  app.post('/message', message.webhook);
+>>>>>>> Lgin Sessin
 
   // Render a userResident page about the project to find out more 
   app.get('/', pages.aboutPage);
     
   // Render a page that will allow an administrator to send out a message
   // to all subscribers
-  app.get('/admin', login.requireLogin, pages.showForm);//
+  app.get('/admin', requireLogin, pages.showForm);//
 
   // Handle new user form submission 
   app.post('/login/signup', login.newUser)
@@ -28,11 +41,17 @@ module.exports = function(app) {;
   // Twilio SMS webhook route
   app.post('/message', message.webhook);
 
+  // Handle sign in
+  app.post('/login', login.validate);
+
   // Handle form submission and send messages to subscribers
   app.post('/message/send', send_sms.sendMessages);
 
   // Handle new park form submission
   app.post('/admin/new_park', admin.createPark);
+
+  // Handle logout
+  app.get('/logout', login.logout);
 
 
   

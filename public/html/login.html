@@ -1,16 +1,17 @@
 <html>
-    <head>
-        <title>Administrator Login</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="../css/main.css">
-        <style>
-            body{
-                max-width: 500px;
-            }
-        </style>
-    </head>
-     <body>    
-    <form action="/admin">
+  <head>
+      <title>Administrator Login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="../css/main.css">
+      <style>
+          body{
+              max-width: 500px;
+          }
+      </style>
+  </head>
+
+  <body>    
+    <form action="/login" method="POST">
       <div class="imgcontainer">
         <img src="controllers/img/logo.svg" alt="Logo" class="avatar" style="display: none" />
       </div>
@@ -30,6 +31,5 @@
         <span class="psw" style="display: none">Forgot <a href="#">password?</a></span>
       </div>
     </form>
-    
-    </body>
+  </body>
 </html>
