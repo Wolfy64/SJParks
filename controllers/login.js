@@ -1,3 +1,7 @@
+/* 
+ * Handle admin user credentials for adminDashboard. Registration, validation and redirection.
+ */
+
 // var bcrypt = require('bcrypt');
 var crypto = require('crypto')
 

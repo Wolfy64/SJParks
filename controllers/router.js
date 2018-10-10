@@ -1,10 +1,10 @@
 /*
- * This file is a template for router file. It is not finished, so you will see repos that do not exist.
+ * Connects extentions of the port to the functions that handle requests and responses.
  */
 
 const pages = require('./pages');
-const message = require('./messageIncoming');
-const send_sms = require('./messageOutgoing');
+const receive = require('./messageIncoming');
+const send = require('./messageOutgoing');
 const login = require('./login');
 const admin = require('./admin');
 
@@ -12,20 +12,24 @@ const admin = require('./admin');
 // Map routes to controller functions
 module.exports = function(app) {
   // Twilio SMS webhook route
-  app.post('/message', message.webhook);
+  app.post('/message', receive.webhook);
 
+    
+    
   // Render a userResident page about the project to find out more 
   app.get('/', pages.aboutPage);
     
   // Render a page that will allow an administrator to send out a message
-  // to all subscribers
-  app.get('/admin', login.requireLogin, pages.showForm);//
+  // to all subscribers and redirect to login page if user is not logged in.
+  app.get('/admin', login.requireLogin, pages.adminDashboard);
 
   // Render a login screen with which an administrator can log in
-  app.get('/login', pages.loginform);
+  app.get('/login', pages.loginForm);
 
+    
+    
   // Handle form submission and send messages to subscribers
-  app.post('/message/send', send_sms.sendMessages);
+  app.post('/message/send', send.sendMessages);
 
   // Handle new user form submission 
   app.post('/login/signup', login.newUser);
