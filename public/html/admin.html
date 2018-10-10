@@ -35,9 +35,10 @@
 
         <!-- Add New User Form-->
         <section class="wrapper"> 
-            <h1> Add New User </h1> 
+            <h1> Add New Admin </h1> 
             <form action="/login/signup" method = "POST">
                 <div class="container" style="background-color:#ebe7e7">
+                    <input type="text" placeholder="Firstname" name="fn" required>
                     <input type="text" placeholder="New Username" name="usname" required>
                     <input type="password" placeholder="New Password" name="pssw" required>
                     <input type="password" placeholder="Confirm New Password" name="cpssw" required>
@@ -50,7 +51,7 @@
                 </div>
                 
                 <div class="container" style="background-color:#f1f1f1">   
-                    <button type="submit" class="btn btn-outline-success" id = "crtBtn">Create New User</button>
+                    <button type="submit" class="btn btn-outline-success" id = "crtBtn">Create User</button>
                     <button type="submit" class="btn cancelbtn" >Clear All</button>
                     <!-- <button type="button" class="cnclBtn" style="display: none">Cancel</button> -->
                 </div>

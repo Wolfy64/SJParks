@@ -7,10 +7,12 @@ exports.createPark = function(req, res) {
     // Check if name exists
     Park.findOne({ name: req.body.parkname}, function(err, park) {
         if (err) {
+            // console.log('****Tried to Find a park and failed****')
             res.send('Derp! Please try again later.');
             return;
         }
         if (park) {
+            // console.log('*********Found a park*********')
             res.send(`Derp! ${park.name} already exists.`);
         }
     }
@@ -33,7 +35,8 @@ exports.createPark = function(req, res) {
     //Create new park
     newPark.save(function(err, newpark) {
       if (err || !newpark) res.send('We couldn\'t add the park - please try again.');
-      else res.send(` <p>Park successfully added.</p>  <a href="/admin">Go Back</a>`)
+      else res.
+    //   else res.send(` <p>Park successfully added.</p>  <a href="/admin">Go Back</a>`)
     });
 
 };

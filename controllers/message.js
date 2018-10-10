@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Subscription = require('../models/Subscription');
+const Subscription = require('../models/SubscriptionLog');
 const messageSender = require('../lib/messageSender')
 
 
@@ -44,8 +44,8 @@ exports.webhook = function(request, response) {
         if(!sub) {
           const newSubscription = new Subscription({ phone: phone, park: msg,});
           newSubscription.save(function(err, newSub) {
-            if (err || !newSub) return respond('We couldn\'t subscribe you - please try again.');
-            respond('Thanks for subscribing to SJParks Notifications');
+            if (err || !newSub) return respond('We couldn\'t subscribe you to ' + msg + ' - please try again.');
+            respond('Thanks for subscribing to '+msg+' - We\'ll keep you...');
           })
         } else respond('You\'re already subscribed to ' + msg + ' - but we love the enthusiasm!');
       });
@@ -81,6 +81,7 @@ exports.sendMessages = function(request, response) {
 User.find({
     subscribed: true,
   }).then((users) => {
+    // @ts-ignore
     messageSender.sendMessageTUsers(users, message, imageUrl);
   }).then(() => {
     request.flash('successes', 'Messages on their way!');

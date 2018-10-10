@@ -5,6 +5,20 @@
 const Park = require('../models/Park');
 const MessageLog = require('../models/MessageLog');
 const messageSender = require('../lib/messageSender');
+const cfg = require('../config');
+const accountSid = cfg.accountSid;
+const authToken = cfg.authToken; 
+const client = require('twilio')(accountSid, authToken);
+
+const getSelected = (input, i = 0, result=[]) => {
+    let parkList = [].concat(input);
+    if(i===parkList.length) return result.filter((value, index, self)=>{ 
+    return self.indexOf(value) === index;
+});
+    result = result.concat();
+  // result = result.concat(phones[parkList[0]])
+return getSelected (parkList, i+1, result) 
+}
 
 exports.sendMessages = function(request, response) {
   // Get message info from form submission
