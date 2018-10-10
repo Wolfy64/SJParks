@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
+<<<<<<< HEAD
 
+=======
+>>>>>>> update lgin
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
 var jwt = require('jsonwebtoken');
@@ -50,9 +53,13 @@ UserSchema.methods.setPassword = function(password){
 UserSchema.methods.validPassword = function(password) {
 =======
 UserSchema.methods.validate_password = function(password) {
+<<<<<<< HEAD
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync('DippedInParks', this.salt, 10000, 512, 'sha512').toString('hex');
 >>>>>>> Lgin Sessin
+=======
+    this.setPassword('DippedInParks')
+>>>>>>> update lgin
     var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.password === hash;
 }

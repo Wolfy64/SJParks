@@ -1,62 +1,10 @@
 // var bcrypt = require('bcrypt');
-<<<<<<< HEAD
 const crypto = require('crypto');
 const User = require('../models/User');
-=======
-var crypto = require('crypto')
-
-const User = require('../models/User');
-const pages = require('./pages');
-
-//register: storing name, email and password and redirecting to home page after signup
-exports.newUser = function (request, response) {
-
-    // bcrypt.hash(request.body.psw + request.body.uname, saltRounds, function (err, hash) {
-    //     user.findOne({
-    //         Username: request.body.uname,
-    //         Password: hash,
-    //         admin: request.body.isAdmin
-    //         },  { runValidators: true, context: 'query' }, function (err, user) {
-    //         //  I'm not sure exactly what happens if it finds NO users are found, as such I will assume a "NULL"might be returned
-    //         if (err || !user) {
-    //             user.create({
-    //                 username: request.body.usname,
-    //                 password: hash,
-    //                 admin: request.body.isAdmin,
-    //                 notes: request.body.eNts
-    //             }).then(() => {
-    //                 console.log('PASS: created new user')
-    //             //  TODO not sure what to do in here
-    //             });
-    //             return response.redirect('/admin');
-    //         }
-    //     });
-    // });
-}
->>>>>>> Lgin Sessin
 
 //  authorize the login information
 exports.validate = function (request, response) {
 
-<<<<<<< HEAD
-    const usrnm = request.body.uname;
-    
-    User.findOne({
-        Username: usrnm
-    }, function (err, user) {
-        if(user.validPassword(request.body.psw) && user.username === usrnm || user.valid  ){
-        return err || !user.admin ? response.redirect('/') : response.redirect('/admin');}
-    });
-}
-
-exports.requireLogin = function (req, res, next) {
-    console.log('#####################################################');
-    console.log(req.query);
-    console.log('#####################################################');
-    if (!req.user) res.redirect('/login');
-    else next();
-}
-=======
     // bcrypt.hash(request.body.psw + request.body.uname, saltRounds, function (err, hash) {
 
     //     bcrypt.compare(request.body.psw + request.body.uname, hash, function(err, res) {
@@ -106,4 +54,3 @@ exports.logout = function (req, res) {
 }
 
 
->>>>>>> Lgin Sessin

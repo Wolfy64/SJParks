@@ -4,7 +4,6 @@
   "description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
   "main": "server.js",
   "dependencies": {
-    "cookie-parser": "^1.4.3",
     "dotenv": "^6.0.0",
     "dotenv-safe": "^6.0.0",
     "express": "^4.16.3",
