@@ -4,7 +4,6 @@
 const Park = require('../models/Park');
 
 exports.createPark = function(req, res) {
-<<<<<<< HEAD
     console.log('------------------------------------------------');
     console.log('------------------------------------------------');
     console.log('------------------------------------------------');
@@ -12,8 +11,6 @@ exports.createPark = function(req, res) {
     console.log('------------------------------------------------');
     console.log('------------------------------------------------');
     console.log('------------------------------------------------');
-=======
->>>>>>> Data architecture overhaul
     // Check if name exists
     Park.findOne({ name: req.body.parkname}, function(err, park) {
         if (err) {
@@ -43,11 +40,7 @@ exports.createPark = function(req, res) {
     //Create new park
     newPark.save(function(err, newpark) {
       if (err || !newpark) res.send('We couldn\'t add the park - please try again.');
-<<<<<<< HEAD
       else res.send(` <p>Park successfully added.</p>  <a href="/admin">Go Back</a>`, {user: req.user});
-=======
-      else res.send(` <p>Park successfully added.</p>  <a href="/admin">Go Back</a>`)
->>>>>>> Data architecture overhaul
     });
 
 };
