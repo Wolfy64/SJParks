@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
     email: {type: String, lowercase: true, required: [true, "you must enter an email"], unique: true,
         match: [/\S+@\S+\.\S+/, 'is invalid'], index: true}, 
     
-    phone: {type: String, match: [ /(+\n+)+\n+\-\n+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
+    //phone: {type: String, match: [ /(+\n+)+\n+\-\n+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
 
     parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }]
     //for easy referene to issues

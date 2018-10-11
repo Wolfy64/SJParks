@@ -26,15 +26,14 @@ app.use(bodyParser.urlencoded({
 // Create and manage HTTP sessions for all requests
 app.use(session({
     secret: config.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
     cookie: {
-        //maxAge: 2 * 24 * 60 * 60 * 1000,
+        maxAge: 10 * 1000,
         //activeDuration: 5 * 60 * 1000,
         httpOnly: true,
-        secure: true,
+        secure: false,
         ephemeral: true,
-        user: false
     }
 }));
 

@@ -12,12 +12,6 @@ const admin = require('./admin');
 // Map routes to controller functions
 module.exports = function(app) {
 
-  function requireLogin(req, res, next) {
-    console.log('requireLogin',req.session);
-    if (req.session.user) next();
-    else res.redirect('/login'); //next(new Error('Not logged in.'));
-}
-
   // Twilio SMS webhook route
   app.post('/message', message.webhook);
 
@@ -26,7 +20,7 @@ module.exports = function(app) {
     
   // Render a page that will allow an administrator to send out a message
   // to all subscribers
-  app.get('/admin', requireLogin, pages.showForm);//
+  app.get('/admin', login.requireLogin, pages.showForm);//
 
   // Handle new user form submission 
   app.post('/login/signup', login.newUser)
