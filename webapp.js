@@ -9,6 +9,7 @@ const User = require('./models/User');
 
 // Create Express web app
 const app = express();
+
 //app.set('view engine', 'html');
 app.set('view engine', 'pug');
 

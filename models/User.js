@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
-<<<<<<< HEAD
-
-=======
->>>>>>> update lgin
 const uniqueValidator = require('mongoose-unique-validator');
 const crypto = require('crypto');
-var jwt = require('jsonwebtoken');
-var secret = require('../config').secret;
+// var jwt = require('jsonwebtoken');
+// var secret = require('../config').secret;
 const Schema = mongoose.Schema;
 
 const UserSchema = new mongoose.Schema({
@@ -48,24 +44,17 @@ UserSchema.methods.setPassword = function(password){
     this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
   };
 
-<<<<<<< HEAD
-//validate password
-UserSchema.methods.validPassword = function(password) {
-=======
+
 UserSchema.methods.validate_password = function(password) {
-<<<<<<< HEAD
-    this.salt = crypto.randomBytes(16).toString('hex');
-    this.hash = crypto.pbkdf2Sync('DippedInParks', this.salt, 10000, 512, 'sha512').toString('hex');
->>>>>>> Lgin Sessin
-=======
+    // this.salt = crypto.randomBytes(16).toString('hex');
+    // this.hash = crypto.pbkdf2Sync('DippedInParks', this.salt, 10000, 512, 'sha512').toString('hex');
     this.setPassword('DippedInParks')
->>>>>>> update lgin
     var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.password === hash;
 }
 
 // add 'Unique' validation to this schema
-// UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;

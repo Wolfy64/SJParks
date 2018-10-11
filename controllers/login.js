@@ -1,5 +1,3 @@
-// var bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const User = require('../models/User');
 
 //  authorize the login information
@@ -16,6 +14,7 @@ exports.validate = function (request, response) {
     }
 }
 
+// Logout current user
 exports.logout = function (req, res) {
     req.session.destroy(() => {console.log('User signed out.')});
     res.redirect('/login');
