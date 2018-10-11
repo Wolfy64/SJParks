@@ -32,7 +32,6 @@ exports.logout = function (req, res) {
 
 // Session Handling
 exports.requireLogin = function (req, res, next) {
-    console.log('requireLogin',req.session);
     if (req.session.admin) next();
     else res.redirect('/login');
   }

@@ -14,13 +14,21 @@ module.exports = function(app) {
   // Render a userResident page about the project to find out more 
   app.get('/', pages.aboutPage);
 
+<<<<<<< HEAD
   
 //------------------------------------------------------------------------
 //****************************** LOGIN PAGE ******************************
 //------------------------------------------------------------------------
+=======
+  // Handle new user form submission 
+  app.post('/login/signup', admin.newUser)
+>>>>>>> fix
 
   // Render login page
   app.get('/login', pages.loginPage);
+
+  // Render login page
+  app.get('/login', pages.loginform);
 
   // Handle sign in
   app.post('/login', login.validate);

@@ -91,6 +91,7 @@ exports.createPark = function(req, res) {
 
 };
 
+<<<<<<< HEAD
 
 
 
@@ -163,3 +164,8 @@ function respond(res, resMessage, success) {
             respond(res, query, true);
         });
   }
+=======
+exports.newUser = function(req, res){
+    
+}
+>>>>>>> fix
