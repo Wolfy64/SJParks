@@ -33,8 +33,7 @@ app.use(session({
         maxAge: 10 * 1000,
         //activeDuration: 5 * 60 * 1000,
         httpOnly: true,
-        secure: false,
-        ephemeral: true,
+        secure: false
     }
 }));
 

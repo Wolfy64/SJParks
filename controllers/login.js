@@ -1,11 +1,21 @@
-const User = require('../models/User');
+const db = require("../models");
 
-//  authorize the login information
+//  Authorize the login information
 exports.validate = function (request, response) {
-    if (!request.body.uname || !request.body.psw) response.redirect('/login');
+    console.log('validating...');
+    if (!request.body.username || !request.body.psw) {
+        console.log('no username or password');
+        response.redirect('/login');
+    }
     else {
-        User.findOne({username: request.body.uname}, function(err, user) {
+        console.log(`usernaem:${request.body.username}  password:${request.body.psw}`);
+        db.User.findOne({username: request.body.username}, function(err, user) {
             if (err) response.redirect('/login');
+            console.log('-----------------------');
+            console.log('---------user----------');
+            console.log(user);
+            console.log('-----------------------');
+            console.log('-----------------------');
             if (user && user.validate_password(request.body.psw) && user.admin){
                 request.session.admin = true;
                 response.redirect('/admin');
@@ -20,6 +30,7 @@ exports.logout = function (req, res) {
     res.redirect('/login');
 }
 
+// Session Handling
 exports.requireLogin = function (req, res, next) {
     console.log('requireLogin',req.session);
     if (req.session.admin) next();

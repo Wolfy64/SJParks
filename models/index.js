@@ -1,7 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+let mongoose = require("mongoose");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/SJParks");
 
-const modelsPath = path.resolve(__dirname, 'models')
-fs.readdirSync(modelsPath).forEach((file) => {
-  require(modelsPath + '/' + file);
-})
+module.exports = {
+  User: require("./User"),
+  Park: require("./Park"),
+  MessageLog: require("./MessageLog"),
+  SubscriptionLog: require("./SubscriptionLog"),
+  Issue: require("./Issue")
+};

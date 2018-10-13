@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+const crypto = require('../lib/cryptoHelper');
 // const uniqueValidator = require('mongoose-unique-validator');
-const crypto = require('crypto');
 // var jwt = require('jsonwebtoken');
 // var secret = require('../config').secret;
 const Schema = mongoose.Schema;
@@ -13,20 +13,20 @@ const UserSchema = new mongoose.Schema({
 
     last_name: {type: String, required: true, max: 100},
 
-    username: {type: String, lowercase: true,  unique: true, match: [/^[a-zA-Z0-9]+$/, 'invalid username'], index: true},
+    username: {type: String, lowercase: true, required: true, unique: true, match: [/^[a-zA-Z0-9]+$/, 'invalid username'], index: true},
 
-    password: {type: String, required: [true, "Password Required"], index: true},
+    password: {type: String, required: [true, "Password Required"]},
 
     admin: {type: Boolean, default: false},
 
     email: {type: String, lowercase: true, required: [true, "you must enter an email"], unique: true,
         match: [/\S+@\S+\.\S+/, 'is invalid'], index: true}, 
     
-    //phone: {type: String, match: [ /(+\n+)+\n+\-\n+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
+    // phone: {type: String, match: [ /(+\d+)+\d+\-\d+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
 
-    parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }]
-    //for easy referene to issues
-    //issues:[{ type: Schema.Types.ObjectId, ref: 'Issue' }]
+    parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }],
+    // for easy referene to issues
+    issues:[{ type: Schema.Types.ObjectId, ref: 'Messagelog' }]
 
 }, {timestamps: true});
 
@@ -37,19 +37,16 @@ UserSchema.virtual('activeSUBS').get(function () {
     return this.phone + '{' + this.parks + ' }' 
 }   );
 
-//schema methods
-// sets the password with a hash
-UserSchema.methods.setPassword = function(password){
-    this.salt = crypto.randomBytes(16).toString('hex');
-    this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-  };
 
 
 UserSchema.methods.validate_password = function(password) {
-    // this.salt = crypto.randomBytes(16).toString('hex');
-    // this.hash = crypto.pbkdf2Sync('DippedInParks', this.salt, 10000, 512, 'sha512').toString('hex');
-    this.setPassword('DippedInParks')
-    var hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+    console.log('22222222222222222222222222');
+    console.log('22222222222222222222222222');
+    console.log(this.salt);
+    console.log(this.password);
+    console.log('22222222222222222222222222');
+    console.log('22222222222222222222222222');
+    var hash = crypto.getPasswordHash(password, new Buffer(this.salt));
     return this.password === hash;
 }
 
