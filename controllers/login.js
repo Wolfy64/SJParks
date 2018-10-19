@@ -11,14 +11,10 @@ exports.validate = function (request, response) {
         console.log(`usernaem:${request.body.username}  password:${request.body.psw}`);
         db.User.findOne({username: request.body.username}, function(err, user) {
             if (err) response.redirect('/login');
-            console.log('-----------------------');
-            console.log('---------user----------');
-            console.log(user);
-            console.log('-----------------------');
-            console.log('-----------------------');
-            if (user && user.validate_password(request.body.psw) && user.admin){
-                request.session.admin = true;
-                response.redirect('/admin');
+            if (user && user.validate_password(request.body.psw)){
+                request.session.admin = user.admin;
+                request.session.username = user.username;
+                response.redirect(user.admin ? '/admin' : '/dashboard');
             } else response.redirect('/login');
         });
     }
@@ -30,8 +26,13 @@ exports.logout = function (req, res) {
     res.redirect('/login');
 }
 
-// Session Handling
-exports.requireLogin = function (req, res, next) {
+// Session Handling 
+exports.requireAdminLogin = function (req, res, next) {
     if (req.session.admin) next();
     else res.redirect('/login');
-  }
+}
+
+exports.requireUserLogin = function (req, res, next) {
+    if (req.session.username) next();
+    else res.redirect('/login');
+}
