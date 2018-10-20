@@ -13,3 +13,8 @@ exports.loginform = function(request, response) {
     // Render form, with any success or error flash messages
     response.sendFile(path.join(__dirname + '/..' + '/public/html/login.html'));
 };
+
+exports.reactDashboard = function(request, response) {
+    // Render form, with any success or error flash messages
+    response.sendFile(path.join(__dirname + '/..' + '/public/index.html'));
+};
