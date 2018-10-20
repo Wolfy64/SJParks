@@ -1,29 +1,26 @@
-/*
- * Express server that receives and replies to inbound SMS messages. 
- * When your Twilio number receives an incoming message, 
- * Twilio will send an HTTP request to a server you control. 
- * This callback mechanism is known as a webhook.  
- * When Twilio sends your application a request, 
- * it expects a response in the TwiML XML format 
- * telling it how to respond to the message.
- */
+console.log('Running index.js')
 
 const http = require('http');
-const express = require('express');
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const mongoose = require('mongoose');
+console.log('Testing config')
+const config = require('./config');
+console.log('Passed config')
 
-const app = express();
 
-app.post('/sms', (req, res) => {
-	  const twiml = new MessagingResponse();
+// Initialize database connection - throws if database connection can't be
+// established
+mongoose.connect(config.mongoUrlTest);
+mongoose.Promise = Promise;
 
-	  twiml.message('The Robots are coming! Head for the hills!');
+console.log('PASS: index.js connected to mongoose')
 
-	  res.writeHead(200, {'Content-Type': 'text/xml'});
-	  res.end(twiml.toString());
-});
+// Create Express web app
+const app = require('./webapp');
 
-http.createServer(app).listen(1337, () => { 
-	//1337 is a port for the temporary ngrok webhook running in the background
-	  console.log('Express server listening on port 1337');
+console.log('PASS: index.js required webapp.js')
+
+// Create an HTTP server and listen on the configured port
+const server = http.createServer(app);
+server.listen(config.port, function() {
+    console.log('Express server listening on *:' + config.port);
 });
