@@ -21,4 +21,6 @@ module.exports = function(app) {
    app.get('/login', pages.loginform);
     // Handle form submission and send messages to subscribers
    app.post('/message/send', send_sms.sendMessages);
+    //Render reactDashboard
+   app.get('/react-admin', pages.reactDashboard);
  };
