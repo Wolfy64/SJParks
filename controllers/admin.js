@@ -100,18 +100,30 @@ exports.createPark = function(req, res) {
 exports.sendMessages = function(req, res) {
   // Get message info from form submission
   const message = req.body.message;
-  const parkID = req.body.parkID;
+  const parks = req.body.parkID;
   
   // console.log(req.session);
     
   if(!message) {
     respond(res, 'Reason: Empty message.', false);
-  } else if(typeof(parkID) === 'string'){
+  } else if(typeof(parks) === 'string'){
     respond(res, 'Reason: No park selected', false);
   } else {
     // TODO prettify res with message displayed
-    respond(res, `Message: ${message}\nSent to parks: ${parkID}\nSent by: ${req.session.username}`, true);
+    console.log('???????????????????????????????????????')
+    console.log(req.session)
+    console.log('???????????????????????????????????????')
+    
+    db.Park.find({parkID : {$in: parks}}).then((result) => {
+        console.log(result)
+    })
+
+
+    
+    respond(res, `Message: ${message}\nSent to parks: ${parks}\nSent by: ${req.session.username}`, true);
   
+
+
     // Send messages to all users subscribed to parks in Parks
     // Subscription.find({
     //   park: {$in: parkID},

@@ -8,7 +8,7 @@ exports.validate = function (request, response) {
         response.redirect('/login');
     }
     else {
-        console.log(`usernaem:${request.body.username}  password:${request.body.psw}`);
+        console.log(`username:${request.body.username}  password:${request.body.psw}`);
         db.User.findOne({username: request.body.username}, function(err, user) {
             if (err) response.redirect('/login');
             if (user && user.validate_password(request.body.psw)){

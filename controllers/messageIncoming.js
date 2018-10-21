@@ -1,6 +1,50 @@
 const db = require("../models");
 const messageSender = require('../lib/messageSender')
 
+
+//------------------------------------------------------------------------
+//******************************** TOOL BOX ******************************
+//------------------------------------------------------------------------
+function sendResponse(res, resMessage, success) {
+  res.send(`
+      <html>
+        <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Admin Dashboard - SJParks</title>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+            <style>
+                body{
+                    font-family: Ubuntu, sans-serif;
+                    margin: 30px 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <p>${success ? 'Success: Message sent!' : 'Error: Couldn\'t verify the req'}.</p>
+            <p>${resMessage}</p>
+            <a class="btn" href="/admin">< Back</a>
+        </body>
+      </html>`
+  )
+}
+
+
+exports.subscribe = function(request, response) {
+  const phone = request.body.phone;
+  const parkId = request.park.parkID;
+  if(!phone || !parkID) sendResponse(response, 'No phone or parkcode submitted.', false);
+  else db.User.findOne({phone: phone}, function(err, sub) {
+    if (err) sendResponse(response, `err: ${err.message}`, false);
+    else if (!sub) {
+      const newUser = new db.User({phone: phone});
+      console.log(`new user: ${newUser}`);
+    } else console.log(`existing user: ${sub}`);
+
+  })
+
+}
+
 // Create a function to handle Twilio SMS / MMS webhook requests
 exports.webhook = function(request, response) {
   // Get the user's phone number
