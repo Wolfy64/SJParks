@@ -59,12 +59,12 @@ module.exports = function(app) {
 //------------------------------------------------------------------------
 
   // Twilio SMS webhook route
-  app.post('/message', messageIncoming.webhook);
+  app.post('/message', message.webhook);
 
   // Handle form submission and send messages to subscribers
   app.post('/admin/send_message', admin.sendMessages);
 
   // Handle subscriptions from about page
-  app.post('/subscribe', messageIncoming.subscribe);
+  app.post('/subscribe', message.webhook);
   
  };

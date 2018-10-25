@@ -1,6 +1,9 @@
 const db = require("../models");
 const crypto = require('../lib/cryptoHelper');
-// const messageSender = require('../lib/messageSender');
+const respond = require('../lib/responseSender').sendResponse;
+const messageSender = require('../lib/messageSender');
+
+
 
 //------------------------------------------------------------------------
 //**************************** CREATE NEW USER ***************************
@@ -85,8 +88,8 @@ exports.createPark = function(req, res) {
 
     //Create new park
     newPark.save(function(err, newpark) {
-      if (err || !newpark) res.send('We couldn\'t add the park - please try again.');
-      else res.send(` <p>Park successfully added.</p>  <a href="/admin">Go Back</a>`, {user: req.user});
+      if (err || !newpark) res.send(`We couldn\'t add the park - please try again. <br> err:${err} <br> newpark:${newpark}`);
+      else res.send(`<p>Park successfully added.</p>  <a href="/admin">Go Back</a>`);
     });
 
 };
@@ -96,31 +99,39 @@ exports.createPark = function(req, res) {
 //***************************** SEND MESSAGES ****************************
 //------------------------------------------------------------------------
 
-
 exports.sendMessages = function(req, res) {
-  // Get message info from form submission
-  const message = req.body.message;
-  const parks = req.body.parkID;
-  
-  // console.log(req.session);
-    
-  if(!message) {
-    respond(res, 'Reason: Empty message.', false);
-  } else if(typeof(parks) === 'string'){
-    respond(res, 'Reason: No park selected', false);
-  } else {
-    // TODO prettify res with message displayed
-    console.log('???????????????????????????????????????')
-    console.log(req.session)
-    console.log('???????????????????????????????????????')
-    
-    db.Park.find({parkID : {$in: parks}}).then((result) => {
-        console.log(result)
-    })
+    // Get message info from form submission
+    const message = req.body.message;
+    const parkids = req.body.parkID;
+    // Validate input
+    if (!message) return respond(res, 'Reason: Empty message.', false);
+    if (typeof(parkids) === 'string') return respond(res, 'Reason: No park selected', false);
+    // Remove hack
+    parkids.shift();
+    // Find the park(s)
+    db.Park.find({parkID : {$in: parkids}}, function(err, parks) {
+        if (err) respond(res, `Error: ${err.message}`, false);
+        // This should not happen!
+        if (!parks) respond(res, 'Some error occurred and it\'s Andres Milton Cubas\' fault.', false);
+        // Get all user ids from parks' user lists
+        const subscribers = parks.reduce((acc, cur) => acc.concat(cur.users), []);
+        // Get all users
+        db.User.find({_id:{$in:subscribers}}, function(err, users) {
+            if (err) return respond(res, `Error: ${err.message}`, false);
+            // This should not happen!
+            if (!users) return respond(res, `Andres Milton Cubas has deleted the users, I think.`, false);
+            
+            // uncomment line below to send message to subscribers
+            // messageSender.sendMessageToSubscribers(users, message, '');
+            db.MessageLog({user:req.session.userid, parks:parks.map(park => park._id), message: message}).save(function(err){});
+            // Send response back to admin
+            respond(res, `Message: ${message}<br>Sent to parks: ${parkids}<br>Sent by: ${req.session.username}`, true);
+        });
+    });
 
 
     
-    respond(res, `Message: ${message}\nSent to parks: ${parks}\nSent by: ${req.session.username}`, true);
+    
   
 
 
@@ -137,7 +148,7 @@ exports.sendMessages = function(req, res) {
     //   req.flash('errors', err.message);
     //   res.redirect('/admin');
     // });
-  }
+  
 
 };
 
@@ -145,32 +156,8 @@ exports.sendMessages = function(req, res) {
 //------------------------------------------------------------------------
 //******************************** TOOL BOX ******************************
 //------------------------------------------------------------------------
-function respond(res, resMessage, success) {
-    res.send(`
-        <html>
-          <head>
-              <meta name="viewport" content="width=device-width, initial-scale=1">
-              <title>Admin Dashboard - SJParks</title>
-              <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-              <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-              <style>
-                  body{
-                      font-family: Ubuntu, sans-serif;
-                      margin: 30px 20px;
-                  }
-              </style>
-          </head>
-          <body>
-              <p>${success ? 'Success: Message sent!' : 'Error: Couldn\'t verify the req'}.</p>
-              <p>${resMessage}</p>
-              <a class="btn" href="/admin">< Back</a>
-          </body>
-        </html>`
-    )
-}
-
-exports.peek = function(req, res ){
-    db.User.find({}, (err, query) => {
+exports.peek = function(req, res){
+    db.SubscriptionLog.find({}, (err, query) => {
         if (err) respond(res, 'err '+err.message, false);
         respond(res, query, true);
     });

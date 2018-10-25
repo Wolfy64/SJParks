@@ -14,6 +14,7 @@ exports.validate = function (request, response) {
             if (user && user.validate_password(request.body.psw)){
                 request.session.admin = user.admin;
                 request.session.username = user.username;
+                request.session.userid = user._id;
                 response.redirect(user.admin ? '/admin' : '/dashboard');
             } else response.redirect('/login');
         });
