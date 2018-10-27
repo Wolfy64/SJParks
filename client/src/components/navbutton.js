@@ -4,7 +4,7 @@ export default class navButton extends Component {
   render() {
     return (
       <div>
-          <button></button>
+        <button className="btn">{this.props.name}</button>
       </div>
     )
   }
