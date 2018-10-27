@@ -27,7 +27,7 @@ exports.logout = function (req, res) {
     res.redirect('/login');
 }
 
-// Session Handling 
+// Session Handling
 exports.requireAdminLogin = function (req, res, next) {
     if (req.session.admin) next();
     else res.redirect('/login');

@@ -11,10 +11,10 @@ module.exports = function(app) {
 //****************************** ABOUT PAGE ******************************
 //------------------------------------------------------------------------
 
-  // Render a userResident page about the project to find out more 
+  // Render a userResident page about the project to find out more
   app.get('/', pages.aboutPage);
 
-  
+
 //------------------------------------------------------------------------
 //****************************** LOGIN PAGE ******************************
 //------------------------------------------------------------------------
@@ -42,9 +42,9 @@ module.exports = function(app) {
 //------------------------------------------------------------------------
 
   // Render the Administrator Dashboard/console
-  app.get('/admin', login.requireAdminLogin, pages.adminPage);//
+  app.get('/admin', pages.adminPage);//login.requireAdminLogin,
 
-  // Handle new user form submission 
+  // Handle new user form submission
   app.post('/admin/newuser', admin.newUser);
 
   // Handle new park form submission
@@ -66,5 +66,5 @@ module.exports = function(app) {
 
   // Handle subscriptions from about page
   app.post('/subscribe', message.webhook);
-  
+
  };

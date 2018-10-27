@@ -18,7 +18,6 @@ exports.newUser = function (req, res) {
         // console.log('------------------------------------------------');
         // console.log('------------------------------------------------');
 
-        //ERROR 537 will be for blah blah blah
         if (err) res.redirect('/537');
         if (!user) {
             if (req.body.psw === req.body.cpsw) {
@@ -59,7 +58,7 @@ exports.createPark = function(req, res) {
     // console.log('------------------------------------------------');
     // console.log('------------------------------------------------');
     // console.log('------------------------------------------------');
-    
+
     // Check if name exists
     db.Park.findOne({ name: req.body.parkname}, function(err, park) {
         if (err) {
@@ -120,7 +119,7 @@ exports.sendMessages = function(req, res) {
             if (err) return respond(res, `Error: ${err.message}`, false);
             // This should not happen!
             if (!users) return respond(res, `Andres Milton Cubas has deleted the users, I think.`, false);
-            
+
             // uncomment line below to send message to subscribers
             // messageSender.sendMessageToSubscribers(users, message, '');
             db.MessageLog({user:req.session.userid, parks:parks.map(park => park._id), message: message}).save(function(err){});
@@ -130,9 +129,9 @@ exports.sendMessages = function(req, res) {
     });
 
 
-    
-    
-  
+ 
+
+
 
 
     // Send messages to all users subscribed to parks in Parks
@@ -148,7 +147,7 @@ exports.sendMessages = function(req, res) {
     //   req.flash('errors', err.message);
     //   res.redirect('/admin');
     // });
-  
+
 
 };
 

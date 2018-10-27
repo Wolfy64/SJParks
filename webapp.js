@@ -5,7 +5,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const config = require('./config');
-const User = require('./models/User');
+const db = require('./models/');
 
 // Create Express web app
 const app = express();

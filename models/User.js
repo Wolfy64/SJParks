@@ -1,51 +1,92 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 const crypto = require('../lib/cryptoHelper');
 const uniqueValidator = require('mongoose-unique-validator');
-// var jwt = require('jsonwebtoken');
-// var secret = require('../config').secret;
-const Schema = mongoose.Schema;
 
+
+//DEF create 'User' schema
 const UserSchema = new mongoose.Schema({
-    
+
     salt: String,
 
-    first_name: {type: String, required: true, max: 100},
+    first_name: {
+        type: String,
+        max: 100,
+        required: true,
+        unique: true,
+        match: [/^[a-zA-Z]+$/, 'An Invalid username was entered. Please enter a valid letter.'],
+    },
 
-    last_name: {type: String, required: true, max: 100},
+    last_name: {
+        type: String,
+        max: 100,
+        required: true,
+        unique: true,
+        match: [/^[a-zA-Z]+$/, 'An Invalid username was entered. Please enter a valid letter.'],
+    },
 
-    username: {type: String, lowercase: true, required: true, unique: true, match: [/^[a-zA-Z0-9]+$/, 'invalid username'], index: true},
+    username: {
+        type: String,
+        max: 100,
+        required: true,
+        unique: true,
+        uniqueCaseInsensitive: true,
+        match: [/^[a-zA-Z0-9]+$/, 'An Invalid username was entered. Please enter either a letter or a number.'],
+        index: true
+    },
 
-    password: {type: String, required: [true, "Password Required"]},
+    password: {
+        type: String,
+        required: [true, 'REQUIRED: Password'],
+        uniqueCaseInsensitive: true,
+    },
 
     admin: {type: Boolean, default: false},
 
-    email: {type: String, lowercase: true, required: [true, "you must enter an email"], unique: true,
-        match: [/\S+@\S+\.\S+/, 'is invalid'], index: true}, 
-    
-    phone: {type: String, required: [true, "you must enter a phone number"], unique: true},
+    email: {
+        type: String,
+        lowercase: true,
+        required: true,
+        unique: true,
+        match: [/\S+@\S+\.\S+/, 'is invalid'],
+        index: true
+    },
 
-    parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }],
-    // for easy referene to issues
-    issues:[{ type: Schema.Types.ObjectId, ref: 'Messagelog' }]
+    phone: {
+        type: String,
+        required: true,
+        unique: true
+    }, // match: [/(+\d+)+\d+\-\d+/, "(999) 999 - 9999"]
+
+    parks: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Park',
+        unique: true
+    }],
+
+    issues:[{ type: Schema.Types.ObjectId, ref: 'Issue' }]
 
 }, {timestamps: true});
 
-// TODO Creat Virtual Fields for optimization
-UserSchema.virtual('name').get(function () { return this.last_name + ', ' + this.first_name; });
+//DEF Create Virtual Fields
+UserSchema.virtual('name').get(function ()
+{
+    return this.last_name + ', ' + this.first_name;
+});
 
-UserSchema.virtual('activeSUBS').get(function () { 
-    return this.phone + '{' + this.parks + ' }' 
-}   );
+UserSchema.virtual('activeSUBS').get(function ()
+{
+    return this.phone + this.parks
+});
 
 
+// ADD 'Unique' validator
+UserSchema.plugin(uniqueValidator);
 
-UserSchema.methods.validate_password = function(password) {
-    console.log('22222222222222222222222222');
-    console.log('22222222222222222222222222');
-    console.log(this.salt);
-    console.log(this.password);
-    console.log('22222222222222222222222222');
-    console.log('22222222222222222222222222');
+
+// ADD 'Ppassword' validator
+UserSchema.methods.validate_password = function (password)
+{
     var hash = crypto.getPasswordHash(password, this.salt);
     return this.password === hash;
 }

@@ -9,7 +9,9 @@ console.log('Passed config')
 
 // Initialize database connection - throws if database connection can't be
 // established
-mongoose.connect(config.mongoUrlTest);
+mongoose.connect(config.mongoUrlTest, {
+    useNewUrlParser: true
+});
 mongoose.Promise = Promise;
 
 console.log('PASS: index.js connected to mongoose')
