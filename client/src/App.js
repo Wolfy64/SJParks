@@ -9,7 +9,7 @@ class App extends React.Component{
             <h1>SJParks</h1>
             <div class="form-group">
               <label for="username">User ID: </label> <br />
-              <input type="name" name="name" />
+              <input type="name" name="name" placeholder="Enter Your Username" />
             </div>
             <div className ="form-group">
             <label for="password">Password: </label> <br />
