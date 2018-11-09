@@ -9,9 +9,10 @@ class App extends React.Component{
     return (
     <div>
         <Sidenav />
-        <Topnav />
-        <p>paragraph</p>
-        
+        <div className="page" id="content-wrapper">
+            <Topnav />
+            <p>paragraph easdfvrasdfvtfyuiol</p>
+        </div>
         
     </div>
     );
