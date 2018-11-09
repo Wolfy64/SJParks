@@ -1,0 +1,19 @@
+.sidebar{
+    border-right: solid 3px darkblue;
+    position: fixed;
+}
+.logout{
+    position: absolute;
+    bottom: 10px;
+    width: inherit;
+}
+
+.title{
+    color: aliceblue;
+    padding-top: 10px;
+}
+@media (max-width: 768px) {
+    .title h1{
+        font-size: 20px;
+    }
+}

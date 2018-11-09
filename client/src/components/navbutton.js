@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
+import './navbutton.css';
 
 export default class navButton extends Component {
   render() {
     return (
-      <div>
-        <button className="btn">{this.props.name}</button>
-      </div>
+        <button className="nav-btn">{this.props.name}</button>
     )
   }
 }
