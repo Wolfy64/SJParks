@@ -3,24 +3,22 @@ import NavButton from './navbutton';
 import './sidenav.css';
 
 export default class SideNav extends Component {
-  render() {
+    render() {
     return (
-      <div className="row">
-      <div className="col-sm-2">
-      <div>
-      <h1>SJParks</h1>
-      <p className="text-center w-100 d-inline-block">Admin</p>
+      <div className="sidebar">
+      <div className="title text-center nav-item">
+          <h1>SJParks</h1>
+          <p>Admin</p>
       </div>
-      <ul className="navbar-nav full-height d-flex flex-column justify-content-between">
-        <li>
-        <li><NavButton name="Updates" action="updatePage"/></li>
+      <ul className="navbar-nav">
+        <li><NavButton onClick={()=>{alert("run")}} name="Updates" action="updatePage"/></li>
         <li><NavButton name="Parks" action="parkPage"/></li>
         <li><NavButton name="Users" action="userPage" /></li>
-        </li>
-        <li><NavButton name="Logout" action="logoutPage" /></li>
-            </ul>
-        </div>
-        </div>
+      </ul>
+      <div className="logout">
+        <NavButton name="Logout" action="logoutPage" />
+      </div>
+      </div>
     );
   }
 }

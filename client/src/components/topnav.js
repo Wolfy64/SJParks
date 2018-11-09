@@ -4,9 +4,9 @@ import './topnav.css';
 class TopNav extends React.Component {
   render() {
     return (
-      <div className="top-nav d-flex justify-content-end col-sm-10">
-        <nav className="navbar sticky-top">
-            <p>newUpdate</p>
+      <div className="top-nav">
+        <nav className="navbar">
+            <button>newUpdate</button>
             <img></img>
         </nav>
       </div>

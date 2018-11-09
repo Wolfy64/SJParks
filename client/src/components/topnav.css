@@ -1,0 +1,9 @@
+.top-nav{
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+    float: right;
+}
+nav a {
+    padding: 10px;
+}
