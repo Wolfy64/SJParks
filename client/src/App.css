@@ -14,8 +14,12 @@ body {
 }
 
 .page{
-    max-width: 80vw;
-    float: right;
+    padding-left: 250px;
+    margin: 10px 30px;
+}
+
+@media (max-width: 768px) {
+    .page{padding-left: 120px;}
 }
 
 #wrapper {
