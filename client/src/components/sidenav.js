@@ -10,32 +10,38 @@ export default class SideNav extends Component {
     };
 
     // This binding is necessary to make `this` work in the callback
-    this.toUpdate = this.toUpdate.bind(this);
+    this.toUpdates = this.toUpdates.bind(this);
     this.toParks = this.toParks.bind(this);
     this.toUsers = this.toUsers.bind(this);
     this.toLogout = this.toLogout.bind(this);
   }
     
-    toUpdate() {
-        if(this.state.page !== "updates"){
-            this.setState({ page: "updates" })
+    toUpdates() {
+        if(this.props.page !== "updates"){
+            this.setState({ page: "updates" }) 
         }
+        console.log(this.props)
   }
     toParks() {
         if(this.state.page !== "parks"){
             this.setState({ page: "parks" })
         }
+        console.log(this.state)
   }
     toUsers() {
         if(this.state.page !== "users"){
             this.setState({ page: "users" })
         }
+        console.log(this.state)
+        
   }
     toLogout() {
         if(this.state.page !== "logout"){
             this.setState({ page: "logout" })
+            console.log(this.state)
         }
         alert("Logged out!")
+        
   }
     
     render() {
