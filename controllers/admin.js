@@ -103,6 +103,7 @@ exports.sendMessages = function(req, res) {
     // Get message info from form submission
     const message = req.body.message;
     const parkids = req.body.parkID;
+    const withParkNames = !req.body.withParkNames;
     // Validate input
     if (!message) return respond(res, 'Reason: Empty message.', false);
     if (typeof(parkids) === 'string') return respond(res, 'Reason: No park selected', false);
@@ -120,36 +121,24 @@ exports.sendMessages = function(req, res) {
             if (err) return respond(res, `Error: ${err.message}`, false);
             // This should not happen!
             if (!users) return respond(res, `Andres Milton Cubas has deleted the users, I think.`, false);
-            
-            // uncomment line below to send message to subscribers
-            // messageSender.sendMessageToSubscribers(users, message, '');
+            let customMessage = '';
+            users.forEach((user) => {
+                if (withParkNames) {
+                    const parkNames = parks.filter(park => user.parks.indexOf(park._id) >= 0 && park.users.indexOf(user._id) >= 0)
+                        .reduce((acc, cur) => acc += `${cur.name}, `, '');
+                    customMessage = `${parkNames}\n\n${message}`;
+                }
+                else customMessage = message;
+                console.log(customMessage);
+                // uncomment line below to send message to subscribers
+                messageSender.sendSingleTwilioMessage(user.phone, customMessage, '');
+            })
+            // Log the message event
             db.MessageLog({user:req.session.userid, parks:parks.map(park => park._id), message: message}).save(function(err){});
             // Send response back to admin
             respond(res, `Message: ${message}<br>Sent to parks: ${parkids}<br>Sent by: ${req.session.username}`, true);
         });
     });
-
-
-    
-    
-  
-
-
-    // Send messages to all users subscribed to parks in Parks
-    // Subscription.find({
-    //   park: {$in: parkID},
-    // }).then((users) => {
-    //   messageSender.sendMessageToSubscribers(users, message, '');
-    // }).then(() => {
-    //   req.flash('successes', 'Messages on their way!');
-    //   res.redirect('/admin');
-    // }).catch((err) => {
-    //   console.log('err ' + err.message);
-    //   req.flash('errors', err.message);
-    //   res.redirect('/admin');
-    // });
-  
-
 };
 
 
