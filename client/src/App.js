@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Login from './components/login'
 import Sidenav from './components/sidenav'
 import Topnav from './components/topnav'
 
