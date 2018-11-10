@@ -17,22 +17,22 @@ export default class SideNav extends Component {
   }
     
     toUpdate() {
-        if(this.state.page != "updates"){
+        if(this.state.page !== "updates"){
             this.setState({ page: "updates" })
         }
   }
     toParks() {
-        if(this.state.page != "parks"){
+        if(this.state.page !== "parks"){
             this.setState({ page: "parks" })
         }
   }
     toUsers() {
-        if(this.state.page != "users"){
+        if(this.state.page !== "users"){
             this.setState({ page: "users" })
         }
   }
     toLogout() {
-        if(this.state.page != "logout"){
+        if(this.state.page !== "logout"){
             this.setState({ page: "logout" })
         }
         alert("Logged out!")
