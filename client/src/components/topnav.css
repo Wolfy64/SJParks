@@ -2,6 +2,7 @@
     display: flex;
     justify-content: flex-end;
     height: 50px;
+    background: #212529;
 }
 nav a {
     padding: 10px;
