@@ -23,7 +23,6 @@ class TopNav extends React.Component {
       <BrowserRouter>
       <div className="top-nav">
         <nav className="navbar">
-            <li><Link></Link>newUpdate</li>
             <li><Link to="/users" onClick={this.toUsers}><img></img>IMAGE</Link></li>
         </nav>
       </div>
