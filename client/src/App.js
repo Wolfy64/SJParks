@@ -5,12 +5,15 @@ import Sidenav from './components/sidenav'
 import Topnav from './components/topnav'
 =======
 import React from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import Sidenav from './components/sidenav'
 
 class App extends React.Component{
     //Template router
     render () {
         return(
+        <div>
+        <Sidenav />
         <Router>
           <div>
             <ul>
@@ -33,6 +36,7 @@ class App extends React.Component{
             <Route path="/topics" component={Topics} />
           </div>
         </Router>
+        </div>
         )
     }
 };
