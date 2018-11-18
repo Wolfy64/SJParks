@@ -3,7 +3,7 @@ import Todo from './todo';
 import Items from './items';
 
 export default class parks extends Component {
-  inputElement = React.createRef();
+  inputElement = React.createRef(); // createRef? 
   constructor(){
     super();
     this.state = {
@@ -15,8 +15,8 @@ export default class parks extends Component {
     }
   }
     handleInput = e => {
-      const itemText = e.target.value;
-      const currentItem = {text: itemText, key:Date.now() }
+      const itemText = e.target.value; // Still Kinda Fuzzy About this Concept
+      const currentItem = {text: itemText, key:Date.now() } // key is a key value pair from currentItem
       this.setState({
         currentItem,
       })
@@ -25,9 +25,9 @@ export default class parks extends Component {
      addItem = e => {
        e.preventDefault();
       const newItem = this.state.currentItem
-      if (newItem.text !== ''){
+      if (newItem.text !== ''){ // .text? is it a string method? if it is, what does it do?
         console.log(newItem)
-        const items = [...this.state.items, newItem]
+        const items = [...this.state.items, newItem] // ... -> This is a Spread Operator but idk i don't understand the concept fully
         this.setState({
           items: items,
           currentItem: {text: '', key: ''}
@@ -36,7 +36,7 @@ export default class parks extends Component {
     }
 
      deleteItem = key => {
-      const filteredItems = this.state.items.filter(item => {
+      const filteredItems = this.state.items.filter(item => { // i forgot what filter() does i need to reasearch this again. 
         return item.key !== key;
       })
       this.setState({
@@ -58,6 +58,11 @@ export default class parks extends Component {
       )
     }
 }
+
+// PLEASE LOOK AT THE COMMENTS ON MY CODE AND IF YOU CAN EXPLAIN TO ME ABOUT THESE CONCEPTS
+// THANK YOU!!!
+
+
 
 
 /*
