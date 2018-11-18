@@ -9,7 +9,7 @@ export default class parks extends Component {
     }
   }
 
-  handleFilter = (e) =>{
+  handleFilter = (e) => {
     this.setState({
       parkFilter: e.target.value
     })
@@ -20,12 +20,12 @@ export default class parks extends Component {
     return (
       <div>
         <h1>Parks</h1>
-        <div class="form-group">
-            <label for="username">New Parks Title: </label> <br />
+        <div className="form-group">
+            <label htmlFor="username">New Parks Title: </label> <br />
             <input type="name" name="name" placeholder="Parks" />
         </div>
-        <div class="form-group">
-            <label for="username">Keyword </label> <br />
+        <div className="form-group">
+            <label htmlFor="username">Keyword </label> <br />
             <input type="name" name="name" placeholder="Keyword" />
         </div>
         <button>Create New Park</button>
