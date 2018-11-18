@@ -1,5 +1,32 @@
 import React, { Component } from 'react'
 
+
+export default class parks extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      items: [],
+      currentItem: {text: '', key: ''},
+    }
+    handleInput = e => {
+      //....
+    }
+
+    addItem = e => {
+      //....
+    }
+     render(){
+       return(
+         <div>
+           <h1>Parks</h1>
+         </div>
+       )
+     }
+  }
+}
+
+
+
 export default class parks extends Component {
   constructor(props){
     super(props);
