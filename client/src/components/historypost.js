@@ -1,24 +1,44 @@
 import React, { Component } from 'react'
+let data = [
+    {name:'Jeff Tomson',
+    date: "11/28/18",
+    time: "11:20",
+    parkIDs: ['ROSE', 'ROSE'],
+    message: 'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'},
+    
+    {name:'Peterson Laderhavin',
+    date: Date.now(),
+    time: "11:20",
+    parkIDs: ['ROSE'],
+    message: 'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'},
+    
+    {name:'Fernando Bordalex',
+    date: Date.now(),
+    time: "11:20",
+    parkIDs: ['ROSE'],
+    message: 'Bramhall Park and Rose Garden,\nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'}
+    ]
+    
 
-class Post extends React.Component{
+export default class Post extends React.Component{
   render (){
     return (
-      <div className="card">
+      <div>{data.map((e, index)=>
+          <div className="card" key={index}>
         <div className="dark-blue white-text">
             <i>Arrow</i>
-            <p>Jeff Tomson</p>
-            <p>11/10/2018 at 11:54 AM</p>
+            <p className="white-text">{e.name}</p>
+            <p className="white-text">{e.date} at {e.time}</p>
         </div>
+        <div>{e.parkIDs.map((park)=><p>{park}</p>)}</div>
         <div className="gray bottom-round">
-            <div className="parkID green-tag white-text">ROSE</div>
             <a className="blue-link">11 more...</a>
         </div>
-        <p>Bramhall Park and Rose Garden, 
-Dear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.</p>
+        <p>{e.message}</p>
       </div>
-    );
+          
+          
+          )}</div>
+      )
   }
 };
-
-
-export default Login;
