@@ -3,6 +3,8 @@ import NavButton from './navbutton';
 import './sidenav.css';
 import Topnav from './topnav'
 import Parks from './parks'
+import Users from './users'
+import Updates from './updates'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 
@@ -26,63 +28,19 @@ export default class SideNav extends Component {
                   </ul>
 
                   <div className="logout">
-                    <Link to="/"><NavButton name="Logout" action="logoutPage" /></Link>
+                    <a href="/"><NavButton name="Logout" action="logoutPage" /></a>
                   </div>
                 </div>
             <div className='page'>
-              <Route path="/updates" component={Home} />
+              <Route path="/updates" component={Updates} />
               <Route path="/parks" component={Parks} />
-              <Route path="/users" component={Topics} />
-              <Route path="/login" component={Topics} />
+              <Route path="/users" component={Users} />
               </div>
             </div>
           </Router> 
       
     );
-        
-function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-    </div>
-  );
-}
 
-
-
-function Topics({ match }) {
-  return (
-    <div>
-      <h2>Topics</h2>
-      <ul>
-        <li>
-          <Link to={`${match.url}/rendering`}>Rendering with React</Link>
-        </li>
-        <li>
-          <Link to={`${match.url}/components`}>Components</Link>
-        </li>
-        <li>
-          <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-        </li>
-      </ul>
-
-      <Route path={`${match.path}/:topicId`} component={Topic} />
-      <Route
-        exact
-        path={match.path}
-        render={() => <h3>Please select a topic.</h3>}
-      />
-    </div>
-  );
-}
-
-function Topic({ match }) {
-  return (
-    <div>
-      <h3>{match.params.topicId}</h3>
-    </div>
-  );
-}
   }
 
 }
