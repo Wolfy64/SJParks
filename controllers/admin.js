@@ -91,10 +91,10 @@ exports.createPark = function(req, res) {
 
 };
 
-<<<<<<< HEAD
 
-
-
+//------------------------------------------------------------------------
+//***************************** SEND MESSAGES ****************************
+//------------------------------------------------------------------------
 
 
 exports.sendMessages = function(req, res) {
@@ -102,7 +102,7 @@ exports.sendMessages = function(req, res) {
   const message = req.body.message;
   const parkID = req.body.parkID;
   
-  console.log(req.session);
+  // console.log(req.session);
     
   if(!message) {
     respond(res, 'Reason: Empty message.', false);
@@ -110,7 +110,7 @@ exports.sendMessages = function(req, res) {
     respond(res, 'Reason: No park selected', false);
   } else {
     // TODO prettify res with message displayed
-    respond(res, 'Message: ' + message, true);
+    respond(res, `Message: ${message}\nSent to parks: ${parkID}\nSent by: ${req.session.username}`, true);
   
     // Send messages to all users subscribed to parks in Parks
     // Subscription.find({
@@ -130,10 +130,9 @@ exports.sendMessages = function(req, res) {
 };
 
 
-
-
-
-// Send html res
+//------------------------------------------------------------------------
+//******************************** TOOL BOX ******************************
+//------------------------------------------------------------------------
 function respond(res, resMessage, success) {
     res.send(`
         <html>
@@ -156,16 +155,11 @@ function respond(res, resMessage, success) {
           </body>
         </html>`
     )
-  }
-
-  exports.peek = function(req, res ){
-        db.User.find({}, (err, query) => {
-            if (err) respond(res, 'err '+err.message, false);
-            respond(res, query, true);
-        });
-  }
-=======
-exports.newUser = function(req, res){
-    
 }
->>>>>>> fix
+
+exports.peek = function(req, res ){
+    db.User.find({}, (err, query) => {
+        if (err) respond(res, 'err '+err.message, false);
+        respond(res, query, true);
+    });
+}

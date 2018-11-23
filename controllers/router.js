@@ -14,21 +14,13 @@ module.exports = function(app) {
   // Render a userResident page about the project to find out more 
   app.get('/', pages.aboutPage);
 
-<<<<<<< HEAD
   
 //------------------------------------------------------------------------
 //****************************** LOGIN PAGE ******************************
 //------------------------------------------------------------------------
-=======
-  // Handle new user form submission 
-  app.post('/login/signup', admin.newUser)
->>>>>>> fix
 
   // Render login page
   app.get('/login', pages.loginPage);
-
-  // Render login page
-  app.get('/login', pages.loginform);
 
   // Handle sign in
   app.post('/login', login.validate);
@@ -38,11 +30,19 @@ module.exports = function(app) {
 
 
 //------------------------------------------------------------------------
+//**************************** DASHBOARD PAGE ****************************
+//------------------------------------------------------------------------
+
+  // Render the general public Dashboard/console
+  app.get('/dashboard', login.requireUserLogin, pages.dashboardPage);
+
+
+//------------------------------------------------------------------------
 //****************************** ADMIN PAGE ******************************
 //------------------------------------------------------------------------
 
   // Render the Administrator Dashboard/console
-  app.get('/admin', login.requireLogin, pages.adminPage);// 
+  app.get('/admin', login.requireAdminLogin, pages.adminPage);//
 
   // Handle new user form submission 
   app.post('/admin/newuser', admin.newUser);

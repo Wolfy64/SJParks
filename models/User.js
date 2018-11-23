@@ -46,7 +46,7 @@ UserSchema.methods.validate_password = function(password) {
     console.log(this.password);
     console.log('22222222222222222222222222');
     console.log('22222222222222222222222222');
-    var hash = crypto.getPasswordHash(password, new Buffer(this.salt));
+    var hash = crypto.getPasswordHash(password, this.salt);
     return this.password === hash;
 }
 
