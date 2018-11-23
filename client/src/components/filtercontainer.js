@@ -26,7 +26,7 @@ export default class componentName extends Component {
             
         }) 
         this.setState({
-            filteredParks
+            filteredParks,
         });  
     }
   render() {
