@@ -37,6 +37,9 @@ button{
 button:hover{
     cursor: pointer;
 }
+.chart{
+    max-height: 100px;
+}
 
 #wrapper #content-wrapper {
   overflow-x: hidden;
