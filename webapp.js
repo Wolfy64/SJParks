@@ -5,9 +5,11 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const config = require('./config');
+const User = require('./models/User');
 
 // Create Express web app
 const app = express();
+
 //app.set('view engine', 'html');
 app.set('view engine', 'pug');
 
@@ -25,8 +27,14 @@ app.use(bodyParser.urlencoded({
 // Create and manage HTTP sessions for all requests
 app.use(session({
     secret: config.secret,
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 10 * 1000,
+        //activeDuration: 5 * 60 * 1000,
+        httpOnly: true,
+        secure: false
+    }
 }));
 
 // Use connect-flash to persist informational messages across redirects
@@ -50,6 +58,12 @@ app.use(function(err, request, response, next) {
     console.error(err.stack);
     response.status(500);
     response.sendFile(path.join(__dirname, 'public', '500.html'));
+});
+
+// Session
+app.use('/admin', function(err, req, res, next) {
+    console.log(err);
+    res.redirect('/login');
 });
 
 // Export Express app
