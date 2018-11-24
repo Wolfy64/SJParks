@@ -88,10 +88,6 @@ const Users = class userInput extends React.Component {
         body: data
       };
 
-      /**
-       * SHOULD BE A BEST PRACTICE TO CRYPT PASSWORD BEFORE SEND IT
-       * HAVE TO SEE WITH BACKEND SIDE
-       */
       fetch('/admin/newuser', payload)
         .then(res => console.log(res))
         .catch(err => console.log(err));
