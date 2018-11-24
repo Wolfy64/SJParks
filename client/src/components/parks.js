@@ -47,25 +47,32 @@ export default class parks extends Component {
       })
     }
 
-    handleFilter = e => {
+    handleFilter = (e) => {
+      e.preventDefault();  
+      const filtered = this.state.items.filter(item=> item.text.includes('hi')); //needs to filter through items according to the inputed value instead of 'hi'
       this.setState({
-        parkFilter: e.target.value,
+        parkFilter: filtered
       })
-      // When I press on the Keyboard, the whole app crashes. 
-      this.props.onChange(e.target.value) // It says that this is not a function.
     }
 
      render(){
       return(
         <div>
+          <h2>List</h2>
           <Todo
             addItem={this.addItem}
             inputElement={this.inputElement}
             handleInput={this.handleInput}
             currentItem={this.state.currentItem}
           />
-          <input type="text" id="filter" value={this.state.parkFilter} onChange={this.handleFilter} placeholder="Search Parks.."/>
           <Items entries={this.state.items} deleteItem={this.deleteItem}/>
+          
+          <h2>Filter</h2>
+          <form onSubmit={this.handleFilter}>
+            <input value={this.state.text} type="text" id="filter" placeholder="Search Parks.."/>
+            <button type="submit">Search</button>
+          </form>
+          <Items entries={this.state.parkFilter}/>
         </div>
       )
     }
