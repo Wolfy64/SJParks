@@ -4,6 +4,7 @@ const ERR_TEXT = 'minimum 3 characaters';
 const ERR_MAIL = 'invalid email address';
 const ERR_PASS = 'minimum 6 characaters';
 const ERR_SELECT = 'You must choose one option';
+const ERR_FORMS = 'Something wrong, did you fill up everything correctly?';
 
 const REGEX_MAIL = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -69,20 +70,24 @@ const Users = class userInput extends React.Component {
     event.preventDefault();
     const { formsError, password, passwordCheck } = this.state;
 
+    // Forms Data to send
+    const data = { ...this.state };
+    delete data.formsError;
+    delete data.passwordCheck;
+    delete data.showError;
+
     // Check if the form has error
     const hasError = Object.values(formsError).find(error => error !== false);
+    const dataIsEmpty = Object.values(data).includes('');
+
     const passIsEqual = password === passwordCheck;
 
-    // If Error show them
-    if (hasError || !passIsEqual) this.setState({ showError: true });
+    // If Forms have error show them
+    if (hasError || !passIsEqual || dataIsEmpty)
+      this.setState({ showError: true });
 
     // If Forms is valid send data Forms to the server
-    if (!hasError && passIsEqual) {
-      const data = this.state;
-      // Delete useless data
-      delete data.formsError;
-      delete data.showError;
-
+    if (!hasError && passIsEqual && !dataIsEmpty) {
       const payload = {
         method: 'POST',
         body: data
@@ -98,6 +103,7 @@ const Users = class userInput extends React.Component {
     return (
       <div>
         <h1>USERS</h1>
+        {this.state.showError && ERR_FORMS}
         <form onSubmit={this.handleSubmit}>
           <label htmlFor='fullName'>Full Name:</label>
           {this.state.showError && this.state.formsError.fullName}
