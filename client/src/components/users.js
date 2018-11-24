@@ -1,6 +1,11 @@
 import React from 'react';
 
-const emailRegex = RegExp(
+const ERR_TEXT = 'minimum 3 characaters';
+const ERR_MAIL = 'invalid email address';
+const ERR_PASS = 'minimum 6 characaters';
+const ERR_SELECT = 'You must choose one option';
+
+const REGEX_MAIL = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
 
@@ -27,24 +32,25 @@ const Users = class userInput extends React.Component {
     const { name, value } = event.target;
     const { formsError } = this.state;
 
-    // Handle input field rules
+    /**
+     * Handle Input rules
+     * Return String or false
+     */
     switch (name) {
       case 'fullName':
-        formsError[name] = value.length < 3 ? 'minimum 3 characaters' : false;
+        formsError[name] = value.length < 3 ? ERR_TEXT : false;
         break;
       case 'userId':
-        formsError[name] = value.length < 3 ? 'minimum 3 characaters' : false;
+        formsError[name] = value.length < 3 ? ERR_TEXT : false;
         break;
       case 'email':
-        formsError[name] = emailRegex.test(value)
-          ? false
-          : 'invalid email address';
+        formsError[name] = REGEX_MAIL.test(value) ? false : ERR_MAIL;
         break;
       case 'password':
-        formsError[name] = value.length < 6 ? 'minimum 6 characaters' : false;
+        formsError[name] = value.length < 6 ? ERR_PASS : false;
         break;
       case 'passwordCheck':
-        formsError[name] = value.length < 6 ? 'minimum 6 characaters' : false;
+        formsError[name] = value.length < 6 ? ERR_PASS : false;
         break;
       case 'accessType':
         formsError[name] =
@@ -52,7 +58,7 @@ const Users = class userInput extends React.Component {
             ? false
             : value === 'premium'
             ? false
-            : 'You must choose one option';
+            : ERR_SELECT;
         break;
     }
 
@@ -61,18 +67,34 @@ const Users = class userInput extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const error = Object.values(this.state.formsError).find(
-      error => error !== false
-    );
-    const samePassword = this.state.password !== this.state.passwordCheck;
-    console.log('samePassword', samePassword);
+    const { formsError, password, passwordCheck } = this.state;
 
-    if (error || !samePassword) {
-      this.setState({ showError: true });
-    }
+    // Check if the form has error
+    const hasError = Object.values(formsError).find(error => error !== false);
+    const passIsEqual = password === passwordCheck;
 
-    if (!error && !samePassword) {
-      console.log(this.state);
+    // If Error show them
+    if (hasError || !passIsEqual) this.setState({ showError: true });
+
+    // If Forms is valid send data Forms to the server
+    if (!hasError && passIsEqual) {
+      const data = this.state;
+      // Delete useless data
+      delete data.formsError;
+      delete data.showError;
+
+      const payload = {
+        method: 'POST',
+        body: data
+      };
+
+      /**
+       * SHOULD BE A BEST PRACTICE TO CRYPT PASSWORD BEFORE SEND IT
+       * HAVE TO SEE WITH BACKEND SIDE
+       */
+      fetch('/admin/newuser', payload)
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     }
   };
 
