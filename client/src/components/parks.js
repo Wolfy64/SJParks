@@ -33,7 +33,14 @@ export default class parks extends Component {
         }
         if (newItem.text !== ''){ // .text is a name for the park that came from user's input
             console.log(newItem)
-            const items = [...this.state.items, newItem] //concatinates new item object to an array of parks
+            let items = [...this.state.items, newItem] //concatinates new item object to an array of parks
+            items.sort((a, b) =>{
+              if (a.text < b.text)
+                return -1;
+              if (a.text > b.text)
+                return 1;
+              return 0;
+            });
             this.setState({
                 items: items,
                 newPark: '',
