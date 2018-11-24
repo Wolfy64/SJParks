@@ -1,17 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import Todo from './todo';
 import Items from './items';
 
 export default class parks extends Component {
-    inputElement = React.createRef(); // createRef? 
     constructor(props){ // and you can tell here that i added props to the component.
         super(props); // It it didn't have any before. 
         this.handleFilter = this.handleFilter.bind(this)
         this.state = {
-        items: [],
-        parkFilter: [],
-        filter: '',
-        newPark: '',
+            items: [],
+            parkFilter: [],
+            filter: '',
+            newPark: '',
         }
     }
 
@@ -41,7 +40,7 @@ export default class parks extends Component {
         }
     }
 
-     deleteItem = key => {
+    deleteItem = key => {
       const filteredItems = this.state.items.filter(item => { //filter() takes in an array and returns a new array with each item that passed through the true/false function.
         return item.key !== key;
       })
@@ -56,8 +55,9 @@ export default class parks extends Component {
           return item.text.includes(this.state.filter)
       }); //needs to filter through items according to the inputed value instead of 'hi'
       this.setState({
-        parkFilter: filtered
-      })
+        parkFilter: filtered,
+        filter: '',
+      });
     }
 
     render(){
@@ -67,7 +67,6 @@ export default class parks extends Component {
                 <h2>List</h2>
                 <Todo
                     addItem={this.addItem}
-                    inputElement={this.inputElement}
                     handleInput={this.handleInput}
                     newPark={this.state.newPark}
                 />
@@ -90,8 +89,3 @@ export default class parks extends Component {
 
 // PLEASE LOOK AT THE COMMENTS ON MY CODE AND IF YOU CAN EXPLAIN TO ME ABOUT THESE CONCEPTS
 // THANK YOU!!!
-
-
-
-
-
