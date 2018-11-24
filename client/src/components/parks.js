@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Todo from './todo';
 import Items from './items';
 
+
 export default class parks extends Component {
   inputElement = React.createRef(); // createRef? 
   constructor(props){ // and you can tell here that i added props to the component.
@@ -13,9 +14,20 @@ export default class parks extends Component {
         text: '',
         key: '',
       },
-      parkFilter: [],
+      parkFilter: '',
     }
   }
+
+  handleFilter = e => {
+    this.setState({
+      parkFilter: e.target.value,
+    })
+    // When I press on the Keyboard, the whole app crashes. 
+    // this.props.onChange(e.target.value)
+    
+    console.log(e)// It says that this is not a function.
+  }
+
     handleInput = e => {
       const itemText = e.target.value; // Still Kinda Fuzzy About this Concept
       const currentItem = {text: itemText, key:Date.now() } // key is a key value pair from currentItem
@@ -47,14 +59,7 @@ export default class parks extends Component {
       })
     }
 
-    handleFilter = e => {
-      this.setState({
-        parkFilter: e.target.value,
-      })
-      // When I press on the Keyboard, the whole app crashes. 
-      this.props.onChange(e.target.value) // It says that this is not a function.
-    }
-
+  
      render(){
       return(
         <div>
@@ -64,7 +69,7 @@ export default class parks extends Component {
             handleInput={this.handleInput}
             currentItem={this.state.currentItem}
           />
-          <input type="text" id="filter" value={this.state.parkFilter} onChange={this.handleFilter} placeholder="Search Parks.."/>
+          <input  type="text" id="filter" value={this.state.parkFilter} onChange={this.handleFilter} placeholder="Search Parks.."/>
           <Items entries={this.state.items} deleteItem={this.deleteItem}/>
         </div>
       )
