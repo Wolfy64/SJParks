@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Todo from './todo';
+import Plist from './plist';
 import Items from './items';
 
 export default class parks extends Component {
@@ -31,7 +31,6 @@ export default class parks extends Component {
             text: newPark,
         }
         if (newItem.text !== ''){ // .text is a name for the park that came from user's input
-            console.log(newItem)
             let items = [...this.state.items, newItem] //concatinates new item object to an array of parks
             items.sort((a, b) =>{
               if (a.text < b.text)
@@ -72,7 +71,7 @@ export default class parks extends Component {
         return(
             <div>
                 <h2>List</h2>
-                <Todo
+                <Plist
                     addItem={this.addItem}
                     handleInput={this.handleInput}
                     newPark={this.state.newPark}
