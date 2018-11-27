@@ -1,10 +1,36 @@
-import React from 'react';
+import React from "react";
+import "./users.css";
+import UserList from "./userlist";
 
-const ERR_TEXT = 'minimum 3 characaters';
-const ERR_MAIL = 'invalid email address';
-const ERR_PASS = 'minimum 6 characaters';
-const ERR_SELECT = 'You must choose one option';
-const ERR_FORMS = 'Something wrong, did you fill up everything correctly?';
+const ERR_TEXT = "minimum 3 characaters";
+const ERR_MAIL = "invalid email address";
+const ERR_PASS = "minimum 6 characaters";
+const ERR_SELECT = "You must choose one option";
+const ERR_FORMS = "Something wrong, did you fill up everything correctly?";
+
+/**
+ * DUMMY DATA
+ */
+const DATA = [
+  {
+    fullName: "John Doe",
+    userId: "john.doe100",
+    email: "john@mail.com",
+    accessType: "updates"
+  },
+  {
+    fullName: "Jeanne Doe",
+    userId: "jeanne.doe200",
+    email: "jeanne@mail.com",
+    accessType: "updates"
+  },
+  {
+    fullName: "Bobby Doe",
+    userId: "bobby.doe300",
+    email: "bobby@mail.com",
+    accessType: "updates"
+  }
+];
 
 const REGEX_MAIL = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -12,12 +38,12 @@ const REGEX_MAIL = RegExp(
 
 const Users = class userInput extends React.Component {
   state = {
-    fullName: '',
-    userId: '',
-    email: '',
-    password: '',
-    passwordCheck: '',
-    accessType: 'updates',
+    fullName: "",
+    userId: "",
+    email: "",
+    password: "",
+    passwordCheck: "",
+    accessType: "updates",
     formsError: {
       fullName: false,
       userId: false,
@@ -29,6 +55,11 @@ const Users = class userInput extends React.Component {
     showError: false
   };
 
+  componentDidMount() {
+    // Get data from the db
+    this.setState({ users: DATA });
+  }
+
   handleChange = event => {
     const { name, value } = event.target;
     const { formsError } = this.state;
@@ -38,26 +69,26 @@ const Users = class userInput extends React.Component {
      * Return String or false
      */
     switch (name) {
-      case 'fullName':
+      case "fullName":
         formsError[name] = value.length < 3 ? ERR_TEXT : false;
         break;
-      case 'userId':
+      case "userId":
         formsError[name] = value.length < 3 ? ERR_TEXT : false;
         break;
-      case 'email':
+      case "email":
         formsError[name] = REGEX_MAIL.test(value) ? false : ERR_MAIL;
         break;
-      case 'password':
+      case "password":
         formsError[name] = value.length < 6 ? ERR_PASS : false;
         break;
-      case 'passwordCheck':
+      case "passwordCheck":
         formsError[name] = value.length < 6 ? ERR_PASS : false;
         break;
-      case 'accessType':
+      case "accessType":
         formsError[name] =
-          value === 'updates'
+          value === "updates"
             ? false
-            : value === 'premium'
+            : value === "premium"
             ? false
             : ERR_SELECT;
         break;
@@ -78,7 +109,7 @@ const Users = class userInput extends React.Component {
 
     // Check if the form has error
     const hasError = Object.values(formsError).find(error => error !== false);
-    const dataIsEmpty = Object.values(data).includes('');
+    const dataIsEmpty = Object.values(data).includes("");
 
     const passIsEqual = password === passwordCheck;
 
@@ -89,22 +120,34 @@ const Users = class userInput extends React.Component {
     // If Forms is valid send data Forms to the server
     if (!hasError && passIsEqual && !dataIsEmpty) {
       const payload = {
-        method: 'POST',
+        method: "POST",
         body: data
       };
 
-      fetch('/admin/newuser', payload)
+      fetch("/admin/newuser", payload)
         .then(res => console.log(res))
         .catch(err => console.log(err));
+
+      // FOR TESTING ONLY with dummy data
+      this.setState({ users: [...this.state.users, data] });
     }
   };
+
+  handleShowUser() {
+    this.setState({ showUser: !this.state.showUser });
+  }
+
+  handleDelete(userId) {
+    const { users } = this.state;
+    this.setState({ users: users.filter(user => user.userId != userId) });
+  }
 
   render() {
     return (
       <div>
         <h1>USERS</h1>
         {this.state.showError && ERR_FORMS}
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit} style={{ display: "grid" }}>
           <label htmlFor='fullName'>Full Name:</label>
           {this.state.showError && this.state.formsError.fullName}
           <input
@@ -173,6 +216,18 @@ const Users = class userInput extends React.Component {
 
           <button type='submit'>Create New User</button>
         </form>
+        // Show a list of users
+        {this.state.users &&
+          this.state.users.map(user => (
+            <UserList
+              key={user.userId}
+              fullName={user.fullName}
+              userId={user.userId}
+              email={user.email}
+              accessType={user.accessType}
+              delete={() => this.handleDelete(user.userId)}
+            />
+          ))}
       </div>
     );
   }
