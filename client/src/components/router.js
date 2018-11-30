@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NavButton from "./navbutton";
 import "./sidenav.css";
-import Topnav from "./topnav";
+import Topnav from "./TopNav/TopNav";
 import Parks from "./parks";
 import Users from "./Users/Users";
 import Updates from "./updates";
