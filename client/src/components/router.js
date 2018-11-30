@@ -5,8 +5,8 @@ import Topnav from './topnav'
 import Parks from './parks'
 import Users from './users'
 import Updates from './updates'
+import NewUpdate from './NewUpdate'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-
 
 export default class SideNav extends Component {
     
@@ -33,6 +33,7 @@ export default class SideNav extends Component {
                 </div>
             <div className='page'>
               <Route path="/updates" component={Updates} />
+              <Route path="/newupdate" component={NewUpdate} />
               <Route path="/parks" component={Parks} />
               <Route path="/users" component={Users} />
               </div>
