@@ -1,6 +1,6 @@
 import React from "react";
 import "./users.css";
-import UserList from "./userlist";
+import UserList from "./UserList";
 
 const ERR_TEXT = "minimum 3 characaters";
 const ERR_MAIL = "invalid email address";
