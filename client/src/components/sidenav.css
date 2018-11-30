@@ -1,6 +1,10 @@
 .sidebar{
     border-right: solid 3px darkblue;
-    position: fixed;
+    position: absolute;
+    top:0;
+    background: #212529;
+    width: 150px;
+    height: 100vh;
 }
 .logout{
     position: absolute;
@@ -16,4 +20,7 @@
     .title h1{
         font-size: 20px;
     }
+}
+.page{
+    padding: 0 20px 0 170px;
 }

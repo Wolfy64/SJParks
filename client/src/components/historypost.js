@@ -1,24 +1,51 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react'   
 
-class Post extends React.Component{
+export default class Post extends React.Component{
+  constructor() {
+    super()
+    this.state = {
+      loadMore: false,
+    }
+    }
+
+  showMore = () =>{
+    this.state.loadMore ? this.setState({loadMore: false}) : this.setState({loadMore: true})
+  }      
+      
   render (){
     return (
-      <div className="card">
-        <div className="dark-blue white-text">
-            <i>Arrow</i>
-            <p>Jeff Tomson</p>
-            <p>11/10/2018 at 11:54 AM</p>
+        <div>
+            <div className="card">
+
+                <div className="dark-blue white-text">
+                    <i className="fas fa-caret-right text-primary"></i>
+
+                    <p className="white-text">{this.props.post.name}</p>
+                    <p className="white-text">{this.props.post.date} at {this.props.post.time}</p>
+                </div>
+
+                <div>
+                    {this.props.post.parkIDs.map((parkID, index)=>
+                        <p key={index}>{parkID}</p>
+                    )}
+                </div>
+
+                <div className="gray bottom-round">
+                <button onClick={this.showMore}
+                     className="blue-link">
+                        {this.state.loadMore ? (
+                        <span>Show less</span>
+                        ) : (
+                        <span>{this.props.post.parkIDs.length>3 ? (this.props.post.parkIDs.length-3).toString()+" more.." : null}</span>
+                        )
+                      }
+                </button>
+                </div>
+
+                <p>{this.props.post.message}</p>
+
+            </div>
         </div>
-        <div className="gray bottom-round">
-            <div className="parkID green-tag white-text">ROSE</div>
-            <a className="blue-link">11 more...</a>
-        </div>
-        <p>Bramhall Park and Rose Garden, 
-Dear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.</p>
-      </div>
-    );
+      )
   }
-};
-
-
-export default Login;
+}

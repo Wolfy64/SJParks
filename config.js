@@ -5,7 +5,7 @@ console.log('Testing config 1')
 const cfg = {};
 
 // HTTP Port for sjparks.c0d3.com
-cfg.port = 9601;
+cfg.port = 9608;
 
 // A random string that will help generate secure one-time passwords and
 // HTTP sessions
@@ -30,7 +30,7 @@ cfg.twilioNumber = process.env.TWILIO_NUMBER;
 cfg.mongoUrl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017'; // default
 
 // MongoDB connection string for test purposes
-cfg.mongoUrlTest = 'mongodb://localhost:27017';
+cfg.mongoUrlTest = 'mongodb://localhost/sj-parks';
 
 // Export configuration object
 module.exports = cfg;
