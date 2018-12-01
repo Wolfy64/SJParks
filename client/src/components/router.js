@@ -6,6 +6,7 @@ import Parks from "./parks";
 import Users from "./Users/Users";
 import Updates from "./updates";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import ProfilePage from "./ProfilePage/ProfilePage";
 
 export default class SideNav extends Component {
   render() {
@@ -52,6 +53,7 @@ export default class SideNav extends Component {
             <Route path='/updates' component={Updates} />
             <Route path='/parks' component={Parks} />
             <Route path='/users' component={Users} />
+            <Route path='/profile' component={ProfilePage} />
           </div>
         </div>
       </Router>
