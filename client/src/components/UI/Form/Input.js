@@ -4,7 +4,6 @@ const ERR_TEXT = 'Minimum 3 characaters';
 const ERR_MAIL = 'Invalid email address';
 const ERR_TEL = 'Invalid phone number';
 const ERR_PASS = 'Minimum 6 characaters';
-const ERR_SELECT = 'You must choose one option';
 const ERR_FORMS = 'Something wrong, did you fill up everything correctly?';
 
 const REGEX_MAIL = RegExp(
@@ -39,12 +38,13 @@ class Input extends React.Component {
       type,
       value
     } = this.props;
+
     const error = this.handleError(value, type);
 
     return (
       <div>
         <label htmlFor={name}>{label}</label>
-        {showError ? <span>{error}</span> : null}
+
         <input
           id={name}
           placeholder={placeholder}
@@ -54,6 +54,8 @@ class Input extends React.Component {
           onChange={onChange}
           haserror={hasError(error)}
         />
+
+        {showError ? <span>{error}</span> : null}
       </div>
     );
   }
