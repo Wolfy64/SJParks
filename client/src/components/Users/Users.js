@@ -1,136 +1,87 @@
-import React from "react";
-import "./users.css";
-import UserList from "./UserList";
-
-const ERR_TEXT = "minimum 3 characaters";
-const ERR_MAIL = "invalid email address";
-const ERR_PASS = "minimum 6 characaters";
-const ERR_SELECT = "You must choose one option";
-const ERR_FORMS = "Something wrong, did you fill up everything correctly?";
+import React from 'react';
+import './users.css';
+import Input from '../UI/Form/Input';
+import Select from '../UI/Form/Select';
+import UserList from './UserList';
 
 /**
  * DUMMY DATA
  */
 const DATA = [
   {
-    fullName: "John Doe",
-    userId: "john.doe100",
-    email: "john@mail.com",
-    accessType: "updates"
+    fullName: 'John Doe',
+    userId: 'john.doe100',
+    email: 'john@mail.com',
+    accessType: 'updates'
   },
   {
-    fullName: "Jeanne Doe",
-    userId: "jeanne.doe200",
-    email: "jeanne@mail.com",
-    accessType: "updates"
+    fullName: 'Jeanne Doe',
+    userId: 'jeanne.doe200',
+    email: 'jeanne@mail.com',
+    accessType: 'updates'
   },
   {
-    fullName: "Bobby Doe",
-    userId: "bobby.doe300",
-    email: "bobby@mail.com",
-    accessType: "updates"
+    fullName: 'Bobby Doe',
+    userId: 'bobby.doe300',
+    email: 'bobby@mail.com',
+    accessType: 'updates'
   }
 ];
-
-const REGEX_MAIL = RegExp(
-  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-);
+const SELECT_OPTIONS = {
+  updates: 'Updates Only',
+  premium: 'Premiun Access'
+};
+const initialState = {
+  fullName: '',
+  userId: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  showError: false
+};
 
 const Users = class userInput extends React.Component {
-  state = {
-    fullName: "",
-    userId: "",
-    email: "",
-    password: "",
-    passwordCheck: "",
-    accessType: "updates",
-    formsError: {
-      fullName: false,
-      userId: false,
-      email: false,
-      password: false,
-      passwordCheck: false,
-      accessType: false
-    },
-    showError: false
-  };
+  state = initialState;
 
   componentDidMount() {
     // Get data from the db
     this.setState({ users: DATA });
   }
 
-  handleChange = event => {
-    const { name, value } = event.target;
-    const { formsError } = this.state;
-
-    /**
-     * Handle Input rules
-     * Return String or false
-     */
-    switch (name) {
-      case "fullName":
-        formsError[name] = value.length < 3 ? ERR_TEXT : false;
-        break;
-      case "userId":
-        formsError[name] = value.length < 3 ? ERR_TEXT : false;
-        break;
-      case "email":
-        formsError[name] = REGEX_MAIL.test(value) ? false : ERR_MAIL;
-        break;
-      case "password":
-        formsError[name] = value.length < 6 ? ERR_PASS : false;
-        break;
-      case "passwordCheck":
-        formsError[name] = value.length < 6 ? ERR_PASS : false;
-        break;
-      case "accessType":
-        formsError[name] =
-          value === "updates"
-            ? false
-            : value === "premium"
-            ? false
-            : ERR_SELECT;
-        break;
-    }
-
-    this.setState({ [name]: value, formsError });
-  };
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
+  hasError = err => err;
 
   handleSubmit = event => {
     event.preventDefault();
-    const { formsError, password, passwordCheck } = this.state;
-
-    // Forms Data to send
-    const data = { ...this.state };
-    delete data.formsError;
-    delete data.passwordCheck;
-    delete data.showError;
+    const hasError = this.hasError();
+    const { confirmPassword, email, fullName, password, userId } = this.state;
+    const data = { email, fullName, password, userId };
 
     // Check if the form has error
-    const hasError = Object.values(formsError).find(error => error !== false);
-    const dataIsEmpty = Object.values(data).includes("");
+    const passIsEqual = password === confirmPassword;
+    const dataIsEmpty = Object.values(data).includes('');
 
-    const passIsEqual = password === passwordCheck;
-
-    // If Forms have error show them
-    if (hasError || !passIsEqual || dataIsEmpty)
+    if (hasError || dataIsEmpty || !passIsEqual) {
       this.setState({ showError: true });
+    }
 
     // If Forms is valid send data Forms to the server
     if (!hasError && passIsEqual && !dataIsEmpty) {
-      const payload = {
-        method: "POST",
-        body: data
-      };
+      const payload = { method: 'POST', body: JSON.stringify(data) };
 
-      fetch("/admin/newuser", payload)
+      fetch('/admin/newuser', payload)
         .then(res => console.log(res))
         .catch(err => console.log(err));
 
+      // Reset Form field
+      this.setState(initialState);
+
       // FOR TESTING ONLY with dummy data
       this.setState({ users: [...this.state.users, data] });
+      console.log('SEND DATA', data);
     }
+
+    console.log('UsersPage', this.state);
   };
 
   handleShowUser() {
@@ -139,84 +90,82 @@ const Users = class userInput extends React.Component {
 
   handleDelete(userId) {
     const { users } = this.state;
-    this.setState({ users: users.filter(user => user.userId != userId) });
+    this.setState({ users: users.filter(user => user.userId !== userId) });
   }
 
   render() {
     return (
       <div>
         <h1>USERS</h1>
-        {this.state.showError && ERR_FORMS}
-        <form onSubmit={this.handleSubmit} style={{ display: "grid" }}>
-          <label htmlFor='fullName'>Full Name:</label>
-          {this.state.showError && this.state.formsError.fullName}
-          <input
-            id='fullName'
-            placeholder='Full Name'
+        <form onSubmit={this.handleSubmit} style={{ display: 'grid' }}>
+          <Input
+            label='Full Name'
+            placeholder='John Doe'
             name='fullName'
             type='text'
+            showError={this.state.showError}
+            hasError={this.hasError}
             value={this.state.fullName}
             onChange={this.handleChange}
           />
 
-          <label htmlFor='userId'>User ID: </label>
-          {this.state.showError && this.state.formsError.userId}
-          <input
-            id='userId'
-            placeholder='User ID'
+          <Input
+            label='User Id'
+            placeholder='john42'
             name='userId'
             type='text'
-            value={this.state.userId}
+            showError={this.state.showError}
+            hasError={this.hasError}
             onChange={this.handleChange}
+            value={this.state.userId}
           />
 
-          <label htmlFor='email'>Email:</label>
-          {this.state.showError && this.state.formsError.email}
-          <input
-            id='email'
-            placeholder='Email'
+          <Input
+            label='Email'
+            placeholder='john.doe@mail.com'
             name='email'
             type='email'
-            value={this.state.email}
+            showError={this.state.showError}
+            hasError={this.hasError}
             onChange={this.handleChange}
+            value={this.state.email}
           />
 
-          <label htmlFor='password'>Password:</label>
-          {this.state.showError && this.state.formsError.password}
-          <input
-            id='password'
+          <Input
+            label='Password'
             placeholder='Password'
             name='password'
             type='password'
+            showError={this.state.showError}
+            hasError={this.hasError}
+            onChange={this.handleChange}
             value={this.state.password}
-            onChange={this.handleChange}
           />
 
-          <label htmlFor='passwordCheck'>Confirm Password:</label>
-          {this.state.showError && this.state.formsError.passwordCheck}
-          <input
-            id='passwordCheck'
+          <Input
+            label='Confirm Password'
             placeholder='Confirm Password'
-            name='passwordCheck'
+            name='confirmPassword'
             type='password'
-            value={this.state.passwordCheck}
+            showError={this.state.showError}
+            hasError={this.hasError}
             onChange={this.handleChange}
+            value={this.state.confirmPassword}
           />
 
-          <label htmlFor='accessType'>Access Type:</label>
-          {this.state.showError && this.state.formsError.accessType}
-          <select
-            id='accessType'
+          <Select
             name='accessType'
+            options={SELECT_OPTIONS}
+            showError={this.state.showError}
+            hasError={this.hasError}
+            onChange={this.handleChange}
             value={this.state.accessType}
-            onChange={this.handleChange}>
-            <option value='updates'>Updates Only</option>
-            <option value='premium'>Premiun Access</option>
-          </select>
+          />
 
           <button type='submit'>Create New User</button>
         </form>
-        // Show a list of users
+
+        <h2>Show a list of users</h2>
         {this.state.users &&
           this.state.users.map(user => (
             <UserList
