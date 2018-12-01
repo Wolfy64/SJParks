@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import NavButton from "./navbutton";
-import "./sidenav.css";
-import Topnav from "./TopNav/TopNav";
-import Parks from "./parks";
-import Users from "./Users/Users";
-import Updates from "./updates";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import ProfilePage from "./ProfilePage/ProfilePage";
+import React, { Component } from 'react';
+import NavButton from './navbutton';
+import './sidenav.css';
+import Topnav from './TopNav/TopNav';
+import Parks from './parks';
+import Users from './Users/Users';
+import Updates from './updates';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import ProfilePage from './ProfilePage/ProfilePage';
 
 export default class SideNav extends Component {
   render() {

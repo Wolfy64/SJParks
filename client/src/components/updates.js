@@ -1,6 +1,7 @@
 import React from 'react'
 import Graph from './graph'
 import Post from './historypost'
+import { Link } from 'react-router-dom'
 
 class Updates extends React.Component{
       constructor(){
@@ -32,7 +33,7 @@ class Updates extends React.Component{
           <div>
             <div className="col-lg-4">
               <Graph />
-              <button>New Text Update</button>
+              <Link to="/newupdate"><button>New Text Update</button></Link>
             </div>
             {this.state.history.map((post)=><Post post={post} className="col-lg-4" />)}
           </div>
