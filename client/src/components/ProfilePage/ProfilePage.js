@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from '../UI/Input';
+import Input from '../UI/Form/Input';
 
 const initialState = {
   fullName: '',
@@ -35,8 +35,8 @@ class ProfilePage extends React.Component {
             type='text'
             showError={this.state.showError}
             hasError={this.hasError}
-            value={this.state.fullName}
             onChange={this.handleChange}
+            value={this.state.fullName}
           />
 
           <Input
