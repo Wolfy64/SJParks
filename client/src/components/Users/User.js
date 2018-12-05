@@ -1,0 +1,35 @@
+import React from 'react';
+
+class User extends React.Component {
+  state = { showUser: false };
+
+  handleShowUser = () => this.setState({ showUser: !this.state.showUser });
+
+  render() {
+    const { showUser } = this.state;
+    const { accessType, deleteUser, email, fullName, UserList } = this.props;
+    let userDetails;
+
+    if (showUser) {
+      userDetails = (
+        <>
+          <p>
+            {email} - {accessType}
+          </p>
+          <button onClick={deleteUser}>Delete User</button>
+        </>
+      );
+    }
+
+    return (
+      <div>
+        <p onClick={this.handleShowUser}>
+          {fullName} {UserList}
+        </p>
+        <div>{userDetails}</div>
+      </div>
+    );
+  }
+}
+
+export default User;
