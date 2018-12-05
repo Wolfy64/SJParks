@@ -7,16 +7,17 @@ class User extends React.Component {
 
   render() {
     const { showUser } = this.state;
-    const { accessType, deleteUser, email, fullName, UserList } = this.props;
+    const { user } = this.props;
+
     let userDetails;
 
     if (showUser) {
       userDetails = (
         <>
           <p>
-            {email} - {accessType}
+            {user.email} - {user.accessType}
           </p>
-          <button onClick={deleteUser}>Delete User</button>
+          <button onClick={user.deleteUser}>Delete User</button>
         </>
       );
     }
@@ -24,7 +25,7 @@ class User extends React.Component {
     return (
       <div>
         <p onClick={this.handleShowUser}>
-          {fullName} {UserList}
+          {user.fullName} {user.UserList}
         </p>
         <div>{userDetails}</div>
       </div>
