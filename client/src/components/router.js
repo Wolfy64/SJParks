@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NavButton from './navbutton';
 import './sidenav.css';
 import Topnav from './topnav'
+import Parks from './parks'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 
@@ -30,7 +31,7 @@ export default class SideNav extends Component {
                 </div>
             <div className='page'>
               <Route path="/updates" component={Home} />
-              <Route path="/parks" component={About} />
+              <Route path="/parks" component={Parks} />
               <Route path="/users" component={Topics} />
               <Route path="/login" component={Topics} />
               </div>
@@ -47,13 +48,7 @@ function Home() {
   );
 }
 
-function About() {
-  return (
-    <div>
-      <h2>About</h2>
-    </div>
-  );
-}
+
 
 function Topics({ match }) {
   return (
