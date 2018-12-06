@@ -1,29 +1,12 @@
-<<<<<<< HEAD
-import React, { Component } from "react";
-import NavButton from "./navbutton";
-import "./sidenav.css";
-import Topnav from "./TopNav/TopNav";
-import Parks from "./parks";
-import Users from "./Users/Users";
-import Updates from "./updates";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import ProfilePage from "./ProfilePage/ProfilePage";
-=======
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import NavButton from './navbutton';
 import './sidenav.css';
 import Topnav from './TopNav/TopNav';
 import Parks from './parks';
-import Users from './Users';
+import Users from './Users/Users';
 import Updates from './updates';
-<<<<<<< HEAD
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import ProfilePage from './ProfilePage/ProfilePage';
->>>>>>> 90fcf9f6f36feed42ea32994896d404b6ef7b6e0
-=======
-import ProfilePage from './ProfilePage';
->>>>>>> david
 
 export default class SideNav extends Component {
   render() {
@@ -54,23 +37,10 @@ export default class SideNav extends Component {
               </li>
             </ul>
 
-<<<<<<< HEAD
-                  <div className="logout">
-                    <a href="/"><NavButton name="Logout" action="logoutPage" /></a>
-                  </div>
-                </div>
-            <div className='page'>
-              <Route path="/updates" component={Updates} />
-              <Route path="/newupdate" component={NewUpdate} />
-              <Route path="/parks" component={Parks} />
-              <Route path="/users" component={Users} />
-              </div>
-=======
             <div className='logout'>
               <a href='/'>
                 <NavButton name='Logout' action='logoutPage' />
               </a>
->>>>>>> 90fcf9f6f36feed42ea32994896d404b6ef7b6e0
             </div>
           </div>
           <div className='page'>
