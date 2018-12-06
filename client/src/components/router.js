@@ -36,10 +36,16 @@ export default class SideNav extends Component {
               </li>
             </ul>
 
-            <div className='logout'>
-              <a href='/'>
-                <NavButton name='Logout' action='logoutPage' />
-              </a>
+                  <div className="logout">
+                    <a href="/"><NavButton name="Logout" action="logoutPage" /></a>
+                  </div>
+                </div>
+            <div className='page'>
+              <Route path="/updates" component={Updates} />
+              <Route path="/newupdate" component={NewUpdate} />
+              <Route path="/parks" component={Parks} />
+              <Route path="/users" component={Users} />
+              </div>
             </div>
           </div>
           <div className='page'>
