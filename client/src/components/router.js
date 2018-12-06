@@ -10,15 +10,20 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import ProfilePage from "./ProfilePage/ProfilePage";
 =======
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import NavButton from './navbutton';
 import './sidenav.css';
 import Topnav from './TopNav/TopNav';
 import Parks from './parks';
-import Users from './Users/Users';
+import Users from './Users';
 import Updates from './updates';
+<<<<<<< HEAD
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import ProfilePage from './ProfilePage/ProfilePage';
 >>>>>>> 90fcf9f6f36feed42ea32994896d404b6ef7b6e0
+=======
+import ProfilePage from './ProfilePage';
+>>>>>>> david
 
 export default class SideNav extends Component {
   render() {
