@@ -1,5 +1,7 @@
 import React from 'react';
 import './topnav.css';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Users } from 'react';
 
 class TopNav extends React.Component {
   constructor(props) {
@@ -17,15 +19,17 @@ class TopNav extends React.Component {
   }
   render() {
     return (
-      <div className='top-nav'>
-        <nav className='navbar'>
-          <li>
-            <Link to='/users' onClick={this.toUsers}>
-              <img />IMAGE
-            </Link>
-          </li>
-        </nav>
-      </div>
+      <Router>
+        <div className='top-nav'>
+          <nav className='navbar'>
+            <li>
+              <Link to='/users' onClick={this.toUsers}>
+                <img />IMAGE
+              </Link>
+            </li>
+          </nav>
+        </div>
+      </Router>
     );
   }
 }

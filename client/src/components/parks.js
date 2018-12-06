@@ -13,7 +13,7 @@ export default class parks extends Component {
     this.setState({
       parkFilter: e.target.value
     })
-    this.props.onChange(event.target.value) 
+    this.props.onChange(e.target.value) 
   }
 
   render() {
