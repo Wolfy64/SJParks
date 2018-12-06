@@ -17,7 +17,7 @@ class User extends React.Component {
           <p>
             {user.email} - {user.accessType}
           </p>
-          <button onClick={user.deleteUser}>Delete User</button>
+          <button onClick={this.props.deleteUser}>Delete User</button>
         </>
       );
     }
