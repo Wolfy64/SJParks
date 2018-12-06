@@ -14,21 +14,12 @@ exports.loginPage = function(request, response) {
   response.sendFile(path.join(__dirname + '/..' + '/public/html/login.html'));
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> david
 exports.dashboardPage = function(request, response) {
   response.sendFile(
     path.join(__dirname + '/..' + '/public/html/dashboard.html')
   );
 };
-<<<<<<< HEAD
-=======
 exports.reactDashboard = function(request, response) {
-    // Render form, with any success or error flash messages
-    response.sendFile(path.join(__dirname + '/..' + '/client/public/index.html'));
+  // Render form, with any success or error flash messages
+  response.sendFile(path.join(__dirname + '/..' + '/client/public/index.html'));
 };
->>>>>>> 38a032977bba57743fa70bebd30e39ce71637cfd
-=======
->>>>>>> david

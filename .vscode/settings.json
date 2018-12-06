@@ -1,2 +1,5 @@
 {
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#FFC600CC"
+  }
 }

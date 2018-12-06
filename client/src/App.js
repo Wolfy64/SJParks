@@ -1,19 +1,15 @@
-import React from 'react'
-import Router from './components/router'
+import React from 'react';
+import Router from './components/router';
 
-class App extends React.Component{
-    //Template router
-    render () {
-        return(
-        <div>
+class App extends React.Component {
+  //Template router
+  render() {
+    return (
+      <div>
         <Router />
-        </div>
-        )
-    }
-};
-
-
-
+      </div>
+    );
+  }
+}
 
 export default App;
-
