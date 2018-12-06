@@ -18,3 +18,7 @@ exports.reactDashboard = function(request, response) {
   // Render form, with any success or error flash messages
   response.sendFile(path.join(__dirname + '/..' + '/public/index.html'));
 };
+
+exports.dashboardPage = function(request, response) {
+    response.sendFile(path.join(__dirname + '/..' + '/public/html/dashboard.html'));
+};
