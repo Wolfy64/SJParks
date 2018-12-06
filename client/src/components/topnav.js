@@ -1,27 +1,29 @@
 import React from 'react';
 import './topnav.css';
 
-
 class TopNav extends React.Component {
-  constructor(props){
-  super(props);
-  this.state = {
-    page: "users",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      page: 'users'
+    };
 
-  this.toUsers = this.toUsers.bind(this);
+    this.toUsers = this.toUsers.bind(this);
   }
 
-  toUsers(e){
-    alert("This buttons goes to users");
+  toUsers(e) {
+    alert('This buttons goes to users');
     e.preventDefault();
   }
   render() {
     return (
-      <div className="top-nav">
-        <nav className="navbar">
-            <li>newUpdate</li>
-            <li><a href ='' onClick={this.toUsers}><img></img>IMAGE</a></li>
+      <div className='top-nav'>
+        <nav className='navbar'>
+          <li>
+            <Link to='/users' onClick={this.toUsers}>
+              <img />IMAGE
+            </Link>
+          </li>
         </nav>
       </div>
     );
@@ -29,4 +31,3 @@ class TopNav extends React.Component {
 }
 
 export default TopNav;
-
