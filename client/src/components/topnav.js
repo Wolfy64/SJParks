@@ -1,14 +1,13 @@
 import React from 'react';
+import './topnav.css';
 
 class TopNav extends React.Component {
   render() {
     return (
-      <div>
-        <nav>
-          <ul>
-            <li>newUpdate</li>
-            <li><img></img></li>
-          </ul>
+      <div className="top-nav d-flex justify-content-end col-sm-10">
+        <nav className="navbar sticky-top">
+            <p>newUpdate</p>
+            <img></img>
         </nav>
       </div>
     );

@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import NavButton from './navbutton';
+import './sidenav.css';
 
 export default class SideNav extends Component {
   render() {
     return (
-      <div className="full-height">
-      <div className="col-sm-3 d-flex flex-column">
-            <h1 className="text-center">SJParks</h1>
-            <p className="text-center">Admin</p>
-            <ul className="navbar-nav">
-                <li className="sidebar-brand">
-                <li><NavButton name="Updates" action="updatePage"/></li>
-                <li><NavButton name="Parks" action="parkPage"/></li>
-                <li><NavButton name="Users" action="userPage" /></li>
-                <li><NavButton className="align-self-end" name="Logout" action="logoutPage" /></li>
-                </li>
+      <div className="row">
+      <div className="col-sm-2">
+      <div>
+      <h1>SJParks</h1>
+      <p className="text-center w-100 d-inline-block">Admin</p>
+      </div>
+      <ul className="navbar-nav full-height d-flex flex-column justify-content-between">
+        <li>
+        <li><NavButton name="Updates" action="updatePage"/></li>
+        <li><NavButton name="Parks" action="parkPage"/></li>
+        <li><NavButton name="Users" action="userPage" /></li>
+        </li>
+        <li><NavButton name="Logout" action="logoutPage" /></li>
             </ul>
         </div>
         </div>
