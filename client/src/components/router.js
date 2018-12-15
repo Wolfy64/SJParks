@@ -5,6 +5,7 @@ import Topnav from './TopNav/TopNav';
 import Parks from './parks';
 import Users from './Users';
 import Updates from './updates';
+import NewUpdate from './NewUpdate';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import ProfilePage from './ProfilePage';
 
@@ -21,17 +22,17 @@ export default class SideNav extends Component {
             </div>
             <ul className='navbar-nav'>
               <li>
-                <Link to='/updates'>
+                <Link to='/admin/updates'>
                   <NavButton name='Updates' action='updatePage' />
                 </Link>
               </li>
               <li>
-                <Link to='/parks'>
+                <Link to='/admin/parks'>
                   <NavButton name='Parks' action='parkPage' />
                 </Link>
               </li>
               <li>
-                <Link to='/users'>
+                <Link to='/admin/users'>
                   <NavButton name='Users' action='userPage' />
                 </Link>
               </li>
@@ -44,10 +45,11 @@ export default class SideNav extends Component {
             </div>
           </div>
           <div className='page'>
-            <Route path='/updates' component={Updates} />
-            <Route path='/parks' component={Parks} />
-            <Route path='/users' component={Users} />
-            <Route path='/profile' component={ProfilePage} />
+            <Route path='/admin/newupdate' component={NewUpdate} />
+            <Route path='/admin/updates' component={Updates} />
+            <Route path='/admin/parks' component={Parks} />
+            <Route path='/admin/users' component={Users} />
+            <Route path='/admin/profile' component={ProfilePage} />
           </div>
         </div>
       </Router>
