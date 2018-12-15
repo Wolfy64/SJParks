@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { parksDB } from '../dummyDB';
+import { parksDB } from '../../dummyDB';
 
 export class newUpdate extends Component {
   constructor(props) {
@@ -53,7 +53,7 @@ export class newUpdate extends Component {
           <button>Select All</button>
           <ul>
             {this.state.filteredLists.map(list => (
-              <li key={list._id}>
+              <li key={list._id} onClick={() => this.props.addPark(list._id)}>
                 <span>{list.name}</span>-<span>{list.parkID}</span>
               </li>
             ))}
