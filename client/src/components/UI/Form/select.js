@@ -1,48 +1,29 @@
 import React from 'react';
+import withFormError from '../../HOC/withFormError';
 
-const ERR_SELECT = 'You must choose one option';
+const Select = props => {
+  const optionsList = Object.entries(props.options).map(([key, value]) => (
+    <option key={key} value={key}>
+      {value}
+    </option>
+  ));
 
-class Select extends React.Component {
-  handleError = value => {
-    const option = Object.keys(this.props.options).find(el => el === value);
-    return option ? null : ERR_SELECT;
-  };
+  return (
+    <div>
+      <label htmlFor={props.name}>{props.label}</label>
 
-  render() {
-    const {
-      hasError,
-      label,
-      name,
-      onChange,
-      options,
-      showError,
-      value
-    } = this.props;
+      <select
+        id={props.name}
+        name={props.name}
+        value={props.value}
+        onChange={props.onChange}>
+        <option>Choose an option</option>
+        {optionsList}
+      </select>
 
-    const error = this.handleError(value);
-    const optionsList = Object.entries(options).map(([key, value]) => (
-      <option key={key} value={key}>
-        {value}
-      </option>
-    ));
+      {props.showError && <span>{props.showError}</span>}
+    </div>
+  );
+};
 
-    return (
-      <div>
-        <label htmlFor={name}>{label}</label>
-
-        <select
-          id={name}
-          name={name}
-          value={value}
-          onChange={onChange}
-          haserror={hasError(error)}>
-          {optionsList}
-        </select>
-
-        {showError ? <span>{error}</span> : null}
-      </div>
-    );
-  }
-}
-
-export default Select;
+export default withFormError(Select);
