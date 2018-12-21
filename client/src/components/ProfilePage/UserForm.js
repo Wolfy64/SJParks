@@ -16,16 +16,13 @@ class UserForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const hasError = this.hasError();
     const { email, fullName, phone } = this.state;
     const data = { email, fullName, phone };
 
-    // Check if the form has error
+    const hasError = this.hasError();
     const dataIsEmpty = Object.values(data).includes('');
 
-    if (hasError || dataIsEmpty) {
-      this.setState({ showError: true });
-    }
+    if (hasError || dataIsEmpty) this.setState({ showError: true });
 
     if (!hasError && !dataIsEmpty) {
       const payload = { method: 'POST', body: JSON.stringify(data) };
@@ -76,7 +73,7 @@ class UserForm extends React.Component {
           value={this.state.phone}
         />
 
-        <button type='submit'>Create New User</button>
+        <button>Create New User</button>
       </form>
     );
   }
