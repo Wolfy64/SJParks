@@ -36,7 +36,7 @@ const withFormError = WrappedComponent => {
     return (
       <WrappedComponent
         {...props}
-        hasError={props.hasError(error)}
+        hasError={props.hasError && props.hasError(error)}
         showError={props.showError && error}
       />
     );
