@@ -19,6 +19,7 @@ exports.dashboardPage = function (request, response) {
     path.join(__dirname + '/..' + '/public/html/dashboard.html')
   );
 };
+
 exports.reactDashboard = function (request, response) {
   // Render form, with any success or error flash messages
   response.sendFile(path.join(__dirname + '/..' + '/client/public/index.html'));

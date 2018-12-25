@@ -3,58 +3,34 @@ const message = require('./messageIncoming');
 const login = require('./login');
 const admin = require('./admin');
 
-// Map routes to controller functions
 module.exports = function (app) {
-  //------------------------------------------------------------------------
-  //****************************** ABOUT PAGE ******************************
-  //------------------------------------------------------------------------
 
-  // Render a userResident page about the project to find out more
   app.get('/', pages.aboutPage);
 
-  //------------------------------------------------------------------------
-  //****************************** LOGIN PAGE ******************************
-  //------------------------------------------------------------------------
-
-  // Render login page
   app.get('/login', pages.loginPage);
 
-  // Handle sign in
   app.post('/login', login.validate);
 
-  // Handle logout
   app.post('/login/out', login.logout);
 
-  //------------------------------------------------------------------------
-  //**************************** DASHBOARD PAGE ****************************
-  //------------------------------------------------------------------------
-
-  // Render the general public Dashboard/console
   app.get('/dashboard', login.requireUserLogin, pages.dashboardPage);
 
-  //------------------------------------------------------------------------
-  //****************************** ADMIN PAGE ******************************
-  //------------------------------------------------------------------------
+  app.get('/admin', login.requireAdminLogin, pages.adminPage);
 
-  // Render the Administrator Dashboard/console
-  app.get('/admin', login.requireAdminLogin, pages.adminPage); //
-
-  // Handle new user form submission
+  // User api
   app.post('/admin/newuser', admin.newUser);
 
-  // Handle new park form submission
   app.post('/admin/newpark', admin.createPark);
 
-  //DEVELOPER TOOL
   app.get('/admin/peek', admin.peek);
 
-  //------------------------------------------------------------------------
-  //*************************** MESSAGE HANDLING ***************************
-  //------------------------------------------------------------------------
+  // app.use('/api/users', routes.users);
 
-  // Twilio SMS webhook route
+  // Message api
   app.post('/message', message.webhook);
 
-  // Handle form submission and send messages to subscribers
   app.post('/admin/send_message', admin.sendMessages);
+
+  // app.use('/api/messages', routes.messages);
+
 };

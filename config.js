@@ -1,36 +1,47 @@
 require('dotenv-safe').load();
-
-console.log('Testing config 1')
-
+const dev = true;
 const cfg = {};
 
-// HTTP Port for sjparks.c0d3.com
-cfg.port = 9608;
+cfg.secret = process.env.APP_SECRET;
 
-// A random string that will help generate secure one-time passwords and
-// HTTP sessions
-cfg.secret = process.env.APP_SECRET || 'keyboard cat';
+cfg.mongoUri = dev ? process.env.DEV_MONGO_URI : process.env.DEP_MONGO_URL;
 
-// Your Twilio account SID and auth token, both found at:
-// https://www.twilio.com/user/account
-//
-// A good practice is to store these string values as system environment
-// variables, and load them from there as we are doing below. Alternately,
-// you could hard code these values here as strings.
+cfg.serverPort = dev ? process.env.APP_DEV_SERVER_PORT : process.env.APP_DEP_SERVER_PORT;
+
+cfg.clientPort = dev ? process.env.APP_DEV_CLIENT_PORT : process.env.APP_DEP_CLIENT_PORT;
+
 cfg.accountSid = process.env.TWILIO_ACCOUNT_SID;
+
 cfg.authToken = process.env.TWILIO_AUTH_TOKEN;
 
-// A Twilio number you control - choose one from:
-// https://www.twilio.com/user/account/phone-numbers/incoming
-// Specify in E.164 format, e.g. "+16519998877"
 cfg.twilioNumber = process.env.TWILIO_NUMBER;
 
-// MongoDB connection string - MONGO_URL is for local dev,
-// MONGOLAB_URI is for the MongoLab add-on for Heroku deployment
-cfg.mongoUrl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017'; // default
 
-// MongoDB connection string for test purposes
-cfg.mongoUrlTest = 'mongodb://localhost/sj-parks';
+/*require('dotenv-safe').load();.........
+------------------------------------------------------------------------------------------------------------
+This threw the folowing error:
+------------------------------------------------------------------------------------------------------------
+ "fs.js:122
+ throw err; ^
 
-// Export configuration object
+ Error: ENOENT: no such file or directory, open '.env.example'
+ at Object.openSync(fs.js: 448: 3)
+ at Object.readFileSync(fs.js: 348: 35)
+ at Object.config(/mnt/c / Users / theMathMonkey / Desktop / theShitTop / Google Drive / Coding / SJParksMERN / node_modules / dotenv - safe / index.js: 27: 45)
+ at Object. < anonymous > (/mnt/c / Users / theMathMonkey / Desktop / theShitTop / Google Drive / Coding / SJParksMERN / config.js: 15: 24)
+ at Module._compile(internal / modules / cjs / loader.js: 707: 30)
+ at Object.Module._extensions..js(internal / modules / cjs / loader.js: 718: 10)
+ at Module.load(internal / modules / cjs / loader.js: 605: 32)
+ at tryModuleLoad(internal / modules / cjs / loader.js: 544: 12)
+ at Function.Module._load(internal / modules / cjs / loader.js: 536: 3)
+ at Module.require(internal / modules / cjs / loader.js: 643: 17)
+ at require(internal / modules / cjs / helpers.js: 22: 18)
+ at Object. < anonymous > (/mnt/c / Users / theMathMonkey / Desktop / theShitTop / Google Drive / Coding / SJParksMERN / server.js: 6: 16)
+ at Module._compile(internal / modules / cjs / loader.js: 707: 30)
+ at Object.Module._extensions..js(internal / modules / cjs / loader.js: 718: 10)
+ at Module.load(internal / modules / cjs / loader.js: 605: 32)
+ at tryModuleLoad(internal / modules / cjs / loader.js: 544: 12)
+ "
+------------------------------------------------------------------------------------------------------------
+ */
 module.exports = cfg;
