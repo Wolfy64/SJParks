@@ -1,48 +1,48 @@
 {
-  "name": "sjparks",
-  "version": "1.0.0",
-  "description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
-  "main": "server.js",
-  "dependencies": {
-    "dotenv": "^6.0.0",
-    "dotenv-safe": "^6.0.0",
-    "express": "^4.16.3",
-    "express-flash": "0.0.2",
-    "express-session": "^1.15.6",
-    "mocha": "^5.2.0",
-    "mongoose": "^5.2.9",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.18.8",
-    "pug": "^2.0.3",
-    "react": "^16.5.2",
-    "react-app": "^1.1.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5",
-    "twilio": "^3.19.2"
-  },
-  "devDependencies": {
-    "concurrently": "^3.5.0"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eject": "react-scripts eject",
-    "client": "cd client && yarn start",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/irishka2863/SJParks.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/irishka2863/SJParks/issues"
-  },
-  "homepage": "https://github.com/irishka2863/SJParks#readme"
+	"name": "sjparks",
+	"version": "1.0.0",
+	"description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
+	"main": "server.js",
+	"dependencies": {
+		"dotenv": "^6.0.0",
+		"dotenv-safe": "^6.0.0",
+		"express": "^4.16.3",
+		"express-flash": "0.0.2",
+		"express-session": "^1.15.6",
+		"mocha": "^5.2.0",
+		"mongoose": "^5.2.9",
+		"morgan": "^1.9.1",
+		"pug": "^2.0.3",
+		"react": "^16.5.2",
+		"react-app": "^1.1.2",
+		"react-dom": "^16.5.2",
+		"react-scripts": "2.0.5",
+		"twilio": "^3.19.2"
+	},
+	"devDependencies": {
+		"nodemon": "^1.18.8",
+		"concurrently": "^3.5.0"
+	},
+	"scripts": {
+		"start": "node server.js",
+		"build": "react-scripts build",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"eject": "react-scripts eject",
+		"client": "cd client && yarn start",
+		"server": "nodemon server.js",
+		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+	},
+	"eslintConfig": {
+		"extends": "react-app"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/irishka2863/SJParks.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/irishka2863/SJParks/issues"
+	},
+	"homepage": "https://github.com/irishka2863/SJParks#readme"
 }
