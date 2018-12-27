@@ -13,6 +13,7 @@ const Select = props => {
       <label htmlFor={props.name}>{props.label}</label>
 
       <select
+        {...props}
         id={props.name}
         name={props.name}
         value={props.value}
