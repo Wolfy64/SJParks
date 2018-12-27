@@ -1,43 +1,58 @@
 import React from 'react';
 import Input from '../UI/Form/Input';
+import errorFormHandler from '../../utils/errorFormHandler';
+import isFormValid from '../../utils/isFormValid';
 
 const initialState = {
   fullName: '',
   email: '',
   phone: '',
-  showError: false
+  showErrors: false,
+  formErrors: null
 };
 
 class UserForm extends React.Component {
   state = initialState;
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
-  hasError = err => err;
+  handleChange = e => {
+    const { name, type, value } = e.target;
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { email, fullName, phone } = this.state;
-    const data = { email, fullName, phone };
+    this.setState({
+      [name]: value,
+      formErrors: {
+        ...this.state.formErrors,
+        [name]: errorFormHandler(type, value)
+      }
+    });
+  };
 
-    const hasError = this.hasError();
-    const dataIsEmpty = Object.values(data).includes('');
+  handleSubmit = e => {
+    e.preventDefault();
+    const { email, formErrors, fullName, phone } = this.state;
+    const dataForm = { email, fullName, phone };
+    const isValid = isFormValid(formErrors, dataForm);
 
-    if (hasError || dataIsEmpty) this.setState({ showError: true });
+    isValid
+      ? this.handleSendForm(dataForm)
+      : this.setState({ showErrors: true });
+  };
 
-    if (!hasError && !dataIsEmpty) {
-      const payload = { method: 'POST', body: JSON.stringify(data) };
+  handleSendForm = dataForm => {
+    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-      fetch('/admin/myprofile', payload)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-      console.log('SEND DATA', data);
+    fetch('/admin/myprofile', payload)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    console.log('SEND DATA', dataForm);
 
-      // Reset Form field
-      this.setState(initialState);
-    }
+    // Reset Form field
+    this.setState(initialState);
   };
 
   render() {
+    const { email, formErrors, fullName, phone, showErrors } = this.state;
+    const hasErrors = showErrors && formErrors;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <Input
@@ -45,10 +60,9 @@ class UserForm extends React.Component {
           placeholder='John Doe'
           name='fullName'
           type='text'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
-          value={this.state.fullName}
+          value={fullName}
+          error={hasErrors && formErrors.fullName}
         />
 
         <Input
@@ -56,21 +70,19 @@ class UserForm extends React.Component {
           placeholder='john.doe@mail.com'
           name='email'
           type='email'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
-          value={this.state.email}
+          value={email}
+          error={hasErrors && formErrors.email}
         />
 
         <Input
           label='Phone'
-          placeholder='123 456-7890'
+          placeholder='123-456-7890'
           name='phone'
           type='tel'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
-          value={this.state.phone}
+          value={phone}
+          error={hasErrors && formErrors.phone}
         />
 
         <button>Create New User</button>
