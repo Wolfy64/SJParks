@@ -1,45 +1,66 @@
 import React from 'react';
 import Input from '../UI/Form/Input';
+import errorFormHandler from '../../utils/errorFormHandler';
+import isFormValid from '../../utils/isFormValid';
 
 const initialState = {
   currentPassword: '',
   newPassword: '',
   repeatPassword: '',
-  showError: false
+  showError: false,
+  formErrors: null
 };
 
 class PasswordForm extends React.Component {
   state = initialState;
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
-  hasError = err => err;
+  handleChange = e => {
+    const { name, type, value } = e.target;
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const hasError = this.hasError();
-    const { currentPassword, newPassword } = this.state;
+    this.setState({
+      [name]: value,
+      formErrors: {
+        ...this.state.formErrors,
+        [name]: errorFormHandler(type, value)
+      }
+    });
+  };
 
-    // Check if the form has error
-    const passIsEqual = currentPassword === newPassword;
+  handleSubmit = e => {
+    e.preventDefault();
+    const { formErrors, newPassword, repeatPassword } = this.state;
+    const passIsEqual = repeatPassword === newPassword;
+    const isValid = isFormValid(formErrors, newPassword) && passIsEqual;
 
-    if (hasError || !newPassword || !passIsEqual) {
-      this.setState({ showError: true });
+    if (!passIsEqual) {
+      this.setState({
+        formErrors: {
+          ...this.state.formErrors,
+          repeatPassword: 'Password must be identical'
+        }
+      });
     }
 
-    if (!hasError && passIsEqual && newPassword) {
-      const payload = { method: 'POST', body: JSON.stringify(newPassword) };
+    isValid
+      ? this.handleSendForm(newPassword)
+      : this.setState({ showErrors: true });
+  };
 
-      fetch('/admin/newpassword', payload)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-      console.log('SEND DATA', newPassword);
+  handleSendForm = dataForm => {
+    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-      // Reset Form field
-      this.setState(initialState);
-    }
+    fetch('/admin/newpassword', payload)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    console.log('SEND DATA', dataForm);
+
+    // Reset Form field
+    this.setState(initialState);
   };
 
   render() {
+    const { formErrors, showErrors } = this.state;
+    const hasErrors = showErrors && formErrors;
     return (
       <form onSubmit={this.handleSubmit}>
         <Input
@@ -47,10 +68,9 @@ class PasswordForm extends React.Component {
           placeholder='Current Password'
           name='currentPassword'
           type='password'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.currentPassword}
+          error={hasErrors && formErrors.currentPassword}
         />
 
         <Input
@@ -58,10 +78,9 @@ class PasswordForm extends React.Component {
           placeholder='New Password'
           name='newPassword'
           type='password'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.newPassword}
+          error={hasErrors && formErrors.newPassword}
         />
 
         <Input
@@ -69,10 +88,9 @@ class PasswordForm extends React.Component {
           placeholder='Repeat Password'
           name='repeatPassword'
           type='password'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.repeatPassword}
+          error={hasErrors && formErrors.repeatPassword}
         />
 
         <button type='submit'>Confirm New Password</button>
