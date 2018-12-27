@@ -28,6 +28,9 @@ const errorFormHandler = (type, value, options) => {
     case 'select':
       !Object.keys(options).find(el => el === value) && (error = msgErr.select);
       break;
+    case 'textarea':
+      value.length < 10 && (error = msgErr.textarea);
+      break;
     default:
       error = msgErr.form;
       break;
