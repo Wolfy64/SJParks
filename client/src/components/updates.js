@@ -9,6 +9,7 @@ class Updates extends React.Component {
     this.state = {
       history: [
         {
+          _id: '825y78',
           name: 'Jeff Tomson',
           date: '11/28/18',
           time: '11:20',
@@ -25,6 +26,7 @@ class Updates extends React.Component {
         },
 
         {
+          _id: '825jsd78',
           name: 'Peterson Laderhavin',
           date: Date.now(),
           time: '11:20',
@@ -34,6 +36,7 @@ class Updates extends React.Component {
         },
 
         {
+          _id: '8ewiug',
           name: 'Fernando Bordalex',
           date: Date.now(),
           time: '11:20',
@@ -54,7 +57,7 @@ class Updates extends React.Component {
           </Link>
         </div>
         {this.state.history.map(post => (
-          <Post post={post} className='col-lg-4' />
+          <Post key={post._id} post={post} className='col-lg-4' />
         ))}
       </div>
     );
