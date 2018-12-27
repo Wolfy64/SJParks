@@ -1,5 +1,4 @@
 import React from 'react';
-import withFormError from '../../HOC/withFormError';
 
 const Select = props => {
   const optionsList = Object.entries(props.options).map(([key, value]) => (
@@ -27,4 +26,4 @@ const Select = props => {
   );
 };
 
-export default withFormError(Select);
+export default Select;
