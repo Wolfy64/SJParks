@@ -1,5 +1,4 @@
 import React from 'react';
-import withFormError from '../../HOC/withFormError';
 
 const Input = props => (
   <div>
@@ -14,8 +13,8 @@ const Input = props => (
       onChange={props.onChange}
     />
 
-    {props.showError && <span>{props.showError}</span>}
+    {props.error && <span>{props.error}</span>}
   </div>
 );
 
-export default withFormError(Input);
+export default Input;
