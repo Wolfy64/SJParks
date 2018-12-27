@@ -7,8 +7,8 @@ const initialState = {
   currentPassword: '',
   newPassword: '',
   repeatPassword: '',
-  showError: false,
-  formErrors: null
+  showErrors: false,
+  formErrors: false
 };
 
 class PasswordForm extends React.Component {
@@ -61,6 +61,7 @@ class PasswordForm extends React.Component {
   render() {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <Input
@@ -70,7 +71,7 @@ class PasswordForm extends React.Component {
           type='password'
           onChange={this.handleChange}
           value={this.state.currentPassword}
-          error={hasErrors && formErrors.currentPassword}
+          error={hasErrors ? formErrors.currentPassword : null}
         />
 
         <Input
@@ -80,7 +81,7 @@ class PasswordForm extends React.Component {
           type='password'
           onChange={this.handleChange}
           value={this.state.newPassword}
-          error={hasErrors && formErrors.newPassword}
+          error={hasErrors ? formErrors.newPassword : null}
         />
 
         <Input
@@ -90,7 +91,7 @@ class PasswordForm extends React.Component {
           type='password'
           onChange={this.handleChange}
           value={this.state.repeatPassword}
-          error={hasErrors && formErrors.repeatPassword}
+          error={hasErrors ? formErrors.repeatPassword : null}
         />
 
         <button type='submit'>Confirm New Password</button>

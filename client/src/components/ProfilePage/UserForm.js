@@ -8,7 +8,7 @@ const initialState = {
   email: '',
   phone: '',
   showErrors: false,
-  formErrors: null
+  formErrors: false
 };
 
 class UserForm extends React.Component {
@@ -62,7 +62,7 @@ class UserForm extends React.Component {
           type='text'
           onChange={this.handleChange}
           value={fullName}
-          error={hasErrors && formErrors.fullName}
+          error={hasErrors ? formErrors.fullName : null}
         />
 
         <Input
@@ -72,7 +72,7 @@ class UserForm extends React.Component {
           type='email'
           onChange={this.handleChange}
           value={email}
-          error={hasErrors && formErrors.email}
+          error={hasErrors ? formErrors.email : null}
         />
 
         <Input
@@ -82,7 +82,7 @@ class UserForm extends React.Component {
           type='tel'
           onChange={this.handleChange}
           value={phone}
-          error={hasErrors && formErrors.phone}
+          error={hasErrors ? formErrors.phone : null}
         />
 
         <button>Create New User</button>
