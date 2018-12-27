@@ -6,7 +6,7 @@ const TopNav = () => (
   <div className='top-nav'>
     <nav className='navbar'>
       <li>
-        <Link to='/profile'>IMAGE</Link>
+        <Link to='/admin/profile'>IMAGE</Link>
       </li>
     </nav>
   </div>
