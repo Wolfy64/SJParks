@@ -8,7 +8,7 @@ import { regex } from '../config/regex';
  * @param {Array} options - The Inout options List.
  * @returns {False || String} - False if any error OR the String of the error.
  */
-const errorFormHandler = (type, value, options) => {
+const errorFormHandler = (type, value, options = {}) => {
   let error = false;
 
   // If there is an error return the error message
@@ -25,7 +25,7 @@ const errorFormHandler = (type, value, options) => {
     case 'password':
       value.length < 6 && (error = msgErr.pass);
       break;
-    case 'select':
+    case 'select-one':
       !Object.keys(options).find(el => el === value) && (error = msgErr.select);
       break;
     case 'textarea':
