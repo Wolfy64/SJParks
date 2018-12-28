@@ -1,0 +1,11 @@
+button.nav-btn{
+    color: aliceblue;
+    width: 100%;
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 10px;
+}
+button:hover{
+    background-color: rgba(255, 255, 255, 0.1)
+}
