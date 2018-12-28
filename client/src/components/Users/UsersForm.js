@@ -1,66 +1,93 @@
 import React from 'react';
 import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
+import errorFormHandler from '../../utils/errorFormHandler';
+import isFormValid from '../../utils/isFormValid';
 
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
   premium: 'Premiun Access'
 };
 const initialState = {
+  accessType: '',
   fullName: '',
   userId: '',
   email: '',
   password: '',
   confirmPassword: '',
-  showError: false
+  showErrors: false
 };
 
 const UsersForm = class userInput extends React.Component {
   state = initialState;
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
-  hasError = err => err;
+  handleChange = e => {
+    const { name, type, value } = e.target;
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const hasError = this.hasError();
-    const { confirmPassword, email, fullName, password, userId } = this.state;
-    const data = { email, fullName, password, userId };
+    this.setState({
+      [name]: value,
+      formErrors: {
+        ...this.state.formErrors,
+        [name]: errorFormHandler(type, value, SELECT_OPTIONS)
+      }
+    });
+  };
 
-    // Check if the form has error
+  handleSubmit = e => {
+    e.preventDefault();
+    const {
+      accessType,
+      confirmPassword,
+      email,
+      formErrors,
+      fullName,
+      password,
+      userId
+    } = this.state;
+    const dataForm = { accessType, email, fullName, password, userId };
     const passIsEqual = password === confirmPassword;
-    const dataIsEmpty = Object.values(data).includes('');
+    const isValid = isFormValid(formErrors, dataForm);
 
-    if (hasError || dataIsEmpty || !passIsEqual) {
-      this.setState({ showError: true });
+    if (!passIsEqual) {
+      this.setState({
+        formErrors: {
+          ...this.state.formErrors,
+          confirmPassword: 'Password must be identical'
+        }
+      });
     }
 
-    // If Forms is valid send data Forms to the server
-    if (!hasError && passIsEqual && !dataIsEmpty) {
-      const payload = { method: 'POST', body: JSON.stringify(data) };
+    isValid
+      ? this.handleSendForm(dataForm)
+      : this.setState({ showErrors: true });
+  };
 
-      fetch('/admin/newuser', payload)
-        .then(res => console.log(res))
-        .catch(err => console.log(err));
-      console.log('SEND DATA', data);
+  handleSendForm = dataForm => {
+    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-      // Reset Form field
-      this.setState(initialState);
-    }
+    fetch('/admin/newuser', payload)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+    console.log('SEND DATA', dataForm);
+
+    // Reset Form field
+    this.setState(initialState);
   };
 
   render() {
+    const { formErrors, showErrors } = this.state;
+    const hasErrors = showErrors && formErrors;
+
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} noValidate>
         <Input
           label='Full Name'
           placeholder='John Doe'
           name='fullName'
           type='text'
-          showError={this.state.showError}
-          hasError={this.hasError}
-          value={this.state.fullName}
           onChange={this.handleChange}
+          value={this.state.fullName}
+          error={hasErrors ? formErrors.fullName : null}
         />
 
         <Input
@@ -68,10 +95,9 @@ const UsersForm = class userInput extends React.Component {
           placeholder='john42'
           name='userId'
           type='text'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.userId}
+          error={hasErrors ? formErrors.userId : null}
         />
 
         <Input
@@ -79,10 +105,9 @@ const UsersForm = class userInput extends React.Component {
           placeholder='john.doe@mail.com'
           name='email'
           type='email'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.email}
+          error={hasErrors ? formErrors.email : null}
         />
 
         <Input
@@ -90,10 +115,9 @@ const UsersForm = class userInput extends React.Component {
           placeholder='Password'
           name='password'
           type='password'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.password}
+          error={hasErrors ? formErrors.password : null}
         />
 
         <Input
@@ -101,19 +125,17 @@ const UsersForm = class userInput extends React.Component {
           placeholder='Confirm Password'
           name='confirmPassword'
           type='password'
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.confirmPassword}
+          error={hasErrors ? formErrors.confirmPassword : null}
         />
 
         <Select
           name='accessType'
           options={SELECT_OPTIONS}
-          showError={this.state.showError}
-          hasError={this.hasError}
           onChange={this.handleChange}
           value={this.state.accessType}
+          error={hasErrors ? formErrors.accessType : null}
         />
 
         <button type='submit'>Create New User</button>
