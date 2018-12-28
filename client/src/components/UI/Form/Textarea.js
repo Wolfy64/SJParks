@@ -1,15 +1,14 @@
 import React from 'react';
 
-const Input = props => (
+const Textarea = props => (
   <div>
     <label htmlFor={props.name}>{props.label}</label>
 
-    <input
+    <textarea
       {...props}
       id={props.name}
       placeholder={props.placeholder}
       name={props.name}
-      type={props.type}
       value={props.value}
       onChange={props.onChange}
     />
@@ -18,4 +17,4 @@ const Input = props => (
   </div>
 );
 
-export default Input;
+export default Textarea;
