@@ -32,6 +32,9 @@
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
+  "engines": {
+    "node": "8.9.2"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
