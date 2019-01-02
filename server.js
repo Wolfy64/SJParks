@@ -21,5 +21,5 @@ console.log('PASS: server.js required webapp.js');
 // Create an HTTP server and listen on the configured port
 const server = http.createServer(app);
 server.listen(config.port, function() {
-  console.log('Express server listening on localhost:' + config.port);
+  console.log('Express server listening on port:' + config.port);
 });
