@@ -1,5 +1,18 @@
 import React from 'react';
+import NavBar from './NavBar';
+import Presentation from './Presentation';
+import SelectPark from './SelectPark';
+import Survey from './Survey';
+import Footer from './Footer';
 
-const PublicPage = () => <h1>Public Page !</h1>;
+const PublicPage = () => (
+  <div>
+    <NavBar />
+    <Presentation />
+    <SelectPark />
+    <Survey />
+    <Footer />
+  </div>
+);
 
 export default PublicPage;
