@@ -6,6 +6,7 @@ import NewUpdate from './components/NewUpdate';
 import ProfilePage from './components/ProfilePage';
 import PublicPage from './components/PublicPage';
 import NoMatch from './components/UI/NoMatch';
+import Login from './components/login';
 import { Route, Switch } from 'react-router-dom';
 
 import Layout from './components/Layout';
@@ -17,6 +18,7 @@ class App extends React.Component {
     let routes = (
       <Switch>
         <Route path='/' component={PublicPage} exact />
+        <Route path='/login' component={Login}/>
         <Route component={NoMatch} />
       </Switch>
     );
