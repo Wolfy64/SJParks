@@ -1,7 +1,6 @@
 import React from 'react';
 import './sidenav.css';
-import { Link } from 'react-router-dom';
-import NavButton from '../navbutton';
+import NavButton from '../UI/Generic/NavButton';
 
 const SideBar = () => (
   <div className='sidebar'>
@@ -11,26 +10,18 @@ const SideBar = () => (
     </div>
     <ul className='navbar-nav'>
       <li>
-        <Link to='/admin/updates'>
-          <NavButton name='Updates' action='updatePage' />
-        </Link>
+        <NavButton to='/admin/updates' name='Updates' action='updatePage' />
       </li>
       <li>
-        <Link to='/admin/parks'>
-          <NavButton name='Parks' action='parkPage' />
-        </Link>
+        <NavButton to='/admin/parks' name='Parks' action='parkPage' />
       </li>
       <li>
-        <Link to='/admin/users'>
-          <NavButton name='Users' action='userPage' />
-        </Link>
+        <NavButton to='/admin/users' name='Users' action='userPage' />
       </li>
     </ul>
 
     <div className='logout'>
-      <a href='/'>
-        <NavButton name='Logout' action='logoutPage' />
-      </a>
+      <NavButton to='/' name='Logout' action='logoutPage' />
     </div>
   </div>
 );

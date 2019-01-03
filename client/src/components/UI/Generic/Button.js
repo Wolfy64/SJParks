@@ -19,16 +19,16 @@ const Btn = styled.button`
 `;
 
 const Button = (props) => {
-    if(!props.link){
+    if(!props.to){
         return <Btn {...props}>{props.name}</Btn>;
     } else {
-    return(
-        <div>
-            <Link to={props.link}>
-                <Btn {...props}>{props.name}</Btn>
-            </Link>
-        </div>
-    );
+        return(
+            <div>
+                <Link to={props.to}>
+                    <Btn {...props}>{props.name}</Btn>
+                </Link>
+            </div>
+        );
     }
 }
 export default Button;
