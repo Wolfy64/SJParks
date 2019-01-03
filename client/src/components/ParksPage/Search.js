@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Parklabels from 'components/parklabels'
+import ParkLabels from 'components/ParkLabels'
 
 class Search extends Component {
   constructor() {
@@ -27,7 +27,7 @@ class Search extends Component {
                   placeholder="Search for..."
                   ref={input => this.search = input}
                   onChange={this.handleInputChange} />
-            <Parklabels results={this.state.results} />
+            <ParkLabels results={this.state.results} />
       </form>
         )
     }

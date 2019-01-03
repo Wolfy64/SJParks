@@ -1,12 +1,12 @@
 import React from 'react';
-import Parks from './components/parks';
-import Users from './components/Users';
-import Updates from './components/Updates';
+import Parks from './components/ParksPage';
+import Users from './components/UsersPage';
+import Updates from './components/UpdatesPage';
 import NewUpdate from './components/NewUpdate';
 import ProfilePage from './components/ProfilePage';
 import PublicPage from './components/PublicPage';
 import NoMatch from './components/UI/NoMatch';
-import Login from './components/Login';
+import Login from './components/LoginPage';
 import { Route, Switch } from 'react-router-dom';
 
 import Layout from './components/Layout';

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Post extends React.Component{
+class Label extends React.Component{
   render (){
     return (
         <div className="green white-text">
@@ -13,4 +13,4 @@ class Post extends React.Component{
 };
 
 
-export default Login;
+export default Label;

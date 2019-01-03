@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Plist from './plist';
-import Items from './items';
+import Plist from './ParksList';
+import Items from './Items';
 
-export default class parks extends Component {
+export default class Parks extends Component {
   constructor(props) {
     // and you can tell here that i added props to the component.
     super(props); // It it didn't have any before.
