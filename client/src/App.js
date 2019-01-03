@@ -30,6 +30,7 @@ class App extends React.Component {
             <Route path='/admin/parks' component={Parks} />
             <Route path='/admin/users' component={Users} />
             <Route path='/admin/profile' component={ProfilePage} />
+            <Route path='/' component={PublicPage} exact />
             <Route component={NoMatch} />
           </Switch>
         </Layout>
