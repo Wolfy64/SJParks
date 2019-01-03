@@ -9,14 +9,15 @@ module.exports = function(app) {
   //------------------------------------------------------------------------
   //****************************** REACT ROUTER ******************************
   //------------------------------------------------------------------------
+  console.log('>>>>>>', process.env);
   if(process.env.NODE_ENV==='production') {
       app.get("*", (req, res) => {
-        console.log('running production build');
+        console.log('>>>>>>> running production build');
         res.sendFile(path.join(__dirname, "client", "build", "index.html"));
       })
   } else {
       app.get("*", (req, res) => {
-        console.log('running development build');
+        console.log('>>>>>> running development build');
         res.sendFile(path.join(__dirname, "client", "public", "index.html"));
       })
   }
