@@ -1,4 +1,4 @@
-const pages = require('./pages');
+const path = require("path");
 const message = require('./messageIncoming');
 const login = require('./login');
 const admin = require('./admin');
@@ -15,7 +15,7 @@ module.exports = function(app) {
     })
   } else {
     app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, 'client', 'public','index.html'));
+      res.sendFile(path.join(__dirname, 'client', 'build','index.html'));
     })
   }
   //------------------------------------------------------------------------
