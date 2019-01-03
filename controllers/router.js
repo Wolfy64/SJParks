@@ -11,13 +11,13 @@ module.exports = function(app) {
   //------------------------------------------------------------------------
   console.log('>>>>>>', process.env);
   if(process.env.NODE_ENV==='production') {
+      console.log('>>>>>>> running production build');  
       app.get("*", (req, res) => {
-        console.log('>>>>>>> running production build');
         res.sendFile(path.join(__dirname, "client", "build", "index.html"));
       })
   } else {
+      console.log('>>>>>> running development build');
       app.get("*", (req, res) => {
-        console.log('>>>>>> running development build');
         res.sendFile(path.join(__dirname, "client", "public", "index.html"));
       })
   }
