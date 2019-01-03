@@ -27,12 +27,10 @@
   "scripts": {
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eject": "react-scripts eject",
-    "client": "cd client && yarn start",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    //"build": "react-scripts build",
+    //"client": "cd client && yarn start",
+    //"server": "nodemon server.js",
+    //"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "engines": {
     "node": "8.9.2"
