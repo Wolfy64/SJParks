@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Button from './UI/Generic/Button'
 
 export default class pList extends Component {
   render() {
@@ -12,7 +13,7 @@ export default class pList extends Component {
             value={this.props.newPark}
             onChange={this.props.handleInput}
             />
-            <button type="submit">Add Park</button>        
+            <Button name='Add Park' type="submit"/>
         </form>
         </div>
         

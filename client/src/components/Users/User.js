@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../UI/Generic/Button'
 
 class User extends React.Component {
   state = { showUser: false };
@@ -17,7 +18,7 @@ class User extends React.Component {
           <p>
             {user.email} - {user.accessType}
           </p>
-          <button onClick={this.props.deleteUser}>Delete User</button>
+          <Button delete name='Delete User' onClick={this.props.deleteUser}/>
         </>
       );
     }

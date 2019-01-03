@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import Button from '../UI/Generic/Button'
 
 const initialState = {
   currentPassword: '',
@@ -94,7 +95,7 @@ class PasswordForm extends React.Component {
           error={hasErrors ? formErrors.repeatPassword : null}
         />
 
-        <button type='submit'>Confirm New Password</button>
+        <Button name='Confirm New Password'  type='submit'/>
       </form>
     );
   }

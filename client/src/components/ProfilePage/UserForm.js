@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import Button from '../UI/Generic/Button';
 
 const initialState = {
   fullName: '',
@@ -85,7 +86,7 @@ class UserForm extends React.Component {
           error={hasErrors ? formErrors.phone : null}
         />
 
-        <button>Create New User</button>
+        <Button name='Create New User'/>
       </form>
     );
   }

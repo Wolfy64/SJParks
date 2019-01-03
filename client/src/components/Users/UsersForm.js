@@ -3,6 +3,7 @@ import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import Button from '../UI/Generic/Button'
 
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
@@ -138,7 +139,7 @@ const UsersForm = class userInput extends React.Component {
           error={hasErrors ? formErrors.accessType : null}
         />
 
-        <button type='submit'>Create New User</button>
+        <Button name='Create New User' type='submit'/>
       </form>
     );
   }
