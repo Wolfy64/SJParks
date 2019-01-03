@@ -11,7 +11,7 @@ import { Route, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
 
 class App extends React.Component {
-  state = { isConnected: false };
+  state = { isConnected: true };
 
   render() {
     let routes = (
