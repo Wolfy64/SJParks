@@ -17,11 +17,7 @@ app.set('view engine', 'pug');
 app.use(morgan('combined'));
 
 // Serve static assets
-if (config.nodeEnv==='production') {
-    app.use(express.static(path.join(__dirname, "client", "build")))
-} else {
-    app.use(express.static(path.join(__dirname, "client", "public")))
-}
+app.use(express.static(path.join(__dirname, "client", "build")));
 
 // Parse incoming form-encoded HTTP bodies
 app.use(bodyParser.urlencoded({
