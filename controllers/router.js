@@ -11,11 +11,11 @@ module.exports = function(app) {
   //------------------------------------------------------------------------
   if(process.env.NODE_ENV==='production') {  
     app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "client", "build"));
+      res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
     })
   } else {
     app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "client", "public"));
+      res.sendFile(path.join(__dirname, 'client', 'public','index.html'));
     })
   }
   //------------------------------------------------------------------------
