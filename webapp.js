@@ -45,12 +45,13 @@ app.use(flash());
 // Configure application routes
 require('./controllers/router')(app);
 
-console.log('PASS: webapp.js required router')
-
 // Handle 404
 app.use(function(request, response, next) {
     response.status(404);
-    response.sendFile(path.join(__dirname, 'public', '404.html'));
+    response.send(`
+        <h3>Error 404</h3>
+        <p>Not Found</p>
+    `);
 });
 
 // Unhandled errors (500)
@@ -59,7 +60,10 @@ app.use(function(err, request, response, next) {
     console.error(err);
     console.error(err.stack);
     response.status(500);
-    response.sendFile(path.join(__dirname, 'public', '500.html'));
+    response.send(`
+        <h3>Error 500</h3>
+        <p>Internal Server Error</p>
+    `);
 });
 
 // Session

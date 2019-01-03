@@ -1,7 +1,5 @@
 require('dotenv-safe').load();
 
-console.log('Testing config 1')
-
 const cfg = {};
 
 // HTTP Port for sjparks.c0d3.com
