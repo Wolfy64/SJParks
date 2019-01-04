@@ -1,7 +1,18 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const InputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  input {
+    border: solid 1px #A4A4A4;
+    border-radius: 5px;
+    padding 3px;
+  }
+`
 
 const Input = props => (
-  <div>
+  <InputBox>
     <label htmlFor={props.name}>{props.label}</label>
 
     <input
@@ -15,7 +26,7 @@ const Input = props => (
     />
 
     {props.error && <span>{props.error}</span>}
-  </div>
+  </InputBox>
 );
 
 export default Input;

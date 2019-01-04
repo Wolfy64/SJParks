@@ -1,26 +1,38 @@
-import React, { Component } from 'react'
-import Button from '../UI/Generic/Button'
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Button from '../UI/Generic/Button';
+import Input from '../UI/Form/Input';
 
-class Login extends React.Component{
-  render (){
+const Screen = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #292929;
+  padding: 10%;
+
+  .card{
+    display: flex;
+    height: 400px;
+    width: 400px;
+    padding: 40px 30px 60px;
+    background-color: white;
+    border-radius: 15px;
+    margin: 0 auto;
+    justify-content: space-between;
+    box-shadow: -5px 3px 3px black;
+  }
+`;
+
+export default class Login extends React.Component{
+  render () {
     return (
-      <div>
-        <div>
-            <h1>SJParks</h1>
-            <div>
-              <label for="username">User ID: </label> <br />
-              <input type="name" name="name" placeholder="Enter Your Username" />
-            </div>
-            <div>
-            <label for="password">Password: </label> <br />
-            <input type="password" placeholder="Password" />
-            <Button link= '/admin/updates' name= 'LOGIN'/>
-            </div>
+      <Screen>
+        <div className='card'>
+          <h1>SJParks</h1>
+          <Input name='username' label='User ID:' placeholder='Enter Your Username' type='name'/>
+          <Input name='password' label='Password:' placeholder='Password' type='password'/>
+          <Button to='/admin/updates' name='LOGIN'/>
         </div>
-      </div>
+      </Screen>
     );
   }
 };
-
-
-export default Login;
