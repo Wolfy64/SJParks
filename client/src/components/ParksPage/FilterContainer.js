@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import parks from './parks';
+import Parks from './index';
 
-export default class componentName extends Component {
+export default class FilterContainer extends Component {
     constructor(){
         super();
         this.state = {
