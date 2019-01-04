@@ -1,15 +1,20 @@
-console.log('>> TEST: Running server.js');
-
 const http = require('http');
 const mongoose = require('mongoose');
 const config = require('./config');
 
 // Initialize database connection - throws if database connection can't be
 // established
-mongoose.connect(config.mongoUrl);
+mongoose
+  .connect(
+    config.mongoUrl,
+    {
+      useCreateIndex: true,
+      useNewUrlParser: true
+    }
+  )
+  .then(() => console.log('>> Connected to mongoose'))
+  .catch(err => console.error(err));
 mongoose.Promise = Promise;
-
-console.log('>> PASS: server.js connected to mongoose');
 
 // Create Express web app
 const app = require('./webapp');
