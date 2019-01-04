@@ -17,20 +17,22 @@
     "react": "^16.5.2",
     "react-app": "^1.1.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5",
-    "twilio": "^3.19.2"
+    "react-scripts": "^2.1.2",
+    "twilio": "^3.19.2",
+    "yarn": "^1.12.3"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
   },
   "scripts": {
     "start": "node server.js",
-    "build": "react-scripts build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "eject": "react-scripts eject",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
     "client": "cd client && yarn start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+  },
+  "engines": {
+    "node": "8.10.0"
   },
   "eslintConfig": {
     "extends": "react-app"

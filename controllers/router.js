@@ -1,23 +1,30 @@
-const pages = require('./pages');
+const path = require("path");
 const message = require('./messageIncoming');
 const login = require('./login');
 const admin = require('./admin');
 
 // Map routes to controller functions
-module.exports = function (app) {
+module.exports = function(app) {
+
+  //------------------------------------------------------------------------
+  //****************************** REACT ROUTER ******************************
+  //------------------------------------------------------------------------
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+  })
   //------------------------------------------------------------------------
   //****************************** ABOUT PAGE ******************************
   //------------------------------------------------------------------------
 
   // Render a userResident page about the project to find out more
-  app.get('/', pages.aboutPage);
+  //app.get('/', pages.aboutPage);
 
   //------------------------------------------------------------------------
   //****************************** LOGIN PAGE ******************************
   //------------------------------------------------------------------------
 
   // Render login page
-  app.get('/login', pages.loginPage);
+  //app.get('/login', pages.loginPage);
 
   // Handle sign in
   app.post('/login', login.validate);
@@ -30,14 +37,14 @@ module.exports = function (app) {
   //------------------------------------------------------------------------
 
   // Render the general public Dashboard/console
-  app.get('/dashboard', login.requireUserLogin, pages.dashboardPage);
+  //app.get('/dashboard', login.requireUserLogin, pages.dashboardPage);
 
   //------------------------------------------------------------------------
   //****************************** ADMIN PAGE ******************************
   //------------------------------------------------------------------------
 
   // Render the Administrator Dashboard/console
-  app.get('/admin', login.requireAdminLogin, pages.adminPage); //
+  //app.get('/admin', login.requireAdminLogin, pages.adminPage); //
 
   // Handle new user form submission
   app.post('/admin/newuser', admin.newUser);
@@ -46,7 +53,7 @@ module.exports = function (app) {
   app.post('/admin/newpark', admin.createPark);
 
   //DEVELOPER TOOL
-  app.get('/admin/peek', admin.peek);
+  //app.get('/admin/peek', admin.peek);
 
   //------------------------------------------------------------------------
   //*************************** MESSAGE HANDLING ***************************
