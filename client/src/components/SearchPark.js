@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ParkLi from './ParkLi';
-import Input from '../UI/Form/Input';
+import Input from './UI/Form/Input';
 
 class NewUpdate extends Component {
   state = {

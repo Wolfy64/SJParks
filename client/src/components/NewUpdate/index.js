@@ -1,6 +1,6 @@
 import React from 'react';
-import SearchPark from './SearchPark';
-import SelectedPark from './SelectedPark';
+import SearchPark from '../SearchPark';
+import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
 import { parksDB } from '../../dummyDB';
 class NewUpdate extends React.Component {
