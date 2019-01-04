@@ -18,7 +18,7 @@ class App extends React.Component {
     let routes = (
       <Switch>
         <Route path='/' component={PublicPage} exact />
-        <Route path='/login' component={Login}/>
+        <Route path='/login' component={Login} />
         <Route component={NoMatch} />
       </Switch>
     );
