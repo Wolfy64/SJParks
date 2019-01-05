@@ -10,12 +10,12 @@ const SELECT_OPTIONS = {
   premium: 'Premiun Access'
 };
 const initialState = {
-  accessType: '',
-  fullName: '',
-  userId: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  accessType: 'Updates Only',
+  fullName: 'Irina',
+  userId: 'irishka2863',
+  email: 'irishka2863@yahoo.com',
+  password: '123456',
+  confirmPassword: '123456',
   showErrors: false
 };
 
@@ -64,8 +64,16 @@ const UsersForm = class userInput extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
-
+    const payload = { 
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify(dataForm) 
+    };
+    
+    console.log('>>TEST payload, ', payload)
     fetch('/admin/newuser', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
@@ -80,7 +88,7 @@ const UsersForm = class userInput extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <form onSubmit={this.handleSubmit} noValidate>
+      <form onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
           placeholder='John Doe'

@@ -43,7 +43,7 @@ export default class Login extends React.Component {
               type='password'
               required
             />
-            <Button type='submit' to='/admin/updates' name='LOGIN' />
+            <Button type='submit' name='LOGIN' />
           </div>
         </form>
       </Screen>
