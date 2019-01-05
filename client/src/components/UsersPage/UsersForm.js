@@ -12,9 +12,9 @@ const SELECT_OPTIONS = {
 const initialState = {
   accessType: 'Updates Only',
   fullName: 'Irina',
-  userId: 'irishka2863',
-  email: 'irishka2863@yahoo.com',
-  password: '123456',
+  userName: 'irishka2863',
+  userEmail: 'irishka2863@yahoo.com',
+  psw: '123456',
   confirmPassword: '123456',
   showErrors: false
 };
@@ -39,14 +39,14 @@ const UsersForm = class userInput extends React.Component {
     const {
       accessType,
       confirmPassword,
-      email,
+      userEmail,
       formErrors,
       fullName,
-      password,
-      userId
+      psw,
+      userName
     } = this.state;
-    const dataForm = { accessType, email, fullName, password, userId };
-    const passIsEqual = password === confirmPassword;
+    const dataForm = { accessType, userEmail, fullName, psw, userName };
+    const passIsEqual = psw === confirmPassword;
     const isValid = isFormValid(formErrors, dataForm);
 
     if (!passIsEqual) {
@@ -73,11 +73,10 @@ const UsersForm = class userInput extends React.Component {
       body: JSON.stringify(dataForm) 
     };
     
-    console.log('>>TEST payload, ', payload)
     fetch('/admin/newuser', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    console.log('>> TEST: sending data \n', dataForm);
 
     // Reset Form field
     this.setState(initialState);
@@ -102,37 +101,37 @@ const UsersForm = class userInput extends React.Component {
         <Input
           label='User Id'
           placeholder='john42'
-          name='userId'
+          name='userName'
           type='text'
           onChange={this.handleChange}
-          value={this.state.userId}
-          error={hasErrors ? formErrors.userId : null}
+          value={this.state.userName}
+          error={hasErrors ? formErrors.userName : null}
         />
 
         <Input
           label='Email'
           placeholder='john.doe@mail.com'
-          name='email'
+          name='userEmail'
           type='email'
           onChange={this.handleChange}
-          value={this.state.email}
-          error={hasErrors ? formErrors.email : null}
+          value={this.state.userEmail}
+          error={hasErrors ? formErrors.userEmail : null}
         />
 
         <Input
           label='Password'
           placeholder='Password'
-          name='password'
+          name='psw'
           type='password'
           onChange={this.handleChange}
-          value={this.state.password}
-          error={hasErrors ? formErrors.password : null}
+          value={this.state.psw}
+          error={hasErrors ? formErrors.psw : null}
         />
 
         <Input
           label='Confirm Password'
           placeholder='Confirm Password'
-          name='confirmPassword'
+          name='psw'
           type='password'
           onChange={this.handleChange}
           value={this.state.confirmPassword}
