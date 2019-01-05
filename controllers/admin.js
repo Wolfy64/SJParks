@@ -8,38 +8,31 @@ const crypto = require('../lib/cryptoHelper');
 
 exports.newUser = function (req, res) {
     console.log('REQ: ', req.body);
-    res.send(200);
     db.User.findOne({username: req.body.userName}, function (err, user) {
-        // console.log('------------------------------------------------');
-        // console.log('------------------------------------------------');
-        // console.log(user)
-        // console.log('------------------------------------------------');
-        // console.log('------------------------------------------------');
-
+        console.log('>> TEST1 username, ', req.body.userName)
         //ERROR 537 will be for blah blah blah
         if (err) res.redirect('/537');
-        if (!user) {
-            if (req.body.psw === req.body.cpsw) {
-                var saltShaker = crypto.getSalt();
-                db.User.create({
-                    first_name: req.body.firstName || 'Henry',
-                    last_name: req.body.lastName || 'Zorrilla',
-                    username: req.body.userName || 'thmthmnky',
-                    admin: req.body.isAdmin === 'on',
-                    phone: req.body.userPhone || '+1234567890',
-                    email: req.body.userEmail || 'parks@test.wtf',
-                    salt: saltShaker,
-                    password: crypto.getPasswordHash(req.body.psw, saltShaker)
-                }).then( (x) => {
-                    //x.setPassword();
-                    console.log('PASS: Create new user; hash and save new user password.\n*&*&*&*&*&*&*&*&*&*\n'+x);
-                    respond(res, 'New user created:\n' + x, true);
-                }).catch((err) => {
-                    console.log('err ' + err.message);
-                    req.flash('errors', err.message);
-                    respond(res, err.message, false);
-                });// END 'User.create().then()'
-            } else respond(res, `Passwords did not match!` , false);
+        if (!user) {  
+            console.log('>> TEST2 username, ', req.body.userName)
+            var saltShaker = crypto.getSalt();
+            db.User.create({
+                first_name: req.body.firstName || 'Henry',
+                last_name: req.body.lastName || 'Zorrilla',
+                username: req.body.userName || 'thmthmnky',
+                admin: req.body.isAdmin === 'on',
+                phone: req.body.userPhone || '+1234567890',
+                email: req.body.userEmail || 'parks@test.wtf',
+                salt: saltShaker,
+                password: crypto.getPasswordHash(req.body.psw, saltShaker)
+            }).then( (x) => {
+                //x.setPassword();
+                console.log('PASS: Create new user; hash and save new user password.\n*&*&*&*&*&*&*&*&*&*\n'+x);
+                respond(res, 'New user created:\n' + x, true);
+            }).catch((err) => {
+                console.log('err ' + err.message);
+                req.flash('errors', err.message);
+                respond(res, err.message, false);
+            });// END 'User.create().then()'
         } else respond(res, `Username ${user.username} is unavailable!` , false);
     });// END 'findOne'
 }
