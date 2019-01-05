@@ -26,6 +26,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <Screen>
+<<<<<<< HEAD
         <div className='card'>
           <h1>SJParks</h1>
           <Input
@@ -42,6 +43,16 @@ export default class Login extends React.Component {
           />
           <Button to='/admin/updates' name='LOGIN' />
         </div>
+=======
+        <form action="/login" method="POST">
+          <div className='card'>
+            <h1>SJParks</h1>
+            <Input name='username' label='User ID:' placeholder='Enter Your Username' type='text' required/>
+            <Input name='psw' label='Password:' placeholder='Enter Password' type='password' required/>
+            <Button type="submit" to='/admin/updates' name='LOGIN'/>
+          </div>
+        </form>
+>>>>>>> 62f9c6896eed7c10e920456bd096e6534ebd423d
       </Screen>
     );
   }
