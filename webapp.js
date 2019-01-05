@@ -17,6 +17,7 @@ app.set('view engine', 'pug');
 app.use(morgan('combined'));
 
 // Serve static assets
+console.log('>>PATH ', path.join(__dirname, '../client', config.clientPath));
 app.use(express.static(path.join(__dirname, '../client', config.clientPath)));
 
 // Parse incoming form-encoded HTTP bodies

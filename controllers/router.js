@@ -10,6 +10,7 @@ module.exports = function(app) {
   //****************************** REACT ROUTER ******************************
   //------------------------------------------------------------------------
   app.get('*', (req, res) => {
+    console.log('>>PATH ', path.join(__dirname, '../client', config.clientPath, 'index.html'));
     res.sendFile(
       path.join(__dirname, '../client', config.clientPath, 'index.html')
     );
