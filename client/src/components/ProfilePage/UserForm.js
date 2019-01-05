@@ -2,7 +2,17 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
+
+const Float = styled.div`
+  width: 250px;
+  overflow: auto;
+  float: left;
+  margin:100px;
+
+
+`;
 
 const initialState = {
   fullName: '',
@@ -55,6 +65,7 @@ class UserForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
+      <Float>
       <form onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
@@ -86,8 +97,9 @@ class UserForm extends React.Component {
           error={hasErrors ? formErrors.phone : null}
         />
 
-        <Button name='Create New User'/>
+        <Button name='Confirm Edits'/>
       </form>
+      </Float>
     );
   }
 }
