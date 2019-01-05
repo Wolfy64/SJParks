@@ -20,6 +20,8 @@ app.use(morgan('combined'));
 app.use(express.static(path.join(__dirname, '../client', config.clientPath)));
 
 // Parse incoming form-encoded HTTP bodies
+app.use(bodyParser.json());
+
 app.use(
   bodyParser.urlencoded({
     extended: true
