@@ -24,11 +24,12 @@
 		"concurrently": "^3.5.0"
 	},
 	"scripts": {
+		"seed": "node seed.js",
 		"start": "node server.js",
 		"build": "react-scripts build",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"eject": "react-scripts eject",
-		"client": "cd client && yarn start",
+		"client": "yarn start --prefix client",
 		"server": "nodemon server.js",
 		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
 	},

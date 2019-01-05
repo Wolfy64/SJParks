@@ -1,25 +1,25 @@
 console.log('Running server.js');
-const mongoose = require('mongoose');
 const config = require('./config');
 
+// Set MongoDB connection options...
 const opts = {
   useCreateIndex: true,
   useNewUrlParser: true,
   useFindAndModify: false
 };
 
+// ...then connect to MongoDB using those options.
+const mongoose = require('mongoose');
 mongoose.connect(config.mongoUri, opts)
-  .then(() => console.log('MongoDB Connected...'))
-  .catch(err => console.log(err));
-
+  .then(() => console.log(`MongoDB Connected @ uri: ${config.mongoUri} with connnection options: ${opts}`))
+  .catch(err => console.log(`An error occured while attempting to connect to MongoDB with uri: ${config.mongoUri} and connection options: ${opts}. Error thrown: ${err.message}`));
 mongoose.Promise = global.Promise;
 
-//create webapp
-const app = require('./webapp');
-
-//create http server
+// Finally, create http_server from webapp.js and...
 const http = require('http');
+const app = require('./webapp');
 const server = http.createServer(app);
+console.log(`An Express server has been created and is awaiting deployment.`)
 
-//set http port
-server.listen(config.serverPort, () => console.log(`...express server started on http://localhost:${config.serverPort}`));
+// ...deploy http_server to localhost orHeroku
+server.listen(config.serverPort, () => console.log(`Express server is deployed @: http://localhost:${config.serverPort}`));

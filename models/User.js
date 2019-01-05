@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 const crypto = require('../lib/cryptoHelper');
-// const uniqueValidator = require('mongoose-unique-validator');
-// var jwt = require('jsonwebtoken');
-// var secret = require('../config').secret;
+const uniqueValidator = require('mongoose-unique-validator');
+
 const Schema = mongoose.Schema;
 
 const UserSchema = new mongoose.Schema({
-    
+
     salt: String,
 
     first_name: {type: String, required: true, max: 100},
@@ -20,8 +19,8 @@ const UserSchema = new mongoose.Schema({
     admin: {type: Boolean, default: false},
 
     email: {type: String, lowercase: true, required: [true, "you must enter an email"], unique: true,
-        match: [/\S+@\S+\.\S+/, 'is invalid'], index: true}, 
-    
+        match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
+
     // phone: {type: String, match: [ /(+\d+)+\d+\-\d+/, "(999) 999 - 9999"], required: [true, "you must enter a phone number"], unique: true},
 
     parks:[{ type: Schema.Types.ObjectId, ref: 'Park' }],
@@ -33,8 +32,8 @@ const UserSchema = new mongoose.Schema({
 // TODO Creat Virtual Fields for optimization
 UserSchema.virtual('name').get(function () { return this.last_name + ', ' + this.first_name; });
 
-UserSchema.virtual('activeSUBS').get(function () { 
-    return this.phone + '{' + this.parks + ' }' 
+UserSchema.virtual('activeSUBS').get(function () {
+    return this.phone + '{' + this.parks + ' }'
 }   );
 
 
@@ -51,7 +50,7 @@ UserSchema.methods.validate_password = function(password) {
 }
 
 // add 'Unique' validation to this schema
-// UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
+UserSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });
 
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
