@@ -22,11 +22,9 @@ const Button = (props) => {
         return <Btn {...props}>{props.name}</Btn>;
     } else {
         return(
-            <>
-                <Link to={props.to}>
-                    <Btn {...props}>{props.name}</Btn>
-                </Link>
-            </>
+            <Link to={props.to}>
+                <Btn {...props}>{props.name}</Btn>
+            </Link>
         );
     }
 }

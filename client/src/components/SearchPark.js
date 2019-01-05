@@ -36,7 +36,7 @@ class NewUpdate extends Component {
           autoComplete='off'
         />
 
-        <button onClick={addAllParks}>Select All</button>
+        {/* <button onClick={addAllParks}>Select All</button> */}
 
         <ul>{parkLi}</ul>
       </div>

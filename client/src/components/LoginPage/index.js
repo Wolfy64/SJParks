@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
@@ -9,7 +9,7 @@ const Screen = styled.div`
   background-color: #292929;
   padding: 10%;
 
-  .card{
+  .card {
     display: flex;
     height: 400px;
     width: 400px;
@@ -22,17 +22,31 @@ const Screen = styled.div`
   }
 `;
 
-export default class Login extends React.Component{
-  render () {
+export default class Login extends React.Component {
+  render() {
     return (
       <Screen>
-        <div className='card'>
-          <h1>SJParks</h1>
-          <Input name='username' label='User ID:' placeholder='Enter Your Username' type='name'/>
-          <Input name='password' label='Password:' placeholder='Password' type='password'/>
-          <Button to='/admin/updates' name='LOGIN'/>
-        </div>
+        <form action='/login' method='POST'>
+          <div className='card'>
+            <h1>SJParks</h1>
+            <Input
+              name='username'
+              label='User ID:'
+              placeholder='Enter Your Username'
+              type='text'
+              required
+            />
+            <Input
+              name='psw'
+              label='Password:'
+              placeholder='Enter Password'
+              type='password'
+              required
+            />
+            <Button type='submit' name='LOGIN' />
+          </div>
+        </form>
       </Screen>
     );
   }
-};
+}
