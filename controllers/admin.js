@@ -7,7 +7,7 @@ const crypto = require('../lib/cryptoHelper');
 //------------------------------------------------------------------------
 
 exports.newUser = function (req, res) {
-    console.log(req.body);
+    console.log('REQ: ', req.body);
     res.send(200);
     db.User.findOne({username: req.body.userName}, function (err, user) {
         // console.log('------------------------------------------------');
