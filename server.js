@@ -21,6 +21,6 @@ const app = require('./webapp');
 
 // Create an HTTP server and listen on the configured port
 const server = http.createServer(app);
-server.listen(config.port, function() {
-  console.log('>> Express server listening on port:' + config.port);
-});
+server.listen(config.port, () =>
+  console.log(`Server listening on port: ${config.port}`)
+);

@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const cfg = require('../config');
 
-
 if (!cfg.mongoUrl) {
   throw new Error('MONGO_URL env variable not set.');
 }

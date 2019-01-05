@@ -5,25 +5,28 @@ import NavButton from '../UI/Generic/NavButton';
 const SideNav = styled.div`
   border-right: solid 3px darkblue;
   position: fixed;
-  top:0;
+  top: 0;
   background: #212529;
   width: 150px;
   height: 100vh;
 
-  .logout{
-  position: absolute;
-  bottom: 10px;
-  width: inherit;
+  .logout {
+    position: absolute;
+    bottom: 10px;
+    width: inherit;
   }
-  .title{
-  color: aliceblue;
-  padding-top: 10px;
+
+  .title {
+    color: aliceblue;
+    padding-top: 10px;
   }
+
   @media (max-width: 768px) {
-  .title h1{
+    .title h1 {
       font-size: 20px;
+    }
   }
-`
+`;
 
 const SideBar = () => (
   <SideNav>
