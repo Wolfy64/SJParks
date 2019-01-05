@@ -1,44 +1,3 @@
-<<<<<<< HEAD:client/src/components/filtercontainer.js
-import React, { Component } from 'react'
-import parks from './parks';
-
-export default class componentName extends Component {
-    constructor(){
-        super();
-        this.state = {
-            parks: [],
-            filterParks: []
-        }
-    }
-
-    componentDidMount(){
-        this.setState = ({
-            parks,
-            filterParks: parks
-        })
-    }
-
-    filterParks = (parkFilter) => {
-        let filteredParks = this.state.parks
-        filteredParks = filteredParks.filter((park) => {
-            let parkName = park.firstPark.toLowerCase()
-            return parkName.indexOf(
-            parkFilter.toLowerCase()) !== -1
-            
-        }) 
-        this.setState({
-            filteredParks,
-        });  
-    }
-  render() {
-    return (
-      <div>
-        <Parks parks={this.state.filteredParks} match={this.props.match} onChange={this.filterParks}/>
-      </div>
-    )
-  }
-}
-=======
 import React, { Component } from 'react'
 import Parks from './index';
 
@@ -64,11 +23,11 @@ export default class FilterContainer extends Component {
             let parkName = park.firstPark.toLowerCase()
             return parkName.indexOf(
             parkFilter.toLowerCase()) !== -1
-            
-        }) 
+
+        })
         this.setState({
             filteredParks,
-        });  
+        });
     }
   render() {
     return (
@@ -78,4 +37,3 @@ export default class FilterContainer extends Component {
     )
   }
 }
->>>>>>> master:client/src/components/ParksPage/FilterContainer.js
