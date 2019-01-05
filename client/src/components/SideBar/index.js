@@ -44,7 +44,9 @@ const SideBar = () => (
     </ul>
 
     <div className='logout'>
-      <NavButton to='/' name='Logout' action='logoutPage' />
+      <form action="/login/out" method="POST">
+        <NavButton type='submit' name='Logout' action='logoutPage' />
+      </form>
     </div>
   </SideNav>
 );
