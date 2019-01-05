@@ -17,25 +17,29 @@ app.set('view engine', 'pug');
 app.use(morgan('combined'));
 
 // Serve static assets
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, '../client', config.clientPath)));
 
 // Parse incoming form-encoded HTTP bodies
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
 
 // Create and manage HTTP sessions for all requests
-app.use(session({
+app.use(
+  session({
     secret: config.secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 10 * 1000,
-        //activeDuration: 5 * 60 * 1000,
-        httpOnly: true,
-        secure: false
+      maxAge: 10 * 1000,
+      //activeDuration: 5 * 60 * 1000,
+      httpOnly: true,
+      secure: false
     }
-}));
+  })
+);
 
 // Use connect-flash to persist informational messages across redirects
 app.use(flash());
@@ -45,8 +49,8 @@ require('./controllers/router')(app);
 
 // Handle 404
 app.use(function(request, response, next) {
-    response.status(404);
-    response.send(`
+  response.status(404);
+  response.send(`
         <h3>Error 404</h3>
         <p>Not Found</p>
     `);
@@ -54,11 +58,11 @@ app.use(function(request, response, next) {
 
 // Unhandled errors (500)
 app.use(function(err, request, response, next) {
-    console.error('An application error has occurred:');
-    console.error(err);
-    console.error(err.stack);
-    response.status(500);
-    response.send(`
+  console.error('An application error has occurred:');
+  console.error(err);
+  console.error(err.stack);
+  response.status(500);
+  response.send(`
         <h3>Error 500</h3>
         <p>Internal Server Error</p>
     `);
@@ -66,8 +70,8 @@ app.use(function(err, request, response, next) {
 
 // Session
 app.use('/admin', function(err, req, res, next) {
-    console.log(err);
-    res.redirect('/login');
+  console.log(err);
+  res.redirect('/login');
 });
 
 // Export Express app

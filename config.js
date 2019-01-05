@@ -33,5 +33,7 @@ cfg.mongoUrl =
 // MongoDB connection string for test purposes
 cfg.mongoUrlTest = 'mongodb://localhost/sj-parks';
 
+cfg.clientPath = process.env.NODE_ENV === 'production' ? 'build' : 'public';
+
 // Export configuration object
 module.exports = cfg;

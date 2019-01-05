@@ -1,17 +1,19 @@
-const path = require("path");
+const path = require('path');
 const message = require('./messageIncoming');
 const login = require('./login');
 const admin = require('./admin');
+const config = require('../config');
 
 // Map routes to controller functions
 module.exports = function(app) {
-  
   //------------------------------------------------------------------------
   //****************************** REACT ROUTER ******************************
-  //------------------------------------------------------------------------ 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname,'../client/build/index.html'));
-  })
+  //------------------------------------------------------------------------
+  app.get('*', (req, res) => {
+    res.sendFile(
+      path.join(__dirname, '../client', config.clientPath, 'index.html')
+    );
+  });
   //------------------------------------------------------------------------
   //****************************** ABOUT PAGE ******************************
   //------------------------------------------------------------------------
