@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import Router from './components/router';
-
-class App extends React.Component {
-  //Template router
-  render() {
-    return (
-      <div>
-        <Router />
-      </div>
-    );
-  }
-}
-
-export default App;
-=======
 import React from 'react';
 import Parks from './components/ParksPage';
 import Users from './components/UsersPage';
@@ -61,4 +44,3 @@ class App extends React.Component {
 }
 
 export default App;
->>>>>>> master
