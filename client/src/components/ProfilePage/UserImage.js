@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 
+
+const placeholder = require('../../img/placeholder.png');
+
 const Image = styled.div`
-  width: 100px;
-  height: 100px;
-  padding: 100px;
+  width: 10px;
+  height: 10px;
 
 `
 
@@ -41,7 +43,7 @@ class UserImage extends React.Component {
     return (
       <Image>
         <button onClick={() => this.fileInput.click()}>
-          <img src='#' alt='avatar' />
+          <img src={placeholder} alt='avatar' />
         </button>
         <input
           type='file'

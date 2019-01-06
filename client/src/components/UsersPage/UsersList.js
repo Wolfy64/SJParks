@@ -1,6 +1,7 @@
 import React from 'react';
 import User from './User';
 
+
 /**
  * DUMMY DATA
  */
@@ -49,7 +50,6 @@ class UserList extends React.Component {
 
     return (
       <div>
-        <h2>Show a list of users</h2>
         {usersList}
       </div>
     );
