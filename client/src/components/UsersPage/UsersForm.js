@@ -10,12 +10,12 @@ const SELECT_OPTIONS = {
   premium: 'Premiun Access'
 };
 const initialState = {
-  accessType: 'Updates Only',
-  fullName: 'Irina',
-  userName: 'irishka2863',
-  userEmail: 'irishka2863@yahoo.com',
-  psw: '123456',
-  confirmPassword: '123456',
+  accessType: '',
+  fullName: '',
+  userId: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
   showErrors: false
 };
 
@@ -29,7 +29,7 @@ const UsersForm = class userInput extends React.Component {
       [name]: value,
       formErrors: {
         ...this.state.formErrors,
-        [name]: errorFormHandler(type, value, SELECT_OPTIONS)
+        [name]: errorFormHandler(type, value, /*SELECT_OPTIONS*/)
       }
     });
   };
@@ -39,14 +39,14 @@ const UsersForm = class userInput extends React.Component {
     const {
       accessType,
       confirmPassword,
-      userEmail,
+      email,
       formErrors,
       fullName,
-      psw,
-      userName
+      password,
+      userId
     } = this.state;
-    const dataForm = { accessType, userEmail, fullName, psw, userName };
-    const passIsEqual = psw === confirmPassword;
+    const dataForm = { accessType, email, fullName, password, userId };
+    const passIsEqual = password === confirmPassword;
     const isValid = isFormValid(formErrors, dataForm);
 
     if (!passIsEqual) {
@@ -64,19 +64,12 @@ const UsersForm = class userInput extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { 
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }, 
-      body: JSON.stringify(dataForm) 
-    };
-    
-    fetch('/admin/newuser', payload)
+    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
+
+    fetch('/api/user', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
-    console.log('>> TEST: sending data \n', dataForm);
+    console.log('SEND DATA', dataForm);
 
     // Reset Form field
     this.setState(initialState);
@@ -87,7 +80,7 @@ const UsersForm = class userInput extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit} noValidate>
         <Input
           label='Full Name'
           placeholder='John Doe'
@@ -101,37 +94,37 @@ const UsersForm = class userInput extends React.Component {
         <Input
           label='User Id'
           placeholder='john42'
-          name='userName'
+          name='userId'
           type='text'
           onChange={this.handleChange}
-          value={this.state.userName}
-          error={hasErrors ? formErrors.userName : null}
+          value={this.state.userId}
+          error={hasErrors ? formErrors.userId : null}
         />
 
         <Input
           label='Email'
           placeholder='john.doe@mail.com'
-          name='userEmail'
+          name='email'
           type='email'
           onChange={this.handleChange}
-          value={this.state.userEmail}
-          error={hasErrors ? formErrors.userEmail : null}
+          value={this.state.email}
+          error={hasErrors ? formErrors.email : null}
         />
 
         <Input
           label='Password'
           placeholder='Password'
-          name='psw'
+          name='password'
           type='password'
           onChange={this.handleChange}
-          value={this.state.psw}
-          error={hasErrors ? formErrors.psw : null}
+          value={this.state.password}
+          error={hasErrors ? formErrors.password : null}
         />
 
         <Input
           label='Confirm Password'
           placeholder='Confirm Password'
-          name='psw'
+          name='confirmPassword'
           type='password'
           onChange={this.handleChange}
           value={this.state.confirmPassword}

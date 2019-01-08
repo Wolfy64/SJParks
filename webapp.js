@@ -1,80 +1,66 @@
+require('dotenv-safe').load();
+// require('dotenv-safe').config();
+console.log(">> Running webapp.js. creating App...");
 const path = require('path');
 const express = require('express');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const flash = require('connect-flash');
-const morgan = require('morgan');
-const config = require('./config');
-const User = require('./models/User');
+const app = express()
 
-// Create Express web app
-const app = express();
+function newApp(){
 
-//app.set('view engine', 'html');
+// app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.use(express.static(path.join(__dirname, "client", "public")));
+
+app.use(function (req, res, next) {
+    console.log('request', req.url, req.body, req.method);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
+    if (req.method === 'OPTIONS') {
+        res.end();
+    } else {
+        next();
+    }
+});
+
+app.use(function (err, req, res, next) {
+    res.status(500).sendfile();
+    next(new Error(`>> This app has failed. Error thrown: ${err}`));
+});
+
 app.set('view engine', 'pug');
 
-// Use morgan for HTTP request logging
+const flash = require('connect-flash');
+app.use(flash());
+
+const morgan = require('morgan');
 app.use(morgan('combined'));
 
-// Serve static assets
-app.use(express.static(path.join(__dirname, '../client', config.clientPath)));
+app.use(express.urlencoded({extended: false}));
 
-// Parse incoming form-encoded HTTP bodies
-app.use(bodyParser.json());
+app.use(express.json());
 
-app.use(
-  bodyParser.urlencoded({
-    extended: true
-  })
-);
-
-// Create and manage HTTP sessions for all requests
-app.use(
-  session({
-    secret: config.secret,
+const session = require('express-session');
+app.use(session({
+    secret: process.env.APP_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 10 * 1000,
-      //activeDuration: 5 * 60 * 1000,
-      httpOnly: true,
-      secure: false
+        maxAge: 10 * 1000,
+        //activeDuration: 5 * 60 * 1000,
+        httpOnly: true,
+        secure: false
     }
-  })
-);
+}));
 
-// Use connect-flash to persist informational messages across redirects
-app.use(flash());
+app.get('/',(req, res, next) =>res.send(path.join(__dirname, 'client/public/index')));
 
-// Configure application routes
-require('./controllers/router')(app);
+const router = require("./routes").newRouter();
 
-// Handle 404
-app.use(function(request, response, next) {
-  response.status(404);
-  response.send(`
-        <h3>Error 404</h3>
-        <p>Not Found</p>
-    `);
-});
+app.use('/api', router);
 
-// Unhandled errors (500)
-app.use(function(err, request, response, next) {
-  console.error('An application error has occurred:');
-  console.error(err);
-  console.error(err.stack);
-  response.status(500);
-  response.send(`
-        <h3>Error 500</h3>
-        <p>Internal Server Error</p>
-    `);
-});
+return app;
+}
 
-// Session
-app.use('/admin', function(err, req, res, next) {
-  console.log(err);
-  res.redirect('/login');
-});
-
-// Export Express app
-module.exports = app;
+module.exports = {
+    newApp: newApp
+}

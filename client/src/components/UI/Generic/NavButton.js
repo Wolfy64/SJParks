@@ -16,17 +16,11 @@ const Btn = styled.button`
 `;
 
 const NavButton = (props) => {
-    if(props.to){
-        return (
-            <Link to={props.to}>
-                <Btn type={props.type || 'button'}>{props.name}</Btn>
-            </Link>
-        )
-    } else {
-        return (
-            <Btn type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
-        )
-    }   
+    return (
+        <Link to={props.to}>
+            <Btn>{props.name}</Btn>
+        </Link>
+    )
 }
 
 export default NavButton;

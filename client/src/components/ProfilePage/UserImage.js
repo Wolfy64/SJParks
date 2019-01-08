@@ -1,12 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Image = styled.div`
-  width: 100px;
-  height: 100px;
-  padding: 100px;
-
-`
 
 const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
@@ -39,7 +31,7 @@ class UserImage extends React.Component {
 
   render() {
     return (
-      <Image>
+      <div>
         <button onClick={() => this.fileInput.click()}>
           <img src='#' alt='avatar' />
         </button>
@@ -50,7 +42,7 @@ class UserImage extends React.Component {
           ref={fileInput => (this.fileInput = fileInput)}
         />
         {this.state.showError ? <span>{ERROR}</span> : null}
-      </Image>
+      </div>
     );
   }
 }

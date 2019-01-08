@@ -12,7 +12,7 @@ export default class FilterContainer extends Component {
 
     componentDidMount(){
         this.setState = ({
-            parks: [],
+            parks,
             filterParks: parks
         })
     }

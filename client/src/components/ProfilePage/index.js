@@ -2,8 +2,6 @@ import React from 'react';
 import UserImage from './UserImage';
 import UserForm from './UserForm';
 import PasswordForm from './PasswordForm';
-import styled from 'styled-components';
-
 
 const ProfilePage = () => (
   <>
