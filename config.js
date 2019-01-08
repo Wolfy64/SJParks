@@ -3,7 +3,7 @@ require('dotenv-safe').load();
 const cfg = {};
 
 // HTTP Port for sjparks.c0d3.com
-cfg.port = process.env.PORT || 9608;
+cfg.port = process.env.PORT || 96089;
 
 // A random string that will help generate secure one-time passwords and
 // HTTP sessions
