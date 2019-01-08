@@ -12,7 +12,7 @@
 /client/build
 
 #VSCode
-/.vscode
+.vscode
 
 # misc
 .DS_Store

@@ -71,11 +71,11 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   input {
-    border: solid 1px #A4A4A4;
+    border: solid 1px #a4a4a4;
     border-radius: 5px;
-    padding 3px;
+    padding: 3px;
   }
-`
+`;
 
 const Input = props => (
   <InputBox>
