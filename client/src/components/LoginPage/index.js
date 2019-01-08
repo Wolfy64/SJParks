@@ -6,13 +6,17 @@ import Input from '../UI/Form/Input';
 const Screen = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: #292929;
+  background-color: ${props => props.theme.colors.dark};
   padding: 10%;
+
+  h1 {
+    text-align: center;
+  }
 
   .card {
     display: flex;
     height: 400px;
-    width: 400px;
+    max-width: 400px;
     padding: 40px 30px 60px;
     background-color: white;
     border-radius: 15px;
@@ -22,31 +26,27 @@ const Screen = styled.div`
   }
 `;
 
-export default class Login extends React.Component {
-  render() {
-    return (
-      <Screen>
-        <form action='/login' method='POST'>
-          <div className='card'>
-            <h1>SJParks</h1>
-            <Input
-              name='username'
-              label='User ID:'
-              placeholder='Enter Your Username'
-              type='text'
-              required
-            />
-            <Input
-              name='psw'
-              label='Password:'
-              placeholder='Enter Password'
-              type='password'
-              required
-            />
-            <Button type='submit' name='LOGIN' />
-          </div>
-        </form>
-      </Screen>
-    );
-  }
-}
+export default () => (
+  <Screen>
+    <form action='/login' method='POST'>
+      <div className='card'>
+        <h1>SJParks</h1>
+        <Input
+          name='username'
+          label='User ID:'
+          placeholder='Enter Your Username'
+          type='text'
+          required
+        />
+        <Input
+          name='psw'
+          label='Password:'
+          placeholder='Enter Password'
+          type='password'
+          required
+        />
+        <Button type='submit' name='LOGIN' />
+      </div>
+    </form>
+  </Screen>
+);
