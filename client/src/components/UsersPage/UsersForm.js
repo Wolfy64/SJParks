@@ -29,7 +29,7 @@ const UsersForm = class userInput extends React.Component {
       [name]: value,
       formErrors: {
         ...this.state.formErrors,
-        [name]: errorFormHandler(type, value, SELECT_OPTIONS)
+        [name]: errorFormHandler(type, value, /*SELECT_OPTIONS*/)
       }
     });
   };

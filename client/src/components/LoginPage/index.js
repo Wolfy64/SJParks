@@ -30,7 +30,7 @@ export default class Login extends React.Component{
           <h1>SJParks</h1>
           <Input name='username' label='User ID:' placeholder='Enter Your Username' type='name'/>
           <Input name='password' label='Password:' placeholder='Password' type='password'/>
-          <Button to='/admin/updates' name='LOGIN'/>
+          <Button to='/api/login' name='LOGIN'/>
         </div>
       </Screen>
     );

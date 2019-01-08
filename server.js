@@ -1,5 +1,6 @@
-console.log('Running server.js');
-const config = require('./config');
+require('dotenv-safe').load();
+// require('dotenv-safe').config();
+console.log('>> Running Index');
 
 // Set MongoDB connection options...
 const opts = {
@@ -9,17 +10,19 @@ const opts = {
 };
 
 // ...then connect to MongoDB using those options.
+const mongoURI = !process.env.NODE_ENV ?
+  process.env.DEV_MONGO_URI : process.env.DEP_MONGO_URI;
 const mongoose = require('mongoose');
-mongoose.connect(config.mongoUri, opts)
-  .then(() => console.log(`MongoDB Connected @ uri: ${config.mongoUri} with connnection options: ${opts}`))
-  .catch(err => console.log(`An error occured while attempting to connect to MongoDB with uri: ${config.mongoUri} and connection options: ${opts}. Error thrown: ${err.message}`));
-mongoose.Promise = global.Promise;
+mongoose.connect(mongoURI, opts)
+.then(() => console.log(`>> MongoDB Connected @uri: ${mongoURI}.`))
+.catch(err => console.error(`>> An error occured while attempting to connect to MongoDB with uri: ${mongoURI}. Error thrown: ${err.message}`));
 
-// Finally, create http_server from webapp.js and...
+mongoose.Promise = Promise;
 const http = require('http');
-const app = require('./webapp');
-const server = http.createServer(app);
-console.log(`An Express server has been created and is awaiting deployment.`)
+const webapp = require('./webapp').newApp();
+const server = http.createServer(webapp);
+console.log(`>> Express server created and awaiting deployment ...`);
 
 // ...deploy http_server to localhost orHeroku
-server.listen(config.serverPort, () => console.log(`Express server is deployed @: http://localhost:${config.serverPort}`));
+const PORT = !process.env.NODE_ENV ? process.env.APP_DEV_SERVER_PORT : process.env.APP_DEP_SERVER_PORT;
+server/*app*/.listen(PORT, () => console.log(`>> Express server is deployed @: http://localhost:${PORT}`));

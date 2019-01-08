@@ -1,25 +1,47 @@
+require('dotenv-safe').load();
+// require('dotenv-safe').config();
+console.log(">> Running webapp.js. creating App...");
 const path = require('path');
-const config = require('./config');
-
-// Create Express web app
 const express = require('express');
-const app = express();
+const app = express()
 
-// Set webapp stock middleware functions/settings
+function newApp(){
+
+// app.use(express.static(path.join(__dirname, "client", "build")));
+
+app.use(express.static(path.join(__dirname, "client", "public")));
+
+app.use(function (req, res, next) {
+    console.log('request', req.url, req.body, req.method);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
+    if (req.method === 'OPTIONS') {
+        res.end();
+    } else {
+        next();
+    }
+});
+
+app.use(function (err, req, res, next) {
+    res.status(500).sendfile();
+    next(new Error(`>> This app has failed. Error thrown: ${err}`));
+});
+
 app.set('view engine', 'pug');
-
-const morgan = require('morgan');
-app.use(morgan('combined'));
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true}));
 
 const flash = require('connect-flash');
 app.use(flash());
 
+const morgan = require('morgan');
+app.use(morgan('combined'));
+
+app.use(express.urlencoded({extended: false}));
+
+app.use(express.json());
+
 const session = require('express-session');
 app.use(session({
-    secret: config.secret,
+    secret: process.env.APP_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -30,44 +52,15 @@ app.use(session({
     }
 }));
 
-//
-// Handle 404
-app.use(function (req, res, next) {
-    res.status(404);
-    res.send(`
-        <h3>Error 404</h3>
-        <p>Not Found</p>
-    `);
-    next();
-});
+app.get('/',(req, res, next) =>res.send(path.join(__dirname, 'client/public/index')));
 
-// Unhandled errors (500)
-app.use(function (err, req, res, next) {
-    console.error('An application error has occurred:');
-    console.error(err);
-    res.status(500);
-    res.send(` <h3>Error 500</h3> <p>Internal Server Error</p> `);
-    next();
-});
+const router = require("./routes").newRouter();
 
-// allow cross origin requests (optional)
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
-// Serve static assets
-app.use(express.static(path.join(__dirname, "client", "build")));
-
-// Configure Express webapp server_routes
-var router = express.Router();
-router.get("*", (req, res, next) => {
-    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-    next();
-})
-require('./controllers/routes')(router);
 app.use('/api', router);
 
-module.exports = app;
+return app;
+}
+
+module.exports = {
+    newApp: newApp
+}

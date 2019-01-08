@@ -8,11 +8,11 @@ const UserSchema = new mongoose.Schema({
 
     salt: String,
 
-    first_name: {type: String, required: true, max: 100},
+    firstName: {type: String, required: true, max: 100},
 
-    last_name: {type: String, required: true, max: 100},
+    lastName: {type: String, required: true, max: 100},
 
-    username: {type: String, lowercase: true, required: true, unique: true, match: [/^[a-zA-Z0-9]+$/, 'invalid username'], index: true},
+    userName: {type: String, lowercase: true, required: true, unique: true, match: [/^[a-zA-Z0-9]+$/, 'invalid username'], index: true},
 
     password: {type: String, required: [true, "Password Required"]},
 
@@ -39,12 +39,6 @@ UserSchema.virtual('activeSUBS').get(function () {
 
 
 UserSchema.methods.validate_password = function(password) {
-    console.log('22222222222222222222222222');
-    console.log('22222222222222222222222222');
-    console.log(this.salt);
-    console.log(this.password);
-    console.log('22222222222222222222222222');
-    console.log('22222222222222222222222222');
     var hash = crypto.getPasswordHash(password, this.salt);
     return this.password === hash;
 }
