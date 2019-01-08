@@ -63,7 +63,7 @@ class EditMessage extends React.Component {
   handleSendForm = dataForm => {
     const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-    fetch('/admin/newupdate', payload)
+    fetch('/api/message', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('SEND DATA', dataForm);

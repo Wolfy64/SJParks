@@ -66,7 +66,7 @@ const UsersForm = class userInput extends React.Component {
   handleSendForm = dataForm => {
     const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-    fetch('/admin/newuser', payload)
+    fetch('/api/user', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('SEND DATA', dataForm);
