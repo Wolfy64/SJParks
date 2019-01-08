@@ -2,13 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-// import * as serviceWorker from './serviceWorker';
+import { ThemeProvider } from 'styled-components';
+import GlobalStyle from './styles/globalStyle';
+import theme from './styles/theme';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+// import * as serviceWorker from './serviceWorker';
 
 const app = (
   <BrowserRouter>
-    <App />
+    <ThemeProvider theme={theme}>
+      <>
+        <GlobalStyle />
+        <App />
+      </>
+    </ThemeProvider>
   </BrowserRouter>
 );
 
