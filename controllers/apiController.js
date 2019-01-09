@@ -1,4 +1,3 @@
-
 function index(req, res){
   res.json({
     message: "Welcome to the San Jose Parks App! Here is some information about its api:",

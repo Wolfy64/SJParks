@@ -11,6 +11,9 @@ function newApp(){
 
 app.use(express.static(path.join(__dirname, "client", "public")));
 
+// console.log('>> PATH 2  ', path.join(__dirname, 'client', config.clientPath));
+// app.use(express.static(path.join(__dirname, 'client', config.clientPath)));
+
 app.use(function (req, res, next) {
     console.log('request', req.url, req.body, req.method);
     res.header("Access-Control-Allow-Origin", "*");
@@ -32,14 +35,8 @@ app.set('view engine', 'pug');
 const flash = require('connect-flash');
 app.use(flash());
 
-<<<<<<< HEAD
 const morgan = require('morgan');
 app.use(morgan('combined'));
-=======
-// Serve static assets
-console.log('>> PATH 2  ', path.join(__dirname, 'client', config.clientPath));
-app.use(express.static(path.join(__dirname, 'client', config.clientPath)));
->>>>>>> fe214ad9e2a573d4198bb58a5c9e70accc2d921d
 
 app.use(express.urlencoded({extended: false}));
 
@@ -59,6 +56,7 @@ app.use(session({
 }));
 
 app.get('/',(req, res, next) =>res.send(path.join(__dirname, 'client/public/index')));
+
 
 const router = require("./routes").newRouter();
 
