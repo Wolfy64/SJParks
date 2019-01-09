@@ -4,7 +4,7 @@
 /client/node_modules
 /node_modules
 .env
-updateDB.code-workspace*
+updateDB.code-workspace
 
 # testing
 /client/coverage
