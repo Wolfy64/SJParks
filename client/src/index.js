@@ -5,8 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 // import * as serviceWorker from './serviceWorker';
 
 const app = (
