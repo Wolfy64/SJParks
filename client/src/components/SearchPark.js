@@ -4,7 +4,6 @@ import Input from './UI/Form/Input';
 
 class NewUpdate extends Component {
   state = {
-    parksList: [],
     filter: ''
   };
 
@@ -20,8 +19,8 @@ class NewUpdate extends Component {
 
   render() {
     const { filter, parksList } = this.state;
-    const { addPark, addAllParks } = this.props;
-    const parkLi = parksList.map(el => (
+    const { addPark, parks, addAllParks } = this.props;
+    const parkLi = parks.map(el => (
       <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
     ));
 
