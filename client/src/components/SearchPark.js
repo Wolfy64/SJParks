@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import ParkLi from './ParkLi';
 import Input from './UI/Form/Input';
+import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
   width: 300px;
@@ -29,7 +30,7 @@ class SearchPark extends Component {
     const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || parks.splice(0, 3);
+    let showParkList = filterPark || [...parks].splice(0, 3);
 
     const parkLi = showParkList.map(el => (
       <ParkLi
@@ -51,7 +52,9 @@ class SearchPark extends Component {
           autoComplete='off'
         />
 
-        {addAllParks && <button onClick={addAllParks}>Select All</button>}
+        {addAllParks && (
+          <ButtonText onClick={addAllParks}>Select All</ButtonText>
+        )}
 
         <ul>{parkLi}</ul>
       </Container>
