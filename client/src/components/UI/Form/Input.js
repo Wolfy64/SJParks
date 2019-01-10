@@ -4,10 +4,15 @@ import styled from 'styled-components';
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
+  label {
+    color: ${props => props.theme.colors.secondary};
+    margin: 1rem;
+  }
   input {
     border: solid 1px #a4a4a4;
     border-radius: 5px;
-    padding: 3px;
+    padding: 0.5rem;
+    font-size: 0.8em;
   }
   span {
     color: ${props => props.theme.colors.danger};
