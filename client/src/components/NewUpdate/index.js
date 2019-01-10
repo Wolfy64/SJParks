@@ -42,6 +42,7 @@ class NewUpdate extends React.Component {
         <h1>Create New Text Update</h1>
         <SearchPark
           parks={this.state.parks}
+          selected={false}
           addPark={park => this.handleAddPark(park)}
           addAllParks={this.handleAddAllPark}
         />

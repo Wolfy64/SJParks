@@ -39,7 +39,8 @@ export default class Parks extends Component {
   }
 
   handleDeletePark = park => {
-    if (window.confirm("Do you really want to delete ".concat(park.name).concat(" from the system?"))) { 
+    if (window.confirm("Delete ".concat(park.name)
+    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) { 
       console.log('>> ', park.name, ' was removed.')
     }
   };
@@ -127,6 +128,7 @@ export default class Parks extends Component {
         <Col2>
           <SearchPark
             parks={this.state.parks}
+            selected={true}
             addPark={park => this.handleDeletePark(park)}
           />
         </Col2>

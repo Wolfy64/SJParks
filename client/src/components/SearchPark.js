@@ -4,7 +4,8 @@ import Input from './UI/Form/Input';
 
 class NewUpdate extends Component {
   state = {
-    filter: ''
+    filter: '',
+    color: (props => props.theme.colors.lightbg)
   };
 
   handleInput = e => {
@@ -18,13 +19,13 @@ class NewUpdate extends Component {
 
   render() {
     const { filter, parksList } = this.state;
-    const { addPark, parks, addAllParks } = this.props;
+    const { addPark, parks, selected, addAllParks } = this.props;
     let parkLi = parks.map(el => (
-      <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
+      <ParkLi key={el._id} park={el} selected={selected} clicked={() => addPark(el)} />
     ));
     if (parksList) {
       parkLi = parksList.map(el => (
-      <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
+      <ParkLi key={el._id} park={el}  selected={selected} clicked={() => addPark(el)} />
     ))}
 
     if(addAllParks) {
