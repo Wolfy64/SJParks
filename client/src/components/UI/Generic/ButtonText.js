@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Btn = styled.button`
+  background: inherit;
   margin: 1rem;
   color: ${props => props.theme.colors.info};
   border: none;
