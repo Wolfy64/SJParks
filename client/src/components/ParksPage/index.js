@@ -27,7 +27,8 @@ const initialState = {
   parks: [],
   showErrors: false,
   newPark: '',
-  parkId: ''
+  parkId: '',
+  parkFilter: [],
 };
 
 export default class Parks extends Component {
@@ -103,6 +104,7 @@ export default class Parks extends Component {
           <form onSubmit={this.handleSubmit}>
             <Input
               name='newPark'
+              label='Name'
               value={this.state.newPark}
               onChange={this.handleChange}
               type='text'
@@ -111,6 +113,7 @@ export default class Parks extends Component {
             />
             <Input
               name='parkId'
+              label='Keyword'
               value={this.state.parkId}
               onChange={this.handleChange}
               type='text'

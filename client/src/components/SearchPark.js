@@ -13,33 +13,53 @@ class NewUpdate extends Component {
     const parksList = parks.filter(el =>
       el.name.toLowerCase().includes(value.toLowerCase())
     );
-
     this.setState({ [name]: value, parksList });
   };
 
   render() {
     const { filter, parksList } = this.state;
     const { addPark, parks, addAllParks } = this.props;
-    const parkLi = parks.map(el => (
+    let parkLi = parks.map(el => (
       <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
     ));
+    if (parksList) {
+      parkLi = parksList.map(el => (
+      <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
+    ))}
 
-    return (
-      <div>
-        <Input
-          name='filter'
-          value={filter}
-          onChange={this.handleInput}
-          type='text'
-          placeholder='Search Parks by Name'
-          autoComplete='off'
-        />
+    if(addAllParks) {
+      return (
+        <div>
+          <Input
+            name='filter'
+            value={filter}
+            onChange={this.handleInput}
+            type='text'
+            placeholder='Search Parks by Name'
+            autoComplete='off'
+          />
 
-        {/* <button onClick={addAllParks}>Select All</button> */}
+          <button onClick={addAllParks}>Select All</button>
 
-        <ul>{parkLi}</ul>
-      </div>
-    );
+          <ul>{parkLi}</ul>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Input
+            name='filter'
+            value={filter}
+            onChange={this.handleInput}
+            type='text'
+            placeholder='Search Parks by Name'
+            autoComplete='off'
+          />
+
+          <ul>{parkLi}</ul>
+        </div>
+      );
+    }
   }
 }
 

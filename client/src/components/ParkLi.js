@@ -11,7 +11,7 @@ const Label = styled.div`
 const ParkLi = props => (
   <Label>
     <li onClick={props.clicked}>
-      <span>{props.park.name}</span>
+      <span>{props.park.name} - {props.park.parkID}</span>
     </li>
   </Label>
 );
