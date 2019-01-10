@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import NavBar from './NavBar';
-import Presentation from './Presentation';
+import About from './About';
 import Subscribe from './Subscribe';
-import Survey from './Survey';
+import Contact from './Contact';
 import Footer from './Footer';
 
 const Jumbotron = styled.div`
-  background-color: #004A75;
+  background-color: ${props => props.theme.colors.primary};
   height: 40vh;
 `;
 
@@ -17,9 +17,9 @@ class PublicPage extends React.Component {
       <div>
         <NavBar />
         <Jumbotron />
-        <Presentation />
+        <About />
         <Subscribe />
-        <Survey />
+        <Contact />
         <Footer />
       </div>
     );
