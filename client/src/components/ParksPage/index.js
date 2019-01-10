@@ -6,13 +6,29 @@ import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import { parksDB } from '../../dummyDB';
 import Button from '../UI/Generic/Button';
+import styled from 'styled-components';
+import { assertDeclareModule } from 'babel-types';
+
+const Col1 = styled.div`
+  min-width: 350px;
+  padding: 30px;
+  float: left;
+  margin: 0 20px 0 0;
+`
+const Col2 = styled.div`
+  min-width: 350px;
+  padding: 30px;
+  height: 100%;
+  float: left;
+  background-color: ${props => props.theme.colors.lightbg};
+`
 
 const initialState = {
   parks: [],
-  parkSelected: [],
   showErrors: false,
   newPark: '',
-  parkId: ''
+  parkId: '',
+  parkFilter: [],
 };
 
 export default class Parks extends Component {
@@ -22,27 +38,11 @@ export default class Parks extends Component {
     this.setState({ parks: parksDB });
   }
 
-  handleAddPark = park => {
-    const { parkSelected } = this.state;
-    const isSelected = parkSelected.find(el => el._id === park._id);
-
-    if (!isSelected) this.setState({ parkSelected: [...parkSelected, park] });
-  };
-
-  handleAddAllPark = () => {
-    this.setState({ parkSelected: [...this.state.parks] });
-  };
-
   handleDeletePark = park => {
-    this.setState({
-      parkSelected: [
-        ...this.state.parkSelected.filter(el => el._id !== park._id)
-      ]
-    });
-  };
-
-  handleDeleteAddAllPark = () => {
-    this.setState({ parkSelected: [] });
+    if (window.confirm("Delete ".concat(park.name)
+    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) { 
+      console.log('>> ', park.name, ' was removed.')
+    }
   };
 
   handleChange = e => {
@@ -101,40 +101,37 @@ export default class Parks extends Component {
   render() {
     return (
       <div>
-        <h2>List</h2>
-        <form onSubmit={this.handleSubmit}>
-          <Input
-            name='newPark'
-            value={this.state.newPark}
-            onChange={this.handleChange}
-            type='text'
-            placeholder='New Park...'
-            autoComplete='off'
+        <Col1>
+          <form onSubmit={this.handleSubmit}>
+            <Input
+              name='newPark'
+              label='Name'
+              value={this.state.newPark}
+              onChange={this.handleChange}
+              type='text'
+              placeholder='New Park...'
+              autoComplete='off'
+            />
+            <Input
+              name='parkId'
+              label='Keyword'
+              value={this.state.parkId}
+              onChange={this.handleChange}
+              type='text'
+              placeholder='Park Id...'
+              autoComplete='off'
+            />
+
+            <Button name='Create a new park' type='submit' />
+          </form>
+        </Col1>
+        <Col2>
+          <SearchPark
+            parks={this.state.parks}
+            selected={true}
+            addPark={park => this.handleDeletePark(park)}
           />
-          <Input
-            name='parkId'
-            value={this.state.parkId}
-            onChange={this.handleChange}
-            type='text'
-            placeholder='Park Id...'
-            autoComplete='off'
-          />
-
-          <Button name='Create a new park' type='submit' />
-        </form>
-
-        <h2>Filter</h2>
-        <SearchPark
-          parks={this.state.parks}
-          addPark={park => this.handleAddPark(park)}
-          addAllParks={this.handleAddAllPark}
-        />
-
-        <SelectedPark
-          parks={this.state.parkSelected}
-          deletePark={park => this.handleDeletePark(park)}
-          deleteAllParks={this.handleDeleteAddAllPark}
-        />
+        </Col2>
       </div>
     );
   }

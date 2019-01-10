@@ -3,7 +3,7 @@ import ParkLi from './ParkLi';
 
 const SelectedPark = props => {
   const selectedPark = props.parks.map(el => (
-    <ParkLi key={el._id} park={el} clicked={() => props.deletePark(el)} />
+    <ParkLi key={el._id} park={el} selected={true} clicked={() => props.deletePark(el)} />
   ));
 
   return (
