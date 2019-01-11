@@ -7,7 +7,6 @@ import ButtonText from './UI/Generic/ButtonText';
 const Container = styled.div`
   width: 300px;
   padding: 1rem;
-  background: white;
 `;
 
 class SearchPark extends Component {
@@ -38,7 +37,7 @@ class SearchPark extends Component {
     ));
 
     return (
-      <Container>
+      <Container className='searchContainer'>
         <Input
           name='filter'
           value={filter}

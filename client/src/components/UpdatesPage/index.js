@@ -2,6 +2,20 @@ import React from 'react';
 import Graph from './Graph';
 import Post from './Historypost';
 import Button from '../UI/Generic/Button';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+    float: left;
+    width: 470px;
+    .recharts-surface {
+        margin-left:-3.5rem;
+        margin-right: 50px;
+    }
+    Button{
+        margin: 70px;
+        width: 300px;
+    }
+`;
 
 class Updates extends React.Component {
     constructor() {
@@ -29,13 +43,15 @@ class Updates extends React.Component {
     render() {
         return (
         <div>
-            <div>
-                <Graph />
+            <Wrapper>
+                <Graph className='recharts-surface' />
                 <Button to='/admin/newupdate' name='New Text Update' />
-            </div>
+            </Wrapper>
+            <Wrapper>
             {this.state.history.map(post => (
                 <Post key={post._id} post={post} />
             ))}
+            </Wrapper>
         </div>
         );
     }

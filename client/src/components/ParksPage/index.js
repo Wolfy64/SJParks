@@ -3,20 +3,18 @@ import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import SearchPark from '../SearchPark';
-import SelectedPark from '../SelectedPark';
 import { parksDB } from '../../dummyDB';
 import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
-import { assertDeclareModule } from 'babel-types';
 
 const Col1 = styled.div`
-  width: 250px;
+  width: 300px;
   float: left;
-  margin: 0 200px 0 0;
+  padding: 20px;
+  margin: 0 5rem 0 0;
 `
 const Col2 = styled.div`
-  width: 250px;
-  height: 100%;
+  height: 100vh;
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
 `
