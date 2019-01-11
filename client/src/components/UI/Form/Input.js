@@ -8,6 +8,7 @@ const InputBox = styled.div`
     border: solid 1px #a4a4a4;
     border-radius: 5px;
     padding: 3px;
+    margin: 5px 0;
   }
   span {
     color: ${props => props.theme.colors.danger};

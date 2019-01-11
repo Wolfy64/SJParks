@@ -3,8 +3,7 @@ import styled from 'styled-components';
 
 const Label = styled.div`
   background-color: ${(props) => {
-    console.log(props)
-    if(props.selected) {
+   if (props.selected) {
       return props.theme.colors.success
     } else {
       return props.theme.colors.lightbg
@@ -27,7 +26,7 @@ const Label = styled.div`
 const ParkLi = props => (
   <Label selected={props.selected} onClick={props.clicked}>
       <span>{props.park.name} - {props.park.parkID}</span>
-      {props.selected? <i class="fa fa-times"></i> : <i class="fa fa-plus"></i>}
+      {props.selected? <i className="fa fa-times"></i> : <i className="fa fa-plus"></i>}
   </Label>
 );
 

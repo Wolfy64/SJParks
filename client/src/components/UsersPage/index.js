@@ -5,33 +5,25 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   float: left;
-  select {
-    margin-top: 13px;
-  }
-  label{
-    margin-top: 13px;
-  }
-
+  width: 250px;
+  margin-right: 200px;
 `;
 
 const Wrapper2 = styled.div`
   float: left;
-  margin-left: 200px;
-  margin-top: 9px;
-  p{
-    margin-bottom: 30px;  
+  width: 400px;
+  UsersList { 
+    
   }
-
-
 `;
 
 const Users = () => (
   <>
     <Wrapper>
-    <UsersForm/>
+      <UsersForm/>
     </Wrapper>
     <Wrapper2>
-    <UsersList/>
+      <UsersList/>
     </Wrapper2>
   </>
 );

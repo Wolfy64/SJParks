@@ -133,7 +133,7 @@ const UsersForm = class userInput extends React.Component {
         <Input
           label='Confirm Password'
           placeholder='Confirm Password'
-          name='psw'
+          name='confirmPassword'
           type='password'
           onChange={this.handleChange}
           value={this.state.confirmPassword}

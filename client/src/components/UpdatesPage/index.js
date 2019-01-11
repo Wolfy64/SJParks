@@ -15,7 +15,7 @@ class Updates extends React.Component {
                 parkIDs: ['ROthgSE', 'ROzdfSE', 'ROSzdE', 'ROzddSE', 'DFzndgROSE', 'ROzdfSE'],
                 message: 'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
                 },
-                {_id: '825y78', 
+                {_id: '825u78', 
                 name: 'Jeff Tomson', 
                 date: '11/28/18',
                 time: '11:20',
