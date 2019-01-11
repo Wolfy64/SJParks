@@ -3,17 +3,34 @@
 	"version": "1.0.0",
 	"description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
 	"main": "server.js",
+	"scripts": {
+		"build": "react-scripts build",
+		"client": "yarn start --prefix client",
+		"client-install": "yarn install --prefix client",
+		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+		"eject": "react-scripts eject",
+		"seed": "node seed.js",
+		"server": "NODE_ENV=development nodemon server.js",
+		"start": "node server.js"
+	},
 	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"connect-flash": "^0.1.1",
 		"dotenv": "^6.2.0",
 		"dotenv-safe": "^6.1.0",
+		"ejs": "^2.6.1",
 		"express": "^4.16.4",
+		"express-ejs-layouts": "^2.5.0",
 		"express-flash": "0.0.2",
+		"express-request-id": "^1.4.1",
 		"express-session": "^1.15.6",
 		"kleur": "3",
 		"mocha": "^5.2.0",
 		"mongoose": "^5.4.2",
 		"mongoose-unique-validator": "^2.0.2",
 		"morgan": "^1.9.1",
+		"passport": "^0.4.0",
+		"passport-local": "^1.0.0",
 		"pug": "^2.0.3",
 		"react": "^16.7.0",
 		"react-app": "^1.1.2",
@@ -24,17 +41,6 @@
 	"devDependencies": {
 		"concurrently": "^3.6.1",
 		"nodemon": "^1.18.9"
-	},
-	"scripts": {
-		"seed": "node seed.js",
-		"start": "node server.js",
-		"build": "react-scripts build",
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"eject": "react-scripts eject",
-		"client-install": "yarn install  --prefix client",
-		"client": "yarn start --prefix client",
-		"server": "nodemon server.js",
-		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
 	},
 	"eslintConfig": {
 		"extends": "react-app"

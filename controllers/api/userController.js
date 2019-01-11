@@ -1,11 +1,11 @@
 const db = require("../../models");
-const crypto = require("../../lib/cryptoHelper");
+const crypto = require("./lib/cryptoHelper");
 
 // @route GET api/user
 // @desc Get all users
 // @access Public
 function index(req, res) {
-		console.log(`>> Retriving user index ...`);
+	console.log(`>[USER:8:23]> Retriving user index ...`);
 	db.User.find()
 		.sort({
 			username: 1,
@@ -13,8 +13,11 @@ function index(req, res) {
 			email: 1
 		})
 		.then(users => {
-			res.status(200).json({ success: true, users: users });
-			console.log(`>> A user index with ${users.length} many user was found ...`);
+			res.status(200).json({
+				success: true,
+				users: users
+			});
+			console.log(`>[USER:20:30]> ...A user index with ${users.length} many user was found`);
 		})
 		.catch(err => res.status(404).json({
 			success: false,
@@ -25,13 +28,13 @@ function index(req, res) {
 // @route GET api/users/:userId
 // @desc Read a user by userId
 // @access Public
-function read(req, res){}
+function read(req, res) {}
 
 // @route POST api/users/
 // @desc Create An New user
 // @access Public
 function create(req, res) {
-		console.log(`>> Creating  user with 'phone = ${req.body.phone}' ...`);
+	console.log(`>[USER:37:26]> Creating  user with 'phone = ${req.body.phone}' ...`);
 	const {
 		password,
 		cpassword,
@@ -44,63 +47,60 @@ function create(req, res) {
 		addPark
 	} = req.body;
 
-	if (password === cpassword) {
-		const newUser = new db.User({
-			isAdmin: isAdmin,
-			userName: userName,
-			firstName: firstName,
-			lastName: lastName,
-			phone: phone,
-			email: email
-		});
-		newUser.salt = crypto.getSalt();
-		newUser.password = crypto.getPasswordHash(password, newUser.salt);
 
-		db.Park.findOne({
-				code: addPark
-			})
-			.exec((err, park) => {
-				if (err) res.json({
-					success: false,
-					error: err.message
-				});
-				if (park) {
-					newUser.parks.push(park._id);
-				} else {
-					const newPark = new db.Park({
-						code: addPark
-					});
-					newPark.users.push(newUser._id);
-					newPark.save();
-					newUser.parks.push(newPark._id);
-				}
-			});
+	const newUser = new db.User({
+		isAdmin: isAdmin,
+		userName: userName,
+		firstName: firstName,
+		lastName: lastName,
+		phone: phone,
+		email: email
+	});
+	newUser.salt = crypto.getSalt();
+	newUser.password = crypto.getPasswordHash(password, newUser.salt);
 
-		newUser.save()
-			.then(newuser => {
-				res.status(220).send({ Success: true, NewUser: newuser._id })
-				console.log(`>> User with '_id = ${newuser._id}' has been created ...`);
-			})
-			.catch(err => res.status(420).send({
-				Success: false,
-				Error: err.message
-			}));
-	} else {
-		return res.status(428).send({
-			Success: false,
-			Error: `Passwords were not the same`
+	db.Park.findOne({
+			code: addPark
 		})
-	}
+		.exec((err, park) => {
+			if (err) res.json({
+				success: false,
+				error: err.message
+			});
+			if (park) {
+				newUser.parks.push(park._id);
+			} else {
+				const newPark = new db.Park({
+					code: addPark
+				});
+				newPark.users.push(newUser._id);
+				newPark.save();
+				newUser.parks.push(newPark._id);
+			}
+		});
+
+	newUser.save()
+		.then(newuser => {
+			res.status(220).send({
+				Success: true,
+				NewUser: newuser._id
+			});
+			console.log(`>[USER:88:32]> ...User with '_id = ${newuser._id}' has been created `);
+		})
+		.catch(err => res.status(420).send({
+			Success: false,
+			Error: err.message
+		}));
+
 }
 
 // @route PUT api/user/update/:id
 // @desc Update an existing user by id
 // @access Public
 function update(req, res) {
-	console.log(`>> Updating user with '_id = ${req.params.id}'...`);
+	console.log(`>[USER:106:27]> Updating user with '_id = ${req.params.id}'...`);
 	const {
 		newPassword,
-		newCPassword,
 		newIsAdmin,
 		newUserName,
 		newFirstName,
@@ -111,95 +111,90 @@ function update(req, res) {
 		addMessage
 	} = req.body;
 
-	if (newPassword === newCPassword) {
-		const updates = {};
-		updates.isAdmin = newIsAdmin;
-		updates.userName = newUserName;
-		updates.firstName = newFirstName;
-		updates.lastName = newLastName;
-		updates.phone = newPhone;
-		updates.email = newEmail;
+	const updates = {};
+	updates.isAdmin = newIsAdmin;
+	updates.userName = newUserName;
+	updates.firstName = newFirstName;
+	updates.lastName = newLastName;
+	updates.phone = newPhone;
+	updates.email = newEmail;
 
-		const options = {
-			// These are the options for 'findByIdAndUpdate'. Please see the link that follows for further details.
-			// {"link":"https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate"}
-			// setDefaultsOnInsert: true,
-			// sort: -1,
-			new: true,
-			upsert: false,
-			runValidators: true,
-			select: null,
-			rawResult: false,
-			strict: false
-		}
+	/* These are the options for 'findByIdAndUpdate'. Please see the link that follows for further details.{"link":"https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate"} */
 
-		db.User.findByIdAndUpdate(req.params.id, updates, options)
-			.then(newUser => {
-				newUser.salt = crypto.getSalt();
-				newUser.password = crypto.getPasswordHash(newPassword, newUser.salt);
-
-				db.Park.findOne({
-						name: addPark
-					})
-					.exec((err, park) => {
-						if (err || !park) {
-							const newPark = new db.Park({
-								name: addPark
-							});
-							newPark.users.push(newUser._id);
-							newPark.save();
-							newUser.parks.push(newPark._id);
-						} else if (park) {
-							newUser.parks.push(park._id);
-						}
-					});
-
-				db.Message.findOne({
-						message: addMessage
-					})
-					.exec((err, message) => {
-						if (err || !message) {
-							const newMessage = new db.Message({
-								author: newUser._id,
-								message: addMessage
-							});
-							newMessage.save();
-							newUser.messages.push(newMessage._id);
-						} else if (message) {
-							newUser.messages.push(message._id);
-						}
-					});
-
-				console.log(newUser._id);
-
-				newUser.save()
-					.then(newuser => res.status(220).send({
-						Success: true,
-						NewUser: newuser
-					}))
-					.catch(err => res.status(420).send({
-						Success: false,
-						Error: `Error saving updated user. Error thrown: ${err.message}.`
-					}));
-			})
-			.catch(err => res.status(457).json({
-				succes: false,
-				error: `Error updating user. Error thrown: ${err.message}`
-			}));
-	} else {
-		return res.status(424).json({
-			success: false,
-			error: "The passwords did not match!"
-		})
+	const options = {
+		// setDefaultsOnInsert: true,
+		// sort: -1,
+		new: true,
+		upsert: false,
+		runValidators: true,
+		select: null,
+		rawResult: false,
+		strict: false
 	}
-	console.log(`>> User with '_id = ${req.params.id} has been updated...'`);
+
+	db.User.findByIdAndUpdate(req.params.id, updates, options)
+		.then(newUser => {
+			newUser.salt = crypto.getSalt();
+			newUser.password = crypto.getPasswordHash(newPassword, newUser.salt);
+
+			db.Park.findOne({
+					name: addPark
+				})
+				.exec((err, park) => {
+					if (err || !park) {
+						const newPark = new db.Park({
+							name: addPark
+						});
+						newPark.users.push(newUser._id);
+						newPark.save();
+						newUser.parks.push(newPark._id);
+					} else if (park) {
+						newUser.parks.push(park._id);
+					}
+				});
+
+			db.Message.findOne({
+					message: addMessage
+				})
+				.exec((err, message) => {
+					if (err || !message) {
+						const newMessage = new db.Message({
+							author: newUser._id,
+							message: addMessage
+						});
+						newMessage.save();
+						newUser.messages.push(newMessage._id);
+					} else if (message) {
+						newUser.messages.push(message._id);
+					}
+				});
+
+			console.log(`>[USER:8:23]>`+
+				newUser._id);
+
+			newUser.save()
+				.then(newuser => res.status(220).send({
+					Success: true,
+					NewUser: newuser
+				}))
+				.catch(err => res.status(420).send({
+					Success: false,
+					Error: `Error saving updated user. Error thrown: ${err.message}.`
+				}));
+		})
+		.catch(err => res.status(457).json({
+			succes: false,
+			error: `Error updating user. Error thrown: ${err.message}`
+		}));
+
+	console.log(`>[USER:190:27]> User with '_id = ${req.params.id} has been updated'`);
 }
 
 // @route DELETE api/user/:id
 // @desc Delete An user by id
 // @access Public
 function destroy(req, res) {
-	console.log(`>> Destroying user with '_id = ${req.params.id}'...`);
+	console.log(`>[USER:197:27]> Destroying user with '_id = ${req.params.id}'...`);
 	db.User.findByIdAndDelete(req.params.id)
 		.then(user => {
 			//
@@ -236,7 +231,7 @@ function destroy(req, res) {
 			success: false,
 			error: err.message
 		}));
-	console.log(`>> User with '_id = ${req.params.id} has been destroyed...'`);
+	console.log(`>[USER:238:27]> User with '_id = ${req.params.id} has been destroyed...'`);
 }
 
 module.exports = {
