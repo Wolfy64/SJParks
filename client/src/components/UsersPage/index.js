@@ -5,24 +5,25 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   float: left;
-  width: 300px;
-  padding:20px;
-  margin-right: 10%;
+  width: 470px;
+  .usersForm{
+    width: 300px;
+  }
 `;
 
 const Wrapper2 = styled.div`
   float: left;
-  width: 40%;
+  width: 470px;
 `;
 
 const Users = () => (
   <>
     <Wrapper>
-      <UsersForm/>
+      <UsersForm />
     </Wrapper>
-    <Wrapper2>
+    <Wrapper>
       <UsersList/>
-    </Wrapper2>
+    </Wrapper>
   </>
 );
 

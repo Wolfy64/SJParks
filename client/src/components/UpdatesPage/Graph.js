@@ -13,7 +13,7 @@ const data = [
 export default class Graph extends Component {
     render(){
         return (
-            <LineChart width={500} height={300} data={data}>
+            <LineChart width={450} height={250} data={data}>
                 <Line type="monotone" dataKey="uv" stroke="#004A75" />
                 <CartesianGrid stroke="#ddd" strokeDasharray="5 5" />
                 <XAxis dataKey="name" />

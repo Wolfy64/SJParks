@@ -4,7 +4,6 @@ import Select from '../UI/Form/Select';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button'
-import styled from 'styled-components';
 
 
 const SELECT_OPTIONS = {
@@ -89,7 +88,7 @@ const UsersForm = class userInput extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className='usersForm' onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
           placeholder='John Doe'

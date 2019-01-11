@@ -3,10 +3,12 @@ import styled from 'styled-components';
 
 const Btn = styled.button`
   background: inherit;
-  margin: 1rem;
+  margin: 3px;
   color: ${props => props.theme.colors.info};
   border: none;
-  font-size: 1rem;
+  :hover{
+    text-decoration: underline;
+  }
 `;
 
 const ButtonText = props => <Btn {...props}>{props.children}</Btn>;

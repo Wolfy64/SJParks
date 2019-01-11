@@ -25,7 +25,7 @@ class SearchPark extends Component {
     const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || [...parks].splice(0, 3);
+    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 3);
 
     const parkLi = showParkList.map(el => (
       <ParkLi

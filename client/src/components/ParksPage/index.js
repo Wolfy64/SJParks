@@ -126,6 +126,7 @@ export default class Parks extends Component {
             parks={this.state.parks}
             selected={true}
             addPark={park => this.handleDeletePark(park)}
+            numShow={this.state.parks.length}
           />
         </Col2>
       </div>
