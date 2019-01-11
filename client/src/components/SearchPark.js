@@ -1,67 +1,61 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import ParkLi from './ParkLi';
 import Input from './UI/Form/Input';
+import ButtonText from './UI/Generic/ButtonText';
 
-class NewUpdate extends Component {
-  state = {
-    filter: '',
-    color: (props => props.theme.colors.lightbg)
-  };
+const Container = styled.div`
+  width: 300px;
+  padding: 1rem;
+  background: white;
+`;
+
+class SearchPark extends Component {
+  state = { filter: '', filterPark: null };
 
   handleInput = e => {
     const { name, value } = e.target;
-    const { parks } = this.props;
-    const parksList = parks.filter(el =>
+    const filterPark = this.props.parks.filter(el =>
       el.name.toLowerCase().includes(value.toLowerCase())
     );
-    this.setState({ [name]: value, parksList });
+
+    this.setState({ [name]: value, filterPark });
   };
 
   render() {
-    const { filter, parksList } = this.state;
+    const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
-    let parkLi = parks.map(el => (
-      <ParkLi key={el._id} park={el} selected={selected} clicked={() => addPark(el)} />
+
+    let showParkList = filterPark || [...parks].splice(0, 3);
+
+    const parkLi = showParkList.map(el => (
+      <ParkLi
+        key={el._id}
+        park={el}
+        selected={selected}
+        clicked={() => addPark(el)}
+      />
     ));
-    if (parksList) {
-      parkLi = parksList.map(el => (
-      <ParkLi key={el._id} park={el}  selected={selected} clicked={() => addPark(el)} />
-    ))}
 
-    if(addAllParks) {
-      return (
-        <div>
-          <Input
-            name='filter'
-            value={filter}
-            onChange={this.handleInput}
-            type='text'
-            placeholder='Search Parks by Name'
-            autoComplete='off'
-          />
+    return (
+      <Container>
+        <Input
+          name='filter'
+          value={filter}
+          onChange={this.handleInput}
+          type='text'
+          placeholder='Search Parks by Name'
+          autoComplete='off'
+        />
 
-          <button onClick={addAllParks}>Select All</button>
+        {addAllParks && (
+          <ButtonText onClick={addAllParks}>Select All</ButtonText>
+        )}
 
-          <ul>{parkLi}</ul>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <Input
-            name='filter'
-            value={filter}
-            onChange={this.handleInput}
-            type='text'
-            placeholder='Search Parks by Name'
-            autoComplete='off'
-          />
-
-          <ul>{parkLi}</ul>
-        </div>
-      );
-    }
+        <ul>{parkLi}</ul>
+      </Container>
+    );
   }
 }
 
-export default NewUpdate;
+export default SearchPark;

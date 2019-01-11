@@ -2,27 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Label = styled.div`
-  background-color: ${(props) => {
-   if (props.selected) {
-      return props.theme.colors.success
-    } else {
-      return props.theme.colors.lightbg
-    }
-  }};
-  color: ${(props) => {
-    console.log(props)
-    if(props.selected) {
-      return props.theme.colors.light
-    } else {
-      return props.theme.colors.dark
-    }
-  }};
+  background-color: ${props =>
+    props.selected ? props.theme.colors.success : props.theme.colors.lightbg};
+  color: ${props =>
+    props.selected ? props.theme.colors.light : props.theme.colors.secondary};
   padding: 7px;
   margin: 5px 0;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
-`
+`;
+
 const ParkLi = props => (
   <Label selected={props.selected} onClick={props.clicked}>
       <span>{props.park.name} - {props.park.parkID}</span>

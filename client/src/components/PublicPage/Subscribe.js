@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
@@ -6,6 +7,19 @@ import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
+
+const Form = styled.form`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
+  background-color: ${props => props.theme.colors.lightbg};
+  height: 40vh;
+
+  .phoneField {
+    width: 300px;
+    align-self: center;
+  }
+`;
 
 const initialState = {
   parks: [],
@@ -84,30 +98,33 @@ class Subscribe extends React.Component {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form id='subscribe' onSubmit={this.handleSubmit}>
         <SearchPark
           parks={this.state.parks}
           addPark={park => this.handleAddPark(park)}
           addAllParks={this.handleAddAllPark}
         />
+
         <SelectedPark
           parks={this.state.parkSelected}
           deletePark={park => this.handleDeletePark(park)}
           deleteAllParks={this.handleDeleteAddAllPark}
         />
 
-        <Input
-          label='Phone'
-          placeholder='123-456-7890'
-          name='phone'
-          type='tel'
-          onChange={this.handleChange}
-          value={this.state.phone}
-          error={hasErrors ? formErrors.phone : null}
-        />
+        <div className='phoneField'>
+          <Input
+            label='Phone'
+            placeholder='123-456-7890'
+            name='phone'
+            type='tel'
+            onChange={this.handleChange}
+            value={this.state.phone}
+            error={hasErrors ? formErrors.phone : null}
+          />
 
-        <Button name='I want to be informed!' />
-      </form>
+          <Button name='I want to be informed!' />
+        </div>
+      </Form>
     );
   }
 }
