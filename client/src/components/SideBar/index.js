@@ -3,34 +3,34 @@ import styled from 'styled-components';
 import NavButton from '../UI/Generic/NavButton';
 
 const SideNav = styled.div`
-  border-right: solid 3px darkblue;
+  border-right: solid 3px ${props=>props.theme.colors.primary};
   position: fixed;
   top: 0;
-  background: #212529;
+  background: ${props=>props.theme.colors.dark};
   width: 150px;
   height: 100vh;
+  color: ${props=>props.theme.colors.lightbg};
 
   .logout {
     position: absolute;
     bottom: 10px;
     width: inherit;
-  }
+  };
 
   .title {
-    color: aliceblue;
-    padding-top: 10px;
-  }
-
-  @media (max-width: 768px) {
-    .title h1 {
-      font-size: 20px;
-    }
+    text-align: center;
+    margin: 1rem 0;
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 0.3rem;
+    };
+  };
   }
 `;
 
 const SideBar = () => (
   <SideNav>
-    <div className='title text-center nav-item'>
+    <div className='title'>
       <h1>SJParks</h1>
       <p>Admin</p>
     </div>
