@@ -5,7 +5,7 @@ const Label = styled.div`
   background-color: ${props =>
     props.selected ? props.theme.colors.success : props.theme.colors.lightbg};
   color: ${props =>
-    props.selected ? props.theme.colors.light : props.theme.colors.dark};
+    props.selected ? props.theme.colors.light : props.theme.colors.secondary};
   padding: 7px;
   margin: 5px 0;
   border-radius: 5px;

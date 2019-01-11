@@ -13,6 +13,12 @@ const Form = styled.form`
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
   background-color: ${props => props.theme.colors.lightbg};
+  height: 40vh;
+
+  .phoneField {
+    width: 300px;
+    align-self: center;
+  }
 `;
 
 const initialState = {
@@ -105,7 +111,7 @@ class Subscribe extends React.Component {
           deleteAllParks={this.handleDeleteAddAllPark}
         />
 
-        <div className='phoneSubmit'>
+        <div className='phoneField'>
           <Input
             label='Phone'
             placeholder='123-456-7890'

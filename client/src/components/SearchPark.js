@@ -8,10 +8,6 @@ const Container = styled.div`
   width: 300px;
   padding: 1rem;
   background: white;
-
-  input {
-    padding: 0.5rem;
-  }
 `;
 
 class SearchPark extends Component {
