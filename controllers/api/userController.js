@@ -1,5 +1,6 @@
 const db = require("../../models");
-const crypto = require("./lib/cryptoHelper");
+const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 // @route GET api/user
 // @desc Get all users
@@ -25,74 +26,170 @@ function index(req, res) {
 		}));
 }
 
-// @route GET api/users/:userId
+// @route GET api/user/:userId
 // @desc Read a user by userId
 // @access Public
 function read(req, res) {}
 
-// @route POST api/users/
+// @route POST api/user/
 // @desc Create An New user
 // @access Public
 function create(req, res) {
 	console.log(`>[USER:37:26]> Creating  user with 'phone = ${req.body.phone}' ...`);
 	const {
-		password,
-		cpassword,
 		isAdmin,
 		userName,
 		firstName,
 		lastName,
 		phone,
 		email,
-		addPark
+		password,
+		addPark,
+		addMessage
 	} = req.body;
 
+	let errors = [];
 
-	const newUser = new db.User({
-		isAdmin: isAdmin,
-		userName: userName,
-		firstName: firstName,
-		lastName: lastName,
-		phone: phone,
-		email: email
-	});
-	newUser.salt = crypto.getSalt();
-	newUser.password = crypto.getPasswordHash(password, newUser.salt);
-
-	db.Park.findOne({
-			code: addPark
-		})
-		.exec((err, park) => {
-			if (err) res.json({
-				success: false,
-				error: err.message
-			});
-			if (park) {
-				newUser.parks.push(park._id);
-			} else {
-				const newPark = new db.Park({
-					code: addPark
-				});
-				newPark.users.push(newUser._id);
-				newPark.save();
-				newUser.parks.push(newPark._id);
-			}
+	if (!userName || !firstName || !lastName || !phone || !email || !password) {
+		errors.push({
+			msg: 'Please enter all fields'
 		});
+	}
 
-	newUser.save()
-		.then(newuser => {
-			res.status(220).send({
-				Success: true,
-				NewUser: newuser._id
+	if (password.length < 8) {
+		errors.push({
+			msg: 'Password must be at least 8 characters'
+		});
+	}
+
+	if (errors.length > 0) {
+		res.render('register', {
+			errors,
+			name,
+			email,
+			password
+		});
+	} else {
+		let user = null;
+		db.User.findOne({
+			userName: userName,
+			phone: phone,
+			email: email
+		}).then(userFound => {
+			if (userFound) user = userFound;
+		});
+		if (user != null) {
+			errors.push({
+				msg: `Derp! User already exists!`,
+				user: user
+			})
+			res.render('register', {
+				errors,
+				user
 			});
-			console.log(`>[USER:88:32]> ...User with '_id = ${newuser._id}' has been created `);
-		})
-		.catch(err => res.status(420).send({
-			Success: false,
-			Error: err.message
-		}));
+		} else {
 
+			const newUser = new db.User({
+				isAdmin: isAdmin,
+				userName: userName,
+				firstName: firstName,
+				lastName: lastName,
+				phone: phone,
+				email: email
+			});
+
+			bcrypt.genSalt(16, (err, salt) => {
+				if (err) throw err;
+				newUser.salt = salt;
+				bcrypt.hash(password, newUser.salt, (err, hash) => {
+					if (err) throw err;
+					newUser.password = hash;
+
+					db.Park.findOne({
+							code: addPark
+						})
+						.then(park => {
+							if (park) {
+								newUser.parks.push(park._id);
+							} else {
+								const newPark = new db.Park({
+									code: addPark
+								});
+								newPark.users.push(newUser._id);
+								newPark
+									.save()
+									.then(park => newUser.parks.push(park._id))
+									.catch(err => console.log(err));
+							}
+						})
+						.catch(err => console.log(err))
+
+					db.Message.findOne({
+							message: addMessage
+						})
+						.exec((err, message) => {
+							if (message) {
+								newUser.messages.push(message._id);
+							} else if (err || !message) {
+								const newMessage = new db.Message({
+									author: newUser._id,
+									message: addMessage
+								});
+								newMessage.save().then(message =>
+									newUser.messages.push(message._id)).catch(err => console.log(err));
+							}
+						});
+
+					newUser.save()
+						.then(user => {
+							req.flash(
+								'success_msg',
+								'You are now registered and can log in'
+							);
+							res.status(220).send({
+								Success: true,
+								NewUser: user._id
+							});
+							res.redirect('/api/users/login');
+							console.log(`>[USER:88:32]> ...User with '_id = ${user._id}' has been created `);
+						})
+						.catch(err => {
+							res.status(420).send({
+								Success: false,
+								Error: err.message
+							});
+							res.redirect('/api/user');
+						});
+				}); // end Bcrypt.getPassword()
+			}); // end Bycrypt.getSaltsalter()
+		}
+	}
 }
+
+// @route POST api/user/login
+// @desc Login an existing user
+// @access Public
+function login(req, res, next) {
+
+	passport.authenticate('local', {
+		successRedirect: '/dashboard',
+		failureRedirect: '/login',
+		failureFlash: true
+	})(req, res, next);
+	if (process.env.NODE_ENV === "test") res.render('dashboard');
+
+};
+
+// @route GET api/user/logout
+// @desc Logout session user
+// @access Public
+
+function logout(req, res) {
+	req.logout();
+	req.flash('success_msg', 'You are logged out');
+	res.redirect('/login');
+	if (process.env.NODE_ENV === "test") res.render('login');
+};
 
 // @route PUT api/user/update/:id
 // @desc Update an existing user by id
@@ -134,54 +231,59 @@ function update(req, res) {
 
 	db.User.findByIdAndUpdate(req.params.id, updates, options)
 		.then(newUser => {
-			newUser.salt = crypto.getSalt();
-			newUser.password = crypto.getPasswordHash(newPassword, newUser.salt);
 
-			db.Park.findOne({
-					name: addPark
-				})
-				.exec((err, park) => {
-					if (err || !park) {
-						const newPark = new db.Park({
+			bcrypt.genSalt(16, (err, salt) => {
+				if (err) throw err;
+				newUser.salt = salt;
+				bcrypt.hash(newPassword, newUser.salt, (err, hash) => {
+					if (err) throw err;
+					newUser.password = hash;
+
+					db.Park.findOne({
 							name: addPark
+						})
+						.exec((err, park) => {
+							if (park) {
+								newUser.parks.push(park._id);
+							} else if (err || !park) {
+								const newPark = new db.Park({
+									name: addPark
+								});
+								newPark.users.push(newUser._id);
+								newPark.save().then(park =>
+									newUser.parks.push(park._id));
+							}
 						});
-						newPark.users.push(newUser._id);
-						newPark.save();
-						newUser.parks.push(newPark._id);
-					} else if (park) {
-						newUser.parks.push(park._id);
-					}
-				});
 
-			db.Message.findOne({
-					message: addMessage
-				})
-				.exec((err, message) => {
-					if (err || !message) {
-						const newMessage = new db.Message({
-							author: newUser._id,
+					db.Message.findOne({
 							message: addMessage
+						})
+						.exec((err, message) => {
+							if (message) {
+								newUser.messages.push(message._id);
+							} else if (err || !message) {
+								const newMessage = new db.Message({
+									author: newUser._id,
+									message: addMessage
+								});
+								newMessage.save().then(message =>
+									newUser.messages.push(message._id));
+							}
 						});
-						newMessage.save();
-						newUser.messages.push(newMessage._id);
-					} else if (message) {
-						newUser.messages.push(message._id);
-					}
+
+					newUser.save()
+						.then(newuser => res.status(220).send({
+							Success: true,
+							NewUser: newuser
+						}))
+						.catch(err => res.status(420).send({
+							Success: false,
+							Error: `Error saving updated user. Error thrown: ${err.message}.`
+						}));
 				});
+			});
 
-			console.log(`>[USER:8:23]>`+
-				newUser._id);
-
-			newUser.save()
-				.then(newuser => res.status(220).send({
-					Success: true,
-					NewUser: newuser
-				}))
-				.catch(err => res.status(420).send({
-					Success: false,
-					Error: `Error saving updated user. Error thrown: ${err.message}.`
-				}));
-		})
+		}) // end findby id and update
 		.catch(err => res.status(457).json({
 			succes: false,
 			error: `Error updating user. Error thrown: ${err.message}`
@@ -193,19 +295,23 @@ function update(req, res) {
 // @route DELETE api/user/:id
 // @desc Delete An user by id
 // @access Public
-function destroy(req, res) {
+const destroy = (req, res) => {
 	console.log(`>[USER:197:27]> Destroying user with '_id = ${req.params.id}'...`);
-	db.User.findByIdAndDelete(req.params.id)
+	db.User.findByIdAndDelete({
+			_id: req.params.id
+		})
 		.then(user => {
 			//
 			user.parks.forEach(park => {
 				db.Park.findById(park).then(doc => {
 					doc.users.pop(user._id);
 					doc.save();
-				}).catch(err => res.status(463).json({
-					success: false,
-					error: err.message
-				}))
+				}).catch(err => {
+					res.status(463).json({
+						success: false,
+						error: err.message
+					})
+				})
 			});
 
 			user.messagess.forEach(mess => {
@@ -237,7 +343,9 @@ function destroy(req, res) {
 module.exports = {
 	index: index,
 	read: read,
-	create: create,
+	register: create,
+	login: login,
+	logout: logout,
 	update: update,
 	destroy: destroy
 }

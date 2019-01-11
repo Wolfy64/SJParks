@@ -1,17 +1,17 @@
 {
 	"name": "sjparks",
 	"version": "1.0.0",
-	"description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
-	"main": "server.js",
+	"description": "An app made to help the City of San Jose communicate with residents a little better. ",
+	"main": "Server.js",
 	"scripts": {
 		"build": "react-scripts build",
 		"client": "yarn start --prefix client",
 		"client-install": "yarn install --prefix client",
-		"dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+		"dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
 		"eject": "react-scripts eject",
-		"seed": "node seed.js",
-		"server": "NODE_ENV=development nodemon server.js",
-		"start": "node server.js"
+		"prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+		"server": "NODE_ENV=development nodemon Server.js",
+		"start": "NODE_ENV=development node Server.js"
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",

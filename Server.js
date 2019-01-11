@@ -1,6 +1,6 @@
-require('dotenv-safe').config();
+require('dotenv-safe').load();
 const config = require('./config');
-process.env.NODE_ENV === "development";
+// process.env.NODE_ENV === "development";
 console.log(`>[SERVER:004:025]> Running index in ${process.env.NODE_ENV} mode...`);
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //************************************************************** Connect MongoDB ***************************************************************
@@ -24,7 +24,7 @@ mongoose.Promise = global.Promise;
 //*********************************************************** Deploy Express Webapp ************************************************************
 //----------------------------------------------------------------------------------------------------------------------------------------------
 const http = require('http');
-const webapp = require('./webapp');
+const webapp = require('./App');
 const server = http.createServer(webapp);
 const port = require('./config').keys.port;
 server.listen(port, () => console.log(`>[SERVER:032:054]> Express Server Deployed @url: http://localhost:${port}...`));

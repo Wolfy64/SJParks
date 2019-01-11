@@ -9,9 +9,17 @@ const {
 } = config.auth;
 console.log(`>[ROUTES:010:030]> Configuring Routes...`);
 
+// @route /register
+router.get('/register', (req, res) => res.render('register')); // view.
+
+// @route /login
+router.post('/login', api.users.login);
+
 // @route /welcome
 router.get('/welcome', (req, res) => res.render('welcome'));
-router.get('/login', (req, res) => res.render('login'));
+
+// @route /logout
+router.post('/logout', api.users.logout)
 
 // @route /dashboard
 router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboard', {
@@ -24,7 +32,7 @@ router.get('/api', api.index.index);
 // @route /api/user
 router.route('/api/user')
   .get(api.users.index)
-  .post(api.users.create);
+  .post(api.users.register);
 
   // @route /api/user/_id
 router.route('/api/user/:userId')

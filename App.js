@@ -55,8 +55,8 @@ app.use(flash());
 app.use(addRequestId);
 morgan.token('id', (req) => req.sessionID.split('-')[0]);
 app.use(morgan('combined', {skip: (req, res) => {return res.statusCode < 400} }));
-app.use(morgan("[: date[iso] #:id] Started :method :url for :remote-addr"));
-app.use(morgan("[: date[iso] #:id] Completed: status: res[content - length] in: response - time ms "));
+app.use(morgan(">[:date[iso] req: Method = :method, Url = :url ]> "));
+app.use(morgan(">[:date[iso] res: Status = :status, ]> "));
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //*********************************************************** Configure App Routes *************************************************************
@@ -64,7 +64,7 @@ app.use(morgan("[: date[iso] #:id] Completed: status: res[content - length] in: 
 
 //  @desc Configuring Access to Project by  Code from any Origin
 app.use(function (req, res, next) {
-    console.log('request', req.url, req.body, req.method);
+    // console.log('request', req.url, req.body, req.method);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
     if (req.method === 'OPTIONS') {
@@ -72,6 +72,12 @@ app.use(function (req, res, next) {
     } else {
         next();
     }
+});
+
+//  /Session Handling
+app.use((req, res, next) =>{
+  if (req.session.admin) next();
+  else res.redirect('api/user/login');
 });
 
 // @desc Configuring Flash Messages
@@ -88,7 +94,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
 }
 
-app.use('/', require("./routes"));
+app.use('/', require("./Routes"));
 
 console.log(`>[WEBAPP:092:026]> ...WebApp Created`);
 module.exports = app;
