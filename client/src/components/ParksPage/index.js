@@ -11,13 +11,11 @@ import { assertDeclareModule } from 'babel-types';
 
 const Col1 = styled.div`
   width: 250px;
-  padding: 30px;
   float: left;
-  margin: 0 20px 0 0;
+  margin: 0 200px 0 0;
 `
 const Col2 = styled.div`
   width: 250px;
-  padding: 30px;
   height: 100%;
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
