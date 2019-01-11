@@ -12,9 +12,6 @@ const Wrapper = styled.div`
 const Wrapper2 = styled.div`
   float: left;
   width: 400px;
-  UsersList { 
-    
-  }
 `;
 
 const Users = () => (

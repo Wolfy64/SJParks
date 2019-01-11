@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
-  premium: 'Premiun Access'
+  premium: 'Full Access'
 };
 const initialState = {
   accessType: 'Updates Only',
@@ -143,6 +143,7 @@ const UsersForm = class userInput extends React.Component {
         <Select
           name='accessType'
           options={SELECT_OPTIONS}
+          label='Access Type'
           onChange={this.handleChange}
           value={this.state.accessType}
           error={hasErrors ? formErrors.accessType : null}
