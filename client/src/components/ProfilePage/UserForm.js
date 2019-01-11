@@ -9,9 +9,7 @@ const Float = styled.div`
   width: 250px;
   overflow: auto;
   float: left;
-  margin:100px;
-
-
+  margin:50px;
 `;
 
 const initialState = {

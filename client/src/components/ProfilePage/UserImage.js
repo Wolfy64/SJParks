@@ -5,10 +5,11 @@ import styled from 'styled-components';
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
-  width: 10px;
-  height: 10px;
-
-`
+  img {
+    height: 170px;
+    width: auto;
+  }
+`;  
 
 const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';

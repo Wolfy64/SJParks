@@ -4,14 +4,16 @@ import UserForm from './UserForm';
 import PasswordForm from './PasswordForm';
 import styled from 'styled-components';
 
-const Pos = styled.h1`
+const Header = styled.h1`
   padding: 16px;
+  margin-left: 15px;
+  margin-bottom: 20px;
 `
 
 
 const ProfilePage = () => (
   <>
-    <Pos>Profile Page</Pos>
+    <Header>Profile Page</Header>
     <UserImage />
     <UserForm />
     <PasswordForm />
