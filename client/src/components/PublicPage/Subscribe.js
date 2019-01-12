@@ -19,8 +19,8 @@ const Form = styled.form`
     width: 300px;
     align-self: center;
   }
-  .searchContainer{
-    background-color:white;
+  .searchContainer {
+    background-color: white;
   }
 `;
 

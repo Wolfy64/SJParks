@@ -17,6 +17,16 @@ const PresentationBox = styled.main`
 const Summary = styled.div`
   align-self: center;
   padding-left: 5rem;
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    line-height: 1.5;
+    padding-left: 1rem;
+  }
 `;
 
 const About = () => (
