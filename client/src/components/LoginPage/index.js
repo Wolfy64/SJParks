@@ -9,7 +9,8 @@ const Screen = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: ${props => props.theme.colors.dark};
-  padding: 10%;
+  display: grid;
+  align-content: center;
 
   h1 {
     text-align: center;
@@ -19,13 +20,28 @@ const Screen = styled.div`
     display: flex;
     height: 400px;
     max-width: 400px;
-    padding: 40px 30px 60px;
-    background-color: white;
-    border-radius: 15px;
-    margin: 0 auto;
-    justify-content: space-between;
-    box-shadow: -5px 3px 3px black;
   }
+  .message {
+    text-align: center;
+    color: ${props => props.theme.colors.danger};
+  }
+`;
+
+const Form = styled.form`
+  display: grid;
+  width: 80%;
+  height: 250px;
+  max-width: 400px;
+  margin: auto;
+  background-color: ${props => props.theme.colors.light};
+  border-radius: 15px;
+  padding: 40px 30px 60px;
+  box-shadow: -5px 3px 3px black;
+
+  h1 {
+    text-align: center;
+  }
+
   .message {
     text-align: center;
     color: ${props => props.theme.colors.danger};
@@ -89,34 +105,32 @@ class Login extends React.Component {
 
     return (
       <Screen>
-        <form onSubmit={this.handleSubmit}>
-          <div className='card'>
-            <h1>SJParks</h1>
-            {message && <span className='message'>{message}</span>}
-            <Input
-              name='username'
-              label='User ID:'
-              placeholder='Enter Your Username'
-              type='text'
-              value={username}
-              onChange={this.handleChange}
-              error={hasErrors ? formErrors.username : null}
-              required
-            />
+        <Form onSubmit={this.handleSubmit}>
+          <h1>SJParks</h1>
+          {message && <span className='message'>{message}</span>}
+          <Input
+            name='username'
+            label='User ID:'
+            placeholder='Enter Your Username'
+            type='text'
+            value={username}
+            onChange={this.handleChange}
+            error={hasErrors ? formErrors.username : null}
+            required
+          />
 
-            <Input
-              name='psw'
-              label='Password:'
-              placeholder='Enter Password'
-              type='psw'
-              value={psw}
-              onChange={this.handleChange}
-              error={hasErrors ? formErrors.psw : null}
-              required
-            />
-            <Button type='submit' name='LOGIN' />
-          </div>
-        </form>
+          <Input
+            name='psw'
+            label='Password:'
+            placeholder='Enter Password'
+            type='psw'
+            value={psw}
+            onChange={this.handleChange}
+            error={hasErrors ? formErrors.psw : null}
+            required
+          />
+          <Button type='submit' name='LOGIN' />
+        </Form>
       </Screen>
     );
   }
