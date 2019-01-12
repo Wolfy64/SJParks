@@ -5,9 +5,10 @@ import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button'
 
+
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
-  premium: 'Premiun Access'
+  premium: 'Full Access'
 };
 const initialState = {
   accessType: '',
@@ -80,7 +81,11 @@ const UsersForm = class userInput extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
+<<<<<<< HEAD
       <form onSubmit={this.handleSubmit} noValidate>
+=======
+      <form className='usersForm' onSubmit={this.handleSubmit}>
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
         <Input
           label='Full Name'
           placeholder='John Doe'
@@ -134,6 +139,7 @@ const UsersForm = class userInput extends React.Component {
         <Select
           name='accessType'
           options={SELECT_OPTIONS}
+          label='Access Type'
           onChange={this.handleChange}
           value={this.state.accessType}
           error={hasErrors ? formErrors.accessType : null}

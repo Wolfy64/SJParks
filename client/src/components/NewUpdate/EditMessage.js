@@ -1,13 +1,13 @@
 import React from 'react';
-import Input from '../UI/Form/Input';
 import Textarea from '../UI/Form/Textarea';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import capsFirstLetter from '../../utils/capsFirstLetter';
+import Button from '../UI/Generic/Button';
 
 const initialState = {
   message: '',
-  title: false,
+  title: 'checked',
   parksTitle: '',
   showError: false,
   formErrors: null
@@ -45,7 +45,7 @@ class EditMessage extends React.Component {
     });
   };
 
-  handleToggle = () => this.setState({ title: !this.state.title });
+  handleToggle = () => this.state.title? this.setState({ title: '' }) : this.setState({ title: 'checked' });
 
   handleSubmit = e => {
     e.preventDefault();
@@ -78,16 +78,21 @@ class EditMessage extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <Input
-          label='Title(s)'
-          name='title'
-          type='checkbox'
-          value='title'
-          onChange={this.handleToggle}
-        />
+        <div className='title'>
+          <label className='label'>Add Title(s)</label>
+          <label className='switch'>
+            <input 
+              name='title'
+              type='checkbox'
+              value='title'
+              onChange={this.handleToggle}
+              {...this.state.title}
+            />
+            <span className='slider round'></span>
+          </label>
+        </div>
 
         <Textarea
-          style={{ width: 300 }}
           placeholder='Write your message here'
           name='message'
           onChange={this.handleChange}
@@ -98,17 +103,16 @@ class EditMessage extends React.Component {
 
         <Textarea
           style={{
-            width: 300,
             minHeight: 100,
-            background: 'green',
-            color: 'white'
+            background: props => props.theme.colors.lightbg,
+            color: props => props.theme.colors.secondary
           }}
           name='textMessage'
           value={title ? `${parksTitle} \n${message}` : message}
           readOnly
         />
 
-        <button>SUBMIT</button>
+        <Button name='SUBMIT' />
       </form>
     );
   }

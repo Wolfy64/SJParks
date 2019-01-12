@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Btn = styled.button`
-    color: aliceblue;
     width: 100%;
-    -webkit-appearance: none;
     background-color: transparent;
     border: none;
     padding: 10px;
-    
+    color: ${props=>props.theme.colors.lightbg};
     :hover {
         background-color: rgba(255, 255, 255, 0.1)
     }

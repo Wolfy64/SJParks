@@ -1,32 +1,46 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import ParkLi from './ParkLi';
 import Input from './UI/Form/Input';
+import ButtonText from './UI/Generic/ButtonText';
 
-class NewUpdate extends Component {
-  state = {
-    parksList: [],
-    filter: ''
+const Container = styled.div`
+  width: 300px;
+  margin: 1rem 0;
+  .selectAll{
+    margin: 1rem 0 0.5rem;
   };
+`;
+
+class SearchPark extends Component {
+  state = { filter: '', filterPark: null };
 
   handleInput = e => {
     const { name, value } = e.target;
-    const { parks } = this.props;
-    const parksList = parks.filter(el =>
+    const filterPark = this.props.parks.filter(el =>
       el.name.toLowerCase().includes(value.toLowerCase())
     );
 
-    this.setState({ [name]: value, parksList });
+    this.setState({ [name]: value, filterPark });
   };
 
   render() {
-    const { filter, parksList } = this.state;
-    const { addPark, addAllParks } = this.props;
-    const parkLi = parksList.map(el => (
-      <ParkLi key={el._id} park={el} clicked={() => addPark(el)} />
+    const { filter, filterPark } = this.state;
+    const { addPark, parks, selected, addAllParks } = this.props;
+
+    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 3);
+
+    const parkLi = showParkList.map(el => (
+      <ParkLi
+        key={el._id}
+        park={el}
+        selected={selected}
+        clicked={() => addPark(el)}
+      />
     ));
 
     return (
-      <div>
+      <Container className='searchContainer'>
         <Input
           name='filter'
           value={filter}
@@ -36,12 +50,18 @@ class NewUpdate extends Component {
           autoComplete='off'
         />
 
+<<<<<<< HEAD
         <button onClick={addAllParks}>Select All</button>
+=======
+        {addAllParks && (
+          <ButtonText className='selectAll' onClick={addAllParks}>Select All</ButtonText>
+        )}
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
 
         <ul>{parkLi}</ul>
-      </div>
+      </Container>
     );
   }
 }
 
-export default NewUpdate;
+export default SearchPark;

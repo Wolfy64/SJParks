@@ -1,16 +1,33 @@
 import React from 'react';
+import styled from 'styled-components';
 import ParkLi from './ParkLi';
+import ButtonText from './UI/Generic/ButtonText';
+
+const Container = styled.div`
+  width: 300px;
+  padding: 3.7rem 1rem;
+  height: 100%;
+  overflow: auto;
+  .selectAll{
+    margin: 0.5rem;
+  };
+`;
 
 const SelectedPark = props => {
   const selectedPark = props.parks.map(el => (
-    <ParkLi key={el._id} park={el} clicked={() => props.deletePark(el)} />
+    <ParkLi
+      key={el._id}
+      park={el}
+      selected={true}
+      clicked={() => props.deletePark(el)}
+    />
   ));
 
   return (
-    <div style={{ backgroundColor: '#3333', minHeight: 100 }}>
-      <button onClick={props.deleteAllParks}>Deselect All</button>
+    <Container>
+      <ButtonText className='selectAll' onClick={props.deleteAllParks}>Deselect All</ButtonText>
       {selectedPark}
-    </div>
+    </Container>
   );
 };
 export default SelectedPark;

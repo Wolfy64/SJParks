@@ -89,6 +89,12 @@ import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button'
+<<<<<<< HEAD
+=======
+import styled from 'styled-components';
+
+
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
 
 const initialState = {
   currentPassword: '',
@@ -150,7 +156,11 @@ class PasswordForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
+<<<<<<< HEAD
       <form onSubmit={this.handleSubmit}>
+=======
+      <form className="passwordForm" onSubmit={this.handleSubmit}>
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
         <Input
           label='Current Password'
           placeholder='Current Password'

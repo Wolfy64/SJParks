@@ -1,13 +1,14 @@
 export default {
   colors: {
-    primary: '#004a78',
+    primary: '#004A75',
     secondary: '#6c757d',
-    success: '#28a745',
-    danger: '#dc3545',
+    success: '#069806',
+    danger: '#750000',
     warning: '#ffc107',
     info: ' #17a2b8',
     light: '#f8f9fa',
-    dark: '#292929'
+    dark: '#292929',
+    lightbg: '#E2E2E2'
   },
   displays: {
     mobileS: '320px',

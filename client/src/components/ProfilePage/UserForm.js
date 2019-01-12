@@ -91,6 +91,11 @@ import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button';
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
 const initialState = {
   fullName: '',
   email: '',
@@ -142,6 +147,10 @@ class UserForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
+<<<<<<< HEAD
+=======
+      <>
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
       <form onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
@@ -175,6 +184,10 @@ class UserForm extends React.Component {
 
         <Button name='Create New User'/>
       </form>
+<<<<<<< HEAD
+=======
+      </>
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
     );
   }
 }

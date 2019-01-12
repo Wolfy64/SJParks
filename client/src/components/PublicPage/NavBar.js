@@ -1,30 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Nav = styled.ul`
-  position: fixed;
-  width: 100vw;
+const Nav = styled.nav`
+  color: ${props => props.theme.colors.light};
+  background-color: ${props => props.theme.colors.primary};
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  padding: 12px 30px;
-  background-color: #004A75;
-  color: white;
+  padding-top: 1.2rem;
 
-  a{
-    color: white;
-    :hover{
-      text-decoration: none;
-      color: #E2E2E2;
+  ul {
+    display: flex;
+    align-items: center;
+    margin-right: 2rem;
+  }
+
+  li {
+    width: 90px;
+    text-align: center;
+  }
+
+  a {
+    color: ${props => props.theme.colors.light};
+    text-decoration: none;
+    :hover {
+      font-weight: bold;
     }
   }
-`
+
+  .logo {
+    font-size: 1.5rem;
+    margin-left: 1rem;
+  }
+`;
 
 const NavBar = () => (
-  <nav>
-    <Nav>
-      <strong>SJParks Text Notification Service</strong>
+  <Nav>
+    <span className='logo'>SJParks Text Notification Service</span>
+    <ul>
       <li>
         <a href='#about'>About</a>
       </li>
@@ -34,8 +46,8 @@ const NavBar = () => (
       <li>
         <a href='#contact'>Contact</a>
       </li>
-    </Nav>
-  </nav>
+    </ul>
+  </Nav>
 );
 
 export default NavBar;

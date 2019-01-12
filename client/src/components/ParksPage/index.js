@@ -103,8 +103,39 @@ export default class parks extends Component {
 // THANK YOU!!!
 =======
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import Plist from './ParksList';
 import Items from './Items';
+=======
+import Input from '../UI/Form/Input';
+import errorFormHandler from '../../utils/errorFormHandler';
+import isFormValid from '../../utils/isFormValid';
+import SearchPark from '../SearchPark';
+import { parksDB } from '../../dummyDB';
+import Button from '../UI/Generic/Button';
+import styled from 'styled-components';
+
+const Col1 = styled.div`
+  width: 300px;
+  float: left;
+  padding: 20px;
+  margin: 0 5rem 0 0;
+`
+const Col2 = styled.div`
+  height: 100vh;
+  padding: 0 20px;
+  float: left;
+  background-color: ${props => props.theme.colors.lightbg};
+`
+
+const initialState = {
+  parks: [],
+  showErrors: false,
+  newPark: '',
+  parkId: '',
+  parkFilter: [],
+};
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
 
 export default class Parks extends Component {
   constructor(props) {
@@ -119,6 +150,7 @@ export default class Parks extends Component {
     };
   }
 
+<<<<<<< HEAD
   handleInput = e => {
     //generic handleInput handles the change for any input field using the name and the value properties.
     const { name, value } = e.target;
@@ -148,6 +180,12 @@ export default class Parks extends Component {
         items: items,
         newPark: ''
       });
+=======
+  handleDeletePark = park => {
+    if (window.confirm("Delete ".concat(park.name)
+    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) { 
+      console.log('>> ', park.name, ' was removed.')
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
     }
   };
 
@@ -176,6 +214,7 @@ export default class Parks extends Component {
     console.log('STATE', this.state);
     return (
       <div>
+<<<<<<< HEAD
         <h2>List</h2>
         <Plist
           addItem={this.addItem}
@@ -197,6 +236,40 @@ export default class Parks extends Component {
           <button type='submit'>Search</button>
         </form>
         <Items entries={this.state.parkFilter} deleteItem={this.deleteItem} />
+=======
+        <Col1>
+          <form onSubmit={this.handleSubmit}>
+            <Input
+              name='newPark'
+              label='Name'
+              value={this.state.newPark}
+              onChange={this.handleChange}
+              type='text'
+              placeholder='New Park...'
+              autoComplete='off'
+            />
+            <Input
+              name='parkId'
+              label='Keyword'
+              value={this.state.parkId}
+              onChange={this.handleChange}
+              type='text'
+              placeholder='Park Id...'
+              autoComplete='off'
+            />
+
+            <Button name='Create a new park' type='submit' />
+          </form>
+        </Col1>
+        <Col2>
+          <SearchPark
+            parks={this.state.parks}
+            selected={true}
+            addPark={park => this.handleDeletePark(park)}
+            numShow={this.state.parks.length}
+          />
+        </Col2>
+>>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
       </div>
     );
   }
