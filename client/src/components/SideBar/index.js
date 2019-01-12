@@ -5,31 +5,12 @@ import NavButton from '../UI/Generic/NavButton';
 const SideNav = styled.div`
   border-right: solid 3px ${props=>props.theme.colors.primary};
   position: fixed;
-<<<<<<< HEAD
-  top:0;
-  background: #212529;
-=======
   top: 0;
   background: ${props=>props.theme.colors.dark};
->>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
   width: 150px;
   height: 100vh;
   color: ${props=>props.theme.colors.lightbg};
 
-<<<<<<< HEAD
-  .logout{
-  position: absolute;
-  bottom: 10px;
-  width: inherit;
-  }
-  .title{
-  color: aliceblue;
-  padding-top: 10px;
-  }
-  @media (max-width: 768px) {
-  .title h1{
-      font-size: 20px;
-=======
   .logout {
     position: absolute;
     bottom: 10px;
@@ -44,9 +25,8 @@ const SideNav = styled.div`
       margin-bottom: 0.3rem;
     };
   };
->>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
   }
-`
+`;
 
 const SideBar = () => (
   <SideNav>
@@ -67,7 +47,9 @@ const SideBar = () => (
     </ul>
 
     <div className='logout'>
-      <NavButton to='/' name='Logout' action='logoutPage' />
+      <form action="/login/out" method="POST">
+        <NavButton type='submit' name='Logout' action='logoutPage' />
+      </form>
     </div>
   </SideNav>
 );

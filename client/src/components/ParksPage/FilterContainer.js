@@ -23,11 +23,11 @@ export default class FilterContainer extends Component {
             let parkName = park.firstPark.toLowerCase()
             return parkName.indexOf(
             parkFilter.toLowerCase()) !== -1
-
-        })
+            
+        }) 
         this.setState({
             filteredParks,
-        });
+        });  
     }
   render() {
     return (

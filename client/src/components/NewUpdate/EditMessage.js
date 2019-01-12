@@ -1,13 +1,13 @@
 import React from 'react';
+import Input from '../UI/Form/Input';
 import Textarea from '../UI/Form/Textarea';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import capsFirstLetter from '../../utils/capsFirstLetter';
-import Button from '../UI/Generic/Button';
 
 const initialState = {
   message: '',
-  title: 'checked',
+  title: false,
   parksTitle: '',
   showError: false,
   formErrors: null
@@ -45,7 +45,7 @@ class EditMessage extends React.Component {
     });
   };
 
-  handleToggle = () => this.state.title? this.setState({ title: '' }) : this.setState({ title: 'checked' });
+  handleToggle = () => this.setState({ title: !this.state.title });
 
   handleSubmit = e => {
     e.preventDefault();
@@ -63,7 +63,7 @@ class EditMessage extends React.Component {
   handleSendForm = dataForm => {
     const payload = { method: 'POST', body: JSON.stringify(dataForm) };
 
-    fetch('/api/message', payload)
+    fetch('/admin/newupdate', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('SEND DATA', dataForm);
@@ -78,21 +78,16 @@ class EditMessage extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className='title'>
-          <label className='label'>Add Title(s)</label>
-          <label className='switch'>
-            <input 
-              name='title'
-              type='checkbox'
-              value='title'
-              onChange={this.handleToggle}
-              {...this.state.title}
-            />
-            <span className='slider round'></span>
-          </label>
-        </div>
+        <Input
+          label='Title(s)'
+          name='title'
+          type='checkbox'
+          value='title'
+          onChange={this.handleToggle}
+        />
 
         <Textarea
+          style={{ width: 300 }}
           placeholder='Write your message here'
           name='message'
           onChange={this.handleChange}
@@ -103,16 +98,17 @@ class EditMessage extends React.Component {
 
         <Textarea
           style={{
+            width: 300,
             minHeight: 100,
-            background: props => props.theme.colors.lightbg,
-            color: props => props.theme.colors.secondary
+            background: 'green',
+            color: 'white'
           }}
           name='textMessage'
           value={title ? `${parksTitle} \n${message}` : message}
           readOnly
         />
 
-        <Button name='SUBMIT' />
+        <button>SUBMIT</button>
       </form>
     );
   }

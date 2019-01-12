@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
@@ -27,6 +27,27 @@ const Screen = styled.div`
   }
 `;
 
+const Form = styled.form`
+  display: grid;
+  width: 80%;
+  height: 250px;
+  max-width: 400px;
+  margin: auto;
+  background-color: ${props => props.theme.colors.light};
+  border-radius: 15px;
+  padding: 40px 30px 60px;
+  box-shadow: -5px 3px 3px black;
+
+  h1 {
+    text-align: center;
+  }
+
+  .message {
+    text-align: center;
+    color: ${props => props.theme.colors.danger};
+  }
+`;
+
 const initialState = {
   username: '',
   psw: '',
@@ -41,6 +62,7 @@ class Login extends React.Component {
     this.setState({
       [name]: value,
       formErrors: {
+        ...this.state.formErrors,
         [name]: errorFormHandler(type, value)
       }
     });
@@ -93,7 +115,7 @@ class Login extends React.Component {
             type='text'
             value={username}
             onChange={this.handleChange}
-            error={hasErrors ? formErrors : null}
+            error={hasErrors ? formErrors.username : null}
             required
           />
 
@@ -104,7 +126,7 @@ class Login extends React.Component {
             type='psw'
             value={psw}
             onChange={this.handleChange}
-            error={hasErrors ? formErrors : null}
+            error={hasErrors ? formErrors.psw : null}
             required
           />
           <Button type='submit' name='LOGIN' />

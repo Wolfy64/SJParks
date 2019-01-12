@@ -1,6 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-=======
 import styled from 'styled-components';
 
 
@@ -8,12 +6,10 @@ const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
   img {
-    height: 165px;
-    margin: 0 0 30px 50px;
+    height: 170px;
     width: auto;
   }
-`; 
->>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
+`;  
 
 const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
@@ -46,15 +42,10 @@ class UserImage extends React.Component {
 
   render() {
     return (
-<<<<<<< HEAD
-      <div>
-        <button onClick={() => this.fileInput.click()}>
-          <img src='#' alt='avatar' />
-        </button>
-=======
       <Image>
-          <img onClick={() => this.fileInput.click()} src={placeholder} alt='avatar' />
->>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7
+        <button onClick={() => this.fileInput.click()}>
+          <img src={placeholder} alt='avatar' />
+        </button>
         <input
           type='file'
           onChange={this.onChange}
@@ -62,7 +53,7 @@ class UserImage extends React.Component {
           ref={fileInput => (this.fileInput = fileInput)}
         />
         {this.state.showError ? <span>{ERROR}</span> : null}
-      </div>
+      </Image>
     );
   }
 }
