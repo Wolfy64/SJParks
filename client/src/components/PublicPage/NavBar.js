@@ -11,10 +11,12 @@ const Nav = styled.nav`
   ul {
     display: flex;
     align-items: center;
+    margin-right: 2rem;
   }
 
   li {
-    margin-right: 1rem;
+    width: 90px;
+    text-align: center;
   }
 
   a {
