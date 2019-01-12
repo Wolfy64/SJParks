@@ -5,12 +5,6 @@ import PasswordForm from './PasswordForm';
 import styled from 'styled-components';
 import { UsersDB } from '../../dummyDB';
 
-const Header = styled.h1`
-  padding: 16px;
-  margin-left: 15px;
-  margin-bottom: 20px;
-`
-
 const Wrapper = styled.div`
   width: 300px;
   overflow: auto;

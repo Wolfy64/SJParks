@@ -7,7 +7,7 @@ const placeholder = require('../../img/placeholder.png');
 const Image = styled.div`
   img {
     height: 165px;
-    margin: 0 0 30px 0;
+    margin: 0 0 30px 50px;
     width: auto;
   }
 `; 
