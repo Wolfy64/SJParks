@@ -15,6 +15,7 @@ const Col1 = styled.div`
 `
 const Col2 = styled.div`
   height: 100vh;
+  padding: 0 20px;
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
 `

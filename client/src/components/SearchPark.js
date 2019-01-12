@@ -6,7 +6,10 @@ import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
   width: 300px;
-  padding: 1rem;
+  margin: 1rem 0;
+  .selectAll{
+    margin: 1rem 0 0.5rem;
+  };
 `;
 
 class SearchPark extends Component {
@@ -48,7 +51,7 @@ class SearchPark extends Component {
         />
 
         {addAllParks && (
-          <ButtonText onClick={addAllParks}>Select All</ButtonText>
+          <ButtonText className='selectAll' onClick={addAllParks}>Select All</ButtonText>
         )}
 
         <ul>{parkLi}</ul>
