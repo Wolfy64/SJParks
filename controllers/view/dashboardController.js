@@ -1,6 +1,6 @@
 // const messageSender = require('../lib/messageSender');
 
-exports.sendMessages = function (req, res) {
+module.exports.sendMessages = function (req, res) {
     // Get message info from form submission
     const message = req.body.message;
     const parkID = req.body.parkID;

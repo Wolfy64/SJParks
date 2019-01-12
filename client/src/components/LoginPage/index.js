@@ -27,53 +27,6 @@ const Screen = styled.div`
   }
 `;
 
-const Form = styled.form`
-  display: grid;
-  width: 80%;
-  height: 250px;
-  max-width: 400px;
-  margin: auto;
-  background-color: ${props => props.theme.colors.light};
-  border-radius: 15px;
-  padding: 40px 30px 60px;
-  box-shadow: -5px 3px 3px black;
-
-  h1 {
-    text-align: center;
-  }
-
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  }
-`;
-
-<<<<<<< HEAD
-export default () => (
-  <Screen>
-    <form action='/api/login' method='POST'>
-      <div className='card'>
-        <h1>SJParks</h1>
-        <Input
-          name='username'
-          label='User ID:'
-          placeholder='Enter Your Username'
-          type='text'
-          required
-        />
-        <Input
-          name='psw'
-          label='Password:'
-          placeholder='Enter Password'
-          type='password'
-          required
-        />
-        <Button type='submit' name='LOGIN' />
-      </div>
-    </form>
-  </Screen>
-);
-=======
 const initialState = {
   username: '',
   psw: '',
@@ -88,7 +41,6 @@ class Login extends React.Component {
     this.setState({
       [name]: value,
       formErrors: {
-        ...this.state.formErrors,
         [name]: errorFormHandler(type, value)
       }
     });
@@ -141,7 +93,7 @@ class Login extends React.Component {
             type='text'
             value={username}
             onChange={this.handleChange}
-            error={hasErrors ? formErrors.username : null}
+            error={hasErrors ? formErrors : null}
             required
           />
 
@@ -152,7 +104,7 @@ class Login extends React.Component {
             type='psw'
             value={psw}
             onChange={this.handleChange}
-            error={hasErrors ? formErrors.psw : null}
+            error={hasErrors ? formErrors : null}
             required
           />
           <Button type='submit' name='LOGIN' />
@@ -163,4 +115,3 @@ class Login extends React.Component {
 }
 
 export default Login;
->>>>>>> eaef81a2e80adcbf94a698067c4206b063585bb7

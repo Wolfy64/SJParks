@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 
 const ERR_TEXT = 'Minimum 3 characaters';
@@ -46,7 +45,7 @@ class Input extends React.Component {
       <div>
         <label htmlFor={name}>{label}</label>
 
-        <input
+        <Input
           id={name}
           placeholder={placeholder}
           name={name}
@@ -63,45 +62,3 @@ class Input extends React.Component {
 }
 
 export default Input;
-=======
-import React from 'react';
-import styled from 'styled-components';
-
-const InputBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  label {
-    color: ${props => props.theme.colors.secondary};
-    margin: 0.6rem 0 0.3rem 0.3rem;
-  }
-  input {
-    border: solid 1px ${props => props.theme.colors.lightbg};
-    border-radius: 5px;
-    padding: 0.3rem;
-    font-size: 0.7em;
-  }
-  span {
-    color: ${props => props.theme.colors.danger};
-  }
-`;
-
-const Input = props => (
-  <InputBox>
-    <label htmlFor={props.name}>{props.label}</label>
-
-    <input
-      {...props}
-      id={props.name}
-      placeholder={props.placeholder}
-      name={props.name}
-      type={props.type}
-      value={props.value}
-      onChange={props.onChange}
-    />
-
-    {props.error && <span>{props.error}</span>}
-  </InputBox>
-);
-
-export default Input;
->>>>>>> master
