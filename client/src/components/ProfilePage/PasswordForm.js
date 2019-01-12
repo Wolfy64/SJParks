@@ -5,12 +5,7 @@ import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button'
 import styled from 'styled-components';
 
-const Float = styled.div`
-  width: 250px;
-  overflow: auto;
-  float: left;
-  margin: 50px;
-`;
+
 
 const initialState = {
   currentPassword: '',
@@ -72,8 +67,7 @@ class PasswordForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <Float>
-      <form onSubmit={this.handleSubmit}>
+      <form className="passwordForm" onSubmit={this.handleSubmit}>
         <Input
           label='Current Password'
           placeholder='Current Password'
@@ -106,7 +100,6 @@ class PasswordForm extends React.Component {
 
         <Button name='Confirm New Password'  type='submit'/>
       </form>
-      </Float>
     );
   }
 }

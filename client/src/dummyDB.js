@@ -50,3 +50,9 @@ export const parksDB = [
     name: 'ZILPHUR'
   }
 ];
+
+export const UsersDB = {
+    name: 'claudio',
+    email: 'blahblah@blahmail.com',
+    phone: '555-5555'
+  };
