@@ -2,7 +2,7 @@ import React from 'react';
 import './topnav.css';
 import { Link } from 'react-router-dom';
 
-const profileImg = require('../../img/profileimg.jpg');
+const profileImg = require('../../img/Placeholder2.jpg');
  
 const TopNav = () => (
   <div className='top-nav'>
