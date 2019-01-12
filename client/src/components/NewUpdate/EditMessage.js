@@ -4,6 +4,108 @@ import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import capsFirstLetter from '../../utils/capsFirstLetter';
 import Button from '../UI/Generic/Button';
+import styled from 'styled-components';
+
+const Title = styled.div`
+    display: flex;
+    align-items: center;
+    label{
+    margin: 0.3rem;
+  };
+  .label{
+    color: ${props => props.theme.colors.secondary};
+  };
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+  };
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  };
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: ${props => props.theme.colors.primary};
+    -webkit-transition: .4s;
+    transition: .4s;
+  };
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    right: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  };
+  
+  input:checked + .slider {
+    background-color: ${props => props.theme.colors.lightbg};
+  };
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(-16px);
+    -ms-transform: translateX(-16px);
+    transform: translateX(-16px);
+  };
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  };
+  
+  .slider.round:before {
+    border-radius: 50%;
+  };
+`;
+
+const Preview = styled.div`
+    background-color: ${props => props.theme.colors.lightbg};
+    color: ${props => props.theme.colors.secondary};
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    position: relative;
+    max-width: 200px;
+    word-wrap: break-word;
+    :before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      bottom: 0;
+      left: -7px;
+      height: 20px;
+      width: 20px;
+      background: ${props => props.theme.colors.lightbg};
+      border-bottom-right-radius: 15px;
+    };
+    :after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: -10px;
+      width: 10px;
+      height: 20px;
+      background: white;
+      border-bottom-right-radius: 10px;
+    };
+`;
 
 const initialState = {
   message: '',
@@ -78,7 +180,7 @@ class EditMessage extends React.Component {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className='title'>
+        <Title>
           <label className='label'>Add Title(s)</label>
           <label className='switch'>
             <input 
@@ -90,7 +192,7 @@ class EditMessage extends React.Component {
             />
             <span className='slider round'></span>
           </label>
-        </div>
+        </Title>
 
         <Textarea
           placeholder='Write your message here'
@@ -100,19 +202,12 @@ class EditMessage extends React.Component {
           error={hasErrors && formErrors.message}
           required
         />
-
-        <Textarea
-          style={{
-            minHeight: 100,
-            background: props => props.theme.colors.lightbg,
-            color: props => props.theme.colors.secondary
-          }}
-          name='textMessage'
-          value={title ? `${parksTitle} \n${message}` : message}
-          readOnly
-        />
-
+        <div className='bottomAlign'>
+          <Preview>
+            <p>{title ? `${parksTitle}\n${message}` : message}</p>
+          </Preview>
         <Button name='SUBMIT' />
+        </div>
       </form>
     );
   }

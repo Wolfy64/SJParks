@@ -8,6 +8,7 @@ const Area = styled.div`
     padding: 5px;
     border-radius: 5px;
     width: 288px;
+    min-height: 100px;
   }
 `;
 const Textarea = props => (
