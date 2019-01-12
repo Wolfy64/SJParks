@@ -1,15 +1,16 @@
 
 const express = require('express');
 const router = express.Router();
-const api = require('./controllers').api;
+const {api} = require('./controllers');
 const config = require("./config");
 const {
   ensureAuthenticated
 } = config.auth;
+
 console.log(`>[ROUTES:010:030]> Configuring Routes...`);
 
 // @route /register
-router.get('/register', (req, res) => res.render('register')); // view.
+router.get('/register', (req, res) => res.render('register')); // api.
 
 // @route /login
 router.post('/login', api.users.login);
@@ -21,9 +22,13 @@ router.get('/welcome', (req, res) => res.render('welcome'));
 router.post('/logout', api.users.logout)
 
 // @route /dashboard
-router.get('/dashboard', ensureAuthenticated, (req, res) => res.render('dashboard', {
+router.get('/admin/updates', ensureAuthenticated, (req, res) => res.render('dashboard', {
   user: req.user
 }));
+
+// @route /api/*
+/**/
+// router.all('/api/*', ensureAuthenticated);
 
 // @route /api
 router.get('/api', api.index.index);
@@ -62,20 +67,20 @@ router.route('/api/park')
 
   // @route /api/park/_id/
 router.route('/api/park/:id')
-  .get(api.parks.read)
-  .put(api.parks.update)
-  .delete(api.parks.destroy);
+  // .get(api.parks.read)
+  // .put(api.parks.update)
+  // .delete(api.parks.destroy);
 
 // @route /api/message
 router.route('/api/message')
-  .get(api.messages.index)
-  .post(api.messages.create);
+  // .get(api.messages.index)
+  // .post(api.messages.create);
 
 // @route /api/message/_id
 router.route('/api/message/:id')
-  .get(api.messages.read)
-  .put(api.messages.update)
-  .delete(api.messages.destroy);
+  // .get(api.messages.read)
+  // .put(api.messages.update)
+  // .delete(api.messages.destroy);
 
 // // @route /api/messageLog
 // router.route('/api/messageLog')

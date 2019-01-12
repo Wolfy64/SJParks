@@ -172,11 +172,11 @@ function create(req, res) {
 function login(req, res, next) {
 
 	passport.authenticate('local', {
-		successRedirect: '/dashboard',
+		successRedirect: '/admin/:user/updates',
 		failureRedirect: '/login',
 		failureFlash: true
 	})(req, res, next);
-	if (process.env.NODE_ENV === "test") res.render('dashboard');
+	if (process.env.NODE_ENV === "test") res.render('updates');
 
 };
 

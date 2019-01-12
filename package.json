@@ -5,7 +5,7 @@
 	"main": "Server.js",
 	"scripts": {
 		"build": "react-scripts build",
-		"client": "yarn start --prefix client",
+		"client": "cd client && yarn start",
 		"client-install": "yarn install --prefix client",
 		"dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
 		"dev-test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",

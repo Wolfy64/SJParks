@@ -60,7 +60,11 @@ const UserSchema = new mongoose.Schema({
     messages: [{
         type: Schema.Types.ObjectId,
         ref: 'Messagelog'
-    }]
+    }],
+
+    imageUrl: {
+        type: String
+    }
 
 }, {
     timestamps: true
