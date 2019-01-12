@@ -7,11 +7,12 @@
 		"build": "react-scripts build",
 		"client": "yarn start --prefix client",
 		"client-install": "yarn install --prefix client",
-		"dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+		"dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
+		"dev-test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
 		"eject": "react-scripts eject",
-		"prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-		"server": "NODE_ENV=development nodemon Server.js",
-		"start": "NODE_ENV=development node Server.js"
+		"prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
+		"server": "NODE_ENV=test nodemon Server.js",
+		"start": "node Server.js"
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",

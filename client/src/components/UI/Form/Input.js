@@ -45,7 +45,7 @@ class Input extends React.Component {
       <div>
         <label htmlFor={name}>{label}</label>
 
-        <input
+        <Input
           id={name}
           placeholder={placeholder}
           name={name}

@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const api = require('./controllers').api;
-const view = require("./controllers").view;
 const config = require("./config");
 const {
   ensureAuthenticated
