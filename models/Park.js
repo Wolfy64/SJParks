@@ -4,28 +4,6 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 //DEF creating 'Park' schema
 const ParkSchema = new mongoose.Schema({
-<<<<<<< HEAD
-    parkID: {
-        type: String,
-        max: 10,
-        required: [true, 'REQUIRED: Park Code'],
-        unique: true,
-    },
-    name: {
-        type: String,
-        max: 50,
-        required: [true, 'REQUIRED: Park Name' ],
-        unique: true,
-        uniqueCaseInsensitive: true,
-        match: [/^[a-zA-Z0-9]+$/, 'invalid usernam, must be a letter or a number.'],
-    },
-    users: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        unique: true
-    }],
-}, {timestamps: true});
-=======
     code: {
         type: String,
         unique: [true, 'Park code must be unique'],
@@ -65,7 +43,6 @@ ParkSchema.index({
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
->>>>>>> master
 
 
 // ADD 'Unique' validator
