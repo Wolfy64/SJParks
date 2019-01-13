@@ -17,30 +17,32 @@ width: 100%;
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      image: null,
-      showError: false,
-      file: '',
-      imagePreviewUrl: '',
-    };
-    
-    this.handleImageChange = this.handleImageChange.bind(this);
+  state = {
+    showError: false,
+    images: []
+  };
 
-  }
-    handleImageChange(e) {
-      e.preventDefault();
-      let reader = new FileReader();
-      let file = e.target.files[0];
+  //Image Upload
+  onChange = e => {
+    const files = Array.from(e.target.files)
+    const formData = new FormData()
 
-      reader.onloadend = () => {
-        this.setState({
-          file: file,
-          imagePreviewUrl: reader.result,
-        });
-      }
-      reader.readAsDataURL(file);
+    files.forEach((file, i) => {
+      formData.append(i, file)
+      console.log(file)
+    })
+    console.log(formData)
+    fetch('/admin/image-upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(images => {
+      this.setState({ 
+        images
+      })
+    })
+    .catch(err => console.log(err));
   }
   
   // onChange = e => {
