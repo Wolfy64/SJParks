@@ -1,6 +1,7 @@
 const db = require("../../models");
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const cloudinary = require('cloudinary');
 
 // @route GET api/user
 // @desc Get all users
@@ -190,6 +191,27 @@ function logout(req, res) {
 	res.redirect('/login');
 	if (process.env.NODE_ENV === "test") res.render('login');
 };
+
+//------------------------------------------------------------------------
+//***************************** IMAGE UPLOAD ****************************
+//------------------------------------------------------------------------
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+  })
+
+exports.imageUpload = function (req, res) {
+    const values = Object.values(req.files)
+    const promises = values.map(image => cloudinary.uploader.upload(image.path))
+
+    Promise
+        .all(promises)
+        .then(results => res.json(results))
+        .catch(err => console.log(err));
+
+    res.status(200);
+}
 
 // @route PUT api/user/update/:id
 // @desc Update an existing user by id
