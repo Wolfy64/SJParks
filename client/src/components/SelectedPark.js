@@ -5,12 +5,8 @@ import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
   width: 300px;
-  padding: 3.7rem 1rem;
-  height: 100%;
+  padding-top: 5rem;
   overflow: auto;
-  .selectAll{
-    margin: 0.5rem;
-  };
 `;
 
 const SelectedPark = props => {
@@ -25,7 +21,7 @@ const SelectedPark = props => {
 
   return (
     <Container>
-      <ButtonText className='selectAll' onClick={props.deleteAllParks}>Deselect All</ButtonText>
+      <ButtonText onClick={props.deleteAllParks}>Deselect All</ButtonText>
       {selectedPark}
     </Container>
   );

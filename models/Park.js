@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const uniqueValidator = require('mongoose-unique-validator');
 
+//DEF creating 'Park' schema
 const ParkSchema = new mongoose.Schema({
     code: {
         type: String,
@@ -43,6 +44,11 @@ ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
 
+
+// ADD 'Unique' validator
+ParkSchema.plugin(uniqueValidator);
+
+//CREATE and EXPORT 'Park' model
 const Park = mongoose.model('Park', ParkSchema);
 
 module.exports = Park;
