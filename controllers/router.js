@@ -56,6 +56,8 @@ module.exports = function(app) {
 
   //DEVELOPER TOOL
   //app.get('/admin/peek', admin.peek);
+  app.post('/admin/image-upload', admin.imageUpload);
+
 
   //------------------------------------------------------------------------
   //*************************** MESSAGE HANDLING ***************************

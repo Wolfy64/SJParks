@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
@@ -17,34 +16,37 @@ const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {
   state = {
-    image: null,
+    images: null,
     showError: false
   };
 
+  //Image Upload
   onChange = e => {
-    const file = e.target.files[0];
-    const isTypeValid = IMAGE_TYPES.includes(file.type);
-    const isSizeValid = file.size / 1024 / 1024 <= 2; // Less than 2MB
+    const files = Array.from(e.target.files)
+    const formData = new FormData()
 
-    // Check if the form has error
-    if ((!isTypeValid, !isSizeValid)) this.setState({ showError: true });
+    files.forEach((file, i) => {
+      formData.append(i, file)
+    })
 
-    if ((isTypeValid, isSizeValid)) {
-      fetch(`admin/image-upload`, {
-        method: 'POST',
-        body: file
+    fetch('/admin/image-upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(images => {
+      this.setState({ 
+        images
       })
-        .then(res => res.json())
-        .catch(err => console.log(err));
-
-      console.log('Data Send', file);
-    }
-  };
+    })
+    .catch(err => console.log(err));
+  }
 
   render() {
+    const {images} = this.state;
     return (
       <Image>
-          <img onClick={() => this.fileInput.click()} src={placeholder} alt='avatar' />
+        <img onClick={() => this.fileInput.click()} src={images?images[0].url : placeholder} alt='avatar'/>
         <input
           type='file'
           onChange={this.onChange}

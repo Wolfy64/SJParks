@@ -1,6 +1,28 @@
 const db = require("../models");
 const crypto = require('../lib/cryptoHelper');
-// const messageSender = require('../lib/messageSender');
+const cloudinary = require('cloudinary')
+
+//------------------------------------------------------------------------
+//***************************** IMAGE UPLOAD ****************************
+//------------------------------------------------------------------------
+cloudinary.config({ 
+    cloud_name: process.env.CLOUD_NAME, 
+    api_key: process.env.API_KEY, 
+    api_secret: process.env.API_SECRET
+  })
+
+exports.imageUpload = function (req, res) {
+    const values = Object.values(req.files)
+    const promises = values.map(image => cloudinary.uploader.upload(image.path))
+        
+    Promise
+        .all(promises)
+        .then(results => res.json(results))
+        .catch(err => console.log(err));
+
+    res.status(200);
+}
+
 
 //------------------------------------------------------------------------
 //**************************** CREATE NEW USER ***************************

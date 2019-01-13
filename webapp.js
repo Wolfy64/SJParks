@@ -5,6 +5,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const config = require('./config');
+const formData = require('express-form-data');
 const User = require('./models/User');
 
 // Create Express web app
@@ -21,14 +22,14 @@ console.log('>> PATH 2  ', path.join(__dirname, 'client', config.clientPath));
 app.use(express.static(path.join(__dirname, 'client', config.clientPath)));
 
 // Parse incoming form-encoded HTTP bodies
-app.use(bodyParser.json());
-
 app.use(
   bodyParser.urlencoded({
     extended: true
   })
 );
 
+app.use(bodyParser.json());
+app.use(formData.parse())
 // Create and manage HTTP sessions for all requests
 app.use(
   session({
