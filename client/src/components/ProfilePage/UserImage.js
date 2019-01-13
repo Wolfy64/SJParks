@@ -4,11 +4,9 @@ import styled from 'styled-components';
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
-display: flex;
-justify-content: center;
-width: 100%;
   img {
     height: 165px;
+    margin: 0 0 30px 50px;
     width: auto;
   }
 `;
@@ -17,30 +15,29 @@ const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      image: null,
-      showError: false,
-      file: '',
-      imagePreviewUrl: '',
-    };
+  state = {
+    showError: false,
+    images: []
+  };
 
     this.handleImageChange = this.handleImageChange.bind(this);
 
-  }
-    handleImageChange(e) {
-      e.preventDefault();
-      let reader = new FileReader();
-      let file = e.target.files[0];
-
-      reader.onloadend = () => {
-        this.setState({
-          file: file,
-          imagePreviewUrl: reader.result,
-        });
-      }
-      reader.readAsDataURL(file);
+    files.forEach((file, i) => {
+      formData.append(i, file)
+      console.log(file)
+    })
+    console.log(formData)
+    fetch('/admin/image-upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(images => {
+      this.setState({
+        images
+      })
+    })
+    .catch(err => console.log(err));
   }
 
   // onChange = e => {
@@ -64,20 +61,13 @@ class UserImage extends React.Component {
   // };
 
   render() {
-    let {imagePreviewUrl} = this.state;
-    let imagePreview = null;
-    if(imagePreviewUrl){
-      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={imagePreviewUrl} alt ='avatar'/>);
-    } else {
-      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={placeholder} alt ='avatar'/>)
-    }
+    const {images} = this.state;
     return (
       <Image>
-          {/* <img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={placeholder} alt='avatar'/> */}
-          {imagePreview}
+        <img onClick={() => this.fileInput.click()} src={images[0]?images[0].url : placeholder} alt='avatar'/>
         <input
           type='file'
-          // onChange={this.onChange}
+          onChange={this.onChange}
           style={{ display: 'none' }}
           ref={fileInput => (this.fileInput = fileInput)}
         />
