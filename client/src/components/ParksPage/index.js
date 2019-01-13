@@ -74,7 +74,7 @@ export default class Parks extends Component {
       body: JSON.stringify(dataForm)
     };
 
-    fetch('/admin/parks', payload)
+    fetch('/api/parks', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('SEND DATA', dataForm);

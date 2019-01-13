@@ -5,7 +5,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const morgan = require('morgan');
 const config = require('./config');
-const db = require('./models/');
+const formData = require('express-form-data');
+const User = require('./models/User');
 
 // Create Express web app
 const app = express();
@@ -24,6 +25,8 @@ app.use(bodyParser.urlencoded({
     extended: true,
 }));
 
+app.use(bodyParser.json());
+app.use(formData.parse())
 // Create and manage HTTP sessions for all requests
 app.use(session({
     secret: config.secret,

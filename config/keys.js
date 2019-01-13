@@ -5,11 +5,10 @@ require('dotenv-safe').load();
 const dev = process.env.NODE_ENV === 'development';
 const prod = process.env.NODE_ENV === 'production';
 const test = process.env.NODE_ENV === 'test';
-var path, url, url_test, secret, port, accountSid, authToken, twilioNumber;
+var path, url, secret, port, accountSid, authToken, twilioNumber;
 
-path = prod ? 'build' : 'public';
-url = dev || test ? process.env.MLAB_URI : process.env.MONGODB_URL;
-url_test = dev || test ? process.env.TEST_MONGO_URL : 'mongodb://localhost/sj-parks';
+path = prod ? 'build' : dev ? 'public' : 'test';
+url = dev ? process.env.MLAB_URI : test ? process.env.TEST_MONGO_URL: process.env.MONGO_URI;
 secret = dev || prod ? process.env.APP_SECRET : 'keyboard cat';
 port = prod ? process.env.PORT : process.env.SERVER_PORT;
 accountSid = dev || prod ? process.env.TWILIO_ACCOUNT_SID : null;
@@ -19,7 +18,6 @@ twilioNumber = dev || prod ? process.env.TWILIO_NUMBER : null;
 module.exports = {
   clientPath: path,
   mongoUrl: url,
-  mongoUrlTest: url_test,
   secret: secret,
   port: port,
   accountSid: accountSid,
