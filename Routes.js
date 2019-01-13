@@ -38,6 +38,9 @@ router.route('/api/users')
   .get(api.users.index)
   .post(api.users.register);
 
+  router.route('/admin/image-upload')
+  .post(api.users.imageUpload);
+
   // @route /api/user/_id
 router.route('/api/users/:userId')
   .get(api.users.read)

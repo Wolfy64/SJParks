@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 const placeholder = require('../../img/placeholder.png');
 
-const Image = styled.div`
-  img {
-    height: 170px;
-    width: auto;
-  }
+const Image = styled.div `
+ img {
+   height: 165px;
+   margin: 0 0 30px 50px;
+   width: auto;
+ }
 `;
 
 const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
@@ -29,31 +30,33 @@ class UserImage extends React.Component {
     })
 
     fetch('/admin/image-upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(images => {
-      this.setState({
-        images
+        method: 'POST',
+        body: formData
       })
-    })
-    .catch(err => console.log(err));
+      .then(res => res.text())
+      .then(images => {
+        this.setState({
+          images
+        })
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
-    const {images} = this.state;
+    const {
+      images
+    } = this.state;
     return (
       <Image>
-        <img onClick={() => this.fileInput.click()} src={images?images[0].url : placeholder} alt='avatar'/>
-        <input
-          type='file'
-          onChange={this.onChange}
-          style={{ display: 'none' }}
-          ref={fileInput => (this.fileInput = fileInput)}
-        />
-        {this.state.showError ? <span>{ERROR}</span> : null}
-      </Image>
+        <img onClick = { () => this.fileInput.click() } src = { images ? images[0].url : placeholder } alt = 'avatar' />
+        < input type = 'file' onChange = { this.onChange } style = {{ display: 'none'}} ref = {
+          fileInput => (this.fileInput = fileInput)
+        }
+        /> {
+        this.state.showError ? < span > {
+          ERROR
+        } </span> : null}
+         </Image >
     );
   }
 }

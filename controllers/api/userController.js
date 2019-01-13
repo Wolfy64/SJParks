@@ -201,7 +201,7 @@ cloudinary.config({
     api_secret: process.env.API_SECRET
   })
 
-exports.imageUpload = function (req, res) {
+const imageUpload = (req, res) => {
     const values = Object.values(req.files)
     const promises = values.map(image => cloudinary.uploader.upload(image.path))
 
@@ -369,5 +369,6 @@ module.exports = {
 	login: login,
 	logout: logout,
 	update: update,
-	destroy: destroy
+	destroy: destroy,
+	imageUpload: imageUpload
 }

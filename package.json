@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.13.2",
     "connect-flash": "^0.1.1",
     "dotenv": "^6.2.0",
     "dotenv-safe": "^6.1.0",
