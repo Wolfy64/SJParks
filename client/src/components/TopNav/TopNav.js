@@ -29,11 +29,13 @@ const TopNav = () => {
   const token = localStorage.getItem('token');
   const userID = jwt_decode(token).user._id;
   return (
-    <Nav>
-      <Link to={`/admin/${userID}/profile`}>
-        <img className='profileImg' src={profileImg} alt="User Avatar" />
-      </Link>
-    </Nav>
+  <div className = 'top-nav' >
+    <nav className = 'navbar' >
+      <li>
+        <Link to='/admin/profile'><img src={profileImg} alt="profile"></img></Link>
+      </li>
+    </nav >
+  </div>
   );
 };
 
