@@ -28,7 +28,7 @@ const TopNav = () => (
   <div className='top-nav'>
     <nav className='navbar'>
       <li>
-        <Link to='/admin/profile'><img src={profileImg} alt="profile"></img></Link>
+        <Link to='/admin/profile'><img src={profileImg}></img></Link>
       </li>
     </nav>
   </div>
