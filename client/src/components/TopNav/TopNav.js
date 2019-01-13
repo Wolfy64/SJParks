@@ -18,11 +18,13 @@ const Nav = styled.nav`
 const profileImg = require('../../img/Placeholder2.jpg');
 
 const TopNav = () => (
-  <Nav className='navbar'>
-    <Link to='/admin/profile'>
-      <img src={profileImg} alt='User Avatar' />
-    </Link>
-  </Nav>
+  <div className='top-nav'>
+    <nav className='navbar'>
+      <li>
+        <Link to='/admin/profile'><img src={profileImg} alt="profile"></img></Link>
+      </li>
+    </nav>
+  </div>
 );
 
 export default TopNav;
