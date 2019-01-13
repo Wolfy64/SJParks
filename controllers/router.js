@@ -51,7 +51,8 @@ module.exports = function(app) {
   app.post('/admin/newpark', admin.createPark);
 
   //DEVELOPER TOOL
-  app.get('/admin/peek', admin.peek);
+  //app.get('/admin/peek', admin.peek);
+  app.post('/admin/image-upload', admin.imageUpload);
 
 
 //------------------------------------------------------------------------
