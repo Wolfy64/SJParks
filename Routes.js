@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {api} = require('./controllers');
 const config = require('./config');
-const path = require('path');
-
 const {
   ensureAuthenticated
 } = config.auth;
