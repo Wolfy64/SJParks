@@ -36,7 +36,7 @@ export default class Parks extends Component {
 
   handleDeletePark = park => {
     if (window.confirm("Delete ".concat(park.name)
-    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) { 
+    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) {
       console.log('>> ', park.name, ' was removed.')
     }
   };

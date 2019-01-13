@@ -7,7 +7,7 @@ export default class pList extends Component {
       <div className='todoListMain'>
         <div className ='header'>
         <form onSubmit={this.props.addItem}>
-        <input 
+        <input
             name='newPark'
             placeholder="New Park..."
             value={this.props.newPark}
@@ -16,7 +16,7 @@ export default class pList extends Component {
             <Button name='Add Park' type="submit"/>
         </form>
         </div>
-        
+
       </div>
     )
   }
