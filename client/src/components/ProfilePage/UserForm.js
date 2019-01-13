@@ -2,7 +2,6 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
-import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
 
 const Float = styled.div`

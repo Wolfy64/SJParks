@@ -11,10 +11,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const Wrapper2 = styled.div`
-  float: left;
-  width: 470px;
-`;
 
 const Users = () => (
   <>
