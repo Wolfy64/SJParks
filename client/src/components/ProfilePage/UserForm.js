@@ -2,14 +2,14 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
-import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
+import styled from 'styled-components';
 
 const Float = styled.div`
-  width: 250px;
+  width: inherit;
   overflow: auto;
   float: left;
-  margin:50px;
+  margin-top: 100px;
 `;
 
 const initialState = {
