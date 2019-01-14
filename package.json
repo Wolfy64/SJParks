@@ -40,7 +40,7 @@
     "react-dom": "^16.7.0",
     "react-scripts": "^2.1.3",
     "twilio": "^3.26.1",
-    "webpack-dev-server": "3.1.9"
+    "webpack-dev-server": "^3.1.14"
   },
   "devDependencies": {
     "concurrently": "^3.6.1",
