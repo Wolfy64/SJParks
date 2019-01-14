@@ -4,9 +4,11 @@ import styled from 'styled-components';
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
+display: flex;
+justify-content: center;
+width: 100%;
   img {
     height: 165px;
-    margin: 0 0 30px 50px;
     width: auto;
   }
 `;
@@ -24,9 +26,8 @@ class UserImage extends React.Component {
 
     files.forEach((file, i) => {
       formData.append(i, file)
-      console.log(file)
     })
-    console.log(formData)
+
     fetch('/admin/image-upload', {
       method: 'POST',
       body: formData

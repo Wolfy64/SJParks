@@ -5,9 +5,11 @@ import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
-  width: 280px;
-  margin: 10px;
+const Float = styled.div`
+  width: inherit;
+  overflow: auto;
+  float: left;
+  margin-top: 100px;
 `;
 
 const initialState = {
