@@ -9,19 +9,23 @@ import Footer from './Footer';
 const Jumbotron = styled.div`
   background-color: ${props => props.theme.colors.primary};
   height: 40vh;
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    display: none;
+  }
 `;
 
 class PublicPage extends React.Component {
   render() {
     return (
-      <div>
+      <>
         <NavBar />
         <Jumbotron />
         <About />
         <Subscribe />
         <Contact />
         <Footer />
-      </div>
+      </>
     );
   }
 }
