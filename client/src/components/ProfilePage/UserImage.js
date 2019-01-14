@@ -29,9 +29,8 @@ class UserImage extends React.Component {
 
     files.forEach((file, i) => {
       formData.append(i, file)
-      console.log(file)
     })
-    console.log(formData)
+
     fetch('/admin/image-upload', {
       method: 'POST',
       body: formData
@@ -79,7 +78,7 @@ class UserImage extends React.Component {
           {imagePreview}
         <input
           type='file'
-          // onChange={this.onChange}
+          onChange={this.onChange}
           style={{ display: 'none' }}
           ref={fileInput => (this.fileInput = fileInput)}
         />
