@@ -15,7 +15,6 @@ const Col1 = styled.div`
 `
 const Col2 = styled.div`
   height: 100vh;
-  padding: 0 20px;
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
 `
@@ -75,7 +74,7 @@ export default class Parks extends Component {
       body: JSON.stringify(dataForm)
     };
 
-    fetch('/admin/parks', payload)
+    fetch('/api/parks', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('SEND DATA', dataForm);

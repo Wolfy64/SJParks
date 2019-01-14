@@ -1,7 +1,7 @@
 module.exports = {
-  User: require('./User'),
-  Park: require('./Park'),
-  MessageLog: require('./MessageLog'),
-  SubscriptionLog: require('./SubscriptionLog'),
-  Issue: require('./Issue')
+  User: require("./User"),
+  Park: require("./Park"),
+  Message: require("./Message"),
+  MessageLog: require("./MessageLog"),
+  SubscriptionLog: require("./SubscriptionLog")
 };

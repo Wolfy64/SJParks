@@ -38,7 +38,7 @@ class UserList extends React.Component {
   }
 
   handleDelete(id) {
-    window.confirm('Delete '
+    window.confirm('Are you sure you want to permanently delete '
     .concat(this.state.users.filter(user => user.id === id)[0].fullName).concat(' from the system? \nTHIS ACTION CAN NOT BE UNDONE'))
     ? this.setState({ users: this.state.users.filter(user => user.id !== id) })
     : console.log("Action has been successfully cancelled")

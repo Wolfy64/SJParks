@@ -1,26 +1,30 @@
-const http = require('http');
-const mongoose = require('mongoose');
+require('dotenv-safe').load();
 const config = require('./config');
+// process.env.NODE_ENV === "development";
+console.log(`>[SERVER:004:025]> Running index in ${process.env.NODE_ENV} mode...`);
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//************************************************************** Connect MongoDB ***************************************************************
+//----------------------------------------------------------------------------------------------------------------------------------------------
+const opts = {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+  useFindAndModify: false
+}
 
-// Initialize database connection - throws if database connection can't be
-// established
-mongoose
-  .connect(
-    config.mongoUrl,
-    {
-      useCreateIndex: true,
-      useNewUrlParser: true
-    }
-  )
-  .then(() => console.log('>> Connected to mongoose'))
-  .catch(err => console.error(err));
-mongoose.Promise = Promise;
+const mongoose = require('mongoose');
+const db = config.keys.mongoUrl;
 
-// Create Express web app
-const app = require('./webapp');
+mongoose.connect(db, opts)
+  .then(() => console.log(`>[SERVER:020:020]> MongoDB Connected @uri: ${db}...`))
+  .catch(err => console.error(`>[SERVER:021:044]> An error occured while attempting to connect to MongoDB with @uri: ${db}. Error thrown: ${err.message}...`));
 
-// Create an HTTP server and listen on the configured port
-const server = http.createServer(app);
-server.listen(config.port, () =>
-  console.log(`Server listening on port: ${config.port}`)
-);
+mongoose.Promise = global.Promise;
+
+//----------------------------------------------------------------------------------------------------------------------------------------------
+//*********************************************************** Deploy Express Webapp ************************************************************
+//----------------------------------------------------------------------------------------------------------------------------------------------
+const http = require('http');
+const webapp = require('./App');
+const server = http.createServer(webapp);
+const port = require('./config').keys.port;
+server.listen(port, () => console.log(`>[SERVER:032:054]> Express Server Deployed @url: http://localhost:${port}...`));

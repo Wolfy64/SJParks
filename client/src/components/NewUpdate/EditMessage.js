@@ -1,4 +1,5 @@
 import React from 'react';
+import Input from '../UI/Form/Input';
 import Textarea from '../UI/Form/Textarea';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
@@ -21,13 +22,13 @@ const Title = styled.div`
     width: 40px;
     height: 24px;
   };
-  
-  .switch input { 
+
+  .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   };
-  
+
   .slider {
     position: absolute;
     cursor: pointer;
@@ -39,7 +40,7 @@ const Title = styled.div`
     -webkit-transition: .4s;
     transition: .4s;
   };
-  
+
   .slider:before {
     position: absolute;
     content: "";
@@ -51,22 +52,22 @@ const Title = styled.div`
     -webkit-transition: .4s;
     transition: .4s;
   };
-  
+
   input:checked + .slider {
     background-color: ${props => props.theme.colors.lightbg};
   };
-  
+
   input:checked + .slider:before {
     -webkit-transform: translateX(-16px);
     -ms-transform: translateX(-16px);
     transform: translateX(-16px);
   };
-  
+
   /* Rounded sliders */
   .slider.round {
     border-radius: 34px;
   };
-  
+
   .slider.round:before {
     border-radius: 50%;
   };
@@ -109,7 +110,7 @@ const Preview = styled.div`
 
 const initialState = {
   message: '',
-  title: 'checked',
+  title: false,
   parksTitle: '',
   showError: false,
   formErrors: null
@@ -147,7 +148,7 @@ class EditMessage extends React.Component {
     });
   };
 
-  handleToggle = () => this.state.title? this.setState({ title: '' }) : this.setState({ title: 'checked' });
+  handleToggle = () => this.setState({ title: !this.state.title });
 
   handleSubmit = e => {
     e.preventDefault();
@@ -183,7 +184,7 @@ class EditMessage extends React.Component {
         <Title>
           <label className='label'>Add Title(s)</label>
           <label className='switch'>
-            <input 
+            <input
               name='title'
               type='checkbox'
               value='title'
@@ -195,6 +196,7 @@ class EditMessage extends React.Component {
         </Title>
 
         <Textarea
+          style={{ width: 300 }}
           placeholder='Write your message here'
           name='message'
           onChange={this.handleChange}

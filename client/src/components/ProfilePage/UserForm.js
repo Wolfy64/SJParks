@@ -4,7 +4,12 @@ import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button';
 
-
+const Float = styled.div`
+  width: 250px;
+  overflow: auto;
+  float: left;
+  margin:50px;
+`;
 
 const initialState = {
   fullName: '',
@@ -57,7 +62,7 @@ class UserForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <>
+      <Float>
       <form onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
@@ -91,7 +96,7 @@ class UserForm extends React.Component {
 
         <Button name='Confirm Edits'/>
       </form>
-      </>
+      </Float>
     );
   }
 }
