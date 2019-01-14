@@ -27,6 +27,21 @@ const Container = styled.div`
       width: 300px;
     }
   }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    grid-template-columns: 1fr;
+    height: auto;
+
+    form {
+      grid-template-columns: 1fr;
+      width: 300px;
+
+      textarea,
+      button {
+        grid-column: auto;
+      }
+    }
+  }
 `;
 
 const Survey = styled.article`
