@@ -4,7 +4,8 @@ import Button from '../UI/Generic/Button';
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  grid-gap: 1rem;
   justify-items: center;
   align-content: center;
   height: 60vh;
@@ -33,6 +34,21 @@ const Container = styled.div`
       grid-column: 2/3;
     }
   }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    grid-template-columns: 1fr;
+    height: auto;
+
+    form {
+      grid-template-columns: 1fr;
+      width: 300px;
+
+      textarea,
+      button {
+        grid-column: auto;
+      }
+    }
+  }
 `;
 
 const Survey = styled.article`
@@ -52,6 +68,12 @@ const Survey = styled.article`
     width: 250px;
     text-align: center;
     margin: 1rem auto;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    width: 300px;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
   }
 `;
 
