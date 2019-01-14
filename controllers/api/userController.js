@@ -216,9 +216,9 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
-function imageUpload(req, res) {
-  const values = Object.values(req.files);
-  const promises = values.map(image => cloudinary.uploader.upload(image.path));
+function imageUpload (req, res) {
+    const values = Object.values(req.files)
+    const promises = values.map(image => cloudinary.uploader.upload(image.path))
 
   Promise.all(promises)
     .then(results => res.json(results))
