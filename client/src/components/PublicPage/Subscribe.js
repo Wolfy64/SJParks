@@ -34,8 +34,11 @@ const Form = styled.form`
     align-self: center;
     padding-bottom: 1rem;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: 20px 0px;
 =======
+=======
+>>>>>>> Add Style
   }
   .searchContainer {
     background-color: white;
@@ -44,6 +47,10 @@ const Form = styled.form`
   .selectedContainer {
     height: 40vh;
 >>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    height: auto;
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
@@ -130,7 +137,11 @@ class Subscribe extends React.Component {
     return (
       <Container>
         <h2>Subscribe</h2>
+<<<<<<< HEAD
         <Form id="subscribe" onSubmit={this.handleSubmit}>
+=======
+        <Form id='subscribe' onSubmit={this.handleSubmit}>
+>>>>>>> Add Style
           <SearchPark
             parks={this.state.parks}
             addPark={park => this.handleAddPark(park)}
@@ -143,18 +154,31 @@ class Subscribe extends React.Component {
             deleteAllParks={this.handleDeleteAddAllPark}
           />
 
+<<<<<<< HEAD
           <div className="phoneField">
             <Input
               label="Phone"
               placeholder="123-456-7890"
               name="phone"
               type="tel"
+=======
+          <div className='phoneField'>
+            <Input
+              label='Phone'
+              placeholder='123-456-7890'
+              name='phone'
+              type='tel'
+>>>>>>> Add Style
               onChange={this.handleChange}
               value={this.state.phone}
               error={hasErrors ? formErrors.phone : null}
             />
 
+<<<<<<< HEAD
             <Button name="I want to be informed!" />
+=======
+            <Button name='I want to be informed!' />
+>>>>>>> Add Style
           </div>
         </Form>
       </Container>
