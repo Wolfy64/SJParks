@@ -5,8 +5,7 @@ import PasswordForm from './PasswordForm';
 import { UsersDB } from '../../dummyDB';
 import styled from 'styled-components';
 
-const Wrap
-per = styled.div`
+const Wrapper = styled.div`
   width: 300px;
   overflow: auto;
   float: left;

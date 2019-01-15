@@ -33,7 +33,7 @@ const About = () => (
   <PresentationBox id='about'>
     <Summary>
       <p>
-        Have your visited the park onlyto find out hat is closed for
+        Have your visited the park only to find out hat is closed for
         maintenance, or even worse, openand unsafe? We provide a solution for
         you to stay informed.
       </p>
