@@ -27,4 +27,4 @@ const http = require('http');
 const webapp = require('./App');
 const server = http.createServer(webapp);
 const port = require('./config').keys.port;
-server.listen(port, () => console.log(`>[SERVER:032:054]> Express Server Deployed @url: http://localhost:${port}...`));
+server.listen(port, () => console.log(`>[SERVER:032:054]> Express Server Deploy

@@ -1,18 +1,18 @@
 require('dotenv-safe').load();
 const config = require('./config');
-// process.env.NODE_ENV === "development";
 console.log(`>[SERVER:004:025]> Running index in ${process.env.NODE_ENV} mode...`);
+
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //************************************************************** Connect MongoDB ***************************************************************
 //----------------------------------------------------------------------------------------------------------------------------------------------
+const mongoose = require('mongoose');
+const db = config.keys.mongoUrl;
+
 const opts = {
   useCreateIndex: true,
   useNewUrlParser: true,
   useFindAndModify: false
 }
-
-const mongoose = require('mongoose');
-const db = config.keys.mongoUrl;
 
 mongoose.connect(db, opts)
   .then(() => console.log(`>[SERVER:020:020]> MongoDB Connected @uri: ${db}...`))
