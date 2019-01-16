@@ -27,7 +27,6 @@ Client run on http://localhost:3000
 
 Server run on http://localhost:5000
 
-
 ## Webapp Structure
 
 ### Public
