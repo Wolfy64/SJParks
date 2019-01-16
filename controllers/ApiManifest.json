@@ -1,0 +1,154 @@
+﻿{
+	"name": "RouterTemplate",
+	"version": 2.0.1
+	"legend": {
+		"route": "/api",
+		"method": "GET",
+		"desc": "String",
+		"params": [{}],
+		"function": "api.AwesomeController.",
+		"rType": {type: "REDIRECT"}
+	},
+	"routes": [{
+			"routeId" : "",
+			"route": "/api/parks",
+			"method": "GET",
+			"desc": "Fetch the list of all parks in JSON format",
+			"params": [{}],
+			"function": "api.parks.index",
+			"rType": {
+				"type": "JSON"
+			}
+		},
+
+		{
+			"route": "/api/subscribe",
+			"method": "POST",
+			"desc": "Subscribe a phone to a list of parks.",
+			"params": {
+				"phone": "string",
+				"addParks": ["park1._id", "park2._id", "..."],
+				"subscribed": true
+			},
+			"function": "api.subscriptionLog.subscribe",
+			"response": {
+				"type": "JSON",
+				"Method": "SERVER"
+			}
+		},
+
+		{
+			"route": "/login",
+			"method": "POST",
+			"desc": "This will authenticate a user provided userName/phone/email and password.",
+			"params": {
+				"userName": "AReallyCoolUserName",
+				"password": "SomeSecurePassword"
+			},
+			"functions": "api.user.login",
+			"response": {
+				"type": "HTML",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "api/admin/:adminId",
+			"method": "GET",
+			"desc": "Redirects @adminId to main admin page. Admin credentials required.",
+			"params": {},
+			"function": "api.users.adminPage",
+			"response": {
+				"type": "HMTL",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "/api/messages",
+			"method": "GET",
+			"desc": "Fetches the index of all messages; both messages recieved and messages sent",
+			"params": {},
+			"function": "api.users.getAllMessages",
+			"response": {
+				"type": "HMTL",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "/api/parks/:parkId/subscribers",
+			"method": "GET",
+			"desc": "Retrives the list of every user currently subscribed to @parkId, each in JSON format",
+			"params": {},
+			"function": "api.parks.getAllSubscribers",
+			"response": {
+				"type": "JSON",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "/api/users/:userId/parks",
+			"method": "GET",
+			"desc": "Retrives the list of every park to which @userId is currently subscribed, each in JSON format",
+			"params": {},
+			"function": "api.users.getAllparks",
+			"response": {
+				"type": "JSON",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "/api/users/:userId/messages",
+			"method": "GET",
+			"desc": "Retrives the list of every message that @userId has ever sent or recieved",
+			"params": {},
+			"function": "api.parks.getAllSubscribers",
+			"response": {
+				"type": "JSON",
+				"genMethod": "REDIRECT"
+			}
+		},
+		
+		
+}
+GET for subscriptionLogs 
+'/admin/updates/new' => NewUpdate
+GET for parks
+POST for sending message through Twilio
+admin/parks' => ParksPage
+GET for parks POST for new park { newName: 'string', newCode: 'string'}
+DELETE for park {ParkId: 'string'}
+'admin/users' => UsersPage
+GET for usersDB
+POST for a new user { name, userName, email, password, access: 'updatesOnly' || 'premium'}
+
+DELETE based on {
+	username: 'string'
+}
+
+'/logout' => Logout
+
+GET to kill the session and redirect to Login Page 'admin/profile' => ProfilePage
+
+GET
+for user 's information {full_name, email, phone, imgURL}
+
+POST
+for image upload {
+	img: {
+		Object
+	}
+} - store it to public folder
+
+PUT
+for changing {
+	full_name,
+	email,
+	phone
+}
+
+POST
+for checking user 's password
+
+PUT
+for changing {
+	psw
+}
