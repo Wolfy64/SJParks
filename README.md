@@ -19,10 +19,6 @@ NODE_ENV=
 
 Install package with `npm install` on both side Frontend `/client` and Backend `/`.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> README
 ## Run App
 
 On root folder: `npm run dev`
@@ -31,11 +27,7 @@ Client run on http://localhost:3000
 
 Server run on http://localhost:5000
 
-<<<<<<< HEAD
-=======
->>>>>>> README
-=======
->>>>>>> README
+
 ## Webapp Structure
 
 ### Public
