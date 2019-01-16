@@ -3,7 +3,6 @@ const path = require('path');
 const logger = require('morgan');
 const flash = require('connect-flash');
 const passport = require('passport');
-const expressLayouts = require('express-ejs-layouts');
 const addRequestId = require('express-request-id')();
 const session = require('express-session');
 const express = require('express');
@@ -17,20 +16,23 @@ console.log(`>[WEBAPP:012:030]> Creating WebApp...`);
 //----------------------------------------------------------------------------------------------------------------------------------------------
 
 // @desc Configuring View Engine
-app.use(expressLayouts);
-
-app.set('view engine', 'ejs');
-// app.set('view engine', 'pug');
-
+if (config.keys.test)
+{
+    const expressEjsLayouts = require('express-ejs-layouts');
+    app.use(expressEjsLayouts);
+    app.set('view engine', 'ejs');
+    app.use(express.static(path.join(__dirname, 'views')));
+} else
+{
+    app.set('view engine', 'pug');
+    app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
+}
 
 // @desc Configuring URL Parser
-app.use(express.urlencoded({
-    extended: false
-}));
-
-// @desc Configuring JSON Parser
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(formData.parse());
+
 
 // @desc Configuring Express Session
 app.use(session({
@@ -57,37 +59,36 @@ app.use(flash());
 app.use(addRequestId);
 logger.token('id', (req) => req.sessionID.split('-')[0]);
 app.use(logger('combined', {
-    skip: (req, res) => {
+    skip: (req, res) =>
+    {
         return res.statusCode < 400
     }
 }));
-app.use(logger(">[:date[iso] req: Method = :method, Url = :url ]> "));
-app.use(logger(">[:date[iso] res: Status = :status, ]> "));
+app.use(logger(">[:date[iso] REQ]> Method = :method, Url = :url , SessionID = :id "));
+app.use(logger(">[:date[iso] RES]> Status = :status, Type = :content-type "));
 
 //----------------------------------------------------------------------------------------------------------------------------------------------
 //*********************************************************** Configure App Routes *************************************************************
 //----------------------------------------------------------------------------------------------------------------------------------------------
 
 // @desc Configuring Access to Project by Code from any Origin
-app.use(function (req, res, next) {
+app.use((req, res, next) =>
+{
     // console.log('request', req.url, req.body, req.method);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
-    if (req.method === 'OPTIONS') {
+    if (req.method === 'OPTIONS')
+    {
         res.end();
-    } else {
+    } else
+    {
         next();
     }
 });
 
-// // @desc Configuring Session Handling
-// app.use((req, res, next) =>{
-//   if (req.session.admin) next();
-//   else res.redirect('api/user/login');
-// });
-
 // @desc Configuring Flash Messages
-app.use(function (req, res, next) {
+app.use(function (req, res, next)
+{
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
@@ -98,8 +99,30 @@ app.use(function (req, res, next) {
 
 console.log('>[WEBAPP:089:027]>', path.join(__dirname, 'client', config.keys.clientPath));
 app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
+// // @desc Configuring Session Handling
+// app.use((req, res, next) =>{
+//   if (req.session.admin) next();
+//   else res.redirect('api/login');
+// });
 
 app.use('/', require("./Routes"));
+
+// Handle 404
+app.use(function (request, response, next)
+{
+    response.status(404);
+    response.sendFile(path.join(__dirname, 'views', '404.ejs'));
+});
+
+// Unhandled errors (500)
+app.use(function (err, request, response, next)
+{
+    console.error('An application error has occurred:');
+    console.error(err);
+    console.error(err.stack);
+    response.status(500);
+    response.sendFile(path.join(__dirname, 'views', '500.ejs'));
+});
 
 console.log(`>[WEBAPP:092:026]> ...WebApp Created`);
 module.exports = app;

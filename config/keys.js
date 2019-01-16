@@ -22,5 +22,8 @@ module.exports = {
   port: port,
   accountSid: accountSid,
   authToken: authToken,
-  twilioNumber: twilioNumber
+  twilioNumber: twilioNumber,
+  dev: dev,
+  prod: prod,
+  test: test
 };
