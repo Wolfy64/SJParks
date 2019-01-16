@@ -4,6 +4,7 @@
   "description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
   "main": "server.js",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cloudinary": "^1.13.2",
     "dotenv": "^6.0.0",
     "dotenv-safe": "^6.0.0",
