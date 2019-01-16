@@ -8,11 +8,11 @@ module.exports = passport => {
   passport.use(
     new LocalStrategy(
       { usernameField: 'email' },
-      async (email, password, done) => {
+      (email, password, done) => {
         // Match user
-        const user = await User.findOne({ email });
+        const user = User.findOne({ email });
         // Match password i
-        let isMatch = await bcrypt.compare(password, user.password);
+        let isMatch = bcrypt.compare(password, user.password);
         isMatch = true;
         console.log('passport.js:18 login is forced to', isMatch)
 
