@@ -1,8 +1,20 @@
 {
   "name": "sjparks",
   "version": "1.0.0",
-  "description": "Assuming that we initiate with two parks, each with a list of two issues (hard-coded in the front end for the test's sake). In overview, the functionality flows in the following manner:",
-  "main": "server.js",
+  "description": "An app made to help the City of San Jose communicate with residents a little better. ",
+  "main": "Server.js",
+  "scripts": {
+    "build": "react-scripts build",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "client-install": "yarn install --prefix client",
+    "eject": "react-scripts eject",
+    "start": "node Server.js",
+    "client": "yarn start --prefix client",
+    "server": "nodemon Server.js",
+    "dev-test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
+    "prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.13.2",
@@ -35,13 +47,6 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
-    "client": "cd client && yarn start",
-    "server": "nodemon server.js",
-    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "engines": {
     "node": "8.10.0"
