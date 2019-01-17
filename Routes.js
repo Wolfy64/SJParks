@@ -1,7 +1,8 @@
 
+
 const express = require('express');
 const router = express.Router();
-const {api} = require('./controllers');
+const {api, view} = require('./controllers');
 const config = require("./config");
 const {
   ensureAuthenticated
@@ -9,20 +10,20 @@ const {
 
 console.log(`>[ROUTES:010:030]> Configuring Routes...`);
 
-// @route /register
-router.get('/register', (req, res) => res.render('register')); // api.users.register
+// @route /api/users/register()
+router.get('/api/users/register', (req, res) => res.render('register')); // api.users.register
 
-// @route /login
-router.post('/login', api.users.login);
+// @route /api/login
+router.post('/api/login', api.users.login);
 
 // @route /welcome
-router.get('/welcome', (req, res) => res.render('welcome'));
+router.get('/welcome', view.dashboard.sendMessages);
 
-// @route /logout
-router.post('/logout', api.users.logout)
+// @route /api/users/logout
+router.post('/api/logout', ensureAuthenticated, api.users.logout)
 
-// @route /dashboard
-router.get('/admin/:userID/updates', ensureAuthenticated, (req, res) => res.render('adminDashboard', {
+// @route /api/user/:userId/dashboard
+router.get('/api/user/:userID/', ensureAuthenticated, (req, res) => res.render('adminDashboard', {
   user: req.user
 }));
 

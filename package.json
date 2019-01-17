@@ -5,14 +5,14 @@
   "main": "Server.js",
   "scripts": {
     "build": "react-scripts build",
-    "client": "cd client && yarn start",
     "client-install": "yarn install --prefix client",
-    "dev": "concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
-    "dev-test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "eject": "react-scripts eject",
-    "prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
-    "server": "NODE_ENV=development nodemon Server.js",
-    "start": "node Server.js"
+    "start": "node Server.js",
+    "client": "yarn start --prefix client",
+    "server": "nodemon Server.js",
+    "dev-test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn start\" \"yarn client\"",
+    "prod": "NODE_ENV=production concurrently --kill-others-on-fail \"yarn start\" \"yarn client\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
