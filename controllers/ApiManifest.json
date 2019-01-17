@@ -1,44 +1,61 @@
 ﻿{
 	"name": "RouterTemplate",
-	"version": 2.0.1
+	"version": "2.0.1",
 	"legend": {
-		"route": "/api",
-		"method": "GET",
+		"route": "/api/Model || /views/Page",
+		"method": "GET || POST || PUT || DELETE",
 		"desc": "String",
-		"params": [{}],
-		"function": "api.AwesomeController.",
-		"rType": {type: "REDIRECT"}
+		"params": {},
+		"function": "api.AwesomeController.coolFunction",
+		"response": {
+			"type": "JSON || HMTL",
+			"genMethod": "SERVER || REDIRECT || RENDER"
+		}
 	},
-	"routes": [{
-			"routeId" : "",
+	"routes": [
+		{
 			"route": "/api/parks",
 			"method": "GET",
 			"desc": "Fetch the list of all parks in JSON format",
-			"params": [{}],
+			"params": {},
 			"function": "api.parks.index",
-			"rType": {
-				"type": "JSON"
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
 			}
 		},
-
 		{
 			"route": "/api/subscribe",
 			"method": "POST",
 			"desc": "Subscribe a phone to a list of parks.",
 			"params": {
 				"phone": "string",
-				"addParks": ["park1._id", "park2._id", "..."],
+				"addParks": [
+					"park1._id",
+					"park2._id",
+					"..."
+				],
 				"subscribed": true
 			},
 			"function": "api.subscriptionLog.subscribe",
 			"response": {
 				"type": "JSON",
-				"Method": "SERVER"
+				"genMethod": "SERVER"
 			}
 		},
-
 		{
-			"route": "/login",
+			"route": "views/login",
+			"method": "GET",
+			"desc": "This will redirect the site to the login page.",
+			"params": {},
+			"functions": "views.login",
+			"response": {
+				"type": "HTML",
+				"genMethod": "REDIRECT"
+			}
+		},
+		{
+			"route": "admin/login",
 			"method": "POST",
 			"desc": "This will authenticate a user provided userName/phone/email and password.",
 			"params": {
@@ -47,16 +64,27 @@
 			},
 			"functions": "api.user.login",
 			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/logout",
+			"method": "GET",
+			"desc": "This will logout current user (i.e. destroy session) and redirect to login page",
+			"params": {},
+			"functions": "api.user.logout",
+			"response": {
 				"type": "HTML",
 				"genMethod": "REDIRECT"
 			}
 		},
 		{
-			"route": "api/admin/:adminId",
+			"route": "/views/admin/adminId",
 			"method": "GET",
 			"desc": "Redirects @adminId to main admin page. Admin credentials required.",
 			"params": {},
-			"function": "api.users.adminPage",
+			"function": "views.dashboard",
 			"response": {
 				"type": "HMTL",
 				"genMethod": "REDIRECT"
@@ -69,8 +97,8 @@
 			"params": {},
 			"function": "api.users.getAllMessages",
 			"response": {
-				"type": "HMTL",
-				"genMethod": "REDIRECT"
+				"type": "JSON",
+				"genMethod": "SERVER"
 			}
 		},
 		{
@@ -81,7 +109,7 @@
 			"function": "api.parks.getAllSubscribers",
 			"response": {
 				"type": "JSON",
-				"genMethod": "REDIRECT"
+				"genMethod": "SERVER"
 			}
 		},
 		{
@@ -92,7 +120,7 @@
 			"function": "api.users.getAllparks",
 			"response": {
 				"type": "JSON",
-				"genMethod": "REDIRECT"
+				"genMethod": "SERVER"
 			}
 		},
 		{
@@ -103,52 +131,163 @@
 			"function": "api.parks.getAllSubscribers",
 			"response": {
 				"type": "JSON",
-				"genMethod": "REDIRECT"
+				"genMethod": "SERVER"
 			}
 		},
-		
-		
-}
-GET for subscriptionLogs 
-'/admin/updates/new' => NewUpdate
-GET for parks
-POST for sending message through Twilio
-admin/parks' => ParksPage
-GET for parks POST for new park { newName: 'string', newCode: 'string'}
-DELETE for park {ParkId: 'string'}
-'admin/users' => UsersPage
-GET for usersDB
-POST for a new user { name, userName, email, password, access: 'updatesOnly' || 'premium'}
-
-DELETE based on {
-	username: 'string'
-}
-
-'/logout' => Logout
-
-GET to kill the session and redirect to Login Page 'admin/profile' => ProfilePage
-
-GET
-for user 's information {full_name, email, phone, imgURL}
-
-POST
-for image upload {
-	img: {
-		Object
-	}
-} - store it to public folder
-
-PUT
-for changing {
-	full_name,
-	email,
-	phone
-}
-
-POST
-for checking user 's password
-
-PUT
-for changing {
-	psw
+		{
+			"route": "/api/messages",
+			"method": "POST",
+			"desc": "Creates a new message object.",
+			"params": {},
+			"function": "api.messages.create",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/api/messages/:messageId",
+			"method": "POST",
+			"desc": "Sends a message object to user through twilio.",
+			"params": {},
+			"function": "api.messages.send",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "view/admin/parks",
+			"method": "GET",
+			"desc": "Redirect ",
+			"params": {},
+			"function": "views.dashboard",
+			"response": {
+				"type": "HTML",
+				"genMethod": "RENDER"
+			}
+		},
+		{
+			"route": "api/parks",
+			"method": "POST",
+			"desc": "Create a new park ",
+			"params": {
+				"newName": {
+					"type": "string"
+				},
+				"newCode": {
+					"type": "string"
+				}
+			},
+			"function": "api.parks.create",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "api/parks/:parkId",
+			"method": "DELETE",
+			"desc": "Delete @parkId from DB ",
+			"params": {},
+			"function": "api.parks.destroy",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "api/parks/:parkId",
+			"method": "DELETE",
+			"desc": "Create a new park ",
+			"params": {},
+			"function": "api.parks.destroy",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users",
+			"method": "GET",
+			"desc": "Retrive the index of all users ",
+			"params": {},
+			"function": "api.users.index",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users",
+			"method": "POST",
+			"desc": "Create a new user ",
+			"params": {
+				"name": "Berhard Riemann",
+				"userName": "TheThunderGod",
+				"phone": "123-456-7890",
+				"email": "ThugLyfe@azur.com",
+				"password": "SomeSecurePassword",
+				"access": "phoneOnly || PREMIUM || ADMIN"
+			},
+			"function": "api.users.register",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users/:userName",
+			"method": "DELETE",
+			"desc": "Delete a user by userName ",
+			"params": {
+				"userName": "AReallyCoolUserName"
+			},
+			"function": "api.users.destroy",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users/:userId",
+			"method": "GET",
+			"desc": " REad a @userId's information ",
+			"params": {},
+			"function": "api.users.read",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users/:userId/imageUplaod",
+			"method": "POST",
+			"desc": " Upload a @userId's profile image and stores the picture in '_dirname/client/public' directory",
+			"params": {
+				"type": "imageObject.url"
+			},
+			"function": "api.users.uploadPhoto",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		},
+		{
+			"route": "/admin/users/:userId/contact",
+			"method": "PUT",
+			"desc": " Update a @userId's contact information & password",
+			"params": {
+				"name": "Berhard Riemann",
+				"phone": "123-456-7890",
+				"email": "ThugLyfe@azur.com",
+				"password": "SomeSecurePassword"
+			},
+			"function": "api.users.update",
+			"response": {
+				"type": "JSON",
+				"genMethod": "SERVER"
+			}
+		}
+	]
 }
