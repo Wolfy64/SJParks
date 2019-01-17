@@ -15,7 +15,7 @@ console.log(`>[WEBAPP:012:030]> Creating WebApp...`);
 //********************************************************* Configure App Middleware ***********************************************************
 //----------------------------------------------------------------------------------------------------------------------------------------------
 
-// @desc Configuring View Engine
+// @desc Configures View Engine
 if (config.keys.test)
 {
     const expressEjsLayouts = require('express-ejs-layouts');
@@ -25,17 +25,17 @@ if (config.keys.test)
 } else
 {
     app.set('view engine', 'pug');
-    app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
+    app.use(express.static(path.join(__dirname, config.keys.clientPath)));
 }
 
-// @desc Configuring URL Parser
+// @desc Configures URL Parser
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(formData.parse());
 
 
-// @desc Configuring Express Session
-app.use(session({
+// @desc Configures Express Session
+const sess = {
     secret: config.keys.secret,
     resave: false,
     saveUninitialized: true,
@@ -45,7 +45,13 @@ app.use(session({
         httpOnly: true,
         secure: false
     }
-}));
+}
+if (app.get('env') === 'production'){
+    app.set('trust proxy', 1); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+}
+
+app.use(session(sess));
 
 // @desc Configuring Passport
 config.pass(passport);
