@@ -9,6 +9,7 @@ const session = require('express-session');
 const express = require('express');
 const app = express();
 const config = require('./config/');
+const formData = require('express-form-data');
 
 console.log(`>[WEBAPP:012:030]> Creating WebApp...`);
 //----------------------------------------------------------------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ app.use(express.urlencoded({
 
 // @desc Configuring JSON Parser
 app.use(express.json());
+app.use(formData.parse());
 
 // @desc Configuring Express Session
 app.use(session({
