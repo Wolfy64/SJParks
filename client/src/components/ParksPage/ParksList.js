@@ -2,6 +2,17 @@ import React, { Component } from 'react'
 import Button from '../UI/Generic/Button'
 
 export default class pList extends Component {
+
+  // Parks List
+  getParksList = req => {
+    fetch('api/park', {
+      method: 'POST',
+      body: newName
+    })
+    .then(req => req.json())
+    
+  }
+
   render() {
     return (
       <div className='todoListMain'>
