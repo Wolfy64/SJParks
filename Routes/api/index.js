@@ -1,5 +1,5 @@
 module.exports = {
-  index:require("./apiController"),
+  index: require("./apiController"),
   users: require("./userController"),
   parks: require("./parkController"),
   messages: require("./messageController"),

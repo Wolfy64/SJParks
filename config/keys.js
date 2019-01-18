@@ -1,21 +1,16 @@
 require('dotenv-safe').config({
-  allowEmptyValues: true
+  allowEmptyValues: process.env.NODE_ENV != 'production'
 });
 require('dotenv-safe').load();
+let payLoad = {};
 
-const dev = process.env.NODE_ENV === 'development';
-const prod = process.env.NODE_ENV === 'production';
-const test = process.env.NODE_ENV === 'test';
+payLoad.dev = process.env.NODE_ENV === 'development';
+payLoad.prod = process.env.NODE_ENV === 'production';
+payLoad.test = process.env.NODE_ENV === 'test';
+payLoad.path = payLoad.prod ? 'client/build' : payLoad.dev ? 'client/public' : 'views';
+payLoad.url = payLoad.prod ? process.env.MONGODB_URI : payLoad.dev ? process.env.MLAB_URI : process.env.TEST_MONGO_URL;
+payLoad.secret = process.env.APP_SECRET || 'Sick as the Rhyme, of that kid thats behind';
+payLoad.port = payLoad.prod ? process.env.PORT : process.env.SERVER_PORT;
 
-module.exports = {
-  dev: dev,
-  prod: prod,
-  test: test,
-  clientPath: prod ? 'client/build' : dev ? 'client/public' : 'views',
-  mongoUrl: prod ? process.env.Mongo_URI : dev ? process.env.MLAB_URI : process.env.TEST_MONGO_URI,
-  port:  prod ? process.env.PORT : process.env.SERVER_PORT,
-  secret: process.env.APP_SECRET,
-  accountSid: process.env.TWILIO_ACCOUNT_SID,
-  authToken: process.env.TWILIO_AUTH_TOKEN,
-  twilioNumber: process.env.TWILIO_NUMBER
-};
+
+module.exports = payLoad;

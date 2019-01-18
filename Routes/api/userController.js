@@ -2,41 +2,38 @@ const db = require("../../models");
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const cloudinary = require('cloudinary');
+const config = require('../../config')
 
 // @route GET api/user
 // @desc Get all users
 // @access Public
-function index(req, res) {
-	console.log(`>[USER:8:23]> Retriving user index ...`);
+function index(req, res)
+{
 	db.User.find()
 		.sort({
 			username: 1,
-			phone: 1,
-			email: 1
+			phone: 1
 		})
-		.then(users => {
+		.then(users =>
+		{
 			res.status(200).json({
 				success: true,
 				users: users
 			});
-			console.log(`>[USER:20:30]> ...A user index with ${users.length} many user was found`);
 		})
-		.catch(err => res.status(404).json({
-			success: false,
-			error: err.errmsg
-		}));
+		.catch(err => console.log(err));
 }
 
 // @route GET api/user/:userId
 // @desc Read a user by userId
 // @access Public
-function read(req, res) {}
+function read(req, res) { }
 
 // @route POST api/user/
 // @desc Create An New user
 // @access Public
-function create(req, res) {
-	console.log(`>[USER:37:26]> Creating  user with 'phone = ${req.body.phone}' ...`);
+function create(req, res)
+{
 	const {
 		isAdmin,
 		userName,
@@ -51,35 +48,41 @@ function create(req, res) {
 
 	let errors = [];
 
-	if (!userName || !firstName || !lastName || !phone || !email || !password) {
+	if (!userName || !firstName || !lastName || !phone || !email || !password)
+	{
 		errors.push({
 			msg: 'Please enter all fields'
 		});
 	}
 
-	if (password.length < 8) {
+	if (password.length < 8)
+	{
 		errors.push({
 			msg: 'Password must be at least 8 characters'
 		});
 	}
 
-	if (errors.length > 0) {
+	if (errors.length > 0)
+	{
 		res.render('register', {
 			errors,
 			name,
 			email,
 			password
 		});
-	} else {
+	} else
+	{
 		let user = null;
 		db.User.findOne({
 			userName: userName,
 			phone: phone,
 			email: email
-		}).then(userFound => {
+		}).then(userFound =>
+		{
 			if (userFound) user = userFound;
 		});
-		if (user != null) {
+		if (user != null)
+		{
 			errors.push({
 				msg: `Derp! User already exists!`,
 				user: user
@@ -88,7 +91,8 @@ function create(req, res) {
 				errors,
 				user
 			});
-		} else {
+		} else
+		{
 
 			const newUser = new db.User({
 				isAdmin: isAdmin,
@@ -99,20 +103,25 @@ function create(req, res) {
 				email: email
 			});
 
-			bcrypt.genSalt(16, (err, salt) => {
+			bcrypt.genSalt(16, (err, salt) =>
+			{
 				if (err) throw err;
 				newUser.salt = salt;
-				bcrypt.hash(password, newUser.salt, (err, hash) => {
+				bcrypt.hash(password, newUser.salt, (err, hash) =>
+				{
 					if (err) throw err;
 					newUser.password = hash;
 
 					db.Park.findOne({
-							code: addPark
-						})
-						.then(park => {
-							if (park) {
+						code: addPark
+					})
+						.then(park =>
+						{
+							if (park)
+							{
 								newUser.parks.push(park._id);
-							} else {
+							} else
+							{
 								const newPark = new db.Park({
 									code: addPark
 								});
@@ -126,12 +135,15 @@ function create(req, res) {
 						.catch(err => console.log(err))
 
 					db.Message.findOne({
-							message: addMessage
-						})
-						.exec((err, message) => {
-							if (message) {
+						message: addMessage
+					})
+						.exec((err, message) =>
+						{
+							if (message)
+							{
 								newUser.messages.push(message._id);
-							} else if (err || !message) {
+							} else if (err || !message)
+							{
 								const newMessage = new db.Message({
 									author: newUser._id,
 									message: addMessage
@@ -142,7 +154,8 @@ function create(req, res) {
 						});
 
 					newUser.save()
-						.then(user => {
+						.then(user =>
+						{
 							req.flash(
 								'success_msg',
 								'You are now registered and can log in'
@@ -152,9 +165,9 @@ function create(req, res) {
 								NewUser: user._id
 							});
 							res.redirect('/api/users/login');
-							console.log(`>[USER:88:32]> ...User with '_id = ${user._id}' has been created `);
 						})
-						.catch(err => {
+						.catch(err =>
+						{
 							res.status(420).send({
 								Success: false,
 								Error: err.message
@@ -170,7 +183,8 @@ function create(req, res) {
 // @route POST api/user/login
 // @desc Login an existing user
 // @access Public
-function login(req, res, next) {
+function login(req, res, next)
+{
 
 	passport.authenticate('local', {
 		successRedirect: '/admin/:user/updates',
@@ -185,39 +199,19 @@ function login(req, res, next) {
 // @desc Logout session user
 // @access Public
 
-function logout(req, res) {
+function logout(req, res)
+{
 	req.logout();
 	req.flash('success_msg', 'You are logged out');
 	res.redirect('/login');
 	if (process.env.NODE_ENV === "test") res.render('login');
 };
 
-//------------------------------------------------------------------------
-//***************************** IMAGE UPLOAD ****************************
-//------------------------------------------------------------------------
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET
-  })
-
-const imageUpload = (req, res) => {
-    const values = Object.values(req.files)
-    const promises = values.map(image => cloudinary.uploader.upload(image.path))
-
-    Promise
-        .all(promises)
-        .then(results => res.json(results))
-        .catch(err => console.log(err));
-
-    res.status(200);
-}
-
 // @route PUT api/user/update/:id
 // @desc Update an existing user by id
 // @access Public
-function update(req, res) {
-	console.log(`>[USER:106:27]> Updating user with '_id = ${req.params.id}'...`);
+function update(req, res)
+{
 	const {
 		newPassword,
 		newIsAdmin,
@@ -252,22 +246,27 @@ function update(req, res) {
 	}
 
 	db.User.findByIdAndUpdate(req.params.id, updates, options)
-		.then(newUser => {
-
-			bcrypt.genSalt(16, (err, salt) => {
+		.then(newUser =>
+		{
+			bcrypt.genSalt(16, (err, salt) =>
+			{
 				if (err) throw err;
 				newUser.salt = salt;
-				bcrypt.hash(newPassword, newUser.salt, (err, hash) => {
+				bcrypt.hash(newPassword, newUser.salt, (err, hash) =>
+				{
 					if (err) throw err;
 					newUser.password = hash;
 
 					db.Park.findOne({
-							name: addPark
-						})
-						.exec((err, park) => {
-							if (park) {
+						name: addPark
+					})
+						.exec((err, park) =>
+						{
+							if (park)
+							{
 								newUser.parks.push(park._id);
-							} else if (err || !park) {
+							} else if (err || !park)
+							{
 								const newPark = new db.Park({
 									name: addPark
 								});
@@ -278,12 +277,15 @@ function update(req, res) {
 						});
 
 					db.Message.findOne({
-							message: addMessage
-						})
-						.exec((err, message) => {
-							if (message) {
+						message: addMessage
+					})
+						.exec((err, message) =>
+						{
+							if (message)
+							{
 								newUser.messages.push(message._id);
-							} else if (err || !message) {
+							} else if (err || !message)
+							{
 								const newMessage = new db.Message({
 									author: newUser._id,
 									message: addMessage
@@ -298,56 +300,46 @@ function update(req, res) {
 							Success: true,
 							NewUser: newuser
 						}))
-						.catch(err => res.status(420).send({
-							Success: false,
-							Error: `Error saving updated user. Error thrown: ${err.message}.`
-						}));
+						.catch(err => console.log(err));
 				});
 			});
 
 		}) // end findby id and update
-		.catch(err => res.status(457).json({
-			succes: false,
-			error: `Error updating user. Error thrown: ${err.message}`
-		}));
-
-	console.log(`>[USER:190:27]> User with '_id = ${req.params.id} has been updated'`);
+		.catch(err => console.log(err));
 }
 
 // @route DELETE api/user/:id
 // @desc Delete An user by id
 // @access Public
-const destroy = (req, res) => {
-	console.log(`>[USER:197:27]> Destroying user with '_id = ${req.params.id}'...`);
+const destroy = (req, res) =>
+{
 	db.User.findByIdAndDelete({
-			_id: req.params.id
-		})
-		.then(user => {
+		_id: req.params.id
+	})
+		.then(user =>
+		{
 			//
-			user.parks.forEach(park => {
-				db.Park.findById(park).then(doc => {
+			user.parks.forEach(park =>
+			{
+				db.Park.findById(park).then(doc =>
+				{
 					doc.users.pop(user._id);
 					doc.save();
-				}).catch(err => {
-					res.status(463).json({
-						success: false,
-						error: err.message
-					})
-				})
+				}).catch(err => console.log(err))
 			});
 
-			user.messagess.forEach(mess => {
+			user.messagess.forEach(mess =>
+			{
 				db.Message.find({
 					author: mess.author
-				}).then(docs => {
-					docs.forEach(doc => {
+				}).then(docs =>
+				{
+					docs.forEach(doc =>
+					{
 						doc.users.pop(user._id);
 						doc.save();
 					})
-				}).catch(err => res.status(467).json({
-					success: false,
-					error: `Error removing "user: ${user._id}" from "updates". Error Thrown: ${err.message}`
-				}))
+				}).catch(err => console.log(err))
 			});
 
 			user.remove().then(removeduser => res.status(200).json({
@@ -355,20 +347,134 @@ const destroy = (req, res) => {
 				deleted: removeduser
 			}))
 		})
-		.catch(err => res.status(404).json({
-			success: false,
-			error: err.message
-		}));
-	console.log(`>[USER:238:27]> User with '_id = ${req.params.id} has been destroyed...'`);
+		.catch(err => console.log(err));
 }
 
-module.exports = {
-	index: index,
-	read: read,
-	register: create,
-	login: login,
-	logout: logout,
-	update: update,
-	destroy: destroy,
-	imageUpload: imageUpload
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const imageUpload = (req, res) =>
+{
+	const values = Object.values(req.files)
+	const promises = values.map(image => cloudinary.uploader.upload(image.path))
+
+	Promise
+		.all(promises)
+		.then(results => res.json(results))
+		.catch(err => console.log(err));
+
+	res.status(200);
 }
+
+/* // [WIP] configuring user Authentication
+
+//POST new user route (optional, everyone has access)
+router.post('/', auth.optional, (req, res, next) =>
+{
+	const { body: { user } } = req;
+
+	if (!user.email)
+	{
+		return res.status(422).json({
+			errors: {
+				email: 'is required',
+			},
+		});
+	}
+
+	if (!user.password)
+	{
+		return res.status(422).json({
+			errors: {
+				password: 'is required',
+			},
+		});
+	}
+
+	const finalUser = new Users(user);
+
+	finalUser.setPassword(user.password);
+
+	return finalUser.save()
+		.then(() => res.json({ user: finalUser.toAuthJSON() }));
+});
+
+//POST login route (optional, everyone has access)
+router.post('/login', auth.optional, (req, res, next) =>
+{
+	const { body: { user } } = req;
+
+	if (!user.email)
+	{
+		return res.status(422).json({
+			errors: {
+				email: 'is required',
+			},
+		});
+	}
+
+	if (!user.password)
+	{
+		return res.status(422).json({
+			errors: {
+				password: 'is required',
+			},
+		});
+	}
+
+	return passport.authenticate('local', { session: false }, (err, passportUser, info) =>
+	{
+		if (err)
+		{
+			return next(err);
+		}
+
+		if (passportUser)
+		{
+			const user = passportUser;
+			user.token = passportUser.generateJWT();
+
+			return res.json({ user: user.toAuthJSON() });
+		}
+
+		return status(400).info;
+	})(req, res, next);
+});
+*/
+const express = require('express');
+const router = express.Router();
+
+// @route /api/user
+router.route('/api/users')
+	.get(index)
+	.post(create);
+
+router.route('/admin/image-upload')
+	.post(imageUpload);
+
+// @route /api/user/_id
+router.route('/api/users/:userId')
+	.get(read)
+	.put(update)
+	.delete(destroy);
+
+//  // @route /api/users/_id/park
+// router.route('/api/users/:userId/park')
+//   .get(readAllParks);
+
+// // @route /api/users/_id/message
+// router.route('/api/users/:userId/message')
+//   .get(readAllMessages);
+
+// // @route /api/users/_id/park/_id
+// router.route('/api/users/:userId/park/:parkId')
+//   .get(findPark);
+
+// // @route /api/user/_id/message/_id
+// router.route('/api/users/:userId/message/:messageId')
+//   .get(findMessage);
+
+module.exports = router;
