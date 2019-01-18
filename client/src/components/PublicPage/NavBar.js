@@ -2,16 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Nav = styled.nav`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 1.2rem;
   color: ${props => props.theme.colors.light};
   background-color: ${props => props.theme.colors.primary};
-  display: flex;
-  justify-content: space-between;
-  padding-top: 1.2rem;
 
   ul {
     display: flex;
     align-items: center;
     margin-right: 2rem;
+    justify-self: right;
   }
 
   li {
@@ -30,6 +31,16 @@ const Nav = styled.nav`
   .logo {
     font-size: 1.5rem;
     margin-left: 1rem;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    grid-template-columns: inherit;
+    justify-content: center;
+    margin-bottom: 2rem;
+
+    ul {
+      margin: 1rem;
+    }
   }
 `;
 

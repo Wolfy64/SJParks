@@ -17,6 +17,6 @@ export default {
     tablet: '768px',
     laptop: '1024px',
     laptopL: '1440px',
-    hd4K: '2560px'
+    hd: '1920px'
   }
 };

@@ -1,8 +1,37 @@
 # Text Notification Platform
 
-## Webapp Structure
-### Public
+## Set up
+
+Add `.env` in root folder with your personnal and private data
+
+```shell
+APP_SECRET=
+MLAB_URI=
+MONGODB_URI=
+TEST_MONGO_URL=
+SERVER_PORT=
+CLIENT_PORT=
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_NUMBER=
+NODE_ENV=
 ```
+
+Install package with `npm install` on both side Frontend `/client` and Backend `/`.
+
+## Run App
+
+On root folder: `npm run dev`
+
+Client run on http://localhost:3000
+
+Server run on http://localhost:5000
+
+## Webapp Structure
+
+### Public
+
+```shell
 |-- About
 |-- Subscribe
     |-- SelectPark
@@ -17,7 +46,8 @@
 ```
 
 ### Admin
-```
+
+```shell
 |-- Topnav
 |-- Profile
     |-- UploadPicture
@@ -46,53 +76,58 @@
 ```
 
 ## Subscriber User Flow
+
 ### Subscription through Text
+
 User texts the parkID to our Twilio number, and we check if he's the new member for that park.
-* Ex: Texting "ROSE" subscribes the user to Municipal Rose Garden notification list.
+
+- Ex: Texting "ROSE" subscribes the user to Municipal Rose Garden notification list.
 
 ### Subscription through the Website
 
 User selects the parks from the Public page and inputs the phone number to subscribe to Text Notifications.
 
-<<<<<<< HEAD
 ### Keywords
 
 userResident gets an automatic response for any text they send to our Twilio number. Special keys are "STOP", "unsubscribe", "HELP", "START", and subscription keys created by the Admin.
 
-##Admin User Flow
+## Admin User Flow
 
-=======
 ### Keywords
+
 userResident gets an automatic response for any text they send to our Twilio number.
 Special keys are:
-* "STOP"
-* "unsubscribe"
-* "HELP"
-* "START"
-* And subscription keys created by the Admin.
+
+- "STOP"
+- "unsubscribe"
+- "HELP"
+- "START"
+- And subscription keys created by the Admin.
 
 ## Admin User Flow
->>>>>>> fe214ad9e2a573d4198bb58a5c9e70accc2d921d
+
 ### Updates
 
 Admin selects the list of Subscribers and sends the message.
 
 ### Parks
-<<<<<<< HEAD
 
 Premium Access Admin is able to view all lists in the system, add new lists, and delete existing lists.
 
 ### Users
 
 Premium Access Admin is able to view all users in the system, add new users, and delete existing users.
-=======
+
 Premium Access Admin is able to view:
-* All lists in the system
-* Add new lists
-* Delete existing lists
+
+- All lists in the system
+- Add new lists
+- Delete existing lists
+
 ### Users
+
 Premium Access Admin is able to view:
-* All users in the system
-* Add new users
-* Delete existing users
->>>>>>> fe214ad9e2a573d4198bb58a5c9e70accc2d921d
+
+- All users in the system
+- Add new users
+- Delete existing users
