@@ -8,9 +8,24 @@ import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
 
+const Container = styled.div`
+  h2 {
+    display: none;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    h2 {
+      display: block;
+      font-size: 1.5rem;
+      padding: 1rem;
+      margin: 1rem 0 -1rem 0;
+    }
+  }
+`;
+
 const Form = styled.form`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   justify-items: center;
   background-color: ${props => props.theme.colors.lightbg};
   height: 40vh;
@@ -18,9 +33,14 @@ const Form = styled.form`
   .phoneField {
     width: 300px;
     align-self: center;
+    padding-bottom: 1rem;
   }
   .searchContainer {
     background-color: white;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    height: auto;
   }
 `;
 
@@ -101,33 +121,36 @@ class Subscribe extends React.Component {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
     return (
-      <Form id='subscribe' onSubmit={this.handleSubmit}>
-        <SearchPark
-          parks={this.state.parks}
-          addPark={park => this.handleAddPark(park)}
-          addAllParks={this.handleAddAllPark}
-        />
-
-        <SelectedPark
-          parks={this.state.parkSelected}
-          deletePark={park => this.handleDeletePark(park)}
-          deleteAllParks={this.handleDeleteAddAllPark}
-        />
-
-        <div className='phoneField'>
-          <Input
-            label='Phone'
-            placeholder='123-456-7890'
-            name='phone'
-            type='tel'
-            onChange={this.handleChange}
-            value={this.state.phone}
-            error={hasErrors ? formErrors.phone : null}
+      <Container>
+        <h2>Subscribe</h2>
+        <Form id='subscribe' onSubmit={this.handleSubmit}>
+          <SearchPark
+            parks={this.state.parks}
+            addPark={park => this.handleAddPark(park)}
+            addAllParks={this.handleAddAllPark}
           />
 
-          <Button name='I want to be informed!' />
-        </div>
-      </Form>
+          <SelectedPark
+            parks={this.state.parkSelected}
+            deletePark={park => this.handleDeletePark(park)}
+            deleteAllParks={this.handleDeleteAddAllPark}
+          />
+
+          <div className='phoneField'>
+            <Input
+              label='Phone'
+              placeholder='123-456-7890'
+              name='phone'
+              type='tel'
+              onChange={this.handleChange}
+              value={this.state.phone}
+              error={hasErrors ? formErrors.phone : null}
+            />
+
+            <Button name='I want to be informed!' />
+          </div>
+        </Form>
+      </Container>
     );
   }
 }

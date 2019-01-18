@@ -7,6 +7,10 @@ const Container = styled.div`
   width: 300px;
   padding-top: 5rem;
   overflow: auto;
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    padding-top: 1rem;
+  }
 `;
 
 const SelectedPark = props => {
