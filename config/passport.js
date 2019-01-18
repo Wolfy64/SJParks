@@ -1,7 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
+const db = require('../models');
 const config = require('./keys');
 
 module.exports = passport => {
@@ -10,7 +10,7 @@ module.exports = passport => {
       { usernameField: 'email' },
       (email, password, done) => {
         // Match user
-        const user = User.findOne({ email });
+        const user = db.User.findOne({ email });
         // Match password i
         let isMatch = bcrypt.compare(password, user.password);
         isMatch = true;
@@ -35,7 +35,7 @@ module.exports = passport => {
   });
 
   passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
+    db.User.findById(id, (err, user) => {
       done(err, user);
     });
   });
