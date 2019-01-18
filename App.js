@@ -1,41 +1,40 @@
-require('dotenv-safe').load();
+console.log(`>      Creating WebApp...`);
+
 const path = require('path');
-const logger = require('morgan');
-const flash = require('connect-flash');
-const passport = require('passport');
-const addRequestId = require('express-request-id')();
-const session = require('express-session');
 const express = require('express');
-const app = express();
+const session = require('express-session');
+const addRequestId = require('express-request-id')();
+const cors = require('cors');
+const errorHandler = require('errorhandler');
+const logger = require('morgan');
 const config = require('./config/');
 const formData = require('express-form-data');
+const db = require('./models');
+const newLocal = config.keys.prod || config.keys.dev;
+const app = express();
 
-console.log(`>[WEBAPP:012:030]> Creating WebApp...`);
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//********************************************************* Configure App Middleware ***********************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
+app.use(cors());
+app.use(addRequestId);
+logger.token('id', (req) => req.sessionID.split('-')[0]);
+app.use(logger(newLocal ? 'dev' : 'combined', {
+    skip: (req, res) =>
+    {
+        return res.statusCode < 400
+    }
+}));
+app.use(logger(">[:date[iso] REQ]> Method = :method, Url = :url , SessionID = :id "));
+app.use(logger(">[:date[iso] RES]> Status = :status, Type = :content-type "));
 
-// @desc Configures View Engine
-if (config.keys.test)
-{
-    const expressEjsLayouts = require('express-ejs-layouts');
-    app.use(expressEjsLayouts);
-    app.set('view engine', 'ejs');
-    app.use(express.static(path.join(__dirname, 'views')));
-} else
-{
-    app.set('view engine', 'pug');
-    app.use(express.static(path.join(__dirname, config.keys.clientPath)));
-}
-
-// @desc Configures URL Parser
-app.use(express.urlencoded({ extended: false }));
+//
+if (newLocal) app.use(require('express-ejs-layouts'));
+app.set('view engine', newLocal ? 'pug' : 'ejs');
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(formData.parse());
+app.use(express.static(path.join(__dirname, config.keys.path)));
 
-
-// @desc Configures Express Session
-const sess = {
+// Configure Express Session
+const sessOpts = {
     secret: config.keys.secret,
     resave: false,
     saveUninitialized: true,
@@ -46,41 +45,16 @@ const sess = {
         secure: false
     }
 }
-if (app.get('env') === 'production'){
+if (config.keys.prod)
+{
     app.set('trust proxy', 1); // trust first proxy
-    sess.cookie.secure = true; // serve secure cookies
+    sessOpts.cookie.secure = true; // serve secure cookies
 }
+app.use(session(sessOpts));
 
-app.use(session(sess));
-
-// @desc Configuring Passport
-config.pass(passport);
-app.use(passport.initialize());
-app.use(passport.session());
-
-// @desc Configuring Express Flash
-app.use(flash());
-
-// @desc Configuring Morgan Logger
-app.use(addRequestId);
-logger.token('id', (req) => req.sessionID.split('-')[0]);
-app.use(logger('combined', {
-    skip: (req, res) =>
-    {
-        return res.statusCode < 400
-    }
-}));
-app.use(logger(">[:date[iso] REQ]> Method = :method, Url = :url , SessionID = :id "));
-app.use(logger(">[:date[iso] RES]> Status = :status, Type = :content-type "));
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//*********************************************************** Configure App Routes *************************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
-
-// @desc Configuring Access to Project by Code from any Origin
 app.use((req, res, next) =>
 {
-    // console.log('request', req.url, req.body, req.method);
+    console.log('request', req.url, req.body, req.method);
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
     if (req.method === 'OPTIONS')
@@ -92,43 +66,57 @@ app.use((req, res, next) =>
     }
 });
 
-// @desc Configuring Flash Messages
-app.use(function (req, res, next)
-{
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-});
+// if (!config.keys.prod) app.use(errorHandler);
 
-// @desc Configuring View Index
-
-console.log('>[WEBAPP:089:027]>', path.join(__dirname, 'client', config.keys.clientPath));
-app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
-// // @desc Configuring Session Handling
-// app.use((req, res, next) =>{
-//   if (req.session.admin) next();
-//   else res.redirect('api/login');
+// Configuring Express Flash
+const flash = require('connect-flash');
+// app.use(flash());
+// app.use(function (req, res, next)
+// {
+//     res.locals.success_msg = req.flash('success_msg');
+//     res.locals.error_msg = req.flash('error_msg');
+//     res.locals.error = req.flash('error');
+//     next();
 // });
 
-app.use('/', require("./Routes"));
 
-// Handle 404
-app.use(function (request, response, next)
+// Configuring Passport
+// const db = require('./models');
+const passport = require('passport');
+config.pass(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use('/', require('./Router'));
+//Error handlers & middlewares
+if (!config.keys.prod)
 {
-    response.status(404);
-    response.sendFile(path.join(__dirname, 'views', '404.ejs'));
+    app.use((err, req, res, next) =>
+    {
+        res.status(err.status || 500);
+
+        res.json({
+            errors: {
+                message: err.message,
+                error: err,
+            },
+        });
+        next();
+    });
+}
+
+app.use((req, res, next) =>
+{
+    res.status(404)
+        .render(path.join(__dirname, 'views', '404.ejs'));
 });
 
-// Unhandled errors (500)
-app.use(function (err, request, response, next)
+app.use((err, req, res, next) =>
 {
-    console.error('An application error has occurred:');
-    console.error(err);
-    console.error(err.stack);
-    response.status(500);
-    response.sendFile(path.join(__dirname, 'views', '500.ejs'));
+    res.status(500)
+        .render(path.join(__dirname, config.keys.path, '500.ejs'));
 });
 
-console.log(`>[WEBAPP:092:026]> ...WebApp Created`);
+console.log(`>      ...WebApp Created`);
+
 module.exports = app;
