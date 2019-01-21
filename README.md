@@ -54,14 +54,6 @@ User texts the parkID to our Twilio number, and we check if he's the new member 
 
 User selects the parks from the Public page and inputs the phone number to subscribe to Text Notifications.
 
-<<<<<<< HEAD
-### Keywords
-
-userResident gets an automatic response for any text they send to our Twilio number. Special keys are "STOP", "unsubscribe", "HELP", "START", and subscription keys created by the Admin.
-
-##Admin User Flow
-
-=======
 ### Keywords
 userResident gets an automatic response for any text they send to our Twilio number.
 Special keys are:
@@ -72,20 +64,11 @@ Special keys are:
 * And subscription keys created by the Admin.
 
 ## Admin User Flow
->>>>>>> fe214ad9e2a573d4198bb58a5c9e70accc2d921d
 ### Updates
 
 Admin selects the list of Subscribers and sends the message.
 
 ### Parks
-<<<<<<< HEAD
-
-Premium Access Admin is able to view all lists in the system, add new lists, and delete existing lists.
-
-### Users
-
-Premium Access Admin is able to view all users in the system, add new users, and delete existing users.
-=======
 Premium Access Admin is able to view:
 * All lists in the system
 * Add new lists
@@ -95,4 +78,3 @@ Premium Access Admin is able to view:
 * All users in the system
 * Add new users
 * Delete existing users
->>>>>>> fe214ad9e2a573d4198bb58a5c9e70accc2d921d

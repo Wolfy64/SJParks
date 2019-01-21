@@ -3,7 +3,7 @@ const db = require('../../models');
 // @route GET api/messageLog/
 // @desc Get all messageLog's
 // @access Public
-function index(req, res){}
+function index(req, res) {}
 
 // @route GET api/messageLog/:messageLogId
 // @desc find a messageLog with '_id = messageLogId'
@@ -25,10 +25,18 @@ function update(req, res) {}
 // @access Public
 function destroy(req, res) {}
 
-module.exports = {
-  index: index,
-  read: read,
-  create: create,
-  update: update,
-  destroy: destroy
-}
+const express = require('express');
+const router = express.Router();
+
+// @route /api/messageLogs
+router.route('/api/messageLogs')
+  .get(index)
+  .post(create);
+
+// @route /api/messageLog/_id
+router.route('/api/messageLogs/:messageLogId')
+  .get(read)
+  .put(update)
+  .delete(destroy);
+
+module.exports = router;
