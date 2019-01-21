@@ -33,12 +33,6 @@ const ParkSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// index
-ParkSchema.index({
-    code: 1,
-    name: 1
-});
-
 // connecting to unique validator
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'

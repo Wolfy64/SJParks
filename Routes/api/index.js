@@ -1,8 +1,7 @@
-module.exports = {
-  index: require("./apiController"),
-  users: require("./userController"),
-  parks: require("./parkController"),
-  messages: require("./messageController"),
-  messsageLogs: require("./messageLogController"),
-  subscriptionLogs: require("./subscriptionLogController")
+module.exports = () => {
+  require("./userRoutes");
+  require("./parkRoutes");
+  require("./messageRoutes");
+  require("./messageLogRoutes");
+  require("./subscriptionLogRoutes"); 
 }

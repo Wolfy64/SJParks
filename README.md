@@ -105,7 +105,6 @@ Special keys are:
 - And subscription keys created by the Admin.
 
 ## Admin User Flow
-
 ### Updates
 
 Admin selects the list of Subscribers and sends the message.
