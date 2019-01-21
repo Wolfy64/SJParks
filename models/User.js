@@ -2,29 +2,23 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const jwt = require('jsonwebtoken');
 const Schema = mongoose.Schema;
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
 
     salt: String,
 
-    firstName: {
-        type: String,
-        default: "Unknown",
-        max: 100
-    },
+    active: Boolean,
 
-    lastName: {
-        type: String,
-        default: "Unknown",
-        max: 100
+    access: {
+        type: String
     },
 
     userName: {
         type: String,
         lowercase: true,
-        required: true,
-        match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
+        required: [true, 'please enter a username'],
+        // match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
         index: true
     },
 
@@ -33,15 +27,20 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
 
-    admin: {
-        type: Boolean,
-        default: false
+    firstName: {
+        type: String,
+        default: "Unknown"
+    },
+
+    lastName: {
+        type: String,
+        default: "Unknown"
     },
 
     email: {
         type: String,
         required: [true, "you must enter an email"],
-        match: [/\S+@\S+\.\S+/, 'is invalid'],
+        // match: [/\S+@\S+\.\S+/, 'is invalid'],
         index: true
     },
 
@@ -59,7 +58,7 @@ const UserSchema = new mongoose.Schema({
 
     messages: [{
         type: Schema.Types.ObjectId,
-        ref: 'Messagelog'
+        ref: 'Message'
     }],
 
     imageUrl: {
@@ -67,46 +66,57 @@ const UserSchema = new mongoose.Schema({
     }
 
 }, {
-        timestamps: true
-    });
+    timestamps: true
+});
 
-// Create Schema Virtual Fields
-UserSchema.virtual('name-lf').get(() =>
-{
+// Create Schema Virtuals
+UserSchema.virtual('name-lf').get(() => {
     return this.lastName + ', ' + this.firstName;
 });
 
-UserSchema.virtual('name-fl').get(() =>
-{
+UserSchema.virtual('name-fl').get(() => {
     return this.firstName + ' ' + this.lastName;
 });
 
-UserSchema.virtual('name').set((x) =>
-{
+UserSchema.virtual('name').set((x) => {
     const N = x.split(' ');
-    this.firstName = x.split(',').length > 0 ? N[1] : N[0],
-        this.lastName = N.pop(N.indexOf(this.firstname));
+    this.firstName = x.split(',').length > 0 ? N[1] : N[0];
+    this.lastName = N.pop(N.indexOf(this.firstname));
 });
 
-// UserSchema.virtual('activeSUBS').get(function () {
-//     return this.phone + '{' + this.parks + ' }'
-// });
+UserSchema.virtual('activeSUBS').get(function () {
+    return {active: this.active, email: this.email, twilio : {phone:this.phone, subscriptions: this.parks }}
+});
 
-// Set Schema methods
-UserSchema.methods.setPassword = password =>
-{
-    this.salt = crypto.randomBytes(16).toString('hex')
-    this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+// Configure Schema Plugins
+UserSchema.plugin(uniqueValidator, {
+    type: 'mongoose-unique-validator'
+});
+
+// Configure Schema methods
+UserSchema.methods.setPassword = password => {
+    // [DEP?] this.salt = crypto.randomBytes(16).toString('hex');
+    // [DEP?] this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+    bcrypt.genSalt(16, (err, salt) => {
+        if (err) throw err;
+        this.salt = salt;
+        bcrypt.hash(password, this.salt, (err, hash) => {
+            if (err) throw err;
+            this.password = hash;
+        });
+    });
 }
 
-UserSchema.methods.validatePassword = password =>
-{
-    const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    return this.password === hash;
+UserSchema.methods.validatePassword = password => {
+    // [DEP?] const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
+    // [DEP?] return this.hash === hash;
+    bcrypt.compare(password, this.password, (err, same) => {
+        if (err) throw err;
+        return same;
+    });
 };
 
-UserSchema.methods.generateJWT = () =>
-{
+UserSchema.methods.generateJWT = () => {
     const today = new Date();
     const expirationDate = new Date(today);
     expirationDate.setDate(today.getDate() + 60);
@@ -114,12 +124,11 @@ UserSchema.methods.generateJWT = () =>
     return jwt.sign({
         email: this.email,
         id: this._id,
-        exp: expirationDate.getTime() / 1000
+        exp: parseInt(expirationDate.getTime() / 1000,10),
     }, 'secret');
 }
 
-UserSchema.methods.toAuthJSON = () =>
-{
+UserSchema.methods.toAuthJSON = () => {
     return {
         _id: this._id,
         email: this.email,
@@ -127,10 +136,4 @@ UserSchema.methods.toAuthJSON = () =>
     };
 };
 
-// add 'Unique' validation to this schema
-UserSchema.plugin(uniqueValidator, {
-    type: 'mongoose-unique-validator'
-});
-
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+module.exports = mongoose.model('User', UserSchema);

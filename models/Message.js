@@ -6,15 +6,16 @@ const MessageSchema = new mongoose.Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, "must have a user"]
+        required: [true, "must have an author"]
     },
     message: {
         type: String,
         required: true,
+        index: true
     },
     log: [{
         type: Schema.Types.ObjectId,
-        ref: 'UpdateLog'
+        ref: 'MessageLog'
     }],
     parks: [{
         type: Schema.Types.ObjectId,
