@@ -36,25 +36,9 @@ function update(req, res) {}
 // @route DELETE api/message/:messageId @desc Delete a message with '_id =
 // messageId' @access Public
 function destroy(req, res) {}
-
-const express = require('express');
-const router = express.Router();
-
-// @route /api/messages
-router
-    .route('/api/messages')
-    .get(index)
-    .post(create);
-
-// @route /api/messages/_id
-router
-    .route('/api/messages/:messagId')
-    .get(read)
-    .put(update)
-    .delete(destroy);
-
-module.exports = router;
-
+module.exports = {
+    
+}
 // function respond(res, resMessage, success)
 // {
 //   res.send(`

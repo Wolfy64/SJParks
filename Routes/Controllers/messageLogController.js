@@ -25,18 +25,10 @@ function update(req, res) {}
 // @access Public
 function destroy(req, res) {}
 
-const express = require('express');
-const router = express.Router();
-
-// @route /api/messageLogs
-router.route('/api/messageLogs')
-  .get(index)
-  .post(create);
-
-// @route /api/messageLog/_id
-router.route('/api/messageLogs/:messageLogId')
-  .get(read)
-  .put(update)
-  .delete(destroy);
-
-module.exports = router;
+module.exports = {
+  index,
+  read,
+  create,
+  update,
+  destroy
+};

@@ -1,18 +1,21 @@
-
+/** Load Dependencies */
+require('dotenv-safe').load();
 const path = require('path');
-const express = require('express');
-const session = require('express-session');
-const addRequestId = require('express-request-id')();
 const cors = require('cors');
 const logger = require('morgan');
-const config = require('./config/');
-const formData = require('express-form-data');
-const db = require('./models');
-const newLocal = config.keys.prod || config.keys.dev;
-const app = express();
+const express = require('express');
+const addRequestId = require('express-request-id')();
 
-// ...logging
+/** Load Configurations */
+const router = require('./Routes');
+const config = require('./config'); 
+const inTesting = !config.keys.prod || config.keys.dev;
+
+/** Initialize An Express-App Instance*/
+let app = express();
 app.use(cors());
+
+/** Logger */
 app.use(addRequestId);
 logger.token('id', (req) => req.sessionID.split('-')[0]);
 app.use(logger(inTesting ? 'dev' : 'combined', {
@@ -20,13 +23,11 @@ app.use(logger(inTesting ? 'dev' : 'combined', {
         return res.statusCode < 400;
     }
 }));
-app.use(logger(">[:date[iso] REQ]> Method = :method, Url = :url , SessionID = :id "));
-app.use(logger(">[:date[iso] RES]> Status = :status, Type = :content-type "));
+// app.use(logger("> [:date[iso] REQ] Method = :method, Url = :url , SessionID = :id >"));
+// app.use(logger("> [:date[iso] RES] Status = :status"/*, Type = :content-type >*/));
 
-// ...view engine
-if (inTesting) app.use(require('express-ejs-layouts'));
-if (inTesting) app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', !inTesting ? 'pug' : 'ejs');
+/** Parser */
+app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
@@ -34,61 +35,21 @@ app.use(express.json());
 app.use(formData.parse());
 app.use(express.static(path.join(__dirname, config.keys.path)));
 
-// ...Session
-const sessOpts = {
-    secret: config.keys.secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 10 * 1000,
-        //activeDuration: 5 * 60 * 1000,
-        httpOnly: true,
-        secure: false
-    }
-}
+/** View Engine */
+if (inTesting) app.use(require('express-ejs-layouts'));
+app.set('view engine', inTesting ? 'ejs' : 'pug');
+if (inTesting) {app.set('views', path.join(__dirname, 'views'));
+} else if (!inTesting){app.use(express.static(config.keys.path));}
 
-if (!inTesting) {
-    app.set('trust proxy', 1);
-    sessOpts.cookie.secure = true;
-}
-app.use(session(sessOpts));
+/** Passport */
+config.passport(app);
 
-// ...passport
-app.use(passport.initialize());
-app.use(passport.session());
-if (!inTesting) app.use(express.static(path.join(__dirname, config.keys.path)));
+/** Error-Handler */
+// if (inTesting) app.use(require('errorhandler'));
 
-
-// ...error handler
-if (inTesting) app.use(errorHandler);
-
-
-// ...Flash
-const flash = require('connect-flash');
-app.use(flash());
-app.use(function (req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-});
-
-// Configure Routes
-app.use((req, res, next) => {
-    console.log('request', req.url, req.body, req.method);
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
-    if (req.method === 'OPTIONS') {
-        res.end();
-    } else {
-        next();
-    }
-});
-// var index = require('./Routes/index');
-var api = require('./Routes/api');
-// app.use('/', index);
-app.use('/api', api);
-config.pass(passport);
+/** Routes */
+app.use('/', );
+app.use('/api', router.api);
 
 //Error handlers & middlewares
 if (inTesting) {
@@ -113,7 +74,6 @@ if (inTesting) {
                 error: err,
             },
         });
-        next();
     });
 }
 console.log(`>  ...WebApp Created`);
