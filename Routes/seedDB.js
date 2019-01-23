@@ -1,19 +1,16 @@
-// This file allows us to seed our application with data
-// simply run: `node seed.js` from the root of this project folder.
-
 var db = require("../models");
 
-const dbSeedEngine = (UserList, ParkList, MessageList, MessageLog, SubscriptionLog) =>
-{
+module.exports.dbSeedEngine = (UserList, ParkList, MessageList, MessageLog, SubscriptionLog) => {
   var seeder = [
     [], {}
   ];
   if (!(UserList || ParkList || MessageList || MessageLog || SubscriptionLog))
   {
-    console.error("you fucked up man, why didn't you provide a seed for every Schema, asshole!!")
+    console.error(" A list of some sort is required...");
   } else
   {
 
+    const x = db.elements();
     seeder[0].push(db.User);
     seeder[0].push(db.Park);
     seeder[0].push(db.Message);
@@ -48,6 +45,3 @@ const dbSeedEngine = (UserList, ParkList, MessageList, MessageLog, SubscriptionL
   }
 }
 
-module.exports = {
-  seeder: dbSeedEngine
-}

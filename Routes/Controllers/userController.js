@@ -1,41 +1,9 @@
 const db = require("../../models");
-const passport = require('passport');
 const cloudinary = require('cloudinary');
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const router = express.Router();
 const config = require('../../config');
 
 // Load input validation
-const validateRegisterInput = require("../../validation/register");
-const validateLoginInput = require("../../validation/login");
-
-/*
-@route POST api/user/login 
-@desc Login an existing user 
-@access Public
-*/
-function login(req, res, next) {
-
-  passport.authenticate('local', {
-    successRedirect: '/user/:userId/dasboard',
-    failureRedirect: '/login',
-    failureFlash: true
-  })(req, res, next);
-}
-
-/*
-@route GET api/user/logout 
-@desc Logout session user 
-@access Public
-*/
-function logout(req, res) {
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/login');
-  if (process.env.NODE_ENV === "test")
-    res.render('login');
-}
+const validateRegisterInput = require("../../config/validation");
 
 /* 
 @route GET api/user/:userId 
@@ -73,7 +41,7 @@ function index(req, res) {
 @desc Create An New user 
 @access Public
 */
-function register(req, res) {
+function create(req, res) {
 
   const {
     errors,
@@ -207,15 +175,16 @@ function register(req, res) {
 */
 function update(req, res) {
   const {
-    newPassword,
     newAccess,
-    newUserName,
     newFirstName,
     newLastName,
     newPhone,
     newEmail,
+    newUserName,
+    newPassword,
     addPark,
-    addMessage
+    addMessage,
+    
   } = req.body;
 
   const data = {};
@@ -229,9 +198,9 @@ function update(req, res) {
   const {
     errors,
     isValid,
+    updates
   } = validateRegisterInput(data);
-  /* These are the options for 'findByIdAndUpdate'. Please see the link that follows for further details.{"link":"https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate"} */
-
+  
   const options = {
     // setDefaultsOnInsert: true, sort: -1,
     new: true,
@@ -242,7 +211,10 @@ function update(req, res) {
     strict: false
   };
 
-  db
+  if(!isValid){
+    res.status(225).json({errors});
+  } else {
+    db
     .User
     .findByIdAndUpdate(req.params.id, updates, options)
     .then(newUser => {
@@ -300,6 +272,7 @@ function update(req, res) {
         }))
         .catch(err => console.log(err));
     }).catch(err => console.log(err)); // end findby id and update
+  }
 }
 
 /*
@@ -365,7 +338,7 @@ function destroy(req, res) {
 @desc Delete An user by id 
 @access Public
 */
-function imageUpload(req, res) {
+function uploadImage(req, res) {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -381,6 +354,7 @@ function imageUpload(req, res) {
 
   res.status(200);
 }
+
 /*
 @route /api/users/_id/park
 */
@@ -409,41 +383,15 @@ function findMessage(req, res) {
 
 }
 
-// @route /admin/image_upload
-router
-  .route('/admin/image-upload')
-  .post(imageUpload);
-
-// @route /welcome router.get('/welcome', view.dashboard); @route /api/user
-router
-  .route('/api/users')
-  .get(index)
-  .post(register);
-
-// @route /api/user/_id
-router
-  .route('/api/users/:userId')
-  .get(read)
-  .put(update)
-  .delete(destroy);
-
-// // @route /api/user/:userId/dashboard
-// router.get('/api/user/:userID/dash', /**ensureAuthenticated,*/ renderDashboard);
-
-// @route /api/users/_id/park
-router.route('/api/users/:userId/park')
-  .get(readAllParks);
-
-// @route /api/users/_id/message
-router.route('/api/users/:userId/message')
-  .get(readAllMessages);
-
-// @route /api/users/_id/park/_id
-router.route('/api/users/:userId/park/:parkId')
-  .get(findPark);
-
-// @route /api/user/_id/message/_id
-router.route('/api/users/:userId/message/:messageId')
-  .get(findMessage);
-
-module.exports = router;
+module.exports = {
+  index,
+  read,
+  register: create,
+  update,
+  destroy,
+  uploadImage,
+  readAllParks,
+  readAllMessages,
+  findPark,
+  findMessage
+};

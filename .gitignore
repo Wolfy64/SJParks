@@ -4,7 +4,8 @@
  /views
 updateDB.code-workspace
 updateExpressServer.code-workspace
-
+userAuth[WIP]
+ 
 # Dependencies
 /client/node_modules
 /node_modules
