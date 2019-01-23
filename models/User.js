@@ -6,134 +6,146 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
 
-    salt: String,
+  salt: String,
 
-    active: Boolean,
+  active: Boolean,
 
-    access: {
-        type: String
-    },
+  access: {
+    type: String
+  },
 
-    userName: {
-        type: String,
-        lowercase: true,
-        required: [true, 'please enter a username'],
-        // match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
-        index: true
-    },
+  userName: {
+    type: String,
+    lowercase: true,
+    required: [true, 'please enter a username'],
+    // match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
+    index: true
+  },
 
-    password: {
-        type: String,
-        required: true
-    },
+  password: {
+    type: String,
+    required: true
+  },
 
-    firstName: {
-        type: String,
-        default: "Unknown"
-    },
+  firstName: {
+    type: String,
+    default: "Unknown"
+  },
 
-    lastName: {
-        type: String,
-        default: "Unknown"
-    },
+  lastName: {
+    type: String,
+    default: "Unknown"
+  },
 
-    email: {
-        type: String,
-        required: [true, "you must enter an email"],
-        // match: [/\S+@\S+\.\S+/, 'is invalid'],
-        index: true
-    },
+  email: {
+    type: String,
+    required: [true, "you must enter an email"],
+    // match: [/\S+@\S+\.\S+/, 'is invalid'],
+    index: true
+  },
 
-    phone: {
-        type: String,
-        /*match: [ /\d{3}-/d{3}/, "(999) 999 - 9999"],*/
-        required: [true, "you must enter a phone number"],
-        index: true
-    },
+  phone: {
+    type: String,
+    /*match: [ /\d{3}-/d{3}/, "(999) 999 - 9999"],*/
+    required: [true, "you must enter a phone number"],
+    index: true
+  },
 
-    parks: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Park'
-    }],
+  parks: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Park'
+  }],
 
-    messages: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Message'
-    }],
+  messages: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Message'
+  }],
 
-    imageUrl: {
-        type: String
-    }
+  imageUrl: {
+    type: String
+  }
 
 }, {
-    timestamps: true
+  timestamps: true
 });
 
 // Create Schema Virtuals
-UserSchema.virtual('name-lf').get(() => {
-    return this.lastName + ', ' + this.firstName;
-});
-
-UserSchema.virtual('name-fl').get(() => {
-    return this.firstName + ' ' + this.lastName;
+UserSchema.virtual('name').get(() => {
+  return this.firstName + ' ' + this.lastName;
 });
 
 UserSchema.virtual('name').set((x) => {
-    const N = x.split(' ');
-    this.firstName = x.split(',').length > 0 ? N[1] : N[0];
-    this.lastName = N.pop(N.indexOf(this.firstname));
+  const N = x.split(' ');
+  this.firstName = x.split(',').length > 0 ? N[1] : N[0];
+  this.lastName = N.pop(N.indexOf(this.firstname));
 });
 
 UserSchema.virtual('activeSUBS').get(function () {
-    return {active: this.active, email: this.email, twilio : {phone:this.phone, subscriptions: this.parks }}
+  return {
+    active: this.active,
+    access: this.access,
+    email: this.email,
+    twilio: {
+      phone: this.phone,
+      subscriptions: this.parks
+    }
+  };
 });
 
 // Configure Schema Plugins
 UserSchema.plugin(uniqueValidator, {
-    type: 'mongoose-unique-validator'
+  type: 'mongoose-unique-validator'
 });
 
 // Configure Schema methods
-UserSchema.methods.setPassword = password => {
-    // [DEP?] this.salt = crypto.randomBytes(16).toString('hex');
-    // [DEP?] this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    bcrypt.genSalt(16, (err, salt) => {
-        if (err) throw err;
-        this.salt = salt;
-        bcrypt.hash(password, this.salt, (err, hash) => {
-            if (err) throw err;
-            this.password = hash;
-        });
+UserSchema.methods.setPassword = newPassword => {
+  bcrypt.genSalt(16, (err, newSalt) => {
+    if (err) throw err;
+    this.salt = newSalt;
+    bcrypt.hash(newPassword, this.salt, (err, newPasswordHash) => {
+      if (err) throw err;
+      this.password = newPasswordHash;
     });
-}
+  });
+};
 
-UserSchema.methods.validatePassword = password => {
-    // [DEP?] const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
-    // [DEP?] return this.hash === hash;
-    bcrypt.compare(password, this.password, (err, same) => {
+/* [DEP?]
+UserSchema.methods.validatePassword = candidatePassword => {
+    bcrypt.compare(candidatePassword, this.password, (err, isValid) => {
         if (err) throw err;
-        return same;
+        return isValid;
     });
+};
+*/
+UserSchema.methods.validatePassword = function (candidatePassword) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+      if (err) return reject(err);
+      resolve(isMatch);
+    });
+  });
 };
 
 UserSchema.methods.generateJWT = () => {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
+  const today = new Date();
+  const expirationDate = new Date(today);
+  expirationDate.setDate(today.getDate() + 60);
 
-    return jwt.sign({
-        email: this.email,
-        id: this._id,
-        exp: parseInt(expirationDate.getTime() / 1000,10),
-    }, 'secret');
-}
+  return jwt.sign({
+    id: this._id,
+    userName: this.userName,
+    exp: parseInt(expirationDate.getTime() / 1000, 10),
+  }, require('config').secret);
+};
 
 UserSchema.methods.toAuthJSON = () => {
-    return {
-        _id: this._id,
-        email: this.email,
-        token: this.generateJWT(),
-    };
+  return {
+    _id: this._id,
+    name: this.name,
+    // phone: this.phone,
+    email: this.email,
+    token: this.generateJWT(),
+  };
 };
 
 module.exports = mongoose.model('User', UserSchema);

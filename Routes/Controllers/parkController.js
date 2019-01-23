@@ -1,5 +1,5 @@
 const db = require('../../models');
-
+const {validateAllUpdates } = require('../../config/validation');
 // @route GET api/park/
 // @desc Get all parks
 // @access Public
@@ -30,8 +30,8 @@ function create(req, res)
   const {
     newName,
     newCode,
-    newUser,
-    newMessage
+    newUserPhone,
+    newUserMessage
   } = req.body;
 
   const newPark = new db.Park({
@@ -39,10 +39,10 @@ function create(req, res)
     code: newCode
   });
 
-  if (newUser != null)
+  if (newUserPhone != null)
   {
     db.User.findOne({
-      phone: newUser
+      phone: newUserPhone
     }).exec((err, user) =>
     {
       if (err) throw err;
@@ -98,17 +98,22 @@ function create(req, res)
 // @access Public
 function update(req, res)
 {
+  const { errors, isValid} = validateAllUpdates(req.body);
   const opts = {
     new: true, // return updated doc
     runValidators: true // validate before update
-  }
+  };
 
-  db.Park.findByIdAndUpdate(req.params.id, req.body, opts)
-    .then(doc => res.status(281).json({
-      success: true,
-      update: doc._id
-    }))
+  if(!isValid){
+    res.status(437).json({errors});
+  } else {
+    db.Park.findByIdAndUpdate(req.params.id, req.body, opts)
+    .then(doc => {
+      doc.save();  
+    })
     .catch(err => console.log(err));
+  }
+ 
 }
 
 // @route DELETE api/park/delete/:id/
@@ -124,18 +129,10 @@ function destroy(req, res)
     .catch(err => console.log(err));
 }
 
-const express = require('express');
-const router = express.Router();
-
-// @route /api/park
-router.route('/api/parks')
-  .get(index)
-  .post(create);
-
-// @route /api/parks/_id/
-router.route('/api/parks/:id')
-  .get(read)
-  .put(update)
-  .delete(destroy);
-
-module.exports = router;
+module.exports = {
+  index,
+  read,
+  create,
+  update,
+  destroy
+}

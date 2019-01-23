@@ -1,22 +1,33 @@
+/** Load Configurations */
 require('dotenv-safe').load();
 const config = require('./config');
-console.log(`> Running index in ${process.env.NODE_ENV} mode...`);
+console.log(`> Running Server in ${process.env.NODE_ENV} mode...`);
 
-const mongoose = require('mongoose');
+/** Configure Mongoose */
+const mongoose = require('mongoose',{
+  useMongoClient: true
+});
+mongoose.set('debug', true);
 mongoose.Promise = global.Promise;
 
 const opts = {
   useCreateIndex: true,
   useNewUrlParser: true,
   useFindAndModify: false
-}
+};
 
+/** Connnect Mongoose to MongoDB */
 mongoose.connect(config.keys.url, opts)
-  .then(() => console.log(`> MongoDB ...`))
+  .then(() => {
+    require('./Routes/seedDB').dbSeedEngine([/*UserList*/],[/* ParkList*/], [/*MessageList*/], [/*MessageLog0*/], [/*SubscriptionLog */]);
+    console.log(`> MongoDB connected...`);
+  })
   .catch(err => console.error(err));
-mongoose.set('debug', true);
 
+/** Create Express-App Server */
 const http = require('http');
 const webapp = require('./App');
 const server = http.createServer(webapp);
+
+/** Deploy Express-App to Local-Host*/
 server.listen(config.keys.port, () => console.log(`> Express Server Deployed @url: http://localhost:${config.keys.port}...`));
