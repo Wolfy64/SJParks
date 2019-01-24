@@ -1,7 +1,7 @@
 /** Load Dependencies */
 require('dotenv-safe').load();
 const path = require('path');
-const cors = require('cors');
+// const cors = require('cors');
 const logger = require('morgan');
 const express = require('express');
 const addRequestId = require('express-request-id')();
@@ -9,11 +9,12 @@ const addRequestId = require('express-request-id')();
 /** Load Configurations */
 const router = require('./Routes');
 const config = require('./config'); 
-const inTesting = !config.keys.prod || config.keys.dev;
-
-/** Initialize An Express-App Instance*/
+const inTesting = !(config.keys.prod || config.keys.dev);
 let app = express();
-app.use(cors());
+const fs = require('fs');
+const apiManifest = JSON.parse(fs.readFileSync('./Routes/ApiManifest.json'));
+console.log(apiManifest.router);
+// app.use(cors());
 
 /** Logger */
 app.use(addRequestId);
@@ -23,8 +24,7 @@ app.use(logger(inTesting ? 'dev' : 'combined', {
         return res.statusCode < 400;
     }
 }));
-// app.use(logger("> [:date[iso] REQ] Method = :method, Url = :url , SessionID = :id >"));
-// app.use(logger("> [:date[iso] RES] Status = :status"/*, Type = :content-type >*/));
+app.use(logger("> [:date[iso] REQ] :method :url :status :response-time ms - :res[content-length] >"));
 
 /** Parser */
 app.use(express.json());
@@ -44,24 +44,22 @@ if (inTesting) {app.set('views', path.join(__dirname, 'views'));
 /** Passport */
 config.passport(app);
 
-/** Error-Handler */
-// if (inTesting) app.use(require('errorhandler'));
-
 /** Routes */
-app.use('/', );
+app.use('/auth', router.auth);
 app.use('/api', router.api);
 
-//Error handlers & middlewares
+
+/** Error Handlers */
 if (inTesting) {
 
     app.use((req, res, next) => {
         res.status(404)
-            .render(path.join(__dirname, config.keys.path, '404.ejs'));
+            .render('404.ejs');
     });
 
     app.use((err, req, res, next) => {
         res.status(500)
-            .render(path.join(__dirname, config.keys.path, '500.ejs'));
+            .render('500.ejs');
     });
 
 } else if (!inTesting) {
@@ -76,6 +74,5 @@ if (inTesting) {
         });
     });
 }
-console.log(`>  ...WebApp Created`);
 
 module.exports = app;
