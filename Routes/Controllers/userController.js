@@ -42,130 +42,130 @@ function index(req, res) {
 @access Public
 */
 function create(req, res) {
+ res.status(200).json(req.body);
+  // const {
+  //   errors,
+  //   isValid,
+  //   data
+  // } = validateRegisterInput(req.body);
+  // // Check validation
+  // if (!isValid) {
+  //   if (!config.keys.prod) {
+  //     return res.render('register', {
+  //       errors
+  //       /*,
+  //             userName,
+  //             firstName,
+  //             lastName,
+  //             phone,
+  //             email,
+  //             password,
+  //             addPark,
+  //             addMessage*/
+  //     });
+  //   } else {
+  //     return res.status(400).json(errors);
+  //   }
 
-  const {
-    errors,
-    isValid,
-    data
-  } = validateRegisterInput(req.body);
-  // Check validation
-  if (!isValid) {
-    if (!config.keys.prod) {
-      return res.render('register', {
-        errors
-        /*,
-              userName,
-              firstName,
-              lastName,
-              phone,
-              email,
-              password,
-              addPark,
-              addMessage*/
-      });
-    } else {
-      return res.status(400).json(errors);
-    }
+  // }
+  // if (errors.length > 0) {
 
-  }
-  if (errors.length > 0) {
+  // } else {
+  //   let user = null;
+  //   db
+  //     .User
+  //     .findOne({
+  //       userName: data.userName,
+  //       phone: data.phone,
+  //       email: data.email
+  //     })
+  //     .then(userFound => {
+  //       if (userFound)
+  //         user = userFound;
+  //     });
+  //   if (user != null) {
+  //     errors.push({
+  //       msg: `Derp! User already exists!`,
+  //       user: user
+  //     })
+  //     res.render('register', {
+  //       errors,
+  //       user
+  //     });
+  //   } else {
 
-  } else {
-    let user = null;
-    db
-      .User
-      .findOne({
-        userName: data.userName,
-        phone: data.phone,
-        email: data.email
-      })
-      .then(userFound => {
-        if (userFound)
-          user = userFound;
-      });
-    if (user != null) {
-      errors.push({
-        msg: `Derp! User already exists!`,
-        user: user
-      })
-      res.render('register', {
-        errors,
-        user
-      });
-    } else {
+  //     const newUser = new db.User({
+  //       isAdmin: data.isAdmin,
+  //       userName: data.userName,
+  //       firstName: data.firstName,
+  //       lastName: data.lastName,
+  //       phone: data.phone,
+  //       email: data.email
+  //     });
 
-      const newUser = new db.User({
-        isAdmin: data.isAdmin,
-        userName: data.userName,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phone: data.phone,
-        email: data.email
-      });
+  //     db
+  //       .Park
+  //       .findOne({
+  //         code: data.addPark
+  //       })
+  //       .then(park => {
+  //         if (park) {
+  //           newUser
+  //             .parks
+  //             .push(park._id);
+  //         } else {
+  //           const newPark = new db.Park({
+  //             code: data.addPark
+  //           });
+  //           newPark
+  //             .users
+  //             .push(newUser._id);
+  //           newPark
+  //             .save()
+  //             .then(park => newUser.parks.push(park._id))
+  //             .catch(err => console.log(err));
+  //         }
+  //       })
+  //       .catch(err => console.log(err));
+  //     db
+  //       .Message
+  //       .findOne({
+  //         message: data.addMessage
+  //       })
+  //       .exec((err, message) => {
+  //         if (message) {
+  //           newUser
+  //             .messages
+  //             .push(message._id);
+  //         } else if (err || !message) {
+  //           const newMessage = new db.Message({
+  //             author: newUser._id,
+  //             message: data.addMessage
+  //           });
+  //           newMessage
+  //             .save()
+  //             .then(message => newUser.messages.push(message._id))
+  //             .catch(err => console.log(err));
+  //         }
+  //       });
+  //     newUser.active = true;
+  //     newUser.setPassword(data.password);
 
-      db
-        .Park
-        .findOne({
-          code: data.addPark
-        })
-        .then(park => {
-          if (park) {
-            newUser
-              .parks
-              .push(park._id);
-          } else {
-            const newPark = new db.Park({
-              code: data.addPark
-            });
-            newPark
-              .users
-              .push(newUser._id);
-            newPark
-              .save()
-              .then(park => newUser.parks.push(park._id))
-              .catch(err => console.log(err));
-          }
-        })
-        .catch(err => console.log(err));
-      db
-        .Message
-        .findOne({
-          message: data.addMessage
-        })
-        .exec((err, message) => {
-          if (message) {
-            newUser
-              .messages
-              .push(message._id);
-          } else if (err || !message) {
-            const newMessage = new db.Message({
-              author: newUser._id,
-              message: data.addMessage
-            });
-            newMessage
-              .save()
-              .then(message => newUser.messages.push(message._id))
-              .catch(err => console.log(err));
-          }
-        });
-      newUser.active = true;
-      newUser.setPassword(data.password);
-
-      newUser
-        .save()
-        .then(user => {
-          req.flash('success_msg', 'You are now registered and can log in');
-          res
-            .status(220)
-            .send({
-              Success: true,
-              NewUser: user._id
-            });
-          res.redirect('/api/users/login');
-        })
-        .catch(err => console.log(err));
-    }
-  }
+  //     newUser
+  //       .save()
+  //       .then(user => {
+  //         req.flash('success_msg', 'You are now registered and can log in');
+  //         res
+  //           .status(220)
+  //           .send({
+  //             Success: true,
+  //             NewUser: user._id
+  //           });
+  //         res.redirect('/admin/login');
+  //       })
+  //       .catch(err => console.log(err));
+  //   }
+  // }
 }
 
 /*

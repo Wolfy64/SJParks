@@ -1,23 +1,20 @@
-var db = require("../models");
+var db = require('../models');
 
-module.exports.dbSeedEngine = (UserList, ParkList, MessageList, MessageLog, SubscriptionLog) => {
+module.exports.dbSeedEngine = (Lists) => {
   var seeder = [
     [], {}
   ];
+  const {UserList, ParkList, MessageList, MessageLog, SubscriptionLog} = Lists;
+  
   if (!(UserList || ParkList || MessageList || MessageLog || SubscriptionLog))
   {
     console.error(" A list of some sort is required...");
   } else
   {
 
-    const x = db.elements();
-    seeder[0].push(db.User);
-    seeder[0].push(db.Park);
-    seeder[0].push(db.Message);
-    seeder[0].push(db.MessageLog);
-    seeder[0].push(db.SubscriptionLog);
-
-    console.log(seeder[0]);
+   for(const Model in db) {
+      seeder[0].push(Model);
+    }
 
     seeder[1].userList = UserList;
     seeder[1].parkList = ParkList;
