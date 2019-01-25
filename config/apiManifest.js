@@ -1,8 +1,8 @@
-﻿{
-	"name": "SJParks Endpoints",
-	"version": "2.0.1",
-	"message": "Welcome to the San Jose Parks App! Here is some information about its api:",
-    "documentationUrl": "https://github.com/irishka2863/SJParks/blob/master/README.md",
+﻿module.exports = {
+	name: "SJParks Endpoints",
+	version: "2.0.1",
+	message: "Welcome to the San Jose Parks App! Here is some information about its api:",
+    documentationUrl: "https://github.com/irishka2863/SJParks/blob/master/README.md",
     "baseUrl": "https://github.com/irishka2863/SJParks/",
 	"legend": {
 		"route": "/api/Model || /[index]/Action || /Page",
