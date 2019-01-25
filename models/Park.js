@@ -2,8 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 
-//DEF creating 'Park' schema
 const ParkSchema = new mongoose.Schema({
+    active: {
+        type: Boolean,
+        default: true
+    },
+    
     code: {
         type: String,
         unique: [true, 'Park code must be unique'],
@@ -23,7 +27,6 @@ const ParkSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid park code!`
         }
     },
-    
     subscriptionLogs: [{
         type: Schema.Types.ObjectId,
         ref: 'subscriptionLog'
