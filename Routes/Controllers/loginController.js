@@ -3,6 +3,14 @@ const passport = require('passport');
 const db = require('../../models');
 const config = require('../../config');
 
+function loadReactRouter(req, res) {
+	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+}
+
+function displayWelcomePage(req, res){
+	res.render('welcome');
+}
+
 function displayRegisterPage(req, res) {
 	res.render('register');
 }
@@ -11,16 +19,10 @@ function displayLoginPage(req, res) {
 	res.render('login');
 }
 
-function displayWelcomePage(req, res){
-	res.render('welcome');
-}
-
-function displayDasboard (req, res){
+function displayDasboardPage (req, res){
 	res.render('dashboard');
 }
-function loadReactRouter(req, res) {
-	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-}
+
 
 function login(req, res, next) {
 	const { user } = req.body;
@@ -83,7 +85,18 @@ function requireUserLogin(req, res, next) {
 	else res.redirect('/login');
 }
 
+
+// 	passport.authenticate('jwt', {
+// 		session: false
+// 	}),
+// 	(req, res, next) => {
+// 		res.json({
+// 			user: req.user
+// 		});
+// 	}
+// 
 function ensureAuthenticated(req, res, next) {
+	
 	if (req.isAuthenticated()) {
 		return next(null);
 	}
@@ -113,6 +126,7 @@ function crossOrginMiddleware(req, res, next) {
 }
 
 module.exports = {
+	loadReactRouter,
 	displayWelcomePage,
 	displayRegisterPage,
 	displayLoginPage,
@@ -120,8 +134,7 @@ module.exports = {
 	ensureAuthenticated,
 	requireUserLogin,
 	requireAdminLogin,
-	displayDasboard,
+	displayDasboardPage,
 	crossOrginMiddleware,
-	loadReactRouter,
 	logout,
 };

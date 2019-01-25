@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 
 //DEF creating 'Park' schema
@@ -17,32 +17,39 @@ const ParkSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: [true, 'Park name must be unique'],
-        required: [true, 'Park name is required']
+        required: [true, 'Park name is required'],
+        validate: {
+            validator: x => /\s{25}/.test(x),
+            message: props => `${props.value} is not a valid park code!`
+        }
     },
-
-    users: [{
+    
+    subscriptionLogs: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'subscriptionLog'
     }],
-
-    updatelog: [{
+    
+    messageLogs: [{
         type: Schema.Types.ObjectId,
-        ref: 'UpdateLog'
+        ref: 'messageLog'
     }]
 }, {
     timestamps: true
-});
+    });
 
-// connecting to unique validator
+ParkSchema.methods.addSubscriptionLog = (newSubscriptionLogId) => {
+    this.subscriptionLogs.push(newSubscriptionLogId);    
+};
+
+ParkSchema.methods.addMessageLog = (newMessageLogId) => {
+    this.messageLogs.push(newMessageLogId);    
+};
+
+
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
 
-
-// ADD 'Unique' validator
-ParkSchema.plugin(uniqueValidator);
-
-//CREATE and EXPORT 'Park' model
 const Park = mongoose.model('Park', ParkSchema);
 
 module.exports = Park;

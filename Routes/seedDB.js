@@ -1,9 +1,9 @@
-var db = require('../models');
-
+const db = require('../models');
 module.exports.dbSeedEngine = (Lists) => {
   var seeder = [
     [], {}
   ];
+  
   const {UserList, ParkList, MessageList, MessageLog, SubscriptionLog} = Lists;
   
   if (!(UserList || ParkList || MessageList || MessageLog || SubscriptionLog))
@@ -40,5 +40,5 @@ module.exports.dbSeedEngine = (Lists) => {
     });
     process.exit();
   }
-}
+};
 

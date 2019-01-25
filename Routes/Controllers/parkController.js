@@ -30,41 +30,23 @@ function create(req, res)
   const {
     newName,
     newCode,
-    newUserPhone,
-    newUserMessage
+    newSubscriptionLogEntry,
+    newMesssageLogEntry
   } = req.body;
+  const parkToBeAdded = {};
 
-  const newPark = new db.Park({
-    name: newName,
-    code: newCode
-  });
-
-  if (newUserPhone != null)
+  if (newSubscriptionLogEntry != null)
   {
-    db.User.findOne({
-      phone: newUserPhone
-    }).exec((err, user) =>
-    {
-      if (err) throw err;
-      if (user)
-      {
-        newPark.users.push(user._id)
-      } else
-      {
-        const newbie = new db.User({
-          phone: user.phone
-        });
-        newbie.parks.push(newPark._id);
-        newbie.save();
-        newPark.users.push(newbie._id);
-      }
-    })
+    db.SubscriptionLog.findOne({
+      phone: newSubscriptionLogEntry
+    }).exec((err, subscriptionLog) => {
+    });
   }
 
-  if (newMessage != null)
+  if (newParkMessage != null)
   {
     db.Message.findOne({
-      message: newMessage
+      message: newParkMessage
     }).exec((err, message) =>
     {
       if (err) throw err;
@@ -74,7 +56,7 @@ function create(req, res)
       } else
       {
         const newMess = new db.Message({
-          message: newMessage
+          message: newParkMessage
         });
         newMess.parks.push(newPark._id);
         newMess.save()
@@ -84,7 +66,11 @@ function create(req, res)
       }
     })
   }
-
+  const newPark = new db.Park({
+    name: newName,
+    code: newCode,
+    
+  });
   newPark.save()
     .then(newpark => res.status(261).send({
       Success: true,
