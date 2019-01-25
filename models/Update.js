@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
-const MessageSchema = new mongoose.Schema({
+const UpdateSchema = new mongoose.Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -25,9 +25,9 @@ const MessageSchema = new mongoose.Schema({
     timestamps: true
 });
 // add 'Unique' validation to this schema
-MessageSchema.plugin(uniqueValidator, {
+UpdateSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
 
-const Message = mongoose.model('Message', MessageSchema);
-module.exports = Message;
+const Update = mongoose.model('Message', UpdateSchema);
+module.exports = Update;
