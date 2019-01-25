@@ -109,14 +109,6 @@ UserSchema.methods.setPassword = newPassword => {
   });
 };
 
-/* [DEP?]
-UserSchema.methods.validatePassword = candidatePassword => {
-    bcrypt.compare(candidatePassword, this.password, (err, isValid) => {
-        if (err) throw err;
-        return isValid;
-    });
-};
-*/
 UserSchema.methods.validatePassword = function (candidatePassword) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
@@ -142,7 +134,6 @@ UserSchema.methods.toAuthJSON = () => {
   return {
     _id: this._id,
     name: this.name,
-    // phone: this.phone,
     email: this.email,
     token: this.generateJWT(),
   };

@@ -14,7 +14,7 @@ const SubscriptionLogSchema = new mongoose.Schema({
     },
     subscribing: {
         type: Boolean,
-        required: true
+        default: true
     }
 }, {
     timestamps: true
