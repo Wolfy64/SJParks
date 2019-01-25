@@ -1,5 +1,5 @@
 module.exports = {
-  // seed: require('./seedDB'),
+  seed: require('./seedDB'),
   api: require('./apiRouter'),
   auth: require('./loginRouter')
 };

@@ -125,4 +125,6 @@ app.use(function (req, res, next) {
  
   /** Add Passport to Express-Session instance */
   app.use(passport.session());
+
+  return app;
 };
