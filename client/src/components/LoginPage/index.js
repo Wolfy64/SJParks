@@ -90,13 +90,12 @@ class Login extends React.Component {
     const res = await fetch('/login', payload);
     const { token, message } = await res.json();
 
-    const res = await fetch('/login', payload);
-    const data = await res.json();
-
-    this.setState({ message: data.message });
-
-    // If Admin redirect
-    if (data.admin) this.props.history.push(`/admin/${data._id}/user`);
+    if (message) this.setState({ message });
+    if (token) {
+      localStorage.setItem('token', token);
+      const userID = jwt_decode(token).user._id;
+      this.props.history.push(`/admin/${userID}/user`);
+    }
 
     // Reset Form field
     this.setState(initialState);
@@ -109,23 +108,23 @@ class Login extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <h1>SJParks</h1>
 
-          {message && <span className='message'>{message}</span>}
+          {message && <span className="message">{message}</span>}
 
           <Input
-            name='email'
-            label='User ID:'
-            placeholder='Enter Your Username'
-            type='text'
+            name="email"
+            label="User ID:"
+            placeholder="Enter Your Username"
+            type="text"
             value={email}
             onChange={this.handleChange}
             required
           />
 
           <Input
-            name='password'
-            label='Password:'
-            placeholder='Enter Password'
-            type='password'
+            name="password"
+            label="Password:"
+            placeholder="Enter Password"
+            type="password"
             value={password}
             onChange={this.handleChange}
             required
