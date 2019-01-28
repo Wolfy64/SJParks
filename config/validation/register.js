@@ -4,7 +4,7 @@ const validator = require('validator');
 const isEmpty = require('is-empty');
 
 module.exports.validateRegisterInput = (data) => {
-	// Convert empty fields to an empty string so we can use validator functions
+
 	data.access = !isEmpty(data.access) ? data.access : 'basic';
 	data.name = !isEmpty(data.name) ? data.name : '';
 	data.phone = !isEmpty(data.phone) ? data.phone : '';
@@ -18,35 +18,35 @@ module.exports.validateRegisterInput = (data) => {
 
 	// Access checks
 	if (!validator.isAlphanumeric(data.access)) {
-        errors.push(new Error({ msg: 'Acces must be alphanumeric' }));
+		errors.push(new Error({ msg: 'Acces must be alphanumeric' }));
 	}
 
 	// Name checks
 	if (validator.isEmpty(data.name)) {
-        errors.push(new Error({ msg: 'Name field is required' }));
+		errors.push(new Error({ msg: 'Name field is required' }));
 	}
 
 	// Phone checks
 	if (validator.isEmpty(data.phone)) {
-		errors.push(new Error({msg: 'Phone field is required'}));
-    }
-    
-    if (!validator.isMobilePhone(data.phone)) {
-		errors.push(new Error({msg: 'Phone is invalid'}));
+		errors.push(new Error({ msg: 'Phone field is required' }));
+	}
+
+	if (!validator.isMobilePhone(data.phone)) {
+		errors.push(new Error({ msg: 'Phone is invalid' }));
 	}
 
 	// Email checks
 	if (validator.isEmpty(data.email)) {
-		errors.push(new Error({msg: 'Email field is required'}));
-    }
-    
-    if (!validator.isEmail(data.email)) {
-		errors.push(new Error({msg: 'Email is invalid'}));
+		errors.push(new Error({ msg: 'Email field is required' }));
+	}
+
+	if (!validator.isEmail(data.email)) {
+		errors.push(new Error({ msg: 'Email is invalid' }));
 	}
 
 	// Password checks';
 	if (validator.isEmpty(data.password)) {
-		errors.push(new Error({msg: 'Password field is required'}));
+		errors.push(new Error({ msg: 'Password field is required' }));
 	}
 
 	if (
@@ -54,12 +54,10 @@ module.exports.validateRegisterInput = (data) => {
 			min: 6,
 			max: 30
 		})
-	) {
-		errors.push(new Error({msg:'Password must be at least 6 and no more than 30 characters in length'}));
-	}
+	) errors.push(new Error({ msg: 'Password must be at least 6 and no more than 30 characters in length' }));
+	
 
 	// find a user
-	let user = null;
 	db.User
 		.findOne({
 			userName: data.userName,
@@ -67,16 +65,16 @@ module.exports.validateRegisterInput = (data) => {
 			email: data.email
 		})
 		.then((userFound) => {
-			if (userFound) user = userFound;
+			if (userFound){}
+			errors.push(
+				new Error({
+					msg: `Derp! User already exists!`
+				}));
 		});
-	if (user != null) {
-		errors.push(new Error({
-			msg: `Derp! User already exists!`,
-			user
-		}));
-    }
-    
-    return {
-        errors, isValid: errors.length === 0
-    }
+
+	return {
+		errors,
+		isValid: errors.length === 0,
+		data
+	};
 };

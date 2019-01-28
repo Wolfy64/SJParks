@@ -1,4 +1,5 @@
 module.exports = {
 	keys: require('./keys'),
-	passport: require('./passport')
-}
+	passport: require('./passport'),
+	validate: require('./validation').registerVal.validateRegisterInput
+};
