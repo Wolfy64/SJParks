@@ -33,6 +33,7 @@
     "express-form-data": "^2.0.7",
     "express-request-id": "^1.4.1",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.4.0",
     "mocha": "^5.2.0",
     "mongoose": "^5.4.4",
     "mongoose-unique-validator": "^2.0.2",
