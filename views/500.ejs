@@ -1,7 +1,7 @@
 
-<h2>Error: <%= error.message %></h2>
+<h2>Error: <%= err.message %></h2>
 <% if (settings['verbose errors']) { %>
-  <pre><%= error.stack %></pre>
+  <pre><%= err.stack %></pre>
 <% } else { %>
   <p>An error occurred!</p>
 <% } %>

@@ -1,9 +1,14 @@
 const db = require('../../models');
 const { validateAllUpdates } = require('../../config/validation');
 
-// @route GET api/park/
-// @desc Get all parks
-// @access Public
+/**
+ * @public
+ * @function index
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/parks
+ * @desc This will return the index of parks 
+ */
 function index(req, res) {
 	db.Park
 		.find()
@@ -25,64 +30,52 @@ function index(req, res) {
 		);
 }
 
-// @route GET api/park/:parkId
-// @desc find a park with '_id = parkId'
-// @access Public
-function read(req, res) {
-	db.Park
-		.findById(req.params.parkId)
-		.then((park) =>
-			res.status(200).json({
-				success: true,
-				park: park
-			})
-		)
-		.catch((err) =>
-			res.status(460).json({
-				success: false,
-				errors: err
-			})
-		);
-}
-
-// @route POST api/park/
-// @desc Create An New Park
-// @access Public
+/**
+ * @public
+ * @function create
+ * @param {request} req 
+ * @param {response} res 
+ * @method POST '/api/park'
+ * @desc Create An New Park
+ */
 function create(req, res) {
 	const { newName, newCode, addSubscriptionLogEntry, addMessageLogEntry } = req.body;
 	const parkToBeAdded = {};
 	const errors = [];
 
-	if ((newName != null) & (newCode != null)) {
-    db.Park.findOne({ name: newName, code: newCode }).exec((err, park) => {
-      if (err) console.log(err);
-			if (park) errors.push({msg:`A park named ${newName} with code: ${newCode} was found`});
-		});
-			parkToBeAdded.name = newName;
-			parkToBeAdded.code = newCode;
+	if ((newName != null) && (newCode != null)) {
+		db.Park
+			.findOne({ name: newName, code: newCode })
+			.then((park) =>
+				errors
+					.push({ msg: `A park named ${newName} with code: ${newCode} was found` })
+					.catch((err) => errors.push({ msg: err }))
+			);
+		parkToBeAdded.name = newName;
+		parkToBeAdded.code = newCode;
 	}
 
 	if (addSubscriptionLogEntry != null) {
-		db.SubscriptionLog
-			.findOne({
-        user: addSubscriptionLogEntry.user,
-        park: addSubscriptionLogEntry.park
+
+		const newLog = new db.SubscriptionLog ({
+				user: addSubscriptionLogEntry.user,
+				park: addSubscriptionLogEntry.park
 			})
-			.exec((err, subscriptionLog) => {
-				parkToBeAdded.subscriptionLogs = !subscriptionLog || err? []:[ subscriptionLog._id ];
+			.save((err, subscriptionLog) => {
+				parkToBeAdded.subscriptionLogs = !subscriptionLog || err ? [] : [ subscriptionLog._id ];
 			});
 	}
 
 	if (addMessageLogEntry != null) {
 		db.MessageLog
-      .findOne({
-        title: addMessageLogEntry.title,
+			.findOne({
+				title: addMessageLogEntry.title,
 				author: addMessageLogEntry.author,
 				message: addMessageLogEntry.message,
 				tag: addMessageLogEntry.tag
 			})
 			.exec((err, messageLog) => {
-				parkToBeAdded.messageLogs = !messageLog || err? []:[ messageLog._id ];
+				parkToBeAdded.messageLogs = !messageLog || err ? [] : [ messageLog._id ];
 			});
 	}
 
@@ -91,8 +84,7 @@ function create(req, res) {
 			success: false,
 			errors: errors
 		});
-  } else {
-    
+	} else {
 		const newPark = new db.Park(parkToBeAdded);
 
 		newPark
@@ -112,9 +104,14 @@ function create(req, res) {
 	}
 }
 
-// @route PUT api/park/update/:id/
-// @desc Update an existing park by id
-// @access Public
+/**
+ * @public
+ * @function update
+ * @param {request} req 
+ * @param {response} res 
+ * @method PUT /api/park/:parkId
+ * @desc Update an existing park by objectId
+ */
 function update(req, res) {
 	const { errors, isValid } = validateAllUpdates(req.body);
 	const opts = {
@@ -134,9 +131,39 @@ function update(req, res) {
 	}
 }
 
-// @route DELETE api/park/delete/:id/
-// @desc Delete An park by id
-// @access Public
+/**
+ * @public
+ * @function read
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET api/park/:parkId
+ * @desc Find a park given a an ObjectId
+ */
+function read(req, res) {
+	db.Park
+		.findById(req.params.parkId)
+		.then((park) =>
+			res.status(200).json({
+				success: true,
+				park: park
+			})
+		)
+		.catch((err) =>
+			res.status(460).json({
+				success: false,
+				errors: err
+			})
+		);
+}
+
+/**
+ * @public
+ * @function destroy
+ * @param {request} req 
+ * @param {response} res 
+ * @method DELETE /api/park/:parkId
+ * @desc Delete An park by ObjectId
+ */
 function destroy(req, res) {
 	db.Park
 		.findByIdAndDelete(req.params.id)
