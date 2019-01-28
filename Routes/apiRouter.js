@@ -9,17 +9,17 @@ router.route('/users').get(api.users.index).post(api.users.register);
 
 router.route('/users/:userId').get(api.users.read).put(api.users.update).delete(api.users.destroy);
 
-router.route('/users/image-upload').post(api.users.uploadImage);
+router.route('/users/:userId/imageUp').post(api.users.uploadImage);
 
 // router.get('/user/:userID/dash', api.admins.displayDasboard);
 
-router.route('/users/:userId/park').get(api.users.readAllParks);
+router.route('/users/:userId/parks').get(api.users.readAllParks);
 
-router.route('/users/:userId/message').get(api.users.readAllMessages);
+router.route('/users/:userId/messages').get(api.users.readAllMessages);
 
-router.route('/users/:userId/park/:parkId').get(api.users.findPark);
+router.route('/users/:userId/parks/:parkId').get(api.users.findPark);
 
-router.route('/users/:userId/message/:messageId').get(api.users.findMessage);
+router.route('/users/:userId/messages/:messageId').get(api.users.findMessage);
 
 /** Parks */
 router.route('/parks').get(api.parks.index).post(api.parks.create);
