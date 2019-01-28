@@ -24,7 +24,6 @@ module.exports = passport => {
         const token = jwt.sign({ user }, config.secret, {
           expiresIn: '1d'
         });
-        console.log('token,', token)
         return done(null, { token });
       }
     )
