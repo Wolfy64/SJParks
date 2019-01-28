@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+import UserImage from '../../client/src/components/ProfilePage/UserImage';
 const db = require('../../models');
 const cloudinary = require('cloudinary');
 const { validate } = require('../../config');
@@ -13,10 +14,7 @@ const { respond } = require('../../lib/responseSender');
  * @desc Read a user by userId 
  */
 function read(req, res) {
-	db.User
-		.findOne(req.params.id)
-		.then((user) => respond(res, true, user, 'json', '/'))
-		.catch((err) => respond(res, false, err, 'json', '/'));
+	db.User.findOne(req.params.id).then((user) => respond(res, true, user)).catch((err) => respond(res, false, err));
 }
 
 /**
@@ -34,8 +32,8 @@ function index(req, res) {
 			username: 1,
 			phone: 1
 		})
-		.then((users) => respond(res, true, users, 'json', '/'))
-		.catch((err) => respond(res, false, err, 'json', '/'));
+		.then((users) => respond(res, true, users))
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -52,7 +50,7 @@ function create(req, res) {
 
 	if (!isValid) {
 		// console.log({ success: false, error: errors });
-		respond(res, false, errors, 'json', '/');
+		respond(res, false, errors);
 	} else {
 		const newUser = new db.User(data);
 		db.Park
@@ -114,11 +112,15 @@ function create(req, res) {
 	}
 }
 
-/*
-@route PUT api/user/update/:id 
-@desc Update an existing user by id 
-@access Public
-*/
+/**
+ * @public
+ * @function update
+ * @param {request} req 
+ * @param {response} res 
+ * @method PUT /api/user/update/:id  
+ * @desc Update an existing user by id  
+ */
+
 function update(req, res) {
 	const {
 		newAccess,
@@ -208,11 +210,15 @@ function update(req, res) {
 	}
 }
 
-/*
-@route DELETE api/user/:id 
-@desc Delete An user by id 
-@access Public
-*/
+/**
+ * @public
+ * @function destroy
+ * @param {request} req 
+ * @param {response} res 
+ * @method DELETE api/user/:id  
+ * @desc Delete an existing user by id  
+ */
+
 function destroy(req, res) {
 	db.User
 		.findByIdAndDelete({
@@ -256,11 +262,15 @@ function destroy(req, res) {
 		.catch((err) => console.log(err));
 }
 
-/*
-@route POST /admin/image-upload 
-@desc Delete An user by id 
-@access Public
-*/
+/**
+ * @public
+ * @function uploadImage
+ * @param {request} req 
+ * @param {response} res 
+ * @method POST /api/user/_id/imageUp   
+ * @desc Upload a userImage for an existing user by id 
+ */
+
 function uploadImage(req, res) {
 	cloudinary.config({
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -270,17 +280,22 @@ function uploadImage(req, res) {
 	const values = Object.values(req.files);
 	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => {
-		console.log(err);
-		respond(res, false, err);
-	});
+	Promise.all(promises)
+		.then((results) => respond(res, true, results))
+		.catch((err) => respond(res, false, err));
 
 	res.status(200);
 }
 
-/*
-@route /api/users/_id/parks
-*/
+/**
+ * @public
+ * @function readAllParks
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/users/_id/parks  
+ * @desc Retrive all parks to which user,_id is subscribed 
+ */
+
 function readAllParks(req, res) {
 	db.User
 		.findById(req.params.id)
@@ -290,42 +305,59 @@ function readAllParks(req, res) {
 		.catch((err) => respond(res, false, err));
 }
 
-/*
-@route /api/users/_id/messages
-*/
+/**
+ * @public
+ * @function readAllMessagess
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/users/_id/messages  
+ * @desc Retrive all messagess user,_id has ever sent or recieved 
+ */
+
 function readAllMessages(req, res) {
 	db.User
-	.findById(req.params.id)
-	.then((user) => {
-		respond(res, true, user.messages);
-	})
-	.catch((err) => respond(res, false, err));
+		.findById(req.params.id)
+		.then((user) => {
+			respond(res, true, user.messages);
+		})
+		.catch((err) => respond(res, false, err));
 }
 
-/*
-@route /api/users/_id/parks/_id
-*/
+/**
+ * @public
+ * @function findPark
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/users/_id/parks/_id  
+ * @desc Find a park, by park._id, to which user._id is subscribed 
+ */
+
 function findPark(req, res) {
 	db.User
-	.findById(req.params.userId)
+		.findById(req.params.userId)
 		.then((user) => {
 			const park = user.parks.find((park) => park._id === req.params.parkId);
-			respond(res, true, { userId: user._id, parkId:park._id });
-	})
-	.catch((err) => respond(res, false, err));
+			respond(res, true, { userId: user._id, parkId: park._id });
+		})
+		.catch((err) => respond(res, false, err));
 }
 
-/*
-@route /api/users/_id/messages/_id
-*/
+/**
+ * @public
+ * @function findMessage
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/users/_id/messages/_id  
+ * @desc Find a message, by message._id, that user._id has either sent or recieved 
+ */
 function findMessage(req, res) {
 	db.User
-	.findById(req.params.id)
+		.findById(req.params.id)
 		.then((user) => {
 			const message = user.messages.find((message) => message._id === req.params.messageId);
-		respond(res, true, {userId: user._id, messageId: message._id});
-	})
-	.catch((err) => respond(res, false, err));
+			respond(res, true, { userId: user._id, messageId: message._id });
+		})
+		.catch((err) => respond(res, false, err));
 }
 
 module.exports = {
