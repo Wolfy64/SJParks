@@ -48,25 +48,26 @@ app.use('/auth', router.auth);
 app.use('/api', router.api);
 
 /** Error Handlers */
-if (inTesting) {
-	app.use((req, res, next) => {
-		res.status(404).render('404.ejs');
-	});
+// if (inTesting) {
+// 	app.use((req, res, next) => {
+// 		res.status(404).render('404.ejs');
+// 	});
 
-	app.use((err, req, res, next) => {
-		res.status(500).render('500.ejs');
-	});
-} else if (!inTesting) {
-	app.use((err, req, res, next) => {
-		res.status(err.status || 500);
+// 	app.use((err, req, res, next) => {
+// 		res.status(500).render('500.ejs', err);
 
-		res.json({
-			errors: {
-				message: err.message,
-				error: err
-			}
-		});
-	});
-}
+// 	});
+// } else if (!inTesting) {
+// 	app.use((err, req, res, next) => {
+// 		res.status(err.status || 500);
+
+// 		res.json({
+// 			errors: {
+// 				message: err.message,
+// 				error: err
+// 			}
+// 		});
+// 	});
+// }
 
 module.exports = app;

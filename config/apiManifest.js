@@ -2,8 +2,8 @@
 	name: "SJParks Endpoints",
 	version: "2.0.1",
 	message: "Welcome to the San Jose Parks App! Here is some information about its api:",
-    documentationUrl: "https://github.com/irishka2863/SJParks/blob/master/README.md",
-    "baseUrl": "https://github.com/irishka2863/SJParks/",
+	documentationUrl: "https://github.com/irishka2863/SJParks/blob/master/README.md",
+	"baseUrl": "https://github.com/irishka2863/SJParks/",
 	"legend": {
 		"route": "/api/Model || /[index]/Action || /Page",
 		"method": "GET || POST || PUT || DELETE",
@@ -298,76 +298,76 @@
 			"method": "GET",
 			"path": "/api",
 			"description": "Describes all available endpoints"
-		  },
+		},
 	
-		  {
+		{
 			"method": "POST",
 			"path": "/api/login",
 			"description": "Log user in"
-		  },
-		  {
+		},
+		{
 			"method": "POST",
 			"path": "/api/login/out",
 			"description": "Log-out user"
-		  },
-		  {
+		},
+		{
 			"method": "POST",
 			"path": "/api/"
-		  },
-		  {
+		},
+		{
 			"method": "GET",
 			"path": "/api/user",
 			"description": "Get all users"
-		  },
-		  {
+		},
+		{
 			"method": "POST",
 			"path": "/api/user",
 			"description": "Create a new user"
-		  },
-		  {
+		},
+		{
 			"method": "PUT",
 			"path": "/api/user/update/:id",
 			"description": "Update a user by id"
-		  },
-		  {
+		},
+		{
 			"method": "DELETE",
 			"path": "/api/user/delete/:id",
 			"description": "Delete a user by id"
-		  },
-		  {
+		},
+		{
 			"method": "GET",
 			"path": "/api/park",
 			"description": "Get all parks"
-		  },
-		  {
+		},
+		{
 			"method": "POST",
 			"path": "/api/park",
 			"description": "Create a new park"
-		  },
-		  {
+		},
+		{
 			"method": "PUT",
 			"path": "/api/park/update/:id",
 			"description": "Update a park by id"
-		  },
-		  {
+		},
+		{
 			"method": "DELETE",
 			"path": "/api/park/delete/:id",
 			"description": "Delete a park by id"
-		  },
-		  {
+		},
+		{
 			"method": "GET",
 			"path": "/api/message",
 			"description": "Get all messages"
-		  },
-		  {
+		},
+		{
 			"method": "GET",
 			"path": "/api/messageLog",
 			"description": "Get all messageLogs"
-		  },
-		  {
+		},
+		{
 			"method": "GET",
 			"path": "/api/subscriptionLog",
 			"description": "Get all subscriptionLogs"
-		  }
+		}
 	]
-}
+};
