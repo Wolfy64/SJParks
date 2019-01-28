@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, config.keys.path)));
 /** View Engine */
 if (inTesting) app.use(require('express-ejs-layouts'));
 app.set('view engine', inTesting ? 'ejs' : 'pug');
-if (inTesting)	app.set('views', path.join(__dirname, config.keys.path));
+if (inTesting) app.set('views', path.join(__dirname, config.keys.path));
 if (!inTesting) app.use(express.static(path.join(__dirname, config.keys.path)));
 
 /** Passport */
@@ -51,24 +51,25 @@ app.use('/api', router.api);
 /** Error Handlers */
 // if (inTesting) {
 // 	app.use((req, res, next) => {
-// 		res.status(404).render('404.ejs');
+// 		res.render('404');
 // 	});
 
 // 	app.use((err, req, res, next) => {
-// 		res.status(500).render('500.ejs', err);
+// 		res.render('500', err);
 
 // 	});
-// } else if (!inTesting) {
-// 	app.use((err, req, res, next) => {
-// 		res.status(err.status || 500);
+// } else
+if (!inTesting) {
+	app.use((err, req, res, next) => {
+		res.status(err.status || 500);
 
-// 		res.json({
-// 			errors: {
-// 				message: err.message,
-// 				error: err
-// 			}
-// 		});
-// 	});
-// }
+		res.json({
+			errors: {
+				message: err.message,
+				error: err
+			}
+		});
+	});
+}
 
 module.exports = app;
