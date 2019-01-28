@@ -1,171 +1,120 @@
-const db = require("../../models");
+/*jshint esversion: 6 */
+const db = require('../../models');
 const cloudinary = require('cloudinary');
-const config = require('../../config');
-
-// Load input validation
-const validateRegisterInput = require("../../config/validation");
-
-/* 
-@route GET api/user/:userId 
-@desc Read a user by userId 
-@access Public
-*/
-function read(req, res) {}
-
-/*
-@route GET api/user 
-@desc Get all users 
-@access Public
-*/
-function index(req, res) {
-  db
-    .User
-    .find()
-    .sort({
-      username: 1,
-      phone: 1
-    })
-    .then(users => {
-      res
-        .status(200)
-        .json({
-          success: true,
-          users: users
-        });
-    })
-    .catch(err => console.log(err));
+const { validate} = require('../../config');
+const { responseSender } = require('../../lib');
+const respond = responseSender;
+/**
+ * @access Public
+ * @function read
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/user/:userId 
+ * @desc Read a user by userId 
+ */
+function read(req, res) {
+	db.Park
+		.findById({ _id: req.params.id })
+		.then((park) => respond(res, true, park, 'json', '/'))
+		.catch((err) => respond(res, false, err, 'json', '/'));
 }
 
-/*
-@route POST api/user/ 
-@desc Create An New user 
-@access Public
-*/
+/**
+ * @access Public
+ * @function index
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/user 
+ * @desc Get all users 
+ */
+function index(req, res) {
+	db.User
+		.find()
+		.sort({
+			username: 1,
+			phone: 1
+		})
+		.then((users) => respond(res, true, users, 'json', '/'))
+		.catch((err) => respond(res, false, err, 'json', '/'));
+}
+
+/**
+ * @public
+ * @function create
+ * @param {request} req 
+ * @param {response} res 
+ * @method POST api/user/ 
+ * @desc Create An New user 
+ */
 function create(req, res) {
- res.status(200).json(req.body);
-  // const {
-  //   errors,
-  //   isValid,
-  //   data
-  // } = validateRegisterInput(req.body);
-  // // Check validation
-  // if (!isValid) {
-  //   if (!config.keys.prod) {
-  //     return res.render('register', {
-  //       errors
-  //       /*,
-  //             userName,
-  //             firstName,
-  //             lastName,
-  //             phone,
-  //             email,
-  //             password,
-  //             addPark,
-  //             addMessage*/
-  //     });
-  //   } else {
-  //     return res.status(400).json(errors);
-  //   }
+	// validate
+	const { errors, isValid } = validate(req.body);
 
-  // }
-  // if (errors.length > 0) {
+	if (!isValid) {
+		console.log({ success: false, error: errors });
+    respond(res, false, errors, 'json', '/');
+	} else {
+		const data = {
+				access: req.body.access,
+				userName: req.body.userName,
+				firstName: req.body.firstName,
+				lastName: req.body.lastName,
+				phone: req.body.phone,
+				email: req.body.email
+			},
+			newUser = new db.User(data);
 
-  // } else {
-  //   let user = null;
-  //   db
-  //     .User
-  //     .findOne({
-  //       userName: data.userName,
-  //       phone: data.phone,
-  //       email: data.email
-  //     })
-  //     .then(userFound => {
-  //       if (userFound)
-  //         user = userFound;
-  //     });
-  //   if (user != null) {
-  //     errors.push({
-  //       msg: `Derp! User already exists!`,
-  //       user: user
-  //     })
-  //     res.render('register', {
-  //       errors,
-  //       user
-  //     });
-  //   } else {
+		db.Park
+			.findOne({
+				code: req.body.addPark
+			})
+			.then((park) => {
+				if (park) {
+					newUser.parks.push(park._id);
+				} else {
+					const newPark = new db.Park({
+						code: req.body.addPark
+					});
+					newPark.users.push(newUser._id);
+					newPark
+						.save()
+						.then((park) => newUser.parks.push(park._id))
+						.catch((err) => errors.push(new Error({ msg: err.message })));
+				}
+			})
+			.catch((err) => errors.push(new Error({ msg: err.message })));
 
-  //     const newUser = new db.User({
-  //       isAdmin: data.isAdmin,
-  //       userName: data.userName,
-  //       firstName: data.firstName,
-  //       lastName: data.lastName,
-  //       phone: data.phone,
-  //       email: data.email
-  //     });
+		db.Message
+			.findOne({
+				message: req.body.addMessage
+			})
+			.exec((err, message) => {
+				if (message) {
+					newUser.messages.push(message._id);
+				} else if (err || !message) {
+					const newMessage = new db.Message({
+						author: newUser._id,
+						message: req.body.addMessage
+					});
+					newMessage
+						.save()
+						.then((message) => newUser.messages.push(message._id))
+						.catch((err) => errors.push(new Error({ msg: err.message })));
+				}
+			});
 
-  //     db
-  //       .Park
-  //       .findOne({
-  //         code: data.addPark
-  //       })
-  //       .then(park => {
-  //         if (park) {
-  //           newUser
-  //             .parks
-  //             .push(park._id);
-  //         } else {
-  //           const newPark = new db.Park({
-  //             code: data.addPark
-  //           });
-  //           newPark
-  //             .users
-  //             .push(newUser._id);
-  //           newPark
-  //             .save()
-  //             .then(park => newUser.parks.push(park._id))
-  //             .catch(err => console.log(err));
-  //         }
-  //       })
-  //       .catch(err => console.log(err));
-  //     db
-  //       .Message
-  //       .findOne({
-  //         message: data.addMessage
-  //       })
-  //       .exec((err, message) => {
-  //         if (message) {
-  //           newUser
-  //             .messages
-  //             .push(message._id);
-  //         } else if (err || !message) {
-  //           const newMessage = new db.Message({
-  //             author: newUser._id,
-  //             message: data.addMessage
-  //           });
-  //           newMessage
-  //             .save()
-  //             .then(message => newUser.messages.push(message._id))
-  //             .catch(err => console.log(err));
-  //         }
-  //       });
-  //     newUser.active = true;
-  //     newUser.setPassword(data.password);
+		newUser.active = true;
 
-  //     newUser
-  //       .save()
-  //       .then(user => {
-  //         req.flash('success_msg', 'You are now registered and can log in');
-  //         res
-  //           .status(220)
-  //           .send({
-  //             Success: true,
-  //             NewUser: user._id
-  //           });
-  //         res.redirect('/admin/login');
-  //       })
-  //       .catch(err => console.log(err));
-  //   }
-  // }
+		newUser.setPassword(req.body.password);
+
+		newUser
+			.save()
+			.then((user) => {
+				respond(res, true, user, 'json', '/');
+				// req.flash('success_msg', 'You are now registered and can log in');
+			})
+			.catch((err) => respond(res, false, errors.push(new Error({ msg: err })), 'json', '/'));
+	}
 }
 
 /*
@@ -174,105 +123,92 @@ function create(req, res) {
 @access Public
 */
 function update(req, res) {
-  const {
-    newAccess,
-    newFirstName,
-    newLastName,
-    newPhone,
-    newEmail,
-    newUserName,
-    newPassword,
-    addPark,
-    addMessage,
-    
-  } = req.body;
+	const {
+		newAccess,
+		newFirstName,
+		newLastName,
+		newPhone,
+		newEmail,
+		newUserName,
+		newPassword,
+		addPark,
+		addMessage
+	} = req.body;
 
-  const data = {};
-  data.access = newAccess;
-  data.userName = newUserName;
-  data.firstName = newFirstName;
-  data.lastName = newLastName;
-  data.phone = newPhone;
-  data.email = newEmail;
+	const data = {};
+	data.access = newAccess;
+	data.userName = newUserName;
+	data.firstName = newFirstName;
+	data.lastName = newLastName;
+	data.phone = newPhone;
+	data.email = newEmail;
 
-  const {
-    errors,
-    isValid,
-    updates
-  } = validateRegisterInput(data);
-  
-  const options = {
-    // setDefaultsOnInsert: true, sort: -1,
-    new: true,
-    upsert: false,
-    runValidators: true,
-    select: null,
-    rawResult: false,
-    strict: false
-  };
+	const { errors, isValid } = validate(data);
 
-  if(!isValid){
-    res.status(225).json({errors});
-  } else {
-    db
-    .User
-    .findByIdAndUpdate(req.params.id, updates, options)
-    .then(newUser => {
-      db
-        .Park
-        .findOne({
-          name: addPark
-        })
-        .exec((err, park) => {
-          if (park) {
-            newUser
-              .parks
-              .push(park._id);
-          } else if (err || !park) {
-            const newPark = new db.Park({
-              name: addPark
-            });
-            newPark
-              .users
-              .push(newUser._id);
-            newPark
-              .save()
-              .then(park => newUser.parks.push(park._id));
-          }
-        });
+	const options = {
+		// setDefaultsOnInsert: true, sort: -1,
+		new: true,
+		upsert: false,
+		runValidators: true,
+		select: null,
+		rawResult: false,
+		strict: false
+	};
 
-      db
-        .Message
-        .findOne({
-          message: addMessage
-        })
-        .exec((err, message) => {
-          if (message) {
-            newUser
-              .messages
-              .push(message._id);
-          } else if (err || !message) {
-            const newMessage = new db.Message({
-              author: newUser._id,
-              message: addMessage
-            });
-            newMessage
-              .save()
-              .then(message => newUser.messages.push(message._id))
-              .catch(err => console.log(err));
-          }
-        });
+	if (!isValid) {
+		res.status(225).json({ errors });
+	} else {
+		db.User
+			.findByIdAndUpdate(req.params.id, data, options)
+			.then((newUser) => {
+				db.Park
+					.findOne({
+						name: addPark
+					})
+					.exec((err, park) => {
+						if (park) {
+							newUser.parks.push(park._id);
+						} else if (err || !park) {
+							const newPark = new db.Park({
+								name: addPark
+							});
+							newPark.users.push(newUser._id);
+							newPark.save().then((park) => newUser.parks.push(park._id));
+						}
+					});
 
-      newUser.setPassword(newPassword);
-      newUser
-        .save()
-        .then(newuser => res.status(220).send({
-          Success: true,
-          NewUser: newuser
-        }))
-        .catch(err => console.log(err));
-    }).catch(err => console.log(err)); // end findby id and update
-  }
+				db.Message
+					.findOne({
+						message: addMessage
+					})
+					.exec((err, message) => {
+						if (message) {
+							newUser.messages.push(message._id);
+						} else if (err || !message) {
+							const newMessage = new db.Message({
+								author: newUser._id,
+								message: addMessage
+							});
+							newMessage
+								.save()
+								.then((message) => newUser.messages.push(message._id))
+								.catch((err) => console.log(err));
+						}
+					});
+
+				newUser.setPassword(newPassword);
+				newUser
+					.save()
+					.then((newuser) =>
+						res.status(220).send({
+							Success: true,
+							NewUser: newuser
+						})
+					)
+					.catch((err) => console.log(err));
+			})
+			.catch((err) => console.log(err)); // end findby id and update
+	}
 }
 
 /*
@@ -281,56 +217,46 @@ function update(req, res) {
 @access Public
 */
 function destroy(req, res) {
-  db
-    .User
-    .findByIdAndDelete({
-      _id: req.params.id
-    })
-    .then(user => {
-      //
-      user
-        .parks
-        .forEach(park => {
-          db
-            .Park
-            .findById(park)
-            .then(doc => {
-              doc
-                .users
-                .pop(user._id);
-              doc.save();
-            })
-            .catch(err => console.log(err))
-        });
+	db.User
+		.findByIdAndDelete({
+			_id: req.params.id
+		})
+		.then((user) => {
+			user.parks.forEach((park) => {
+				db.Park
+					.findById(park)
+					.then((doc) => {
+						doc.users.pop(user._id);
+						doc.save();
+					})
+					.catch((err) => console.log(err));
+			});
 
-      user
-        .messagess
-        .forEach(mess => {
-          db
-            .Message
-            .find({
-              author: mess.author
-            })
-            .then(docs => {
-              docs.forEach(doc => {
-                doc
-                  .users
-                  .pop(user._id);
-                doc.save();
-              })
-            })
-            .catch(err => console.log(err))
-        });
+			user.messagess.forEach((mess) => {
+				db.Message
+					.find({
+						author: mess.author
+					})
+					.then((docs) => {
+						docs.forEach((doc) => {
+							doc.users.pop(user._id);
+							doc.save();
+						});
+					})
+					.catch((err) => console.log(err));
+			});
 
-      user
-        .remove()
-        .then(removeduser => res.status(200).json({
-          success: true,
-          deleted: removeduser
-        }))
-        .catch(err => console.log(err))
-    })
-    .catch(err => console.log(err));
+			user
+				.remove()
+				.then((removeduser) =>
+					res.status(200).json({
+						success: true,
+						deleted: removeduser
+					})
+				)
+				.catch((err) => console.log(err));
+		})
+		.catch((err) => console.log(err));
 }
 
 /*
@@ -339,59 +265,48 @@ function destroy(req, res) {
 @access Public
 */
 function uploadImage(req, res) {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
-  const values = Object.values(req.files)
-  const promises = values.map(image => cloudinary.uploader.upload(image.path))
+	cloudinary.config({
+		cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+		api_key: process.env.CLOUDINARY_API_KEY,
+		api_secret: process.env.CLOUDINARY_API_SECRET
+	});
+	const values = Object.values(req.files);
+	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-  Promise
-    .all(promises)
-    .then(results => res.json(results))
-    .catch(err => console.log(err));
+	Promise.all(promises).then((results) => res.json(results)).catch((err) => console.log(err));
 
-  res.status(200);
+	res.status(200);
 }
 
 /*
 @route /api/users/_id/park
 */
-function readAllParks(req, res) {
-
-}
+function readAllParks(req, res) {}
 
 /*
 @route /api/users/_id/park
 */
-function readAllMessages(req, res) {
-
-}
+function readAllMessages(req, res) {}
 
 /*
 @route /api/users/_id/park
 */
-function findPark(req, res) {
-
-}
+function findPark(req, res) {}
 
 /*
 @route /api/users/_id/park
 */
-function findMessage(req, res) {
-
-}
+function findMessage(req, res) {}
 
 module.exports = {
-  index,
-  read,
-  register: create,
-  update,
-  destroy,
-  uploadImage,
-  readAllParks,
-  readAllMessages,
-  findPark,
-  findMessage
+	index,
+	read,
+	register: create,
+	update,
+	destroy,
+	uploadImage,
+	readAllParks,
+	readAllMessages,
+	findPark,
+	findMessage
 };
