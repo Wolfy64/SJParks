@@ -1,9 +1,9 @@
 /*jshint esversion: 6 */
 const db = require('../../models');
 const cloudinary = require('cloudinary');
-const { validate} = require('../../config');
-const { responseSender } = require('../../lib');
-const respond = responseSender;
+const { validate } = require('../../config');
+const { respond } = require('../../lib/responseSender');
+
 /**
  * @access Public
  * @function read
@@ -13,9 +13,9 @@ const respond = responseSender;
  * @desc Read a user by userId 
  */
 function read(req, res) {
-	db.Park
-		.findById({ _id: req.params.id })
-		.then((park) => respond(res, true, park, 'json', '/'))
+	db.User
+		.findOne(req.params.id)
+		.then((user) => respond(res, true, user, 'json', '/'))
 		.catch((err) => respond(res, false, err, 'json', '/'));
 }
 
@@ -48,22 +48,13 @@ function index(req, res) {
  */
 function create(req, res) {
 	// validate
-	const { errors, isValid } = validate(req.body);
+	const { errors, isValid, data } = validate(req.body);
 
 	if (!isValid) {
-		console.log({ success: false, error: errors });
-    respond(res, false, errors, 'json', '/');
+		// console.log({ success: false, error: errors });
+		respond(res, false, errors, 'json', '/');
 	} else {
-		const data = {
-				access: req.body.access,
-				userName: req.body.userName,
-				firstName: req.body.firstName,
-				lastName: req.body.lastName,
-				phone: req.body.phone,
-				email: req.body.email
-			},
-			newUser = new db.User(data);
-
+		const newUser = new db.User(data);
 		db.Park
 			.findOne({
 				code: req.body.addPark
@@ -73,7 +64,8 @@ function create(req, res) {
 					newUser.parks.push(park._id);
 				} else {
 					const newPark = new db.Park({
-						code: req.body.addPark
+						code: req.body.addPark.code,
+						name: req.body.addPark.name
 					});
 					newPark.users.push(newUser._id);
 					newPark
@@ -98,8 +90,10 @@ function create(req, res) {
 					});
 					newMessage
 						.save()
-						.then((message) => newUser.messages.push(message._id))
-						.catch((err) => errors.push(new Error({ msg: err.message })));
+						.then((message) => {
+							newUser.messages.push(message._id);
+						})
+						.catch((err) => errors.push(new Error({ msg: err })));
 				}
 			});
 
@@ -110,10 +104,13 @@ function create(req, res) {
 		newUser
 			.save()
 			.then((user) => {
-				respond(res, true, user, 'json', '/');
+				respond(res, true, user);
 				// req.flash('success_msg', 'You are now registered and can log in');
 			})
-			.catch((err) => respond(res, false, errors.push(new Error({ msg: err })), 'json', '/'));
+			.catch((err) => {
+				errors.push(new Error({ msg: err }));
+				respond(res, false, errors);
+			});
 	}
 }
 
@@ -273,30 +270,63 @@ function uploadImage(req, res) {
 	const values = Object.values(req.files);
 	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises).then((results) => res.json(results)).catch((err) => console.log(err));
+	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => {
+		console.log(err);
+		respond(res, false, err);
+	});
 
 	res.status(200);
 }
 
 /*
-@route /api/users/_id/park
+@route /api/users/_id/parks
 */
-function readAllParks(req, res) {}
+function readAllParks(req, res) {
+	db.User
+		.findById(req.params.id)
+		.then((user) => {
+			respond(res, true, user.parks);
+		})
+		.catch((err) => respond(res, false, err));
+}
 
 /*
-@route /api/users/_id/park
+@route /api/users/_id/messages
 */
-function readAllMessages(req, res) {}
+function readAllMessages(req, res) {
+	db.User
+	.findById(req.params.id)
+	.then((user) => {
+		respond(res, true, user.messages);
+	})
+	.catch((err) => respond(res, false, err));
+}
 
 /*
-@route /api/users/_id/park
+@route /api/users/_id/parks/_id
 */
-function findPark(req, res) {}
+function findPark(req, res) {
+	db.User
+	.findById(req.params.userId)
+		.then((user) => {
+			const park = user.parks.find((park) => park._id === req.params.parkId);
+			respond(res, true, { userId: user._id, parkId:park._id });
+	})
+	.catch((err) => respond(res, false, err));
+}
 
 /*
-@route /api/users/_id/park
+@route /api/users/_id/messages/_id
 */
-function findMessage(req, res) {}
+function findMessage(req, res) {
+	db.User
+	.findById(req.params.id)
+		.then((user) => {
+			const message = user.messages.find((message) => message._id === req.params.messageId);
+		respond(res, true, {userId: user._id, messageId: message._id});
+	})
+	.catch((err) => respond(res, false, err));
+}
 
 module.exports = {
 	index,
