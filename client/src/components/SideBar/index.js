@@ -11,32 +11,12 @@ const SideNav = styled.div`
   width: 150px;
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
-  z-index: 3;
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    width: 100%;
-    height: auto;
-    background-color: transparent;
-    #navbar{
-      margin-top: -300px;
-      padding-top: 50px;
-      -webkit-transition: all 0.5s ease;
-      -moz-transition: all 0.5s ease;
-      transition: all 0.5s ease;
-      background: ${props => props.theme.colors.dark};
-      border-bottom: solid 3px ${props => props.theme.colors.primary};
-    }
-  };
 
   .logout {
     position: absolute;
     bottom: 10px;
-    width: 100%;
-    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-      position: relative;
-      bottom: 0px;
-    }
-  };
-
+    width: inherit;
+  }
   .title {
     text-align: center;
     margin: 1rem 0;
@@ -44,48 +24,7 @@ const SideNav = styled.div`
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
-    };
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-      display: none;
     }
-  }
-
-  .menuIcon {
-    display: none;
-
-    text-align: center;
-    margin: 10px 0;
-
-    @media screen and (max-width: ${props => jsonprops.theme.displays.mobileL}) {
-      display: block;
-    }
-  }
-  @media screen and (max-width: ${props => props.jsonops.theme.displays.mobileL}) {
-    .navbar-nav {
-      margin-top: -200px;
-    }
-  }
-  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-    width: 100%;
-    height: auto;
-  }
-
-    height: 20px;
-    width: 30px;
-    padding: 40px 20px;
-    position: fixed;
-    right: 0px;
-    justify-content: center;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-      display: block;
-    }
-  }
-
-  #hid{
-    height: 100vh;
-    width: 100%;
-    background-color: transparent;
-    display: none;
   }
 `;
 function openNav() {
@@ -93,102 +32,47 @@ function openNav() {
   document.getElementById("hid").style.display = "block";
 }
 
+const SideBar = () => {
+  const token = localStorage.getItem('token');
+  const userID = jwt_decode(token).user._id;
 
-export default class SideBar extends React.Component {
-  state = {
-    menuIcon: 'fa fa-bars',
-  
-/* Set the width of the side navigation to 0 */
+  return (
+    <SideNav>
+      <div className="title">
+        <h1>SJParks</h1>
+        <p>Admin</p>
+      </div>
+      <ul className="navbar-nav">
+        <li>
+          <NavButton
+            to={`/admin/${userID}/updates`}
+            name="Updates"
+            action="updatePage"
+          />
+        </li>
+        <li>
+          <NavButton
+            to={`/admin/${userID}/parks`}
+            name="Parks"
+            action="parkPage"
+          />
+        </li>
+        <li>
+          <NavButton
+            to={`/admin/${userID}/users`}
+            name="Users"
+            action="userPage"
+          />
+        </li>
+      </ul>
 
-function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-300px";
-  document.getElementById("hid").style.display = "none";
-}
-export default class SideBar extends React.Component {
-  
-  state = {
-    menuIcon: 'fa fa-bars',
-    menu: false
-  };
+      <div className="logout">
+        <form action="/login/out" method="POST">
+          <NavButton type="submit" name="Logout" action="logoutPage" />
+        </form>
+      </div>
+    </SideNav>
+  );
+};
 
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.setState({
-        userID: jwt_decode(token).user._id
-      });
-    }
-  };
-
-  logout = () => {
-    localStorage.removeItem('token');
-    window.location.replace('/login');
-  };
-
-  toggleMenu = () => {
-    if(this.state.menuIcon === 'fa fa-bars'){
-      openNav()
-      this.setState({
-        menuIcon: 'fa fa-times',
-        menu: true
-      })
-    } else {
-      closeNav()
-      this.setState({
-        menuIcon: 'fa fa-bars',
-        menu: false
-      })
-    }
-  };
-
-  render() {
-    return (
-
-      <SideNav>
-        <div className="title">
-          <h1>SJParks</h1>
-          <p>Admin</p>
-        </div>
-        <div className='menuIcon' onClick={this.toggleMenu}>
-          <i className={this.state.menuIcon}/>
-        </div>
-
-        <div id="navbar">
-          <ul>
-            <li>
-              <NavButton
-                to={`/admin/${this.state.userID}/updates`}
-                name="Updates"
-                action="updatePage"
-              />
-            </li>
-            <li>
-              <NavButton
-                to={`/admin/${this.state.userID}/parks`}
-                name="Parks"
-                action="parkPage"
-              />
-            </li>
-            <li>
-              <NavButton
-                to={`/admin/${this.state.userID}/users`}
-                name="Users"
-                action="userPage"
-              />
-            </li>
-          </ul>
-          
-          <div className="logout">
-            <NavButton
-              onClick={this.logout}
-              type="submit"
-              name="Logout"
-              action="logoutPage"
-            />
-          </div>
-        </div>
-        <div id="hid" onClick={this.toggleMenu}></div>
-      </SideNav>
-    );
-  }
-}
+export default SideBar;
