@@ -54,6 +54,14 @@ const initialState = {
 class Login extends React.Component {
   state = initialState;
 
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const userID = jwt_decode(token).user._id;
+      this.props.history.push(`/admin/${userID}/updates`);
+    }
+  }
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -85,8 +93,7 @@ class Login extends React.Component {
     if (message) this.setState({ message });
     if (token) {
       localStorage.setItem('token', token);
-      const userID = jwt_decode(token).user._id;
-      this.props.history.push(`/admin/${userID}/user`);
+      global.location.reload(true);
     }
 
     // Reset Form field
@@ -95,7 +102,6 @@ class Login extends React.Component {
 
   render() {
     const { email, password, message } = this.state;
-
     return (
       <Container>
         <Form onSubmit={this.handleSubmit}>
