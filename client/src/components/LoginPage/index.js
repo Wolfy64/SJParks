@@ -43,7 +43,7 @@ class Login extends React.Component {
       const userID = jwt_decode(token).user._id;
       this.props.history.push(`/admin/${userID}/updates`);
     }
-  };
+  }
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -74,8 +74,7 @@ class Login extends React.Component {
     if (message) this.setState({ message });
     if (token) {
       localStorage.setItem('token', token);
-      const userID = jwt_decode(token).user._id;
-      this.props.history.push(`/admin/${userID}/user`);
+      global.location.reload(true);
     }
 
     // Reset Form field
