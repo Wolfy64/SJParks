@@ -1,8 +1,8 @@
 /*jshint esversion: 6 */
-import UserImage from '../../client/src/components/ProfilePage/UserImage';
+// import UserImage from '../../client/src/components/ProfilePage/UserImage';
 const db = require('../../models');
 const cloudinary = require('cloudinary');
-const { validate } = require('../../config');
+const { validateUserInput } = require('../../config/validator');
 const { respond } = require('../../lib/responseSender');
 
 /**
@@ -14,7 +14,9 @@ const { respond } = require('../../lib/responseSender');
  * @desc Read a user by userId 
  */
 function read(req, res) {
-	db.User.findOne(req.params.id).then((user) => respond(res, true, user)).catch((err) => respond(res, false, err));
+	db.User.findOne(req.params.id)
+		.then((user) => respond(res, true, user))
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -46,7 +48,7 @@ function index(req, res) {
  */
 function create(req, res) {
 	// validate
-	const { errors, isValid, data } = validate(req.body);
+	const { errors, isValid, data } = validateUserInput(req.body);
 
 	if (!isValid) {
 		// console.log({ success: false, error: errors });
@@ -280,9 +282,7 @@ function uploadImage(req, res) {
 	const values = Object.values(req.files);
 	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises)
-		.then((results) => respond(res, true, results))
-		.catch((err) => respond(res, false, err));
+	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => respond(res, false, err));
 
 	res.status(200);
 }
