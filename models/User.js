@@ -10,7 +10,11 @@ const UserSchema = new mongoose.Schema({
   salt: String,
 
   active: Boolean,
-
+  
+  imageUrl: {
+    type: String
+  },
+  
   access: {
     type: String
   },
@@ -38,17 +42,17 @@ const UserSchema = new mongoose.Schema({
     default: "Unknown"
   },
 
-  email: {
-    type: String,
-    required: [true, "you must enter an email"],
-    // match: [/\S+@\S+\.\S+/, 'is invalid'],
-    index: true
-  },
-
   phone: {
     type: String,
     /*match: [ /\d{3}-/d{3}/, "(999) 999 - 9999"],*/
     required: [true, "you must enter a phone number"],
+    index: true
+  },
+
+  email: {
+    type: String,
+    required: [true, "you must enter an email"],
+    // match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true
   },
 
@@ -60,11 +64,7 @@ const UserSchema = new mongoose.Schema({
   messages: [{
     type: Schema.Types.ObjectId,
     ref: 'Message'
-  }],
-
-  imageUrl: {
-    type: String
-  }
+  }]
 
 }, {
   timestamps: true

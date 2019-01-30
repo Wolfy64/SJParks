@@ -1,6 +1,6 @@
 const db = require('../../models');
-const { validateAllUpdates } = require('../../config/validation');
-
+const { validateParkInput } = require('../../config');
+const { respond } = require('../../lib/responseSender');
 /**
  * @public
  * @function index
@@ -16,18 +16,8 @@ function index(req, res) {
 			code: 1,
 			name: 1
 		})
-		.then((parks) =>
-			res.status(200).json({
-				success: true,
-				parks: parks
-			})
-		)
-		.catch((err) =>
-			res.status(459).json({
-				success: false,
-				errors: err
-			})
-		);
+		.then((parks) => respond(res, true, parks))
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -39,68 +29,17 @@ function index(req, res) {
  * @desc Create An New Park
  */
 function create(req, res) {
-	const { newName, newCode, addSubscriptionLogEntry, addMessageLogEntry } = req.body;
-	const parkToBeAdded = {};
-	const errors = [];
+	const {errors, isValid, data} = validateParkInput(req.body);
 
-	if ((newName != null) && (newCode != null)) {
-		db.Park
-			.findOne({ name: newName, code: newCode })
-			.then((park) =>
-				errors
-					.push({ msg: `A park named ${newName} with code: ${newCode} was found` })
-					.catch((err) => errors.push({ msg: err }))
-			);
-		parkToBeAdded.name = newName;
-		parkToBeAdded.code = newCode;
-	}
-
-	if (addSubscriptionLogEntry != null) {
-
-		const newLog = new db.SubscriptionLog ({
-				user: addSubscriptionLogEntry.user,
-				park: addSubscriptionLogEntry.park
-			})
-			.save((err, subscriptionLog) => {
-				parkToBeAdded.subscriptionLogs = !subscriptionLog || err ? [] : [ subscriptionLog._id ];
-			});
-	}
-
-	if (addMessageLogEntry != null) {
-		db.MessageLog
-			.findOne({
-				title: addMessageLogEntry.title,
-				author: addMessageLogEntry.author,
-				message: addMessageLogEntry.message,
-				tag: addMessageLogEntry.tag
-			})
-			.exec((err, messageLog) => {
-				parkToBeAdded.messageLogs = !messageLog || err ? [] : [ messageLog._id ];
-			});
-	}
-
-	if (errors.length > 0) {
-		res.status(461).json({
-			success: false,
-			errors: errors
-		});
+	if (!isValid) {
+		respond(res, false, errors);
 	} else {
-		const newPark = new db.Park(parkToBeAdded);
+		const NewPark = new db.Park(data);
 
-		newPark
+		NewPark
 			.save()
-			.then((newpark) =>
-				res.status(200).json({
-					Success: true,
-					NewPark: newpark
-				})
-			)
-			.catch((err) =>
-				res.status(462).json({
-					success: false,
-					errors: err
-				})
-			);
+			.then((newPark) => respond(res, true, newPark))
+			.catch((err) => respond(res, false, errors.push(new Error(err))));
 	}
 }
 
@@ -112,8 +51,9 @@ function create(req, res) {
  * @method PUT /api/park/:parkId
  * @desc Update an existing park by objectId
  */
+
 function update(req, res) {
-	const { errors, isValid } = validateAllUpdates(req.body);
+	const { errors, isValid, data } = validateParkInput(req.body);
 	const opts = {
 		new: true, // return updated doc
 		runValidators: true // validate before update
@@ -123,7 +63,7 @@ function update(req, res) {
 		res.status(437).json({ errors });
 	} else {
 		db.Park
-			.findByIdAndUpdate(req.params.id, req.body, opts)
+			.findByIdAndUpdate(req.params.id, data, opts)
 			.then((doc) => {
 				doc.save();
 			})
