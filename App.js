@@ -48,7 +48,6 @@ app.use('/auth', router.auth);
 app.use('/api', router.api);
 
 /** Error Handlers */
-// if (inTesting) {
 // 	app.use((req, res, next) => {
 // 		res.render('404');
 // 	});
@@ -57,18 +56,15 @@ app.use('/api', router.api);
 // 		res.render('500', err);
 
 // 	});
-// } else
-if (!inTesting) {
-	app.use((err, req, res, next) => {
-		res.status(err.status || 500);
+// 
+app.use((err, req, res, next) => {
+	res.status(err.status || 500);
 
-		res.json({
-			errors: {
-				message: err.message,
-				error: err
-			}
-		});
+	res.json({
+		errors: {
+			message: err
+		}
 	});
-}
+});
 
 module.exports = app;

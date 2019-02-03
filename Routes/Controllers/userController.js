@@ -47,68 +47,25 @@ function index(req, res) {
  * @desc Create An New user 
  */
 function create(req, res) {
+
 	// validate
 	const { errors, isValid, data } = validateUserInput(req.body);
 
 	if (!isValid) {
-		// console.log({ success: false, error: errors });
+		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
 		const newUser = new db.User(data);
-		db.Park
-			.findOne({
-				code: req.body.addPark
-			})
-			.then((park) => {
-				if (park) {
-					newUser.parks.push(park._id);
-				} else {
-					const newPark = new db.Park({
-						code: req.body.addPark.code,
-						name: req.body.addPark.name
-					});
-					newPark.users.push(newUser._id);
-					newPark
-						.save()
-						.then((park) => newUser.parks.push(park._id))
-						.catch((err) => errors.push(new Error({ msg: err.message })));
-				}
-			})
-			.catch((err) => errors.push(new Error({ msg: err.message })));
 
-		db.Message
-			.findOne({
-				message: req.body.addMessage
-			})
-			.exec((err, message) => {
-				if (message) {
-					newUser.messages.push(message._id);
-				} else if (err || !message) {
-					const newMessage = new db.Message({
-						author: newUser._id,
-						message: req.body.addMessage
-					});
-					newMessage
-						.save()
-						.then((message) => {
-							newUser.messages.push(message._id);
-						})
-						.catch((err) => errors.push(new Error({ msg: err })));
-				}
-			});
-
-		newUser.active = true;
-
-		newUser.setPassword(req.body.password);
+		newUser.setPassword(data.password);
 
 		newUser
 			.save()
 			.then((user) => {
 				respond(res, true, user);
-				// req.flash('success_msg', 'You are now registered and can log in');
 			})
 			.catch((err) => {
-				errors.push(new Error({ msg: err }));
+				errors.push(new Error({ msg: "Could not save user" }));
 				respond(res, false, errors);
 			});
 	}
@@ -124,30 +81,12 @@ function create(req, res) {
  */
 
 function update(req, res) {
-	const {
-		newAccess,
-		newFirstName,
-		newLastName,
-		newPhone,
-		newEmail,
-		newUserName,
-		newPassword,
-		addPark,
-		addMessage
-	} = req.body;
 
-	const data = {};
-	data.access = newAccess;
-	data.userName = newUserName;
-	data.firstName = newFirstName;
-	data.lastName = newLastName;
-	data.phone = newPhone;
-	data.email = newEmail;
-
-	const { errors, isValid } = validate(data);
+	const { errors, isValid, data } = validateUserInput(req.body);
 
 	const options = {
-		// setDefaultsOnInsert: true, sort: -1,
+		setDefaultsOnInsert: true,
+		sort: 1,
 		new: true,
 		upsert: false,
 		runValidators: true,
@@ -162,42 +101,8 @@ function update(req, res) {
 		db.User
 			.findByIdAndUpdate(req.params.id, data, options)
 			.then((newUser) => {
-				db.Park
-					.findOne({
-						name: addPark
-					})
-					.exec((err, park) => {
-						if (park) {
-							newUser.parks.push(park._id);
-						} else if (err || !park) {
-							const newPark = new db.Park({
-								name: addPark
-							});
-							newPark.users.push(newUser._id);
-							newPark.save().then((park) => newUser.parks.push(park._id));
-						}
-					});
-
-				db.Message
-					.findOne({
-						message: addMessage
-					})
-					.exec((err, message) => {
-						if (message) {
-							newUser.messages.push(message._id);
-						} else if (err || !message) {
-							const newMessage = new db.Message({
-								author: newUser._id,
-								message: addMessage
-							});
-							newMessage
-								.save()
-								.then((message) => newUser.messages.push(message._id))
-								.catch((err) => console.log(err));
-						}
-					});
-
-				newUser.setPassword(newPassword);
+				
+				newUser.setPassword(data.assword);
 				newUser
 					.save()
 					.then((newuser) =>
@@ -253,11 +158,7 @@ function destroy(req, res) {
 
 			user
 				.remove()
-				.then((removeduser) =>
-					res.status(200).json({
-						success: true,
-						deleted: removeduser
-					})
+				.then((removedUser) => res(res,true,removedUser)
 				)
 				.catch((err) => console.log(err));
 		})
@@ -282,7 +183,9 @@ function uploadImage(req, res) {
 	const values = Object.values(req.files);
 	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => respond(res, false, err));
+	Promise.all(promises)
+		.then((results) => respond(res, true, results))
+		.catch((err) => respond(res, false, err));
 
 	res.status(200);
 }
@@ -363,7 +266,7 @@ function findMessage(req, res) {
 module.exports = {
 	index,
 	read,
-	register: create,
+	create,
 	update,
 	destroy,
 	uploadImage,

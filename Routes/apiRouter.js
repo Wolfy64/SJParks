@@ -5,7 +5,7 @@ const api = require('./Controllers');
 // var apiManifest = require('../config/apiManifest');
 
 /** Users */
-router.route('/users').get(api.users.index).post(api.users.register); 
+router.route('/users').get(api.users.index).post(api.users.create); 
 
 router.route('/users/:userId').get(api.users.read).put(api.users.update).delete(api.users.destroy);
 
