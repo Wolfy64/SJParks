@@ -40,6 +40,8 @@ const ParkSchema = new mongoose.Schema({
     timestamps: true
     });
 
+ParkSchema.set('toJSON', { getters: true, virtuals: false });
+    
 ParkSchema.methods.addSubscriptionLog = (newSubscriptionLogId) => {
     this.subscriptionLogs.push(newSubscriptionLogId);    
 };
@@ -48,11 +50,9 @@ ParkSchema.methods.addMessageLog = (newMessageLogId) => {
     this.messageLogs.push(newMessageLogId);    
 };
 
-
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
-
 const Park = mongoose.model('Park', ParkSchema);
 
 module.exports = Park;

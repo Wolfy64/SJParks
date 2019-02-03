@@ -9,19 +9,22 @@ const UserSchema = new mongoose.Schema({
 
   salt: String,
 
-  active: Boolean,
-  
+  active: {
+    type: Boolean,
+    default: true
+  },
+
   imageUrl: {
     type: String
   },
-  
+
   access: {
-    type: String
+    type: String,
+    default: 'basic'
   },
 
   userName: {
     type: String,
-    lowercase: true,
     required: [true, 'please enter a username'],
     // match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
     index: true
@@ -34,26 +37,26 @@ const UserSchema = new mongoose.Schema({
 
   firstName: {
     type: String,
-    default: "Unknown"
+    default: 'Unknown'
   },
 
   lastName: {
     type: String,
-    default: "Unknown"
-  },
-
-  phone: {
-    type: String,
-    /*match: [ /\d{3}-/d{3}/, "(999) 999 - 9999"],*/
-    required: [true, "you must enter a phone number"],
-    index: true
+    default: 'Unknown'
   },
 
   email: {
+    index: true,
     type: String,
-    required: [true, "you must enter an email"],
-    // match: [/\S+@\S+\.\S+/, 'is invalid'],
-    index: true
+    required: [true, 'you must enter an email'],
+    // match: [/\S+@\S+\.+\S/, 'is invalid'],
+  },
+
+  phone: {
+    index: true,
+    type: String,
+    required: [true, 'you must enter a phone number'],
+    /*match: [ /\d{3}+\-+\d{3}+\-+\d{4}/, '999-999-9999']*/
   },
 
   parks: [{
@@ -61,27 +64,29 @@ const UserSchema = new mongoose.Schema({
     ref: 'Park'
   }],
 
-  messages: [{
+  updates: [{
     type: Schema.Types.ObjectId,
-    ref: 'Message'
-  }]
+    ref: 'Update'
+  }],
 
 }, {
   timestamps: true
 });
 
+
+
 // Create Schema Virtuals
 UserSchema.virtual('name').get(() => {
-  return this.firstName + ' ' + this.lastName;
+  return  this.firstName + ' ' + this.lastName;
 });
 
 UserSchema.virtual('name').set((x) => {
   const N = x.split(' ');
   this.firstName = x.split(',').length > 0 ? N[1] : N[0];
-  this.lastName = N.pop(N.indexOf(this.firstname));
+  this.lastName = N.pop(N.indexOf(this.firstName));
 });
 
-UserSchema.virtual('activeSUBS').get(function () {
+UserSchema.virtual('subscriptions').get(function () {
   return {
     active: this.active,
     access: this.access,
@@ -93,7 +98,9 @@ UserSchema.virtual('activeSUBS').get(function () {
   };
 });
 
-// Configure Schema Plugins
+UserSchema.set('toJSON', { getters: true, virtuals: true });
+
+// Configure Custom Validators
 UserSchema.plugin(uniqueValidator, {
   type: 'mongoose-unique-validator'
 });

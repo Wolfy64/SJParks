@@ -60,14 +60,14 @@ function update(req, res) {
 	};
 
 	if (!isValid) {
-		res.status(437).json({ errors });
+		respond(res, false, errors);
 	} else {
 		db.Park
 			.findByIdAndUpdate(req.params.id, data, opts)
 			.then((doc) => {
 				doc.save();
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => respond(res, false, errors.push(new Error({msg: err}))));
 	}
 }
 

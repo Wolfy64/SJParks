@@ -9,15 +9,11 @@ const MessageLogSchema = new mongoose.Schema({
 	},
 	message: {
 		type: String,
-		required: true
+		required: [true,'']
 	},
 	desc: String,
 	tag: {
-		type: String,
-		validate: {
-			validator: (props) => {},
-			message: 'Derp! invalid tag'
-		}
+		type: String
 	},
 	author: {
 		type: Schema.Types.ObjectId,
