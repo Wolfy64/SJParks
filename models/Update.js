@@ -23,7 +23,8 @@ const UpdateSchema = new mongoose.Schema({
     }]
 }, {
     timestamps: true
-});
+    });
+     
 // add 'Unique' validation to this schema
 UpdateSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'

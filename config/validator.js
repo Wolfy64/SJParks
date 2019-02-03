@@ -3,75 +3,108 @@ const db = require('../models');
 const validator = require('validator');
 const isEmpty = require('is-empty');
 
-function validateUserInput(data) {
-	data.access = !isEmpty(data.access) ? data.access : 'basic';
-	data.userName = !isEmpty(data.userName) ? data.userName : '';
-	data.password = !isEmpty(data.password) ? data.password : '';
-	data.name = !isEmpty(data.name) ? data.name : '';
-	data.phone = !isEmpty(data.phone) ? data.phone : '';
-	data.email = !isEmpty(data.email) ? data.email : '';
-	data.addPark = !isEmpty(data.addPark) ? data.addPark : '';
-	data.addMessage = !isEmpty(data.addMessage) ? data.addMessage : '';
+/**
+ * @function validateUserInput 
+ * @param {request.body} props
+ * @desc Validates user input provided by an HTTP_request object
+ */
+function validateUserInput(props) {
+	console.log('> validating user');
+	const queries = [];
+	const errors = [];
+	const data = {};
 
-	let errors = [];
+	// prepare data
+	console.log('> Preparing Data');
+	data.access = !isEmpty(props.access) ? props.access : 'basic';
+	data.userName = !isEmpty(props.userName) ? props.userName : '';
+	data.password = !isEmpty(props.password) ? props.password : '';
+	data.name = !isEmpty(props.name) ? props.name : '';
+	data.phone = !isEmpty(props.phone) ? props.phone : '';
+	data.email = !isEmpty(props.email) ? props.email : '';
+	data.addPark = !isEmpty(props.addPark) ? props.addPark : '';
+	data.addUpdate = !isEmpty(props.addUpdate) ? props.addUpdate : '';
+	console.log(`> Prepared data: ${JSON.stringify(data)}`);
 
-	// Name checks
-	if (validator.isEmpty(data.name)) {
-		errors.push(new Error({ msg: 'Name field is required' }));
-	}
+	// prepare validator queries
+	console.log('> Preparing queries');
+	queries.push({ code: data.addPark.code, name: data.addPark.name });
+	queries.push({ author: data.addUpdate.author });
+	queries.push({
+		userName: data.userName,
+		phone: data.phone,
+		email: data.email
+	});
 
-	// Phone checks
+	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
+
+	// empty validator checks
+
 	if (validator.isEmpty(data.phone)) {
-		errors.push(new Error({ msg: 'Phone field is required' }));
+		console.log(`phone was empy`);
+		errors.push({ msg: 'Phone field is required' });
 	}
+	console.log('[1]' + errors.toString());
 
-	// Email checks
 	if (validator.isEmpty(data.email)) {
-		errors.push(new Error({ msg: 'Email field is required' }));
+		console.log(`email was empy`);
+		errors.push({ msg: 'Email field is required' });
 	}
+	console.log('[2]' + errors.toString());
 
-	if (!validator.isEmail(data.email)) {
-		errors.push(new Error({ msg: 'Email is invalid' }));
+	if (validator.isEmpty(data.userName)) {
+		console.log(`userName was empy`);
+		errors.push({ msg: 'userName field is required' });
 	}
+	console.log('[3]' + errors.toString());
 
-	// Password checks';
 	if (validator.isEmpty(data.password)) {
-		errors.push(new Error({ msg: 'Password field is required' }));
+		console.log(`password was empy`);
+		errors.push({ msg: 'Password field is required' });
 	}
-
-	// Access checks
-	if (!validator.isAlphanumeric(data.access)) {
-		errors.push(new Error({ msg: 'Acces must be alphanumeric' }));
-	}
-	
-	if (!validator.isMobilePhone(data.phone)) {
-		errors.push(new Error({ msg: 'Phone is invalid' }));
-	}
+	console.log('[4]' + errors.toString());
 
 	if (
 		!validator.isLength(data.password, {
 			min: 6,
 			max: 30
 		})
-	)
-		errors.push(new Error({ msg: 'Password must be at least 6 and no more than 30 characters in length' }));
+	) {
+		errors.push({ msg: 'Password must be at least 6 and no more than 30 characters in length' });
+	}
+	console.log('[5]' + errors.toString());
 
-	// find a user
-	db.User
-		.findOne({
-			userName: data.userName,
-			phone: data.phone,
-			email: data.email
-		})
-		.then((userFound) => {
-			if (userFound) {
-			}
-			errors.push(
-				new Error({
-					msg: `Derp! User already exists!`
-				})
-			);
-		});
+	// misc validator checks
+	if (!validator.isAlphanumeric(data.access)) {
+		errors.push({ msg: 'Access must be alpha-numeric' });
+	}
+	console.log('[6]' + errors.toString());
+
+	if (!validator.isMobilePhone(data.phone)) {
+		errors.push({ msg: 'Phone is invalid' });
+	}
+	console.log('[7]' + errors.toString());
+
+	// db.Update
+	// 	.findOne(queries[1])
+	// 	.then((x) => data.addUpdate = x._id)
+	// 	.catch((err) => errors.push({ msg: `Could not find a Update with that @userId`, errThrown: err }));
+	// console.log('[8]'+errors.toString());
+
+	// db.Park
+	// 	.findOne(queries[0])
+	// 	.then((x) => data.appPark = x._id)
+	// 	.catch((err) => errors.push({ msg: `Could not find a  with that @parkId`, errThrown: err }));
+	// console.log('[9]'+errors);
+
+	// db.User
+	// 	.findOne(queries[2])
+	// 	.then((userFound) => {
+	// 		console.log(`found a user`);
+	// 		errors.push({ msg: `A user with @userId: ${userFound._id} was found with the given information` });
+	// 	})
+	// 	.catch((err) => console.error(err));
+	// console.log('[10]'+errors.toString());
 
 	return {
 		errors,
@@ -80,44 +113,66 @@ function validateUserInput(data) {
 	};
 }
 
+/**
+ * @function validateParkInput 
+ * @param {request.body} props
+ * @desc Validates park input provided by an HTTP_request object
+ */
 function validateParkInput(props) {
-	let queries = [];
-	let errors = [];
+	console.log('> validating park');
+	const queries = [];
+	const errors = [];
 	const data = {};
 
-	data.name = !isEmpty(props.name)?  props.name: '';
+	// prepare data
+	console.log('> Preparing Data');
+	data.name = !isEmpty(props.name) ? props.name : '';
 	data.code = !isEmpty(props.code) ? props.code : '';
+	data.subscriptionLog = !isEmpty(props.addSubscriptionLog) ? props.addSubscriptionLog : '';
+	data.messageLog = !isEmpty(props.addMessageLog) ? props.addMessageLog : '';
+	console.log(`> Prepared data: ${JSON.stringify(data)}`);
+
+	// prepare validator queries
+	console.log('> Preparing queries');
+	queries.push({ parks: { $elemMatch: { _id: props.addSubscriptionLog.parkId } } });
+	queries.push({ parks: { $elemMatch: { _id: props.addMessageLog.parkId } } });
 	queries.push({ name: data.name, code: data.code });
-	data.subscriptionLog = !isEmpty(props.subscriptionLog) ? props.subscriptionLog : '';
-	if(!data.subscriptionLog.parkId)queries.push({park: data.subscriptionLog.parkId});
-	data.messageLog = !isEmpty(props.messageLog) ? props.messageLog : '';
-	if(data.messageLog.)
+	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
+
+	// empty validator checks
+
 	if (validator.isEmpty(data.name)) {
-		errors.push(new Error({ msg: 'Name field is required' }));
+		console.log(`name was empty`);
+		errors.push({ msg: 'Name field is required' });
 	}
+	console.log('[1]' + errors.toString());
 
 	if (validator.isEmpty(data.code)) {
-		errors.push(new Error({ msg: 'A Park Code is required' }));
+		console.log(`code was empty`);
+		errors.push({ msg: 'A Park Code is required' });
 	}
+	console.log('[2]' + errors.toString());
 
-	if (validator.isEmpty(data.subscriptionLog)) {
-		data.subscriptionLog = [];
-	}
+	if (!validator.isEmpty(data.addSubscriptionLog))
+		db.SubscriptionLog.findOne(queries[0]).then((prop) => (data.subscriptionLog = prop._id)).catch((err) => {
+			errors.push({ msg: `Could not find a subscriptionLog with that @parkId`, errThrown: err });
+		});
+		console.log('[3]' + errors.toString());
 
-	if (validator.isEmpty(data.messageLog)) {
-		data.messageLog = [];
-	}
+	if (!validator.isEmpty(data.addMessageLog))
+		db.MessageLog.findOne(queries[1]).then((prop) => (data.messageLog = prop._id)).catch((err) => {
+			errors.push({ msg: `Could not find a messageLog with that @authorId`, errThrown: err });
+		});
+		console.log('[4]' + errors.toString());
 
-	db.SubscriptionLog.findOne(query);
-
+		// misc validator checks
 	db.Park
-		.findOne({ name: data.name, code: data.code })
+		.findOne(queries[1])
 		.then((park) => {
-			errors
-				.push(new Error({ msg: `A park named ${data.name} with code: ${data.code} was found` })
-				);
-		}).catch((err) => console.error(err));
-	
+			errors.push({ msg: `A park named ${park.name} with code: ${park.code} was found` });
+		})
+		.catch((err) => console.error(err));
+		console.log('[5]' + errors.toString());
 
 	return {
 		errors,
@@ -151,7 +206,8 @@ function validateLoginInput(data) {
 	};
 }
 
-module.export = {
+module.exports = {
 	validateUserInput,
-	validateParkInput
+	validateParkInput,
+	validateLoginInput
 };
