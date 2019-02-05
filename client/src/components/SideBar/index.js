@@ -45,8 +45,13 @@ export default class SideBar extends React.Component {
   };
 
 const SideBar = () => {
-  const token = localStorage.getItem('token');
+  let token = localStorage.getItem('token');
   const userID = jwt_decode(token).user._id;
+  const logout = () => {
+    localStorage.removeItem('token');
+    token = localStorage.getItem('token');
+    window.location.replace('/login');
+  }
 
   return (
     <SideNav>
@@ -79,9 +84,7 @@ const SideBar = () => {
       </ul>
 
       <div className="logout">
-        <form action="/login/out" method="POST">
-          <NavButton type="submit" name="Logout" action="logoutPage" />
-        </form>
+        <NavButton onClick={logout} type="submit" name="Logout" action="logoutPage" />
       </div>
     </SideNav>
   );
