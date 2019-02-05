@@ -5,15 +5,8 @@ import SideBar from '../SideBar';
 
 const Page = styled.div`
   margin: 0 80px 0 240px;
-  display: flex;
-  flex-wrap: wrap;
-  z-index: 1;
-  max-width: 1000px;
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    margin: 100px 0;
-    width: 100vw;
-    flex-direction: column;
-    align-items: center;
+  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    margin: 50px 10px;
   }
 `;
 
