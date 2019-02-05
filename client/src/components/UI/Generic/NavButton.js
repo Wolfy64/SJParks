@@ -22,7 +22,7 @@ const NavButton = (props) => {
         )
     } else {
         return (
-            <Btn type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
+            <Btn onClick={props.onClick} type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
         )
     }   
 }
