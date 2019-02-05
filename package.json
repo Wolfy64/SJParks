@@ -9,10 +9,9 @@
     "eject": "react-scripts eject",
     "start": "node Server.js",
     "client": "cd client && yarn start",
-    "server": "NODE_ENV=test nodemon Server.js",
+    "server": "nodemon Server.js",
     "test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
     "dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
-
   },
   "dependencies": {
     "acorn": "^6.0.5",

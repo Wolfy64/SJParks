@@ -1,5 +1,5 @@
 const db = require('../../models');
-const { validateParkInput } = require('../../config');
+const { validateParkInput } = require('../../config/validator');
 const { respond } = require('../../lib/responseSender');
 /**
  * @public
@@ -29,17 +29,30 @@ function index(req, res) {
  * @desc Create An New Park
  */
 function create(req, res) {
+	for (const key in req.query) {
+		console.log(key, req.query[key]);
+	}
+	console.log('> Creating new park');
 	const {errors, isValid, data} = validateParkInput(req.body);
-
+	console.log('> Passed new park data validation');
 	if (!isValid) {
+		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
+		
 		const NewPark = new db.Park(data);
 
 		NewPark
 			.save()
-			.then((newPark) => respond(res, true, newPark))
-			.catch((err) => respond(res, false, errors.push(new Error(err))));
+			.then((park) => {
+				console.log(`New park created. NewPark: ${park._id}`);
+				respond(res, true, park);
+			})
+			.catch((err) => {
+				console.log(err);
+				errors.push({ msg: err.message });
+				respond(res, false, errors);
+			});
 	}
 }
 
@@ -81,7 +94,7 @@ function update(req, res) {
  */
 function read(req, res) {
 	db.Park
-		.findById(req.params.parkId)
+		.findById(req.query.parkId)
 		.then((park) =>
 			res.status(200).json({
 				success: true,
