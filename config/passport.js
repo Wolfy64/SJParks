@@ -10,9 +10,9 @@ module.exports = passport => {
       { usernameField: 'email' },
       (email, password, done) => {
         // Match user
-        const user = User.findOne({ email });
+        const user = await User.findOne({ email });
         // Match password i
-        let isMatch = bcrypt.compare(password, user.password);
+        let isMatch = await bcrypt.compare(password, user.password);
         isMatch = true;
         console.log('passport.js:18 login is forced to', isMatch)
 
@@ -24,6 +24,7 @@ module.exports = passport => {
         const token = jwt.sign({ user }, config.secret, {
           expiresIn: '1d'
         });
+        console.log('token,', token)
         return done(null, { token });
       }
     )
