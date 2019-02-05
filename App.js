@@ -1,7 +1,7 @@
 /** Load Dependencies */
 require('dotenv-safe').load();
 const path = require('path');
-// const cors = require('cors');
+const cors = require('cors');
 const logger = require('morgan');
 const express = require('express');
 const addRequestId = require('express-request-id')();
@@ -9,21 +9,14 @@ const addRequestId = require('express-request-id')();
 /** Load Configurations */
 const router = require('./Routes');
 const config = require('./config');
-const inTesting = !(config.keys.prod || config.keys.dev);
 let app = express();
 
-// app.use(cors());
+app.use(cors());
 
 /** Logger */
 app.use(addRequestId);
 logger.token('id', (req) => req.sessionID.split('-')[0]);
-app.use(
-	logger(inTesting ? 'dev' : 'combined', {
-		skip: (req, res) => {
-			return res.statusCode < 400;
-		}
-	})
-);
+app.use(logger('combined'/*, {skip: (req, res) => res.statusCode < 400 }*/));
 app.use(logger('> [:date[iso]] :method :url :status :response-time ms - :res[content-length] >'));
 
 /** Parser */
@@ -36,10 +29,8 @@ app.use(formData.parse());
 app.use(express.static(path.join(__dirname, config.keys.path)));
 
 /** View Engine */
-if (inTesting) app.use(require('express-ejs-layouts'));
-app.set('view engine', inTesting ? 'ejs' : 'pug');
-if (inTesting) app.set('views', path.join(__dirname, config.keys.path));
-if (!inTesting) app.use(express.static(path.join(__dirname, config.keys.path)));
+app.set('view engine', 'pug');
+app.use(express.static(path.join(__dirname, config.keys.path)));
 
 /** Passport */
 config.passport(app);
@@ -49,19 +40,8 @@ app.use('/auth', router.auth);
 app.use('/api', router.api);
 
 /** Error Handlers */
-// 	app.use((req, res, next) => {
-// 		res.render('404');
-// 	});
-
-// 	app.use((err, req, res, next) => {
-// 		res.render('500', err);
-
-// 	});
-// 
 app.use((err, req, res, next) => {
-	res.status(err.status || 500);
-
-	res.json({
+	res.status(500).json({
 		errors: {
 			message: err
 		}

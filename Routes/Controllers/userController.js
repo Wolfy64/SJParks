@@ -14,7 +14,7 @@ const { respond } = require('../../lib/responseSender');
  * @desc Read a user by userId 
  */
 function read(req, res) {
-	db.User.findOne(req.params.id)
+	db.User.findById(req.params.userId)
 		.then((user) => respond(res, true, user))
 		.catch((err) => respond(res, false, err));
 }
@@ -48,13 +48,13 @@ function index(req, res) {
  */
 function create(req, res) {
 
-	// validate
 	const { errors, isValid, data } = validateUserInput(req.body);
 
 	if (!isValid) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
+		console.log(data);
 		const newUser = new db.User(data);
 
 		newUser.setPassword(data.password);
@@ -62,10 +62,11 @@ function create(req, res) {
 		newUser
 			.save()
 			.then((user) => {
+				console.log(`New user created. NewUser: ${user._id}`);
 				respond(res, true, user);
 			})
 			.catch((err) => {
-				errors.push(new Error({ msg: "Could not save user" }));
+				errors.push(new Error({ msg: "Could not save user" , error: err}));
 				respond(res, false, errors);
 			});
 	}
@@ -173,7 +174,6 @@ function destroy(req, res) {
  * @method POST /api/user/_id/imageUp   
  * @desc Upload a userImage for an existing user by id 
  */
-
 function uploadImage(req, res) {
 	cloudinary.config({
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -202,6 +202,7 @@ function uploadImage(req, res) {
 function readAllParks(req, res) {
 	db.User
 		.findById(req.params.id)
+		.populate('parks')
 		.then((user) => {
 			respond(res, true, user.parks);
 		})
@@ -210,18 +211,19 @@ function readAllParks(req, res) {
 
 /**
  * @public
- * @function readAllMessagess
+ * @function readAllUpdates
  * @param {request} req 
  * @param {response} res 
  * @method GET /api/users/_id/messages  
  * @desc Retrive all messagess user,_id has ever sent or recieved 
  */
 
-function readAllMessages(req, res) {
+function readAllUpdates(req, res) {
 	db.User
 		.findById(req.params.id)
+		.populate('updates')
 		.then((user) => {
-			respond(res, true, user.messages);
+			respond(res, true, user.updates);
 		})
 		.catch((err) => respond(res, false, err));
 }
@@ -231,8 +233,8 @@ function readAllMessages(req, res) {
  * @function findPark
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/users/_id/parks/_id  
- * @desc Find a park, by park._id, to which user._id is subscribed 
+ * @method GET /api/users/:userId/parks/:parkId  
+ * @desc Find a park, by parkId, to which userId is subscribed 
  */
 
 function findPark(req, res) {
@@ -247,13 +249,13 @@ function findPark(req, res) {
 
 /**
  * @public
- * @function findMessage
+ * @function findUpdate
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/users/_id/messages/_id  
+ * @method GET /api/users/:userId/updates/:updateId  
  * @desc Find a message, by message._id, that user._id has either sent or recieved 
  */
-function findMessage(req, res) {
+function findUpdate(req, res) {
 	db.User
 		.findById(req.params.id)
 		.then((user) => {
@@ -271,7 +273,7 @@ module.exports = {
 	destroy,
 	uploadImage,
 	readAllParks,
-	readAllMessages,
+	readAllUpdates,
 	findPark,
-	findMessage
+	findUpdate
 };

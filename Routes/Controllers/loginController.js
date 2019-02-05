@@ -7,21 +7,21 @@ function loadReactRouter(req, res) {
 	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 
-function displayWelcomePage(req, res){
-	res.render('welcome');
-}
+// function displayWelcomePage(req, res){
+// 	res.render('welcome');
+// }
 
-function displayRegisterPage(req, res) {
-	res.render('register');
-}
+// function displayRegisterPage(req, res) {
+// 	res.render('register');
+// }
 
-function displayLoginPage(req, res) {
-	res.render('login');
-}
+// function displayLoginPage(req, res) {
+// 	res.render('login');
+// }
 
-function displayDasboardPage (req, res){
-	res.render('dashboard');
-}
+// function displayDasboardPage (req, res){
+// 	res.render('dashboard');
+// }
 
 
 function login(req, res, next) {
@@ -127,14 +127,14 @@ function crossOrginMiddleware(req, res, next) {
 
 module.exports = {
 	loadReactRouter,
-	displayWelcomePage,
-	displayRegisterPage,
-	displayLoginPage,
+	// displayWelcomePage,
+	// displayRegisterPage,
+	// displayLoginPage,
+	// displayDasboardPage,
 	login,
 	ensureAuthenticated,
 	requireUserLogin,
 	requireAdminLogin,
-	displayDasboardPage,
 	crossOrginMiddleware,
 	logout,
 };

@@ -10,9 +10,9 @@ const isEmpty = require('is-empty');
  */
 function validateUserInput(props) {
 	console.log('> validating user');
-	const queries = [];
 	const errors = [];
 	const data = {};
+	const queries = {};
 
 	// prepare data
 	console.log('> Preparing Data');
@@ -22,19 +22,21 @@ function validateUserInput(props) {
 	data.name = !isEmpty(props.name) ? props.name : '';
 	data.phone = !isEmpty(props.phone) ? props.phone : '';
 	data.email = !isEmpty(props.email) ? props.email : '';
-	data.addPark = !isEmpty(props.addPark) ? props.addPark : '';
-	data.addUpdate = !isEmpty(props.addUpdate) ? props.addUpdate : '';
+	// data.addPark.code = !isEmpty(props.addPark.code) ? props.addPark.code : '';
+	// data.addPark.name = !isEmpty(props.addPark.name) ? props.addPark.name : '';
+	// data.addUpdate.author = !isEmpty(props.addUpdate.author) ? props.addUpdate.author : '';
+	// data.addUpdate.auther = !isEmpty(props.addUpdate) ? props.addUpdate : '';
 	console.log(`> Prepared data: ${JSON.stringify(data)}`);
 
 	// prepare validator queries
 	console.log('> Preparing queries');
-	queries.push({ code: data.addPark.code, name: data.addPark.name });
-	queries.push({ author: data.addUpdate.author });
-	queries.push({
+	// queries.Park = { code: data.addPark.code, name: data.addPark.name };
+	// queries.Update = { message: data.addUpdate.message, author: data.addUpdate.author };
+	queries.User = {
 		userName: data.userName,
 		phone: data.phone,
 		email: data.email
-	});
+	};
 
 	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
 
@@ -86,26 +88,26 @@ function validateUserInput(props) {
 	console.log('[7]' + errors.toString());
 
 	// db.Update
-	// 	.findOne(queries[1])
+	// 	.findOne(queries.Update)
 	// 	.then((x) => data.addUpdate = x._id)
 	// 	.catch((err) => errors.push({ msg: `Could not find a Update with that @userId`, errThrown: err }));
 	// console.log('[8]'+errors.toString());
 
 	// db.Park
-	// 	.findOne(queries[0])
+	// 	.findOne(queries.Park)
 	// 	.then((x) => data.appPark = x._id)
 	// 	.catch((err) => errors.push({ msg: `Could not find a  with that @parkId`, errThrown: err }));
 	// console.log('[9]'+errors);
 
 	// db.User
-	// 	.findOne(queries[2])
+	// 	.findOne(queries.User)
 	// 	.then((userFound) => {
 	// 		console.log(`found a user`);
 	// 		errors.push({ msg: `A user with @userId: ${userFound._id} was found with the given information` });
 	// 	})
 	// 	.catch((err) => console.error(err));
 	// console.log('[10]'+errors.toString());
-
+	
 	return {
 		errors,
 		isValid: errors.length === 0,
@@ -120,27 +122,25 @@ function validateUserInput(props) {
  */
 function validateParkInput(props) {
 	console.log('> validating park');
-	const queries = [];
 	const errors = [];
 	const data = {};
+	const queries = {};
 
 	// prepare data
 	console.log('> Preparing Data');
 	data.name = !isEmpty(props.name) ? props.name : '';
 	data.code = !isEmpty(props.code) ? props.code : '';
-	data.subscriptionLog = !isEmpty(props.addSubscriptionLog) ? props.addSubscriptionLog : '';
-	data.messageLog = !isEmpty(props.addMessageLog) ? props.addMessageLog : '';
-	console.log(`> Prepared data: ${JSON.stringify(data)}`);
+	// data.subscriptionLog = !isEmpty(props.addSubscriptionLog) ? props.addSubscriptionLog : '';
+	// data.messageLog = !isEmpty(props.addMessageLog) ? props.addMessageLog : '';
 
 	// prepare validator queries
 	console.log('> Preparing queries');
-	queries.push({ parks: { $elemMatch: { _id: props.addSubscriptionLog.parkId } } });
-	queries.push({ parks: { $elemMatch: { _id: props.addMessageLog.parkId } } });
-	queries.push({ name: data.name, code: data.code });
+	// queries.SubscriptionLog = { park: { $eq: { _id: props.addSubscriptionLog.parkId } } };
+	// queries.MessageLog = { parks: { $eq: props.addMessageLog.parkId } };
+	queries.Park = { name: data.name, code: data.code };
 	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
 
 	// empty validator checks
-
 	if (validator.isEmpty(data.name)) {
 		console.log(`name was empty`);
 		errors.push({ msg: 'Name field is required' });
@@ -153,26 +153,26 @@ function validateParkInput(props) {
 	}
 	console.log('[2]' + errors.toString());
 
-	if (!validator.isEmpty(data.addSubscriptionLog))
-		db.SubscriptionLog.findOne(queries[0]).then((prop) => (data.subscriptionLog = prop._id)).catch((err) => {
-			errors.push({ msg: `Could not find a subscriptionLog with that @parkId`, errThrown: err });
-		});
-		console.log('[3]' + errors.toString());
+	// if (!validator.isEmpty(data.addSubscriptionLog))
+	// 	db.SubscriptionLog.findOne(queries.SubscriptionLog).then((prop) => (data.subscriptionLog = prop._id)).catch((err) => {
+	// 		errors.push({ msg: `Could not find a subscriptionLog with that @parkId`, errThrown: err });
+	// 	});
+	// 	console.log('[3]' + errors.toString());
 
-	if (!validator.isEmpty(data.addMessageLog))
-		db.MessageLog.findOne(queries[1]).then((prop) => (data.messageLog = prop._id)).catch((err) => {
-			errors.push({ msg: `Could not find a messageLog with that @authorId`, errThrown: err });
-		});
-		console.log('[4]' + errors.toString());
+	// if (!validator.isEmpty(data.addMessageLog))
+	// 	db.MessageLog.findOne(queries.MessageLog).then((prop) => (data.messageLog = prop._id)).catch((err) => {
+	// 		errors.push({ msg: `Could not find a messageLog with that @authorId`, errThrown: err });
+	// 	});
+	// 	console.log('[4]' + errors.toString());
 
-		// misc validator checks
-	db.Park
-		.findOne(queries[1])
-		.then((park) => {
-			errors.push({ msg: `A park named ${park.name} with code: ${park.code} was found` });
-		})
-		.catch((err) => console.error(err));
-		console.log('[5]' + errors.toString());
+	// misc validator checks
+	// db.Park
+	// 	.findOne(queries.Park)
+	// 	.then((park) => {
+	// 		errors.push({ msg: `A park named ${park.name} with code: ${park.code} was found` });
+	// 	})
+	// 	.catch((err) => console.error(err));
+	// 	console.log('[5]' + errors.toString());
 
 	return {
 		errors,
@@ -181,6 +181,12 @@ function validateParkInput(props) {
 	};
 }
 
+/**
+ * @public
+ * @function validateLoginInput
+ * @param {data} data 
+ * @desc 
+ */
 function validateLoginInput(data) {
 	let errors = {};
 

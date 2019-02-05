@@ -3,7 +3,7 @@ import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
-import Button from '../UI/Generic/Button'
+import Button from '../UI/Generic/Button';
 
 /** [H] I Need to make this match with current BE*/
 const SELECT_OPTIONS = {
@@ -17,7 +17,7 @@ const initialState = {
   fullName: 'Irina',
   userName: 'irishka2863',
   userEmail: 'irishka2863@yahoo.com',
-  psw: '123456',
+  password: '123456',
   confirmPassword: '123456',
   showErrors: false
 };
@@ -50,17 +50,17 @@ const UsersForm = class userInput extends React.Component {
       userEmail,
       formErrors,
       fullName,
-      psw,
+      password,
       userName
     } = this.state;
     const dataForm = {
       accessType,
       userEmail,
       fullName,
-      psw,
+      password,
       userName
     };
-    const passIsEqual = psw === confirmPassword;
+    const passIsEqual = password === confirmPassword;
     const isValid = isFormValid(formErrors, dataForm);
 
     if (!passIsEqual) {
@@ -89,8 +89,8 @@ const UsersForm = class userInput extends React.Component {
       },
       body: JSON.stringify(dataForm)
     };
-    /** [H]/api/user is handeling this at the moment */
-    fetch('/admin/newuser', payload)
+
+    fetch('/api/users', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('>> TEST: sending data \n', dataForm);
@@ -144,15 +144,15 @@ const UsersForm = class userInput extends React.Component {
     hasErrors ?
     formErrors.userEmail : null
   }
-  /> < Input label = 'Password' placeholder = 'Password' name = 'psw' type = 'password' onChange = {
+  /> < Input label = 'Password' placeholder = 'Password' name = 'password' type = 'password' onChange = {
   this.handleChange
 }
 value = {
-  this.state.psw
+  this.state.password
 }
 error = {
   hasErrors ?
-  formErrors.psw : null
+  formErrors.password : null
 }
 /> < Input label = 'Confirm Password' placeholder = 'Confirm Password' name = 'confirmPassword' type = 'password' onChange = {
 this.handleChange
