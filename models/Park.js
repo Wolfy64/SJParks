@@ -12,20 +12,20 @@ const ParkSchema = new mongoose.Schema({
         type: String,
         unique: [true, 'Park code must be unique'],
         required: [true, 'Park code is required'],
-        validate: {
-            validator: x => /\s{8}/.test(x),
-            message: props => `${props.value} is not a valid park code!`
-        }
+        // validate: {
+        //     validator: x => /\s{8}/.test(x),
+        //     message: props => `${props.value} is not a valid park code!`
+        // }
     },
 
     name: {
         type: String,
         unique: [true, 'Park name must be unique'],
         required: [true, 'Park name is required'],
-        validate: {
-            validator: x => /\s{25}/.test(x),
-            message: props => `${props.value} is not a valid park code!`
-        }
+        // validate: {
+        //     validator: x => /\s{25}/.test(x),
+        //     message: props => `${props.value} is not a valid park name!`
+        // }
     },
     subscriptionLogs: [{
         type: Schema.Types.ObjectId,
@@ -50,6 +50,7 @@ ParkSchema.methods.addMessageLog = (newMessageLogId) => {
     this.messageLogs.push(newMessageLogId);    
 };
 
+// ParkSchema.pre("save",)
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });

@@ -35,15 +35,9 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
 
-  firstName: {
-    type: String,
-    default: 'Unknown'
-  },
+  firstName: String,
 
-  lastName: {
-    type: String,
-    default: 'Unknown'
-  },
+  lastName: String,
 
   email: {
     index: true,
@@ -82,8 +76,8 @@ UserSchema.virtual('name').get(() => {
 
 UserSchema.virtual('name').set((x) => {
   const N = x.split(' ');
-  this.firstName = x.split(',').length > 0 ? N[1] : N[0];
-  this.lastName = N.pop(N.indexOf(this.firstName));
+  this.firstName = N[0];
+  this.lastName = N[1];
 });
 
 UserSchema.virtual('subscriptions').get(function () {
@@ -117,9 +111,9 @@ UserSchema.methods.setPassword = newPassword => {
   });
 };
 
-UserSchema.methods.validatePassword = function (candidatePassword) {
+UserSchema.methods.validatePassword = (candidatePassword) => {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) return reject(err);
       resolve(isMatch);
     });

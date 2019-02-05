@@ -1,20 +1,20 @@
-const db = require("../models");
-const sendResponse = require('../lib/responseSender');
-const defaultResponseMessage = 'Sorry, we didn\'t understand that. '
-  + 'Available commands are: ROSE - Municipal Rose Garden, BH - Bramhall Park, DM - Del Monte Park or STOP';
+/*jshint esversion: 6 */
+const db = require('../../models');
+const { respond } = require('../../lib/responseSender');
+const defaultResponseMessage = 'Sorry, we didn\'t understand that. Available commands are: ROSE - Municipal Rose Garden, BH - Bramhall Park, DM - Del Monte Park or STOP';
 
 /**
  * @public
  * @function incoming
- * @param { request} request 
- * @param { response } response
+ * @param { request} req 
+ * @param { response } res
  * @desc Create a function to handle Twilio SMS / MMS webhook requests 
  */
-function incoming(request, response) {
+function incoming(req, res) {
   // Get the user's phone number
-  const phone = request.body.From;
+  const phone = req.body.From;
   // Split the user's text message into array of individual words
-  const text = (request.body.Body || 'empty').toLowerCase().split(' ').filter(x=>x);
+  const text = (req.body.Body || 'empty').toLowerCase().split(' ').filter(x=>x);
   // We only handle messages of at most two words
   // Messages with two words must begin with either the word 'start' or 'stop'
   if (text[2] || (text[1] && !['start','stop'].includes(text[0]))) return respond(defaultResponseMessage);
@@ -22,29 +22,29 @@ function incoming(request, response) {
   // Handle user unsubscription requests
   if (text[0] === 'stop') {
     // Find the user document
-    db.User.findOne({phone: phone}, function(err, user) {
-      if (err) return respond('Derp! Please text back again later.', false);
+    db.User.findOne({phone: phone}, (err, user) => {
+      if (err) return respond(res, false, {msg:'Derp! Please text back again later.'});
       // We don't know this user
-      if (!user) return respond('new phony whudis ?', false);
+        if (!user) return respond(res, false, { msg: 'new phony whudis ?' });
       // Handle targeted unsubscription requests
       if (text[1]) {
         // Find the park
         db.Park.findOne({code: text[1]}, (err, park) => {
-          if (err) return respond('Derp! Please text back again later.', false);
-          if (!park) return respond(`${text[1]} is not a valid park code. ${defaultResponseMessage}`, false);
+            if (err) return respond(res, false, { msg: 'Derp! Please text back again later.' });
+            if (!park) return respond(res, false, { msg: `${text[1]} is not a valid park code. ${defaultResponseMessage}` });
           // Has user subscribed in the past?
-          if (user.parks.indexOf(park._id) < 0) return respond(`You never subscribed to notifications for ${park.name}.`, false);
+            if (user.parks.indexOf(park._id) < 0) return respond(res, false, { msg: `You never subscribed to notifications for ${park.name}.` });
           // Find user in park document
           const index = park.users.indexOf(user._id);
           // Has user unsubscribed in the past?
-          if (index < 0) return respond(`You have already unsubscribed from notifications for ${park.name}. But it was nice hearing from you!`);
+            if (index < 0) return respond(res, false, { msg: `You have already unsubscribed from notifications for ${park.name}. But it was nice hearing from you!` });
           // Remove the user from the park document
           park.users.splice(index, 1);
           park.save(function(err, updated) {
-            if (err) return respond('Derp! Please text back again later.', false);
+              if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
             // Log a new unsubscription event
             new db.SubscriptionLog({user: user._id, park: updated._id, subscribing: false}).save(function(err, newSubscriptionResult){});
-            respond(`So sad to see you go! You have unsubscribed to notifications for ${updated.name}.`);
+            respond(res, true, {msg:`So sad to see you go! You have unsubscribed to notifications for ${updated.name}.`});
           });
         });
       }
@@ -54,7 +54,7 @@ function incoming(request, response) {
         if (!user.parks.length) return respond('You never subscribed to notifications from Parks and Rec');
         // Get all the user's parks
         db.Park.find({_id:{$in:user.parks}}, function(err, parks) {
-          if (err) return respond('Derp! Please text back again later.', false);
+            if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
           // This should not happen!
           if (!parks) return respond('Your parks have been destroyed by irrational disaster!', false);
           // Remove the user from each park document as above
@@ -79,12 +79,12 @@ function incoming(request, response) {
     if (text[0]==='start' && !text[1]) {
       // Find the user
       db.User.findOne({phone: phone}, (err, user) => {
-        if (err) return respond('Derp! Please text back again later.', false);
+        if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
         // We don't know this user
         if (!user) return respond('new phony whudis ?', false);
         // Get all the user's parks
         db.Park.find({_id:{$in:user.parks}}, (err, parks) => {
-          if (err) return respond('Derp! Please text back again later.', false);
+            if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
           // This shouldn't happen!
           if (!parks) return respond('Hmmm? You have no parks to resubscribe to.', false);
           // Resubscribe to all parks in user's list
@@ -104,11 +104,11 @@ function incoming(request, response) {
     else {
       // Find the park
       db.Park.findOne({parkID: text[text.length-1]}, function(err, park) {
-        if (err) return respond('Derp! Please text back again later.', false);
+        if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
         if (!park) return respond(`${text[text.length-1]} is not a valid park code. ${defaultResponseMessage}`, false);
         // Find user
         db.User.findOne({phone: phone}, function(err, user) {
-          if (err) return respond('Derp! Please text back again later.', false);
+            if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
           // New user
           if (!user) user = new db.User({
             phone: phone,
@@ -124,9 +124,9 @@ function incoming(request, response) {
           else if (user.parks.indexOf(park._id) >= 0) {
             // Add user to park's user list, save and respond
             park.users.push(user._id);
-            park.save(function(err,result) {
-              if (err) return respond('Derp! Please text back again later.', false);//sendResponse(response, `err: ${err.message}`, false, '/');
-              new db.SubscriptionLog({user: user._id, park: result._id, subscribing: true}).save(function(err, newSubscriptionResult){});
+            park.save((err,result) => {
+                if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
+              new db.SubscriptionLog({user: user._id, park: result._id, subscribing: true}).save((err, newSubscriptionResult)=>{});
               respond(`Thanks for resubscribing to ${park.name}`);
             });
           }
@@ -135,11 +135,11 @@ function incoming(request, response) {
             // Add park to user's park list and save
             user.parks.push(park._id);
             user.save(function(err, updatedUser){
-              if (err) return respond('Derp! Please text back again later.', false);
+                if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
               // Add user to park's user list, save and respond
               park.users.push(updatedUser._id);
               park.save(function(err,result) {
-                if (err) return respond('Derp! Please text back again later.', false);
+                if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
                 new db.SubscriptionLog({user: updatedUser._id, park: result._id, subscribing: true}).save(function(err, newSubscriptionResult){});
                 respond(`Thanks for subscribing to ${park.name}`);
               });
@@ -149,12 +149,94 @@ function incoming(request, response) {
       });
     }
   }
-
-  // Set Content-Type response header and render XML (TwiML) response in a
-  // Jade template - sends a text message back to user
-  function respond(message, success=true ) {
-    // response.type('text/xml');
-    // response.render('twiml', {message: message});
-    sendResponse(response, success, {msg: message});
-  }
 }
+
+/**
+ * @public
+ * @function index
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET /api/updates 
+ * @desc Get all updates's  
+ */
+function index(req, res) {
+	db.Update
+		.find()
+		.sort({
+			username: 1,
+			phone: 1
+		})
+		.then((users) => respond(res, true, users))
+		.catch((err) => respond(res, false, err));
+}
+
+/**
+ * @public
+ * @function read
+ * @param {request} req 
+ * @param {response} res 
+ * @method GET api/update/:updateId 
+ * @desc  Read an update with '_id:updateId'
+ */
+function read(req, res) {
+	db.Update.findById(req.params.updateId)
+		.then((user) => respond(res, true, user))
+		.catch((err) => respond(res, false, err));
+}
+
+/**
+ * @public
+ * @function create
+ * @param {request} req 
+ * @param {response} res 
+ * @method POST /api/update/ 
+ * @desc Create a new update
+ */
+function create(req, res) {}
+
+function send(req, res) {
+    const messageSender = require('../lib/messageSender');  
+    
+    // Get message info from form submission   
+    const message = req.body.message;
+    const parkID = req.body.parkID;   
+    console.log(req.session);   
+    if (!message) {
+        respond(res, false, { msg:'Reason: Empty message.'});   
+    } else if (typeof (parkID) === 'string') {
+        respond(res, false, {msg:'Reason: No park selected'});
+    }
+    else {
+        // TODO prettify res with message displayed     
+        respond(res, true, { msg:`Message: ${message}\nSent to parks: ${parkID}\nSent by: ${req.session.username}`});
+        
+        // Send messages to all users subscribed
+    // to parks in Parks     
+        db.User
+            .find({ parks: { $in: parkID } })
+            .populate("subscription")
+            .then((users) =>messageSender.sendMessageToSubscribers(users, message, '')).catch((err) => {
+                console.log('err ' + err.message);
+                respond(res, true, err);
+            });
+    }
+
+}
+
+// @route UPDATE api/message/:messageId @desc Update a message with '_id =
+// messageId' @access Public
+function edit(req, res) {}
+
+// @route DELETE api/message/:messageId @desc Delete a message with '_id =
+// messageId' @access Public
+function destroy(req, res) { }
+
+module.exports = {
+    incoming,
+    index,
+    read,
+    create,
+    edit,
+    send,
+    destroy
+};

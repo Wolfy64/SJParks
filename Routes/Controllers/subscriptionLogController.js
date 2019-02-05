@@ -1,4 +1,4 @@
-const db = require('../../models');
+// const db = require('../../models');
 
 // @route GET api/subscriptionLog/
 // @desc Get all subscriptionLog's

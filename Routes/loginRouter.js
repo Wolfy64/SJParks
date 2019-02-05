@@ -3,11 +3,11 @@ const router = require('express').Router();
 
 router.get('/', admin.loadReactRouter);
 
-router.get('/register', admin.displayRegisterPage);
+// router.get('/register', admin.displayRegisterPage);
 
-router.get('/login', admin.displayLoginPage);
+// router.get('/login', admin.displayLoginPage);
 
-// router.post('/login', admin.login);
+router.post('/login', admin.login);
 
 
 // router.get('/login', passport.authenticate('forcedotcom'));
@@ -27,8 +27,8 @@ router.get('/login', admin.displayLoginPage);
 
 // router.get('/dashboard', admin.requireLogin, admin.displayUserDashboard);
 
-router.get('/welcome', admin.displayWelcomePage);
+// router.get('/welcome', admin.displayWelcomePage);
 
-router.get('/logout', admin.logout);
+// router.get('/logout', admin.logout);
 
 module.exports = router;

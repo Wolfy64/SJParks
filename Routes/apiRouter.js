@@ -15,21 +15,21 @@ router.route('/users/:userId/imageUp').post(api.users.uploadImage);
 
 router.route('/users/:userId/parks').get(api.users.readAllParks);
 
-router.route('/users/:userId/messages').get(api.users.readAllMessages);
+router.route('/users/:userId/updates').get(api.users.readAllUpdates);
 
 router.route('/users/:userId/parks/:parkId').get(api.users.findPark);
 
-router.route('/users/:userId/messages/:messageId').get(api.users.findMessage);
+router.route('/users/:userId/updates/:updateId').get(api.users.findUpdate);
 
 /** Parks */
 router.route('/parks').get(api.parks.index).post(api.parks.create);
 
 router.route('/parks/:id').get(api.parks.read).put(api.parks.update).delete(api.parks.destroy);
 
-/** Messages */
-router.route('/api/messages').get(api.parks.index).post(api.parks.create);
+/** Updates */
+router.route('/api/updates').get(api.parks.index).post(api.parks.create);
 
-router.route('/api/messages/:messagId').get(api.parks.read).put(api.parks.update).delete(api.parks.destroy);
+router.route('/api/updates/:updateId').get(api.parks.read).put(api.parks.update).delete(api.parks.destroy);
 
 /** MessageLogs */
 router.route('/api/messageLogs').get(api.messageLogs.index).post(api.messageLogs.create);
