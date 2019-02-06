@@ -6,13 +6,17 @@ import { Link } from 'react-router-dom';
 const Nav = styled.nav`
   display: flex;
   justify-content: flex-end;
-  height: 50px;
-  padding: 10px;
-
+  height: 100px;
+  align-items: center;
   img {
     height: 36px;
     width: auto;
     border-radius: 50%;
+  }
+  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    display: fixed;
+    justify-content: start;
+    margin: auto 20px;;
   }
 `;
 
