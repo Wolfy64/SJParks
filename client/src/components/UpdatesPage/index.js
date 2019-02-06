@@ -5,19 +5,26 @@ import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  text-align: center;
+  /* float: left;
+  width: 470px; */
   .recharts-surface {
     margin-left: -3.5rem;
     margin-right: 50px;
-  };
+  }
   .updateButton {
     margin: 50px;
     width: 300px;
-  };
+  }
   @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    background: pink;
     .recharts-surface {
       margin: unset;
       width: fit-content;
+    }
+
+    .updateButton {
+      margin: unset;
+      width: 300px;
     }
   }
 `;
@@ -124,7 +131,7 @@ class Updates extends React.Component {
           <Graph className="recharts-surface" />
           <Button
             className="updateButton"
-            to="/admin/:id/newupdate"
+            to="/admin/newupdate"
             name="New Text Update"
           />
         </Wrapper>
