@@ -6,11 +6,16 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   float: left;
   width: 470px;
-  .usersForm{
+  .usersForm {
     width: 300px;
   }
-`;
 
+  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    .usersForm {
+      margin: auto;
+    }
+  }
+`;
 
 const Users = () => (
   <>
@@ -18,7 +23,7 @@ const Users = () => (
       <UsersForm />
     </Wrapper>
     <Wrapper>
-      <UsersList/>
+      <UsersList />
     </Wrapper>
   </>
 );
