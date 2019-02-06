@@ -5,8 +5,7 @@ import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  /* float: left;
-  width: 470px; */
+  text-align: center;
   .recharts-surface {
     margin-left: -3.5rem;
     margin-right: 50px;
@@ -16,15 +15,9 @@ const Wrapper = styled.div`
     width: 300px;
   }
   @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-    background: pink;
     .recharts-surface {
       margin: unset;
       width: fit-content;
-    }
-
-    .updateButton {
-      margin: unset;
-      width: 300px;
     }
   }
 `;
