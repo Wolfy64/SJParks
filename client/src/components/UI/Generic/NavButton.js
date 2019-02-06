@@ -11,6 +11,9 @@ const Btn = styled.button`
     :hover {
         background-color: rgba(255, 255, 255, 0.1)
     }
+    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+        padding: 22px 10px;
+    }
 `;
 
 const NavButton = (props) => {

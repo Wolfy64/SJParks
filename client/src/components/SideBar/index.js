@@ -11,6 +11,18 @@ const SideNav = styled.div`
   width: 150px;
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
+  z-index: 2;
+  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    width: 100vw;
+    height: auto;
+    #navbar{
+      margin-top: -300px;
+      padding-top: 50px;
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+    }
+  }
 
   .logout {
     position: absolute;
@@ -29,30 +41,36 @@ const SideNav = styled.div`
       font-size: 1.8em;
       margin-bottom: 0.3rem;
     }
+    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+      display: none;
+    }
   }
 
   .menuIcon {
     display: none;
-    text-align: center;
-    margin: 10px 0;
+    height: 20px;
+    width: 30px;
+    padding: 40px 20px;
+    position: fixed;
+    right: 0px;
+    justify-content: center;
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
       display: block;
     }
   }
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    .navbar-nav{
-      margin-top: -200px;
-    }
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    width: 100%;
-    height: auto;
-  }
 `;
+function openNav() {
+  document.getElementById("navbar").style.marginTop = "30px";
+}
 
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+  document.getElementById("navbar").style.marginTop = "-300px";
+}
   export default class SideBar extends React.Component {
   state = {
     menuIcon: 'fa fa-bars',
+    menu: false
   };
   componentDidMount() {
     const token = localStorage.getItem('token');
@@ -70,9 +88,17 @@ const SideNav = styled.div`
 
   toggleMenu = () => {
     if(this.state.menuIcon === 'fa fa-bars'){
-      this.setState({menuIcon: 'fa fa-times'})
+      openNav()
+      this.setState({
+        menuIcon: 'fa fa-times',
+        menu: true
+      })
     } else {
-      this.setState({menuIcon: 'fa fa-bars'})
+      closeNav()
+      this.setState({
+        menuIcon: 'fa fa-bars',
+        menu: false
+      })
     }
   }
   render() {
@@ -82,10 +108,10 @@ const SideNav = styled.div`
           <h1>SJParks</h1>
           <p>Admin</p>
         </div>
-        <div className='menuIcon'>
-          <i className={this.state.menuIcon} onClick={this.toggleMenu}/>
+        <div className='menuIcon' onClick={this.toggleMenu}>
+          <i className={this.state.menuIcon}/>
         </div>
-        <div className="navbar-nav">
+        <div id="navbar">
           <ul>
             <li>
               <NavButton
