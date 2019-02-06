@@ -13,7 +13,7 @@ const SideNav = styled.div`
   color: ${props => props.theme.colors.lightbg};
   z-index: 2;
   @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    width: 100vw;
+    width: 100%;
     height: auto;
     #navbar{
       margin-top: -300px;
