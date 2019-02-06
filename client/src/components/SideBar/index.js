@@ -16,7 +16,7 @@ const SideNav = styled.div`
     position: absolute;
     bottom: 10px;
     width: 100%;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
       position: relative;
       bottom: 0px;
     }
@@ -35,46 +35,46 @@ const SideNav = styled.div`
     display: none;
     text-align: center;
     margin: 10px 0;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
       display: block;
     }
   }
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    .navbar-nav{
+  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    .navbar-nav {
       margin-top: -200px;
     }
   }
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
     width: 100%;
     height: auto;
   }
 `;
 
-  export default class SideBar extends React.Component {
+export default class SideBar extends React.Component {
   state = {
-    menuIcon: 'fa fa-bars',
+    menuIcon: 'fa fa-bars'
   };
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
       this.setState({
         userID: jwt_decode(token).user._id
-      }) 
+      });
     }
   }
 
   logout = () => {
     localStorage.removeItem('token');
     window.location.replace('/login');
-  }
+  };
 
   toggleMenu = () => {
-    if(this.state.menuIcon === 'fa fa-bars'){
-      this.setState({menuIcon: 'fa fa-times'})
+    if (this.state.menuIcon === 'fa fa-bars') {
+      this.setState({ menuIcon: 'fa fa-times' });
     } else {
-      this.setState({menuIcon: 'fa fa-bars'})
+      this.setState({ menuIcon: 'fa fa-bars' });
     }
-  }
+  };
   render() {
     return (
       <SideNav>
@@ -82,8 +82,8 @@ const SideNav = styled.div`
           <h1>SJParks</h1>
           <p>Admin</p>
         </div>
-        <div className='menuIcon'>
-          <i className={this.state.menuIcon} onClick={this.toggleMenu}/>
+        <div className="menuIcon">
+          <i className={this.state.menuIcon} onClick={this.toggleMenu} />
         </div>
         <div className="navbar-nav">
           <ul>
@@ -111,14 +111,15 @@ const SideNav = styled.div`
           </ul>
 
           <div className="logout">
-            <NavButton 
-              onClick={this.logout} 
-              type="submit" 
-              name="Logout" 
-              action="logoutPage" />
+            <NavButton
+              onClick={this.logout}
+              type="submit"
+              name="Logout"
+              action="logoutPage"
+            />
           </div>
         </div>
       </SideNav>
     );
   }
-};
+}
