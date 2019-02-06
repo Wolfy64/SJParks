@@ -20,6 +20,9 @@ const Btn = styled.button`
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
         padding: 22px 10px;
     }
+    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+        padding: 22px 10px;
+    }
 `;
 
 const NavButton = (props) => {
