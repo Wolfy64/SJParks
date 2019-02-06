@@ -28,7 +28,7 @@ const SideNav = styled.div`
     position: absolute;
     bottom: 10px;
     width: 100%;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
       position: relative;
       bottom: 0px;
     }
@@ -77,14 +77,14 @@ function closeNav() {
     if (token) {
       this.setState({
         userID: jwt_decode(token).user._id
-      }) 
+      });
     }
   }
 
   logout = () => {
     localStorage.removeItem('token');
     window.location.replace('/login');
-  }
+  };
 
   toggleMenu = () => {
     if(this.state.menuIcon === 'fa fa-bars'){
@@ -100,7 +100,7 @@ function closeNav() {
         menu: false
       })
     }
-  }
+  };
   render() {
     return (
       <SideNav>
@@ -137,14 +137,15 @@ function closeNav() {
           </ul>
 
           <div className="logout">
-            <NavButton 
-              onClick={this.logout} 
-              type="submit" 
-              name="Logout" 
-              action="logoutPage" />
+            <NavButton
+              onClick={this.logout}
+              type="submit"
+              name="Logout"
+              action="logoutPage"
+            />
           </div>
         </div>
       </SideNav>
     );
   }
-};
+}
