@@ -12,19 +12,22 @@ const Col1 = styled.div`
   float: left;
   padding: 20px;
   margin: 0 5rem 0 0;
-`
+  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    margin: unset;
+  }
+`;
 const Col2 = styled.div`
   height: 100vh;
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
-`
+`;
 
 const initialState = {
   parks: [],
   showErrors: false,
   newPark: '',
   parkId: '',
-  parkFilter: [],
+  parkFilter: []
 };
 
 export default class Parks extends Component {
@@ -35,9 +38,16 @@ export default class Parks extends Component {
   }
 
   handleDeletePark = park => {
-    if (window.confirm("Delete ".concat(park.name)
-    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) { 
-      console.log('>> ', park.name, ' was removed.')
+    if (
+      window.confirm(
+        'Delete '
+          .concat(park.name)
+          .concat(
+            ' and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE'
+          )
+      )
+    ) {
+      console.log('>> ', park.name, ' was removed.');
     }
   };
 
@@ -100,25 +110,25 @@ export default class Parks extends Component {
         <Col1>
           <form onSubmit={this.handleSubmit}>
             <Input
-              name='newPark'
-              label='Name'
+              name="newPark"
+              label="Name"
               value={this.state.newPark}
               onChange={this.handleChange}
-              type='text'
-              placeholder='New Park...'
-              autoComplete='off'
+              type="text"
+              placeholder="New Park..."
+              autoComplete="off"
             />
             <Input
-              name='parkId'
-              label='Keyword'
+              name="parkId"
+              label="Keyword"
               value={this.state.parkId}
               onChange={this.handleChange}
-              type='text'
-              placeholder='Park Id...'
-              autoComplete='off'
+              type="text"
+              placeholder="Park Id..."
+              autoComplete="off"
             />
 
-            <Button name='Create a new park' type='submit' />
+            <Button name="Create a new park" type="submit" />
           </form>
         </Col1>
         <Col2>
