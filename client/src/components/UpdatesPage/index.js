@@ -124,7 +124,7 @@ class Updates extends React.Component {
           <Graph className="recharts-surface" />
           <Button
             className="updateButton"
-            to="/admin/newupdate"
+            to="/admin/:id/newupdate"
             name="New Text Update"
           />
         </Wrapper>
