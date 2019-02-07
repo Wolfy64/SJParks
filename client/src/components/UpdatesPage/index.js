@@ -9,11 +9,11 @@ const Wrapper = styled.div`
   .recharts-surface {
     margin-left: -3.5rem;
     margin-right: 50px;
-  }
+  };
   .updateButton {
     margin: 50px;
     width: 300px;
-  }
+  };
   @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
     .recharts-surface {
       margin: unset;
