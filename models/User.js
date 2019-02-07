@@ -7,15 +7,9 @@ const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
 
-  salt: String,
-
   active: {
     type: Boolean,
     default: true
-  },
-
-  imageUrl: {
-    type: String
   },
 
   access: {
@@ -23,17 +17,9 @@ const UserSchema = new mongoose.Schema({
     default: 'basic'
   },
 
-  userName: {
-    type: String,
-    required: [true, 'please enter a username'],
-    // match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
-    index: true
-  },
+  salt: String,
 
-  password: {
-    type: String,
-    required: true
-  },
+  imageUrl: String,
 
   firstName: String,
 
@@ -42,15 +28,24 @@ const UserSchema = new mongoose.Schema({
   email: {
     index: true,
     type: String,
-    required: [true, 'you must enter an email'],
-    // match: [/\S+@\S+\.+\S/, 'is invalid'],
+    required: [true, 'you must enter an email']
   },
 
   phone: {
     index: true,
     type: String,
-    required: [true, 'you must enter a phone number'],
-    /*match: [ /\d{3}+\-+\d{3}+\-+\d{4}/, '999-999-9999']*/
+    required: [true, 'you must enter a phone number']
+  },
+
+  userName: {
+    index: true,
+    type: String,
+    required: [true, 'you must enter a username']
+  },
+
+  password: {
+    type: String,
+    required: [true,'you must provide a password'],
   },
 
   parks: [{
@@ -67,17 +62,15 @@ const UserSchema = new mongoose.Schema({
   timestamps: true
 });
 
-
-
 // Create Schema Virtuals
-UserSchema.virtual('name').get(() => {
-  return  this.firstName + ' ' + this.lastName;
-});
-
 UserSchema.virtual('name').set((x) => {
   const N = x.split(' ');
   this.firstName = N[0];
   this.lastName = N[1];
+});
+
+UserSchema.virtual('name').get(() => {
+  return  this.firstName + ' ' + this.lastName;
 });
 
 UserSchema.virtual('subscriptions').get(function () {
@@ -100,18 +93,24 @@ UserSchema.plugin(uniqueValidator, {
 });
 
 // Configure Schema methods
-UserSchema.methods.setPassword = newPassword => {
-  bcrypt.genSalt(16, (err, newSalt) => {
+/*
+"Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly  prevent binding this, so your method will not have access to the document and the above examples will not work."" 
+
+from: https://mongoosejs.com/docs/guide.html,
+ */
+
+UserSchema.methods.setPassword = function (newPassword){
+  bcrypt.genSalt(16, function (err, newSalt){
     if (err) throw err;
     this.salt = newSalt;
-    bcrypt.hash(newPassword, this.salt, (err, newPasswordHash) => {
+    bcrypt.hash(newPassword, newSalt, function (err, newPasswordHash){
       if (err) throw err;
       this.password = newPasswordHash;
     });
   });
 };
 
-UserSchema.methods.validatePassword = (candidatePassword) => {
+UserSchema.methods.validatePassword = function (candidatePassword){
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) return reject(err);
@@ -120,7 +119,7 @@ UserSchema.methods.validatePassword = (candidatePassword) => {
   });
 };
 
-UserSchema.methods.generateJWT = () => {
+UserSchema.methods.generateJWT = function(){
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
@@ -132,7 +131,7 @@ UserSchema.methods.generateJWT = () => {
   }, require('config').secret);
 };
 
-UserSchema.methods.toAuthJSON = () => {
+UserSchema.methods.toAuthJSON = function (){
   return {
     _id: this._id,
     name: this.name,

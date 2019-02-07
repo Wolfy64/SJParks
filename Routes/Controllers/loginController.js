@@ -1,74 +1,53 @@
+/*jshint esversion: 6 */
 const path = require('path');
 const passport = require('passport');
-const db = require('../../models');
-const config = require('../../config');
+// const db = require('../../models');
+// const config = require('../../config');
+const { respond } = require('../../lib');
 
 function loadReactRouter(req, res) {
 	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 
-// function displayWelcomePage(req, res){
-// 	res.render('welcome');
-// }
-
-// function displayRegisterPage(req, res) {
-// 	res.render('register');
-// }
-
-// function displayLoginPage(req, res) {
-// 	res.render('login');
-// }
-
-// function displayDasboardPage (req, res){
-// 	res.render('dashboard');
-// }
-
-
 function login(req, res, next) {
-	const { user } = req.body;
+	// const { errors, isValid, user  } = req.body;
 
-	let errors = [];
+	// let errors = [];
 
-	if (!user.email || !user.userName) {
-		errors.push({
-			candidate: [ user.email, user.userName ],
-			msg: 'Not a valid email nor a valid username'
-		});
-	}
+	// if (!user.email || !user.userName) {
+	// 	errors.push({
+	// 		candidate: [ user.email, user.userName ],
+	// 		msg: 'Invalid userName or password'
+	// 	});
+	// }
 
-	if (!user.password) {
-		errors.push({
-			candidate: user.password,
-			msg: 'Not a valid password'
-		});
-	}
-
-	if (errors.values.length === 0) {
+	// if (!user.password) {
+	// 	errors.push({
+	// 		candidate: user.password,
+	// 		msg: 'Not a valid password'
+	// 	});
+	// }
+	const isValid = true;
+	if (isValid) {
 		return passport.authenticate(
 			'local',
 			{
 				session: false,
-				successRedirect: '/dashboard',
-				failureRedirect: '/login',
+				successRedirect: '/dashboard', // fix this
+				failureRedirect: '/auth/login', // fix this
 				failureFlash: true
 			},
 			(err, passportUser, info) => {
-				if (err) {
-					return next(err);
-				}
+				if (err) return next(err);
 
 				if (passportUser) {
 					const user = passportUser;
 					user.token = passportUser.generateJWT();
 
-					return res.json({
-						user: user.toAuthJSON()
-					});
+					return respond(res, true, { user: user.toAuthJSON() });
 				}
 
-				return res.status(400).json({
-					info
-				});
+				return respond(res, false, info);
 			}
 		)(req, res, next);
 	}
@@ -109,9 +88,7 @@ function logout(req, res) {
 		console.log('User signed out.');
 	});
 	req.logout();
-	req.flash('success_msg', 'You are logged out');
 	res.redirect('/login');	
-	if (process.env.NODE_ENV === 'test') res.render('login');
 }
 
 function crossOrginMiddleware(req, res, next) {
@@ -127,10 +104,6 @@ function crossOrginMiddleware(req, res, next) {
 
 module.exports = {
 	loadReactRouter,
-	// displayWelcomePage,
-	// displayRegisterPage,
-	// displayLoginPage,
-	// displayDasboardPage,
 	login,
 	ensureAuthenticated,
 	requireUserLogin,

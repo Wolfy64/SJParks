@@ -1,130 +1,135 @@
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
-const passport = require('passport');
 const db = require('../models/');
-const LocalStrategy = require('passport-local').Strategy;
+const config = require('./keys');
 // const ForceDotComStrategy = require('./lib/passport-forcedotcom').Strategy,
 // const TwitterStrategy = require('passport-twitter').Strategy,
 // const FacebookStrategy = require('passport-facebook').Strategy;
 
-module.exports = app => {
+module.exports = (app) => {
+	/** Configure Express-Session */
 
-  /** Configure Express-Session */
+	const sessOpts = {
+		secret: config.secret,
+		resave: false,
+		saveUninitialized: true,
+		rolling: true,
+		name: 'sid',
+		cookie: {
+			httpOnly: true,
+			maxAge: 20 * 60 * 1000,
+			// activeDuration: 5 * 60 * 1000,
+			secure: false
+		}
+	};
 
-  const sessOpts = {
-    secret: require('./keys').secret,
-    resave: false,
-    saveUninitialized: true,
-    rolling: true,
-    name: 'sid', 
-    cookie: {
-      httpOnly: true,
-      maxAge: 20 * 60 * 1000,
-      // activeDuration: 5 * 60 * 1000,
-      secure: false
-    }
-  };
+	if (config.prod || config.dev) {
+		app.set('trust proxy', 1);
+		sessOpts.cookie.secure = true;
+	}
 
-  if (require('./keys').prod || require('./keys').dev) {
-    app.set('trust proxy', 1);
-    sessOpts.cookie.secure = true;
-  }
+	app.use(session(sessOpts));
 
-  app.use(session(sessOpts));
+	/** Flash */
 
-/** Flash */ 
-app.use(flash());
-app.use(function (req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-});
+	app.use(flash());
+	app.use(function(req, res, next) {
+		res.locals.success_msg = req.flash('success_msg');
+		res.locals.error_msg = req.flash('error_msg');
+		res.locals.error = req.flash('error');
+		next();
+	});
 
-  /** Serialize user to user._id  */
-  passport.serializeUser((user, done) => {
-    return done(null, user._id);
-  });
+	/** Serialize user to user._id  */
+	passport.serializeUser((user, done) => {
+		return done(null, user._id);
+	});
 
-  /** Deserialize user from user._id */
-  passport.deserializeUser(function (userId, done) {
-    db.User.findById(userId)
-      .then(function (user) {
-        done(null, user);
-      })
-      .catch(function (err) {
-        done(err);
-      });
-  });
+	/** Deserialize user from user._id */
+	passport.deserializeUser(function(userId, done) {
+		db.User
+			.findById(userId)
+			.then(function(user) {
+				done(null, user);
+			})
+			.catch(function(err) {
+				done(err);
+			});
+	});
 
-  /** Configure Passport Strategies */
+	/** Configure Passport Strategies */
 
-  // Local Strategy
-  passport.use(
-    new LocalStrategy({
-      usernameField: 'user[userName]',
-      passwordField: 'user[password]'
-    }, (username, password, done) => {
-      const errorMsg = 'Invalid username or password';
+	// Local Strategy
+	passport.use(
+		new LocalStrategy(
+			{
+				usernameField: 'user[userName]',
+				passwordField: 'user[password]'
+			},
+			(username, password, done) => {
+				const errorMsg = { message: 'Invalid username or password' };
 
-      // Match user
-      db.User.findOne({
-        userName: username
-      }).then(matchedUser => {
-        if (!matchedUser) {
-          return done(null, false, {
-            message: errorMsg
-          });
-        }
-        return matchedUser.validatePassword(password)
-          .then(isMatch => done(null, isMatch ? matchedUser : false, isMatch ? null : {
-            message: errorMsg
-          }));
-      }).catch(done);
-    })
-  );
-  
-  // // Force-Dot-Com Strategy
-  // passport.use(new ForceDotComStrategy({
-  //     clientID: '[FDCID]',
-  //     clientSecret: '[FDCSECRET]',
-  //     callbackURL: 'https://127.0.0.1:' + config.port + '/token'
-  //   },
-  //   function (token, tokenSecret, profile, done) {
-  //     console.log(profile);
-  //     return done(null, profile);
-  //   }
-  // ));
+				// Match user
+				db.User
+					.findOne({
+						userName: username
+					})
+					.then((matchedUser) => {
+						if (!matchedUser) {
+							return done(null, false, errorMsg);
+						}
+						return matchedUser
+							.validatePassword(password)
+							.then((isMatch) => done(null, isMatch ? matchedUser : false, isMatch ? null : errorMsg));
+					})
+					.catch(done);
+			}
+		)
+	);
 
-  // // Twitter Strategy
-  // passport.use(new TwitterStrategy({
-  //   consumerKey: '[TWITTERID]',
-  //   consumerSecret: '[TWITTERSECRET]',
-  //   callbackURL: 'https://127.0.0.1:' + config.port + '/twitter-token' //this will need to be dealt with
-  // }, function (token, tokenSecret, profile, done) {
-  //   process.nextTick(function () {
-  //     return done(null, profile);
-  //   });
-  // }));
+	// // Force-Dot-Com Strategy
+	// passport.use(new ForceDotComStrategy({
+	//     clientID: '[FDCID]',
+	//     clientSecret: '[FDCSECRET]',
+	//     callbackURL: 'https://127.0.0.1:' + config.port + '/token'
+	//   },
+	//   function (token, tokenSecret, profile, done) {
+	//     console.log(profile);
+	//     return done(null, profile);
+	//   }
+	// ));
 
-  // // Facebook Strategy
-  // passport.use(new FacebookStrategy({
-  //     clientID: '[FBID]',
-  //     clientSecret: '[FBSECRET]',
-  //     callbackURL: 'https://127.0.0.1:' + config.port + '/facebook-token'
-  //   },
-  //   function (accessToken, refreshToken, profile, done) {
-  //     process.nextTick(function () {
-  //       return done(null, profile);
-  //     });
-  //   }
-  // ));
+	// // Twitter Strategy
+	// passport.use(new TwitterStrategy({
+	//   consumerKey: '[TWITTERID]',
+	//   consumerSecret: '[TWITTERSECRET]',
+	//   callbackURL: 'https://127.0.0.1:' + config.port + '/twitter-token' //this will need to be dealt with
+	// }, function (token, tokenSecret, profile, done) {
+	//   process.nextTick(function () {
+	//     return done(null, profile);
+	//   });
+	// }));
 
-  /** Initialize Passport within the App*/
-  app.use(passport.initialize());
- 
-  /** Add Passport to Express-Session instance */
-  app.use(passport.session());
+	// // Facebook Strategy
+	// passport.use(new FacebookStrategy({
+	//     clientID: '[FBID]',
+	//     clientSecret: '[FBSECRET]',
+	//     callbackURL: 'https://127.0.0.1:' + config.port + '/facebook-token'
+	//   },
+	//   function (accessToken, refreshToken, profile, done) {
+	//     process.nextTick(function () {
+	//       return done(null, profile);
+	//     });
+	//   }
+	// ));
 
-  return app;
+	/** Initialize Passport within the App*/
+	app.use(passport.initialize());
+
+	/** Add Passport to Express-Session instance */
+	app.use(passport.session());
+
+	return app;
 };
