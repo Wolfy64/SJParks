@@ -11,16 +11,19 @@ const SideNav = styled.div`
   width: 150px;
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
-  z-index: 2;
+  z-index: 3;
   @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
     width: 100%;
     height: auto;
+    background-color: transparent;
     #navbar{
       margin-top: -300px;
       padding-top: 50px;
       -webkit-transition: all 0.5s ease;
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
+      background: ${props => props.theme.colors.dark};
+      border-bottom: solid 3px ${props => props.theme.colors.primary};
     }
   };
 
@@ -37,6 +40,7 @@ const SideNav = styled.div`
   .title {
     text-align: center;
     margin: 1rem 0;
+    background: ${props => props.theme.colors.dark};
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
@@ -48,123 +52,15 @@ const SideNav = styled.div`
 
   .menuIcon {
     display: none;
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-<<<<<<< HEAD<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-    text-align: center;<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-    margin: 10px 0;<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-    @media screen and (max-width: ${props => <<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> jsonprops.theme.displays.mobileL}) {
-      display: block;<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-    }<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-  }<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-  @media screen and (max-width: ${props => pr<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> json
-=======
->>>>>>> Merge new Backend
-=======
->>>>>>> jsonops.theme.displays.mobileL}) {
+
+    text-align: center;
+    margin: 10px 0;
+
+    @media screen and (max-width: ${props => jsonprops.theme.displays.mobileL}) {
+      display: block;
+    }
+  }
+  @media screen and (max-width: ${props => props.jsonops.theme.displays.mobileL}) {
     .navbar-nav {
       margin-top: -200px;
     }
@@ -173,7 +69,7 @@ const SideNav = styled.div`
     width: 100%;
     height: auto;
   }
-=======
+
     height: 20px;
     width: 30px;
     padding: 40px 20px;
@@ -184,30 +80,35 @@ const SideNav = styled.div`
       display: block;
     }
   }
->>>>>>> Mobile topnav
+
+  #hid{
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+    display: none;
+  }
 `;
 function openNav() {
-  document.getElementById("navbar").style.marginTop = "30px";
+  document.getElementById("navbar").style.marginTop = "0px";
+  document.getElementById("hid").style.display = "block";
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 export default class SideBar extends React.Component {
   state = {
-    menuIcon: 'fa fa-bars'
-=======
+    menuIcon: 'fa fa-bars',
+  
 /* Set the width of the side navigation to 0 */
-=======
->>>>>>> Cleaning up code
+
 function closeNav() {
   document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("hid").style.display = "none";
 }
 export default class SideBar extends React.Component {
   
   state = {
     menuIcon: 'fa fa-bars',
     menu: false
->>>>>>> Mobile topnav
   };
 
   componentDidMount() {
@@ -225,12 +126,6 @@ export default class SideBar extends React.Component {
   };
 
   toggleMenu = () => {
-<<<<<<< HEAD
-    if (this.state.menuIcon === 'fa fa-bars') {
-      this.setState({ menuIcon: 'fa fa-times' });
-    } else {
-      this.setState({ menuIcon: 'fa fa-bars' });
-=======
     if(this.state.menuIcon === 'fa fa-bars'){
       openNav()
       this.setState({
@@ -243,7 +138,6 @@ export default class SideBar extends React.Component {
         menuIcon: 'fa fa-bars',
         menu: false
       })
->>>>>>> Mobile topnav
     }
   };
 
@@ -255,13 +149,8 @@ export default class SideBar extends React.Component {
           <h1>SJParks</h1>
           <p>Admin</p>
         </div>
-<<<<<<< HEAD
-        <div className="menuIcon">
-          <i className={this.state.menuIcon} onClick={this.toggleMenu} />
-=======
         <div className='menuIcon' onClick={this.toggleMenu}>
           <i className={this.state.menuIcon}/>
->>>>>>> Mobile topnav
         </div>
 
         <div id="navbar">
@@ -298,6 +187,7 @@ export default class SideBar extends React.Component {
             />
           </div>
         </div>
+        <div id="hid" onClick={this.toggleMenu}></div>
       </SideNav>
     );
   }
