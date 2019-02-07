@@ -11,16 +11,19 @@ const SideNav = styled.div`
   width: 150px;
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
-  z-index: 2;
+  z-index: 3;
   @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
     width: 100%;
     height: auto;
+    background-color: transparent;
     #navbar{
       margin-top: -300px;
       padding-top: 50px;
       -webkit-transition: all 0.5s ease;
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
+      background: ${props => props.theme.colors.dark};
+      border-bottom: solid 3px ${props => props.theme.colors.primary};
     }
   };
 
@@ -37,6 +40,7 @@ const SideNav = styled.div`
   .title {
     text-align: center;
     margin: 1rem 0;
+    background: ${props => props.theme.colors.dark};
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
@@ -58,13 +62,22 @@ const SideNav = styled.div`
       display: block;
     }
   }
+
+  #hid{
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+    display: none;
+  }
 `;
 function openNav() {
-  document.getElementById("navbar").style.marginTop = "30px";
+  document.getElementById("navbar").style.marginTop = "0px";
+  document.getElementById("hid").style.display = "block";
 }
 
 function closeNav() {
   document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("hid").style.display = "none";
 }
 export default class SideBar extends React.Component {
   
@@ -149,6 +162,7 @@ export default class SideBar extends React.Component {
             />
           </div>
         </div>
+        <div id="hid" onClick={this.toggleMenu}></div>
       </SideNav>
     );
   }
