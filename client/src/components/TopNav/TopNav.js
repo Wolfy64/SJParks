@@ -12,11 +12,11 @@ const Nav = styled.nav`
     height: 36px;
     width: auto;
     border-radius: 50%;
-  }
+  };
   @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
     display: fixed;
     justify-content: start;
-    margin: auto 20px;;
+    margin: auto 20px;
   }
 `;
 

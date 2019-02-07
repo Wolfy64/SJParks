@@ -22,7 +22,7 @@ const SideNav = styled.div`
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
     }
-  }
+  };
 
   .logout {
     position: absolute;
@@ -32,7 +32,7 @@ const SideNav = styled.div`
       position: relative;
       bottom: 0px;
     }
-  }
+  };
 
   .title {
     text-align: center;
@@ -40,7 +40,7 @@ const SideNav = styled.div`
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
-    }
+    };
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
       display: none;
     }
@@ -63,15 +63,16 @@ function openNav() {
   document.getElementById("navbar").style.marginTop = "30px";
 }
 
-/* Set the width of the side navigation to 0 */
 function closeNav() {
   document.getElementById("navbar").style.marginTop = "-300px";
 }
-  export default class SideBar extends React.Component {
+export default class SideBar extends React.Component {
+  
   state = {
     menuIcon: 'fa fa-bars',
     menu: false
   };
+
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -79,7 +80,7 @@ function closeNav() {
         userID: jwt_decode(token).user._id
       });
     }
-  }
+  };
 
   logout = () => {
     localStorage.removeItem('token');
@@ -101,8 +102,10 @@ function closeNav() {
       })
     }
   };
+
   render() {
     return (
+
       <SideNav>
         <div className="title">
           <h1>SJParks</h1>
@@ -111,6 +114,7 @@ function closeNav() {
         <div className='menuIcon' onClick={this.toggleMenu}>
           <i className={this.state.menuIcon}/>
         </div>
+
         <div id="navbar">
           <ul>
             <li>
@@ -135,7 +139,7 @@ function closeNav() {
               />
             </li>
           </ul>
-
+          
           <div className="logout">
             <NavButton
               onClick={this.logout}

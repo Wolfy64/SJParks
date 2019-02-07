@@ -13,13 +13,13 @@ const Container = styled.div`
 
   h1 {
     text-align: center;
-  }
+  };
 
   .card {
     display: flex;
     height: 400px;
     max-width: 400px;
-  }
+  };
   .message {
     text-align: center;
     color: ${props => props.theme.colors.danger};
@@ -39,12 +39,12 @@ const Form = styled.form`
 
   h1 {
     text-align: center;
-  }
+  };
 
   .message {
     text-align: center;
     color: ${props => props.theme.colors.danger};
-  }
+  };
 `;
 
 const initialState = {
@@ -60,7 +60,7 @@ class Login extends React.Component {
       const userID = jwt_decode(token).user._id;
       this.props.history.push(`/admin/${userID}/updates`);
     }
-  }
+  };
 
   handleChange = e => {
     const { name, value } = e.target;
