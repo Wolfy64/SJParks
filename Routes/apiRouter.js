@@ -46,7 +46,7 @@ router.route('/api/subscriptionLogs').get(api.subscriptionLogs.index).post(api.s
 router
 	.route('/api/subscriptionLogs/:subscriptionLogId')
 	.get(api.subscriptionLogs.read)
-	.put(api.subscriptionLogs.update)
+	.put(api.subscriptionLogs.edit)
 	.delete(api.subscriptionLogs.destroy);
 
 module.exports = router;

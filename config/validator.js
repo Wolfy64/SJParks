@@ -9,13 +9,13 @@ const isEmpty = require('is-empty');
  * @desc Validates user input provided by an HTTP_request object
  */
 function validateUserInput(props) {
-	console.log('> validating user');
+	console.log('> [12:20] Begin user Validation');
 	const errors = [];
 	const data = {};
 	const queries = {};
 
 	// prepare data
-	console.log('> Preparing Data');
+	console.log('> [18:19] Preparing Data');
 	data.access = !isEmpty(props.access) ? props.access : 'basic';
 	data.userName = !isEmpty(props.userName) ? props.userName : '';
 	data.password = !isEmpty(props.password) ? props.password : '';
@@ -26,10 +26,10 @@ function validateUserInput(props) {
 	// data.addPark.name = !isEmpty(props.addPark.name) ? props.addPark.name : '';
 	// data.addUpdate.author = !isEmpty(props.addUpdate.author) ? props.addUpdate.author : '';
 	// data.addUpdate.auther = !isEmpty(props.addUpdate) ? props.addUpdate : '';
-	console.log(`> Prepared data: ${JSON.stringify(data)}`);
+	console.log(`> [29:22] Prepared data: ${JSON.stringify(data)}`);
 
 	// prepare validator queries
-	console.log('> Preparing queries');
+	console.log('> [32:22] Preparing queries');
 	// queries.Park = { code: data.addPark.code, name: data.addPark.name };
 	// queries.Update = { message: data.addUpdate.message, author: data.addUpdate.author };
 	queries.User = {
@@ -38,7 +38,7 @@ function validateUserInput(props) {
 		email: data.email
 	};
 
-	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
+	console.log(`> [41:19] Prepared queries: ${JSON.stringify(queries)}`);
 
 	// empty validator checks
 
@@ -108,6 +108,7 @@ function validateUserInput(props) {
 	// 	.catch((err) => console.error(err));
 	// console.log('[10]'+errors.toString());
 	
+	console.log(`> [111:23] End User Validation. ***** Errors: ${errors.toString()}, IsValid: ${errors.length === 0}, Data: ${JSON.stringify(data)}*****`);
 	return {
 		errors,
 		isValid: errors.length === 0,
