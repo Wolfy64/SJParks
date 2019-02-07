@@ -22,7 +22,7 @@ const SideNav = styled.div`
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
     }
-  }
+  };
 
   .logout {
     position: absolute;
@@ -32,7 +32,7 @@ const SideNav = styled.div`
       position: relative;
       bottom: 0px;
     }
-  }
+  };
 
   .title {
     text-align: center;
@@ -40,7 +40,7 @@ const SideNav = styled.div`
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
-    }
+    };
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
       display: none;
     }
@@ -49,13 +49,122 @@ const SideNav = styled.div`
   .menuIcon {
     display: none;
 <<<<<<< HEAD
-    text-align: center;
-    margin: 10px 0;
-    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-      display: block;
-    }
-  }
-  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+<<<<<<< HEAD<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+    text-align: center;<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+    margin: 10px 0;<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+    @media screen and (max-width: ${props => <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> jsonprops.theme.displays.mobileL}) {
+      display: block;<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+    }<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+  }<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+  @media screen and (max-width: ${props => pr<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> json
+=======
+>>>>>>> Merge new Backend
+=======
+>>>>>>> jsonops.theme.displays.mobileL}) {
     .navbar-nav {
       margin-top: -200px;
     }
@@ -82,20 +191,25 @@ function openNav() {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 export default class SideBar extends React.Component {
   state = {
     menuIcon: 'fa fa-bars'
 =======
 /* Set the width of the side navigation to 0 */
+=======
+>>>>>>> Cleaning up code
 function closeNav() {
   document.getElementById("navbar").style.marginTop = "-300px";
 }
-  export default class SideBar extends React.Component {
+export default class SideBar extends React.Component {
+  
   state = {
     menuIcon: 'fa fa-bars',
     menu: false
 >>>>>>> Mobile topnav
   };
+
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -103,7 +217,7 @@ function closeNav() {
         userID: jwt_decode(token).user._id
       });
     }
-  }
+  };
 
   logout = () => {
     localStorage.removeItem('token');
@@ -132,8 +246,10 @@ function closeNav() {
 >>>>>>> Mobile topnav
     }
   };
+
   render() {
     return (
+
       <SideNav>
         <div className="title">
           <h1>SJParks</h1>
@@ -147,6 +263,7 @@ function closeNav() {
           <i className={this.state.menuIcon}/>
 >>>>>>> Mobile topnav
         </div>
+
         <div id="navbar">
           <ul>
             <li>
@@ -171,7 +288,7 @@ function closeNav() {
               />
             </li>
           </ul>
-
+          
           <div className="logout">
             <NavButton
               onClick={this.logout}

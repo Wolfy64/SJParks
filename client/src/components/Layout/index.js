@@ -7,7 +7,7 @@ const Page = styled.div`
   margin: 0 80px 0 240px;
   z-index: 1;
   @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    margin: 50px 10px;
+    margin: 50px 0;
   }
 `;
 
