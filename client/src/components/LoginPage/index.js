@@ -10,6 +10,20 @@ const Container = styled.div`
   background-color: ${props => props.theme.colors.dark};
   display: grid;
   align-content: center;
+
+  h1 {
+    text-align: center;
+  };
+
+  .card {
+    display: flex;
+    height: 400px;
+    max-width: 400px;
+  };
+  .message {
+    text-align: center;
+    color: ${props => props.theme.colors.danger};
+  }
 `;
 
 const Form = styled.form`
@@ -24,10 +38,11 @@ const Form = styled.form`
   box-shadow: -5px 3px 3px black;
   h1 {
     text-align: center;
-  }
+  };
+
   .message {
     color: ${props => props.theme.colors.danger};
-  }
+  };
 `;
 
 const initialState = {
@@ -43,7 +58,7 @@ class Login extends React.Component {
       const userID = jwt_decode(token).user._id;
       this.props.history.push(`/admin/${userID}/updates`);
     }
-  }
+  };
 
   handleChange = e => {
     const { name, value } = e.target;

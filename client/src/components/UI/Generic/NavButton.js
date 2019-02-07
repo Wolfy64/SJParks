@@ -11,9 +11,12 @@ const Btn = styled.button`
     :hover {
         background-color: rgba(255, 255, 255, 0.1)
     };
+<<<<<<< HEAD
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
         padding: 22px 10px;
     }
+=======
+>>>>>>> Cleaning up code
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
         padding: 22px 10px;
     }
@@ -29,8 +32,8 @@ const NavButton = (props) => {
     } else {
         return (
             <Btn onClick={props.onClick} type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
-        )
-    }   
-}
+        );
+    };
+};
 
 export default NavButton;
