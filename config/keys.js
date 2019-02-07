@@ -7,7 +7,7 @@ const prod = process.env.NODE_ENV === 'production';
 const test = process.env.NODE_ENV === 'test';
 var path, url, secret, port, accountSid, authToken, twilioNumber;
 
-path = prod ? 'build' : dev ? 'public' : 'test';
+path = prod ? 'build' : 'public';
 url = dev ? process.env.MLAB_URI : test ? process.env.TEST_MONGO_URL: process.env.MONGO_URI;
 secret = dev || prod ? process.env.APP_SECRET : 'keyboard cat';
 port = prod ? process.env.PORT : process.env.SERVER_PORT;
