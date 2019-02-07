@@ -8,6 +8,7 @@ const {
 
 console.log(`>[ROUTES:010:030]> Configuring Routes...`);
 
+
 // @route /register
 router.get('/register', (req, res) => res.render('register')); // api.users.register
 
@@ -105,6 +106,8 @@ router.route('/api/messages/:messagId')
 //   .get(api.subscriptionLogs.read)
 //   .put(api.subscriptionLogs.update)
 //   .delete(api.subscriptionLogs.destroy);
+
+router.get('*', (req, res) => res.sendFile(path.join(__dirname,'/client/build/index.html')))
 
 console.log(`>[ROUTES:094:035]> ...Routes Configured`);
 
