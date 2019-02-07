@@ -20,9 +20,6 @@ const Btn = styled.button`
     @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
         padding: 22px 10px;
     }
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-        padding: 22px 10px;
-    }
 `;
 
 const NavButton = (props) => {
@@ -35,8 +32,8 @@ const NavButton = (props) => {
     } else {
         return (
             <Btn onClick={props.onClick} type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
-        )
-    }   
-}
+        );
+    };
+};
 
 export default NavButton;

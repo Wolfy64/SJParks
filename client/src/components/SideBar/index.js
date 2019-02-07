@@ -33,6 +33,7 @@ const SideNav = styled.div`
       bottom: 0px;
     }
   }
+
   .title {
     text-align: center;
     margin: 1rem 0;
@@ -63,15 +64,16 @@ function openNav() {
   document.getElementById("navbar").style.marginTop = "30px";
 }
 
-/* Set the width of the side navigation to 0 */
 function closeNav() {
   document.getElementById("navbar").style.marginTop = "-300px";
 }
-  export default class SideBar extends React.Component {
+export default class SideBar extends React.Component {
+  
   state = {
     menuIcon: 'fa fa-bars',
     menu: false
   };
+
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -101,8 +103,10 @@ function closeNav() {
       })
     }
   };
+
   render() {
     return (
+
       <SideNav>
         <div className="title">
           <h1>SJParks</h1>
@@ -111,6 +115,7 @@ function closeNav() {
         <div className='menuIcon' onClick={this.toggleMenu}>
           <i className={this.state.menuIcon}/>
         </div>
+
         <div id="navbar">
           <ul>
             <li>
@@ -135,7 +140,7 @@ function closeNav() {
               />
             </li>
           </ul>
-
+          
           <div className="logout">
             <NavButton
               onClick={this.logout}
