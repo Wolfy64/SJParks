@@ -16,9 +16,10 @@ const Nav = styled.div`
     border-radius: 50%;
     z-index:10;
   };
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    display: fixed;
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     justify-content: start;
+    position: fixed;
+    top: 0;
   }
 `;
 

@@ -12,13 +12,13 @@ const SideNav = styled.div`
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
   z-index: 3;
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     width: 100%;
     height: auto;
     background-color: transparent;
     #navbar{
-      margin-top: -300px;
-      padding-top: 50px;
+      margin-top: -400px;
+      padding-top: 70px;
       -webkit-transition: all 0.5s ease;
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
@@ -31,7 +31,7 @@ const SideNav = styled.div`
     position: absolute;
     bottom: 10px;
     width: 100%;
-    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
       position: relative;
       bottom: 0px;
     }
@@ -45,7 +45,7 @@ const SideNav = styled.div`
       font-size: 1.8em;
       margin-bottom: 0.3rem;
     };
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
       display: none;
     }
   }
@@ -58,7 +58,7 @@ const SideNav = styled.div`
     position: fixed;
     right: 0px;
     justify-content: center;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
       display: block;
     }
   }
@@ -76,7 +76,7 @@ function openNav() {
 }
 
 function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("navbar").style.marginTop = "-400px";
   document.getElementById("hid").style.display = "none";
 }
 export default class SideBar extends React.Component {
