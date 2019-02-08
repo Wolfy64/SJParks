@@ -61,9 +61,9 @@ class Login extends React.Component {
   }
 
   handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+    const { name, value } = e.target
+    this.setState({ [name]: value })
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -72,7 +72,7 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.sendForm(dataForm);
-  };
+  }
 
   sendForm = async dataForm => {
     const payload = {
