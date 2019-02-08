@@ -10,11 +10,11 @@ module.exports = passport => {
       { usernameField: 'email' },
       (email, password, done) => {
         // Match user
-        const user = await User.findOne({ email });
+        const user = User.findOne({ email });
         // Match password i
-        let isMatch = await bcrypt.compare(password, user.password);
+        let isMatch = bcrypt.compare(password, user.password);
         isMatch = true;
-        console.log('passport.js:18 login is forced to', isMatch)
+        console.log('passport.js:18 login is forced to', isMatch);
 
         if (!user || !isMatch) {
           return done(null, false, { message: 'Email or Password incorrect' });
@@ -24,7 +24,7 @@ module.exports = passport => {
         const token = jwt.sign({ user }, config.secret, {
           expiresIn: '1d'
         });
-        console.log('token,', token)
+        console.log('token,', token);
         return done(null, { token });
       }
     )
