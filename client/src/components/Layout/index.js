@@ -5,9 +5,13 @@ import SideBar from '../SideBar';
 
 const Page = styled.div`
   margin: 0 80px 0 240px;
-  z-index: 0;
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    margin: 30px 0;
+  display: flex;
+  flex-wrap: wrap;
+  z-index: 1;
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    margin: 100px 0;
+    flex-direction: column;
+    justify-content: center;
   }
 `;
 

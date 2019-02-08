@@ -5,123 +5,51 @@ import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  text-align: center;
-  .recharts-surface {
-    margin-left: -3.5rem;
-    margin-right: 50px;
-  };
-  .updateButton {
-    margin: 50px;
-    width: 300px;
-  };
-  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-    .recharts-surface {
-      margin: unset;
-      width: fit-content;
+  width: 46%;
+  margin: 0 2%;
+  #graph{
+    display: flex;
+    justify-content: center;
+    margin-left: -40px;
+  }
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    width: 100vw;
+    margin: 0;
+    .updateButton {
+      margin: 30px auto;
     }
   }
+  .updateButton {
+    display: flex;
+    justify-content: center;
+    margin: 50px auto;
+  };
 `;
 
 class Updates extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      history: [
-        {
-          _id: '825y78',
-          name: 'Jeff Tomson',
-          date: '11/28/18',
-          time: '11:20',
-          parkIDs: [
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE',
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE'
-          ],
-          message:
-            'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
-        },
-        {
-          _id: '825y78',
-          name: 'Jeff Tomson',
-          date: '11/28/18',
-          time: '11:20',
-          parkIDs: [
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE'
-          ],
-          message:
-            'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
-        },
-        {
-          _id: '825y78',
-          name: 'Jeff Tomson',
-          date: '11/28/18',
-          time: '11:20',
-          parkIDs: [
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE'
-          ],
-          message:
-            'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
-        },
-        {
-          _id: '825y78',
-          name: 'Jeff Tomson',
-          date: '11/28/18',
-          time: '11:20',
-          parkIDs: [
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE'
-          ],
-          message:
-            'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
-        },
-        {
-          _id: '825u78',
-          name: 'Jeff Tomson',
-          date: '11/28/18',
-          time: '11:20',
-          parkIDs: [
-            'ROthgSE',
-            'ROzdfSE',
-            'ROSzdE',
-            'ROzddSE',
-            'DFzndgROSE',
-            'ROzdfSE'
-          ],
-          message:
-            'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
-        }
-      ]
-    };
+  state = {
+    history: [
+      { _id: '825y78',
+        name: 'Jeff Tomson', date: '11/28/18', time: '11:20',
+        parkIDs: [
+          'ROthgSE',
+          'ROzdfSE',
+          'ROSzdE',
+          'ROzddSE',
+          'DFzndgROSE',
+          'ROzdfSE'
+        ],
+        message:
+          'Bramhall Park and Rose Garden, \nDear resident, we recommend not visiting Rose Garden or Bramhall Park due to a fire in the Almaden area. We will update you as soon as it is safe to visit the park.'
+      }
+    ]
   }
 
   render() {
     return (
-      <div>
+      <>
         <Wrapper>
-          <Graph className="recharts-surface" />
+          <Graph />
           <Button
             className="updateButton"
             to="/admin/:id/newupdate"
@@ -133,7 +61,7 @@ class Updates extends React.Component {
             <Post key={post._id} post={post} />
           ))}
         </Wrapper>
-      </div>
+      </>
     );
   }
 }
