@@ -6,11 +6,31 @@ import { parksDB } from '../../dummyDB';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  width: 300px;
+  display: flex;
+  justify-content: center;
+  width: 320px;
   margin: 0 60px 80px 0;
   height: 40vh;
   .selectedContainer {
     background-color: ${props => props.theme.colors.lightbg};
+  }
+  .col3{
+      margin: 0 10px;
+      height: 100%;
+      width: fit-content;
+  }
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    margin: 50px 0;
+    .selectedContainer {
+      width: 100vw;
+    }
+    .editMessage {
+      display: flex;
+      flex-direction: column;
+      button{
+        align-self: center;
+      }
+    }
   }
 `
 
@@ -60,18 +80,19 @@ class NewUpdate extends React.Component {
         </Wrapper>
         <Wrapper>
             <SelectedPark
-              className='col2'
               parks={this.state.parkSelected}
               deletePark={park => this.handleDeletePark(park)}
               deleteAllParks={this.handleDeleteAddAllPark}
             />
         </Wrapper>
         <Wrapper>
+          <div className='col3'>
           {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
           ) : (
               <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
           )}
+          </div>
         </Wrapper>
       </>
     );
