@@ -5,24 +5,12 @@ import EditMessage from './EditMessage';
 import { parksDB } from '../../dummyDB';
 import styled from 'styled-components';
 
-const Col1 = styled.div`
+const Wrapper = styled.div`
   width: 300px;
-  float: left;
-  margin: 0 20px;
-`
-const Col2 = styled.div`
-  float: left;
-  margin: 0 20px;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.lightbg};
-`
-
-const Col3 = styled.div`
-  float: left;
-  width: 300px;
-  margin: 3.7rem 20px 0;
-  .bottomAlign{
-    margin-top: 100px;
+  margin: 0 60px 80px 0;
+  height: 40vh;
+  .selectedContainer {
+    background-color: ${props => props.theme.colors.lightbg};
   }
 `
 
@@ -62,28 +50,29 @@ class NewUpdate extends React.Component {
   render() {
     return (
       <>
-        <Col1>
+        <Wrapper>
           <SearchPark
             parks={this.state.parks}
             selected={false}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
-        </Col1>
-        <Col2>
-          <SelectedPark
-            parks={this.state.parkSelected}
-            deletePark={park => this.handleDeletePark(park)}
-            deleteAllParks={this.handleDeleteAddAllPark}
-          />
-        </Col2>
-        <Col3>
+        </Wrapper>
+        <Wrapper>
+            <SelectedPark
+              className='col2'
+              parks={this.state.parkSelected}
+              deletePark={park => this.handleDeletePark(park)}
+              deleteAllParks={this.handleDeleteAddAllPark}
+            />
+        </Wrapper>
+        <Wrapper>
           {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
           ) : (
               <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
           )}
-        </Col3>
+        </Wrapper>
       </>
     );
   }

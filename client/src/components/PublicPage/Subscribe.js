@@ -28,7 +28,6 @@ const Form = styled.form`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   justify-items: center;
   background-color: ${props => props.theme.colors.lightbg};
-  height: 40vh;
 
   .phoneField {
     width: 300px;
@@ -37,6 +36,10 @@ const Form = styled.form`
   }
   .searchContainer {
     background-color: white;
+    height: 40vh;
+  }
+  .selectedContainer {
+    height: 40vh;
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {

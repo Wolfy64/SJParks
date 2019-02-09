@@ -7,16 +7,13 @@ import { parksDB } from '../../dummyDB';
 import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 
-const Col1 = styled.div`
+const Wrapper = styled.div`
   width: 300px;
-  float: left;
   padding: 20px;
-  margin: 0 5rem 0 0;
-`
-const Col2 = styled.div`
-  height: 100vh;
-  float: left;
-  background-color: ${props => props.theme.colors.lightbg};
+  margin-right: 5rem;
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    margin: 0 auto;
+  }
 `
 
 const initialState = {
@@ -96,8 +93,8 @@ export default class Parks extends Component {
 
   render() {
     return (
-      <div>
-        <Col1>
+      <>
+        <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
               name='newPark'
@@ -120,16 +117,16 @@ export default class Parks extends Component {
 
             <Button name='Create a new park' type='submit' />
           </form>
-        </Col1>
-        <Col2>
-          <SearchPark
-            parks={this.state.parks}
-            selected={true}
-            addPark={park => this.handleDeletePark(park)}
-            numShow={this.state.parks.length}
-          />
-        </Col2>
-      </div>
+        </Wrapper>
+        <Wrapper>
+            <SearchPark
+              parks={this.state.parks}
+              selected={true}
+              addPark={park => this.handleDeletePark(park)}
+              numShow={this.state.parks.length}
+            />
+        </Wrapper>
+      </>
     );
   }
 }

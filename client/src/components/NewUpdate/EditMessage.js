@@ -110,7 +110,7 @@ const Preview = styled.div`
 
 const initialState = {
   message: '',
-  title: false,
+  title: true,
   parksTitle: '',
   showError: false,
   formErrors: null
@@ -205,9 +205,13 @@ class EditMessage extends React.Component {
           required
         />
         <div className='bottomAlign'>
-          <Preview>
-            <p>{title ? `${parksTitle}\n${message}` : message}</p>
-          </Preview>
+        {message 
+        ? <Preview> <p>
+          {title 
+          ? parksTitle+" "+message
+          : message}</p></Preview>
+        : <Preview><p>...Message Preview</p></Preview>
+        }
         <Button name='SUBMIT' />
         </div>
       </form>
