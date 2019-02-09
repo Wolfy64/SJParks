@@ -1,26 +1,37 @@
 import React, { Component } from 'react';
-import Input from '../UI/Form/Input';
+import styled from 'styled-components';
+import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import SearchPark from '../SearchPark';
-import { parksDB } from '../../dummyDB';
+import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
-import styled from 'styled-components';
 
 const Wrapper = styled.div`
   width: 300px;
-  padding: 20px;
   margin-right: 5rem;
+  .searchContainer{
+    background-color: ${(props) => props.theme.colors.lightbg}
+  }
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
     margin: 0 auto;
+    form {
+      width: 300px;
+    }
+    .searchContainer{
+      margin-top: 30px;
+    }
   }
 `
 
 const initialState = {
   parks: [],
   showErrors: false,
-  newPark: '',
-  parkId: '',
+  newName: '',
+  newCode: '',
   parkFilter: [],
 };
 
@@ -52,8 +63,8 @@ export default class Parks extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { newPark, parkId, formErrors } = this.state;
-    const dataForm = { newPark, parkId };
+    const { newName, newCode, formErrors } = this.state;
+    const dataForm = { newName, newCode };
     const isValid = isFormValid(formErrors, dataForm);
 
     isValid
@@ -73,8 +84,8 @@ export default class Parks extends Component {
 
     fetch('/api/parks', payload)
       .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+      .catch(err => console.log('>> err,', err.message));
+    console.log('>>New Park: ', dataForm);
 
     // Reset Form field
     this.setState(initialState);
@@ -97,18 +108,18 @@ export default class Parks extends Component {
         <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
-              name='newPark'
+              name='newName'
               label='Name'
-              value={this.state.newPark}
+              value={this.state.newName}
               onChange={this.handleChange}
               type='text'
               placeholder='New Park...'
               autoComplete='off'
             />
             <Input
-              name='parkId'
+              name='newCode'
               label='Keyword'
-              value={this.state.parkId}
+              value={this.state.newCode}
               onChange={this.handleChange}
               type='text'
               placeholder='Park Id...'

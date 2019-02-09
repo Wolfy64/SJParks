@@ -6,7 +6,7 @@ import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
   width: 100%;
-  max-width: 300px;
+  max-width: 280px;
   padding: 20px;
   height: 100%;
   overflow-y: scroll;
