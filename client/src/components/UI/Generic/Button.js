@@ -22,7 +22,7 @@ const Button = (props) => {
         return <Btn {...props}>{props.name}</Btn>;
     } else {
         return(
-            <Link to={props.to}>
+            <Link style={{textDecoration:'none'}} to={props.to}>
                 <Btn {...props}>{props.name}</Btn>
             </Link>
         );

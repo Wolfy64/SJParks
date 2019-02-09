@@ -3,20 +3,23 @@ import jwt_decode from 'jwt-decode';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Nav = styled.nav`
+const Nav = styled.div`
   display: flex;
   justify-content: flex-end;
   height: 100px;
   align-items: center;
-  img {
+  margin: auto 20px;
+  z-index: 10;
+  .profileImg {
     height: 36px;
     width: auto;
     border-radius: 50%;
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
-    display: fixed;
+    z-index:10;
+  };
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     justify-content: start;
-    margin: auto 20px;;
+    position: fixed;
+    top: 0;
   }
 `;
 
@@ -26,9 +29,9 @@ const TopNav = () => {
   const token = localStorage.getItem('token');
   const userID = jwt_decode(token).user._id;
   return (
-    <Nav className="navbar">
+    <Nav>
       <Link to={`/admin/${userID}/profile`}>
-        <img src={profileImg} alt="User Avatar" />
+        <img className='profileImg' src={profileImg} alt="User Avatar" />
       </Link>
     </Nav>
   );

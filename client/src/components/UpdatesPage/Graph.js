@@ -11,15 +11,34 @@ const data = [
 ];
 
 export default class Graph extends Component {
+    state = {
+
+    }
+    componentDidMount() {
+        if(window.innerWidth <= 768){
+            this.setState(
+                {
+                    width:  document.body.clientWidth-20,
+                    height: 0.5*window.innerWidth
+                }
+            )
+        }
+    }
+
     render(){
+        let mobileWidth = document.getElementById("graph");
+        console.log('current width: ', mobileWidth)
+        console.log('state width: ', this.state.width)
         return (
-            <LineChart width={450} height={250} data={data}>
-                <Line type="monotone" dataKey="uv" stroke="#004A75" />
-                <CartesianGrid stroke="#ddd" strokeDasharray="5 5" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-            </LineChart>
+            <div id="graph">
+                <LineChart width={this.state.width || window.innerWidth*0.30} height={this.state.height || window.innerWidth*0.18} data={data}>
+                    <Line type="monotone" dataKey="uv" stroke="#004A75" />
+                    <CartesianGrid stroke="#ddd" strokeDasharray="5 5" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                </LineChart>
+            </div>
         )
     }
 }

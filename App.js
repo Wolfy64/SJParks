@@ -96,8 +96,8 @@ app.use(function (req, res, next) {
 
 // @desc Configuring View Index
 
-// console.log('>[WEBAPP:089:027]>', path.join(__dirname, 'client', config.keys.clientPath));
-// app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
+console.log('>[WEBAPP:089:027]>', path.join(__dirname, 'client', config.keys.clientPath));
+app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
 
 app.use('/', require("./Routes"));
 

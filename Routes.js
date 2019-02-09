@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const {api} = require('./controllers');
 const config = require('./config');
+const path = require('path');
+
 const {
   ensureAuthenticated
 } = config.auth;
 
 console.log(`>[ROUTES:010:030]> Configuring Routes...`);
+
 
 // @route /register
 router.get('/register', (req, res) => res.render('register')); // api.users.register
@@ -105,6 +108,8 @@ router.route('/api/messages/:messagId')
 //   .get(api.subscriptionLogs.read)
 //   .put(api.subscriptionLogs.update)
 //   .delete(api.subscriptionLogs.destroy);
+
+router.get('/api/*', (req, res) => path.join(__dirname, 'client', config.keys.clientPath, 'index'));
 
 console.log(`>[ROUTES:094:035]> ...Routes Configured`);
 

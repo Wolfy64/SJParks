@@ -11,37 +11,41 @@ const SideNav = styled.div`
   width: 150px;
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
-  z-index: 2;
-  @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+  z-index: 3;
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     width: 100%;
     height: auto;
+    background-color: transparent;
     #navbar{
-      margin-top: -300px;
-      padding-top: 50px;
+      margin-top: -400px;
+      padding-top: 70px;
       -webkit-transition: all 0.5s ease;
       -moz-transition: all 0.5s ease;
       transition: all 0.5s ease;
+      background: ${props => props.theme.colors.dark};
+      border-bottom: solid 3px ${props => props.theme.colors.primary};
     }
-  }
+  };
 
   .logout {
     position: absolute;
     bottom: 10px;
     width: 100%;
-    @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
       position: relative;
       bottom: 0px;
     }
-  }
+  };
 
   .title {
     text-align: center;
     margin: 1rem 0;
+    background: ${props => props.theme.colors.dark};
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
-    }
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    };
+    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
       display: none;
     }
   }
@@ -54,24 +58,34 @@ const SideNav = styled.div`
     position: fixed;
     right: 0px;
     justify-content: center;
-    @media screen and (max-width: ${(props) => props.theme.displays.mobileL}) {
+    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
       display: block;
     }
   }
+
+  #hid{
+    height: 100vh;
+    width: 100%;
+    background-color: transparent;
+    display: none;
+  }
 `;
 function openNav() {
-  document.getElementById("navbar").style.marginTop = "30px";
+  document.getElementById("navbar").style.marginTop = "0px";
+  document.getElementById("hid").style.display = "block";
 }
 
-/* Set the width of the side navigation to 0 */
 function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("navbar").style.marginTop = "-400px";
+  document.getElementById("hid").style.display = "none";
 }
-  export default class SideBar extends React.Component {
+export default class SideBar extends React.Component {
+  
   state = {
     menuIcon: 'fa fa-bars',
     menu: false
   };
+
   componentDidMount() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -79,7 +93,7 @@ function closeNav() {
         userID: jwt_decode(token).user._id
       });
     }
-  }
+  };
 
   logout = () => {
     localStorage.removeItem('token');
@@ -101,8 +115,10 @@ function closeNav() {
       })
     }
   };
+
   render() {
     return (
+
       <SideNav>
         <div className="title">
           <h1>SJParks</h1>
@@ -111,6 +127,7 @@ function closeNav() {
         <div className='menuIcon' onClick={this.toggleMenu}>
           <i className={this.state.menuIcon}/>
         </div>
+
         <div id="navbar">
           <ul>
             <li>
@@ -135,7 +152,7 @@ function closeNav() {
               />
             </li>
           </ul>
-
+          
           <div className="logout">
             <NavButton
               onClick={this.logout}
@@ -145,6 +162,7 @@ function closeNav() {
             />
           </div>
         </div>
+        <div id="hid" onClick={this.toggleMenu}></div>
       </SideNav>
     );
   }
