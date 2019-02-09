@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '../UI/Generic/Button';
+import Textarea from '../UI/Form/Textarea';
+import Input from '../UI/Form/Input';
 
 const Container = styled.div`
   display: grid;
@@ -9,30 +11,11 @@ const Container = styled.div`
   justify-items: center;
   align-content: center;
   height: 60vh;
-
   form {
     display: grid;
     width: 500px;
     grid-gap: 1rem;
     grid-template-columns: 1fr 1fr;
-
-    input,
-    textarea {
-      border: solid 1px ${props => props.theme.colors.lightbg};
-      border-radius: 5px;
-      padding: 0.3rem;
-      font-size: 0.7em;
-    }
-
-    textarea {
-      grid-column: span 2;
-      height: 100px;
-      resize: none;
-    }
-
-    button {
-      grid-column: 2/3;
-    }
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
@@ -42,11 +25,6 @@ const Container = styled.div`
     form {
       grid-template-columns: 1fr;
       width: 300px;
-
-      textarea,
-      button {
-        grid-column: auto;
-      }
     }
   }
 `;
@@ -90,10 +68,10 @@ const Contact = () => (
       </a>
     </Survey>
     <form action='https://formspree.io/info@azur-agency.org' method='POST'>
-      <input type='text' name='name' placeholder='Your Name' />
-      <input type='email' name='_replyto' placeholder='Your Email' />
-      <textarea placeholder='Your Message' />
-      <Button name='Submit' />
+      <Input type='text' name='name' placeholder='Your Name' />
+      <Input type='email' name='_replyto' placeholder='Your Email' />
+      <Textarea className='publicText' placeholder='Your Message' />
+      <Button type='submit' name='Submit' />
     </form>
   </Container>
 );
