@@ -1,10 +1,6 @@
 import React from 'react';
 import User from './User';
 
-
-/**
- * DUMMY DATA
- */
 const DATA = [
   {
     id: 'john.doe100',
@@ -55,9 +51,9 @@ class UserList extends React.Component {
     ));
 
     return (
-      <>
+      <div className='usersList'>
         {usersList}
-      </>
+      </div>
     );
   }
 }
