@@ -107,6 +107,8 @@ router.route('/api/messages/:messagId')
 //   .put(api.subscriptionLogs.update)
 //   .delete(api.subscriptionLogs.destroy);
 
+router.get('/api/*', path.join(__dirname, 'client', config.keys.clientPath, 'index'));
+
 console.log(`>[ROUTES:094:035]> ...Routes Configured`);
 
 module.exports = router;
