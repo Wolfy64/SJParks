@@ -195,7 +195,6 @@ class EditMessage extends React.Component {
         </Title>
 
         <Textarea
-          style={{ width: 300 }}
           placeholder='Write your message here'
           name='message'
           onChange={this.handleChange}

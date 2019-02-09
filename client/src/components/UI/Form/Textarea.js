@@ -3,14 +3,13 @@ import styled from 'styled-components'
 
 const Area = styled.div`
   grid-column: span 2;
-  width: 100%;
   textarea {
     border: solid 1px ${props => props.theme.colors.lightbg};
     border-radius: 5px;
-    padding: 0.3rem;
+    padding: 5px;
     font-size: 0.7em;
     min-height: 100px;
-    width: 100%;
+    width: calc(100% - 12px);
     font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 `

@@ -15,12 +15,12 @@ const Wrapper = styled.div`
     background-color: ${props => props.theme.colors.lightbg};
   }
   .col3{
-      margin: 0 10px;
+      margin: 0 20px;
       height: 100%;
-      width: fit-content;
+      width: 280px;
   }
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    margin: 50px 0;
+    margin: 0 0 60px 0;
     .selectedContainer {
       width: 100vw;
     }

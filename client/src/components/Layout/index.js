@@ -10,6 +10,7 @@ const Page = styled.div`
   z-index: 1;
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     margin: 100px 0;
+    width: 100vw;
     flex-direction: column;
     align-items: center;
   }
