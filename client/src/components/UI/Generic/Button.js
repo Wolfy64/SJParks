@@ -10,7 +10,9 @@ const Btn = styled.button`
   padding: 0.25em 1em;
   border-radius: 7px;
   border: 1px solid ${props => props.delete ? "#580808" : "#083C5B"};
-  width : 100%;
+  width: 100%;
+  height: 2em;
+  max-width : 300px;
   :hover {
     background: white;
     color: ${props => props.delete ? "#580808" : "#083C5B"};
