@@ -57,12 +57,7 @@ app.use(function(req, res, next) {
 	}
 });
 
-// // // @desc Configuring Session Handling
-// // app.use((req, res, next) =>{
-// //   if (req.session.admin) next();
-// //   else res.redirect('api/user/login');
-// // });
-
+// router.all('/api/*', ensureAuthenticated);
 app.use('/admin', router.auth);
 app.use('/api', router.api);
 

@@ -25,9 +25,23 @@ function update(req, res) {}
 // @route DELETE api/messageLog/:messageLogId
 // @desc Delete a messageLog with '_id = messageLogId'
 // @access Public
-function destroy(req, res) {}
+function destroy(req, res) { }
 
-module.exports = {
+// const express = require('express');
+// const router = express.Router();
+
+// // @route /api/messageLogs
+// router.route('/api/messageLogs')
+//   .get(api.messageLogs.index)
+//   .post(api.messageLogs.create);
+
+// // @route /api/messageLog/_id
+// router.route('/api/messageLogs/:messageLogId')
+//   .get(api.messageLogs.read)
+//   .put(api.messageLogs.update)
+//   .delete(api.messageLogs.destroy);
+
+module.exports = /*router*/{
   index,
   read,
   create,

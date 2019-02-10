@@ -80,7 +80,21 @@ function edit(req, res) {}
 // messageId' @access Public
 function destroy(req, res) { }
 
-module.exports = {
+// const express = require('express');
+// const router = express.Router();
+
+// // @route /api/messages
+// router.route('/api/messages')
+//   // .get(index)
+//   // .post(create);
+
+// // @route /api/messages/_id
+// router.route('/api/messages/:messagId')
+//   // .get(read)
+//   // .put(update)
+//   // .delete(destroy);
+
+module.exports = /*router*/{
     index,
     read,
     create,
