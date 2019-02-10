@@ -3,23 +3,17 @@ const DefaultHeaders = {
     'Content-Type': 'application/json',
 }
 
-const makeRequest = (path, payload, method, headers = DefaultHeaders) => {
-    console.log('>> utils.api.path:', path)
-    if (method === 'GET') {
-        return fetch(path, {
-            method: method,
-            headers: headers,
-            credentials: 'include'
-        })
-    }
-    else {
-        return fetch(path, {
-            method: method,
-            headers: headers,
-            credentials: 'include',
-            body: JSON.stringify(payload),
-        })
-    }
+const makeRequest = (path, method, payload, headers = DefaultHeaders) => {
+    console.log('>> utils.makeRequest.path: ', path)
+    const options = {
+        method: method,
+        headers: headers,
+        credentials: 'include'
+    } 
+
+    if (payload) options.body = JSON.stringify(payload);
+
+    return fetch(path, options);
 }
 
-export default makeRequest;
+export default makeRequest
