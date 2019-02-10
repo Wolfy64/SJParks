@@ -11,9 +11,7 @@ const data = [
 ];
 
 export default class Graph extends Component {
-    state = {
-
-    }
+    state = {}
     componentDidMount() {
         if(window.innerWidth <= 768){
             this.setState(
@@ -27,8 +25,6 @@ export default class Graph extends Component {
 
     render(){
         let mobileWidth = document.getElementById("graph");
-        console.log('current width: ', mobileWidth)
-        console.log('state width: ', this.state.width)
         return (
             <div id="graph">
                 <LineChart width={this.state.width || window.innerWidth*0.30} height={this.state.height || window.innerWidth*0.18} data={data}>

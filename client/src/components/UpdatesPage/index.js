@@ -2,29 +2,7 @@ import React from 'react';
 import Graph from './Graph';
 import Post from './Historypost';
 import Button from '../UI/Generic/Button';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  width: 46%;
-  margin: 0 2%;
-  #graph{
-    display: flex;
-    justify-content: center;
-    margin-left: -40px;
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    width: 100vw;
-    margin: 0;
-    .updateButton {
-      margin: 30px auto;
-    }
-  }
-  .updateButton {
-    display: flex;
-    justify-content: center;
-    margin: 50px auto;
-  };
-`;
+import {Wrapper} from './styles';
 
 class Updates extends React.Component {
   state = {

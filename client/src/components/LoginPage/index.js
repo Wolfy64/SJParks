@@ -1,34 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.dark};
-  display: grid;
-  align-content: center;
-`;
-
-const Form = styled.form`
-  display: grid;
-  width: 80%;
-  height: 250px;
-  max-width: 300px;
-  margin: auto;
-  background-color: ${props => props.theme.colors.light};
-  border-radius: 15px;
-  padding: 40px 30px 60px;
-  box-shadow: -5px 3px 3px black;
-  h1 {
-    text-align: center;
-  }
-  .message {
-    color: ${props => props.theme.colors.danger};
-  }
-`;
+import {Container, Form} from './styles'
 
 const initialState = {
   email: '',

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
@@ -7,26 +6,7 @@ import makeRequest from '../../utils/makeRequest'
 import SearchPark from '../SearchPark';
 import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
-
-const Wrapper = styled.div`
-  width: 300px;
-  margin-right: 5rem;
-  .searchContainer{
-    background-color: ${(props) => props.theme.colors.lightbg}
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    display: flex;
-    justify-content: center;
-    width: 100vw;
-    margin: 0 auto;
-    form {
-      width: 300px;
-    }
-    .searchContainer{
-      margin-top: 30px;
-    }
-  }
-`
+import {Wrapper} from './styles';
 
 const initialState = {
   parks: [],
@@ -40,6 +20,11 @@ export default class Parks extends Component {
   state = initialState;
 
   componentDidMount() {
+    makeRequest('/api/parks', 'GET').then(res => {
+      const { parks } = res.json();
+      console.log('>> ParksPage.index:25 GET res.parks,', parks)
+    }).catch(err => err)
+
     this.setState({ parks: parksDB });
   }
 

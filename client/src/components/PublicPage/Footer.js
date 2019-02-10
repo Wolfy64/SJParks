@@ -1,26 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Container = styled.footer`
-  font-size: 0.8rem;
-  color: ${props => props.theme.colors.light};
-  background-color: ${props => props.theme.colors.primary};
-  height: 10vh;
-  display: flex;
-  align-items: center;
-  padding-left: 5rem;
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    padding: 1rem;
-    height: auto;
-  }
-`;
+import {FooterContainer} from './styles';
 
 const Footer = () => (
-  <Container>
+  <FooterContainer>
     Designed and Developed by Azur Agency volunteers for San Jose Parks and
     Recreations Departement.
-  </Container>
+  </FooterContainer>
 );
 
 export default Footer;
