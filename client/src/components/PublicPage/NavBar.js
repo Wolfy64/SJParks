@@ -33,6 +33,10 @@ const Nav = styled.nav`
     margin-left: 1rem;
   }
 
+  .nobreak {
+    white-space: nowrap;
+  }
+
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     grid-template-columns: inherit;
     justify-content: center;
@@ -40,22 +44,25 @@ const Nav = styled.nav`
 
     ul {
       margin: 1rem;
+      justify-self: inherit;
     }
   }
 `;
 
 const NavBar = () => (
   <Nav>
-    <span className='logo'>SJParks Text Notification Service</span>
+    <h1 className="logo">
+      SJParks <span className="nobreak">Text Notification Service</span>
+    </h1>
     <ul>
       <li>
-        <a href='#about'>About</a>
+        <a href="#about">About</a>
       </li>
       <li>
-        <a href='#subscribe'>Subscribe</a>
+        <a href="#subscribe">Subscribe</a>
       </li>
       <li>
-        <a href='#contact'>Contact</a>
+        <a href="#contact">Contact</a>
       </li>
     </ul>
   </Nav>
