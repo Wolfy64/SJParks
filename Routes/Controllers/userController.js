@@ -53,7 +53,7 @@ function incoming(req, res) {
 					park.users.splice(index, 1);
 					park.save(function(err, updated) {
 						if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
-						// Log a new unsubscription event
+						// Log a new unsubscription event`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
 						new db.SubscriptionLog({ user: user._id, park: updated._id, subscribing: false }).save(function(
 							err,
 							newSubscriptionResult
@@ -66,12 +66,12 @@ function incoming(req, res) {
 			} else {
 				// Unsubscribe from all parks
 				// Has the user subscribed before?
-				if (!user.parks.length) return respond('You never subscribed to notifications from Parks and Rec');
+				if (!user.parks.length) return respond(res, false, { msg: 'You never subscribed to notifications from Parks and Rec'});
 				// Get all the user's parks
 				db.Park.find({ _id: { $in: user.parks } }, function(err, parks) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This should not happen!
-					if (!parks) return respond('Your parks have been destroyed by irrational disaster!', false);
+					if (!parks) return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
 					// Remove the user from each park document as above
 					parks.forEach((park) => {
 						const index = park.users.indexOf(user._id);
@@ -87,7 +87,7 @@ function incoming(req, res) {
 							});
 						}
 					});
-					respond('So sad to see you go! You have unsubscribed to notifications from Parks and Rec.');
+					respond(res, false, { msg: 'So sad to see you go! You have unsubscribed to notifications from Parks and Rec.' });
 				});
 			}
 		});
@@ -100,12 +100,12 @@ function incoming(req, res) {
 			db.User.findOne({ phone: phone }, (err, user) => {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				// We don't know this user
-				if (!user) return respond('new phony whudis ?', false);
+				if (!user) return respond(res, false, { msg: 'new phony whudis ?' });
 				// Get all the user's parks
 				db.Park.find({ _id: { $in: user.parks } }, (err, parks) => {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This shouldn't happen!
-					if (!parks) return respond('Hmmm? You have no parks to resubscribe to.', false);
+					if (!parks) return respond(res, false, { msg: 'Hmmm? You have no parks to resubscribe to.' });
 					// Resubscribe to all parks in user's list
 					parks.forEach((park) => {
 						if (park.users.indexOf(user._id) < 0) {
@@ -118,20 +118,19 @@ function incoming(req, res) {
 										subscribing: true
 									}).save((err, newSubscriptionResult) => {});
 							});
-						}
+						}`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
 					});
-					respond('Thanks for resubscribing to notifications from San Jose Parks!');
+						respond(res, false, { msg: 'Thanks for resubscribing to notifications from San Jose Parks!'});
 				});
 			});
 		} else {
 			// 'start [parkcode]' equivalent to '[parkcode]' i.e. resubscribe process is same as subscription process
 			// Find the park
-			db.Park.findOne({ parkID: text[text.length - 1] }, function(err, park) {
+			db.Park.findOne({ parkID: text[text.length - 1] }, function (err, park) {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				if (!park)
 					return respond(
-						`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`,
-						false
+						res, false, { msg: `${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`}
 					);
 				// Find user
 				db.User.findOne({ phone: phone }, function(err, user) {
@@ -570,13 +569,13 @@ function uploadImage(req, res) {
  * @function readAllParks
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/users/_id/parks  
+ * @method GET /api/users/:userId/parks  
  * @desc Retrive all parks to which user,_id is subscribed 
  */
 
 function readAllParks(req, res) {
 	db.User
-		.findById(req.params.id)
+		.findById(req.params.userId)
 		.populate('parks')
 		.then((user) => {
 			respond(res, true, user.parks);
@@ -628,14 +627,14 @@ function findPark(req, res) {
  * @param {request} req 
  * @param {response} res 
  * @method GET /api/users/:userId/updates/:updateId  
- * @desc Find a message, by message._id, that user._id has either sent or recieved 
+ * @desc Find a update, by update._id, that user._id has either sent or recieved 
  */
 function findUpdate(req, res) {
 	db.User
-		.findById(req.params.id)
+		.findById(req.params.userId)
 		.then((user) => {
-			const message = user.messages.find((message) => message._id === req.params.messageId);
-			respond(res, true, { userId: user._id, messageId: message._id });
+			const update = user.updates.find((update) => update._id === req.params.updateId);
+			respond(res, true, { userId: user._id, updateId: update._id });
 		})
 		.catch((err) => respond(res, false, err));
 }

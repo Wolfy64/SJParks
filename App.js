@@ -6,6 +6,7 @@ const flash = require('connect-flash');
 const logger = require('morgan');
 const express = require('express');
 const addRequestId = require('express-request-id')();
+const formData = require('express-form-data');
 
 /** Load Configurations */
 const router = require('./Routes');

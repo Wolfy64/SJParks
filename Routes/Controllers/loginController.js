@@ -10,7 +10,7 @@ function loadReactRouter(req, res) {
 }
 
 function login(req, res, next) {
-	// const { errors, isValid, user  } = req.body;
+	// const { errors, isValid, user  } = validateLoginRequest(req.body);
 
 	// let errors = [];
 
