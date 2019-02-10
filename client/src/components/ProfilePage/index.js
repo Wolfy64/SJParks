@@ -8,11 +8,13 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   width: 100%;
   margin-bottom: 40px;
   color: ${props => props.theme.colors.secondary};
-  .profileInfo{
+  .userImage, .userForm {
+    margin-right: 50px;
+  }
+  .profileInfo {
     display: flex;
     flex-direction: column;
     padding: 0 10px;

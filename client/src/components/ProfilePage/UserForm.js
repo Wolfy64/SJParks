@@ -61,7 +61,7 @@ class UserForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <Wrapper>
+      <Wrapper className='userForm'>
       <form onSubmit={this.handleSubmit}>
         <Input
           label='Full Name'
