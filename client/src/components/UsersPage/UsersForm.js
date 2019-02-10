@@ -1,8 +1,9 @@
 import React from 'react';
-import Input from '../UI/Form/Input';
-import Select from '../UI/Form/Select';
+import makeRequest from '../../utils/makeRequest';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import Input from '../UI/Form/Input';
+import Select from '../UI/Form/Select';
 import Button from '../UI/Generic/Button'
 
 
@@ -65,19 +66,7 @@ const UsersForm = class userInput extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { 
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }, 
-      body: JSON.stringify(dataForm) 
-    };
-    
-    fetch('/admin/newuser', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('>> TEST: sending data \n', dataForm);
+    makeRequest('/admin/newuser', dataForm, 'POST')
 
     // Reset Form field
     this.setState(initialState);
