@@ -10,8 +10,8 @@ const ProfilePage = () => (
     <Container>
       <UserImage />
       <UserForm />
-    </Wrapper>
-    <Wrapper>
+    </Container>
+    <Container>
       <div className='profileInfo'>
         <p>Name: {UsersDB.name}</p>
         <p>Email: {UsersDB.email}</p>

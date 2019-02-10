@@ -270,7 +270,7 @@
 				"type": "JSON",
 				"genMethod": "SERVER"
 			},
-			"WIP": false
+			"WIP": true
 		},
 		{
 			"route": "/admin/users/:userId/imageUplaod",
