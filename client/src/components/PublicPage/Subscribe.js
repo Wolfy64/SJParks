@@ -33,9 +33,7 @@ const Form = styled.form`
     width: 300px;
     align-self: center;
     padding-bottom: 1rem;
-<<<<<<< HEAD
     margin: 20px 0px;
-=======
   }
   .searchContainer {
     background-color: white;
@@ -43,7 +41,6 @@ const Form = styled.form`
   }
   .selectedContainer {
     height: 40vh;
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
