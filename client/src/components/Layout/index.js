@@ -8,10 +8,12 @@ const Page = styled.div`
   display: flex;
   flex-wrap: wrap;
   z-index: 1;
+  max-width: 1000px;
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     margin: 100px 0;
+    width: 100vw;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
   }
 `;
 

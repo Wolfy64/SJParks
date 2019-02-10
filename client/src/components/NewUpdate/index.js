@@ -5,24 +5,35 @@ import EditMessage from './EditMessage';
 import { parksDB } from '../../dummyDB';
 import styled from 'styled-components';
 
-const Col1 = styled.div`
-  width: 300px;
-  float: left;
-  margin: 0 20px;
-`
-const Col2 = styled.div`
-  float: left;
-  margin: 0 20px;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.lightbg};
-`
-
-const Col3 = styled.div`
-  float: left;
-  width: 300px;
-  margin: 3.7rem 20px 0;
-  .bottomAlign{
-    margin-top: 100px;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 320px;
+  height: 40vh;
+  .searchContainer {
+    margin-bottom: 30px;
+  }
+  .selectedContainer {
+    margin: 0 40px;
+    background-color: ${props => props.theme.colors.lightbg};
+  }
+  .col3{
+      margin: 0 20px;
+      height: 100%;
+      width: 280px;
+  }
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    margin: 0 0 60px 0;
+    .selectedContainer {
+      width: 100vw;
+    }
+    .editMessage {
+      display: flex;
+      flex-direction: column;
+      button{
+        align-self: center;
+      }
+    }
   }
 `
 
@@ -62,28 +73,30 @@ class NewUpdate extends React.Component {
   render() {
     return (
       <>
-        <Col1>
+        <Wrapper>
           <SearchPark
             parks={this.state.parks}
             selected={false}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
-        </Col1>
-        <Col2>
-          <SelectedPark
-            parks={this.state.parkSelected}
-            deletePark={park => this.handleDeletePark(park)}
-            deleteAllParks={this.handleDeleteAddAllPark}
-          />
-        </Col2>
-        <Col3>
+        </Wrapper>
+        <Wrapper>
+            <SelectedPark
+              parks={this.state.parkSelected}
+              deletePark={park => this.handleDeletePark(park)}
+              deleteAllParks={this.handleDeleteAddAllPark}
+            />
+        </Wrapper>
+        <Wrapper>
+          <div className='col3'>
           {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
           ) : (
               <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
           )}
-        </Col3>
+          </div>
+        </Wrapper>
       </>
     );
   }

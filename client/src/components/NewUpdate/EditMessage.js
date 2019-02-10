@@ -1,5 +1,4 @@
 import React from 'react';
-import Input from '../UI/Form/Input';
 import Textarea from '../UI/Form/Textarea';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
@@ -78,8 +77,8 @@ const Preview = styled.div`
     color: ${props => props.theme.colors.secondary};
     border-radius: 20px;
     padding: 8px 15px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 40px;
+    margin-bottom: 10px;
     display: inline-block;
     position: relative;
     max-width: 200px;
@@ -110,7 +109,7 @@ const Preview = styled.div`
 
 const initialState = {
   message: '',
-  title: false,
+  title: true,
   parksTitle: '',
   showError: false,
   formErrors: null
@@ -180,7 +179,7 @@ class EditMessage extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className='editMessage' onSubmit={this.handleSubmit}>
         <Title>
           <label className='label'>Add Title(s)</label>
           <label className='switch'>
@@ -196,7 +195,6 @@ class EditMessage extends React.Component {
         </Title>
 
         <Textarea
-          style={{ width: 300 }}
           placeholder='Write your message here'
           name='message'
           onChange={this.handleChange}
@@ -204,12 +202,14 @@ class EditMessage extends React.Component {
           error={hasErrors && formErrors.message}
           required
         />
-        <div className='bottomAlign'>
-          <Preview>
-            <p>{title ? `${parksTitle}\n${message}` : message}</p>
-          </Preview>
-        <Button name='SUBMIT' />
-        </div>
+        {message 
+        ? <Preview> <p>
+          {title 
+          ? parksTitle+" "+message
+          : message}</p></Preview>
+        : <Preview><p>...Message Preview</p></Preview>
+        }
+        <Button className='button' name='SUBMIT' />
       </form>
     );
   }

@@ -109,7 +109,7 @@ router.route('/api/messages/:messagId')
 //   .put(api.subscriptionLogs.update)
 //   .delete(api.subscriptionLogs.destroy);
 
-router.get('/api/*', (req, res) => path.join(__dirname, 'client', config.keys.clientPath, 'index'));
+router.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client', config.keys.clientPath, 'index.html')));
 
 console.log(`>[ROUTES:094:035]> ...Routes Configured`);
 

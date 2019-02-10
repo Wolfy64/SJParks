@@ -10,41 +10,24 @@ const Container = styled.div`
   background-color: ${props => props.theme.colors.dark};
   display: grid;
   align-content: center;
-
-  h1 {
-    text-align: center;
-  };
-
-  .card {
-    display: flex;
-    height: 400px;
-    max-width: 400px;
-  };
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  }
 `;
 
 const Form = styled.form`
   display: grid;
   width: 80%;
   height: 250px;
-  max-width: 400px;
+  max-width: 300px;
   margin: auto;
   background-color: ${props => props.theme.colors.light};
   border-radius: 15px;
   padding: 40px 30px 60px;
   box-shadow: -5px 3px 3px black;
-
   h1 {
     text-align: center;
-  };
-
+  }
   .message {
-    text-align: center;
     color: ${props => props.theme.colors.danger};
-  };
+  }
 `;
 
 const initialState = {
@@ -69,12 +52,10 @@ class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-
     const dataForm = {
       email: this.state.email,
       password: this.state.password
     };
-
     this.sendForm(dataForm);
   };
 
@@ -95,7 +76,6 @@ class Login extends React.Component {
       localStorage.setItem('token', token);
       global.location.reload(true);
     }
-
     // Reset Form field
     this.setState(initialState);
   };

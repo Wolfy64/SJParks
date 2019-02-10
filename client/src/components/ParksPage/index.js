@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import Input from '../UI/Form/Input';
+import styled from 'styled-components';
+import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import SearchPark from '../SearchPark';
-import { parksDB } from '../../dummyDB';
+import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
-import styled from 'styled-components';
 
-const Col1 = styled.div`
+const Wrapper = styled.div`
   width: 300px;
+<<<<<<< HEAD
   float: left;
   padding: 20px;
   margin: 0 5rem 0 0;
@@ -21,13 +22,38 @@ const Col2 = styled.div`
   float: left;
   background-color: ${props => props.theme.colors.lightbg};
 `;
+=======
+  margin-right: 5rem;
+  .searchContainer{
+    background-color: ${(props) => props.theme.colors.lightbg}
+  }
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    margin: 0 auto;
+    form {
+      width: 300px;
+    }
+    .searchContainer{
+      margin-top: 30px;
+    }
+  }
+`
+>>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
 
 const initialState = {
   parks: [],
   showErrors: false,
+<<<<<<< HEAD
   newPark: '',
   parkId: '',
   parkFilter: []
+=======
+  newName: '',
+  newCode: '',
+  parkFilter: [],
+>>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
 };
 
 export default class Parks extends Component {
@@ -65,8 +91,8 @@ export default class Parks extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { newPark, parkId, formErrors } = this.state;
-    const dataForm = { newPark, parkId };
+    const { newName, newCode, formErrors } = this.state;
+    const dataForm = { newName, newCode };
     const isValid = isFormValid(formErrors, dataForm);
 
     isValid
@@ -86,8 +112,8 @@ export default class Parks extends Component {
 
     fetch('/api/parks', payload)
       .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+      .catch(err => console.log('>> err,', err.message));
+    console.log('>>New Park: ', dataForm);
 
     // Reset Form field
     this.setState(initialState);
@@ -106,22 +132,34 @@ export default class Parks extends Component {
 
   render() {
     return (
-      <div>
-        <Col1>
+      <>
+        <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
+<<<<<<< HEAD
               name="newPark"
               label="Name"
               value={this.state.newPark}
+=======
+              name='newName'
+              label='Name'
+              value={this.state.newName}
+>>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
               onChange={this.handleChange}
               type="text"
               placeholder="New Park..."
               autoComplete="off"
             />
             <Input
+<<<<<<< HEAD
               name="parkId"
               label="Keyword"
               value={this.state.parkId}
+=======
+              name='newCode'
+              label='Keyword'
+              value={this.state.newCode}
+>>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
               onChange={this.handleChange}
               type="text"
               placeholder="Park Id..."
@@ -130,16 +168,16 @@ export default class Parks extends Component {
 
             <Button name="Create a new park" type="submit" />
           </form>
-        </Col1>
-        <Col2>
-          <SearchPark
-            parks={this.state.parks}
-            selected={true}
-            addPark={park => this.handleDeletePark(park)}
-            numShow={this.state.parks.length}
-          />
-        </Col2>
-      </div>
+        </Wrapper>
+        <Wrapper>
+            <SearchPark
+              parks={this.state.parks}
+              selected={true}
+              addPark={park => this.handleDeletePark(park)}
+              numShow={this.state.parks.length}
+            />
+        </Wrapper>
+      </>
     );
   }
 }

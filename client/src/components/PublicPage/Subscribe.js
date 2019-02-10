@@ -28,13 +28,22 @@ const Form = styled.form`
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   justify-items: center;
   background-color: ${props => props.theme.colors.lightbg};
-  height: 40vh;
 
   .phoneField {
     width: 300px;
     align-self: center;
     padding-bottom: 1rem;
+<<<<<<< HEAD
     margin: 20px 0px;
+=======
+  }
+  .searchContainer {
+    background-color: white;
+    height: 40vh;
+  }
+  .selectedContainer {
+    height: 40vh;
+>>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {

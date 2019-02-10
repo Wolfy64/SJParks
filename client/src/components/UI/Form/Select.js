@@ -8,6 +8,7 @@ const Wrapper = styled.div`
     padding: 0.3rem;
     font-size: 0.7em;
     margin: 0.3rem 0;
+    max-width: 300px;
   }
   label {
     color: ${props => props.theme.colors.secondary};

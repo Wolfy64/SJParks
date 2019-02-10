@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 300px;
   label {
     color: ${props => props.theme.colors.secondary};
     margin: 0.6rem 0 0.3rem 0.3rem;
