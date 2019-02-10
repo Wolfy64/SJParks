@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import makeRequest from '../../utils/makeRequest'
 import SearchPark from '../SearchPark';
 import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
@@ -80,18 +81,7 @@ export default class Parks extends Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
-
-    fetch('/api/parks', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log('>> err,', err.message));
+    makeRequest('/api/parks', 'POST', dataForm)
     console.log('>>New Park: ', dataForm);
 
     // Reset Form field
