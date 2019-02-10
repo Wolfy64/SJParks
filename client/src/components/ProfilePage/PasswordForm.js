@@ -6,10 +6,9 @@ import Button from '../UI/Generic/Button'
 import styled from 'styled-components';
 
 
-const Float = styled.div`
-  width: inherit;
-  overflow: auto;
-  float: left;
+const Wrapper = styled.div`
+  width: 280px;
+  margin: 10px;
 `;
 
 const initialState = {
@@ -72,7 +71,7 @@ class PasswordForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <Float>
+      <Wrapper>
       <form onSubmit={this.handleSubmit}>
         <Input
           label='Current Password'
@@ -106,7 +105,7 @@ class PasswordForm extends React.Component {
 
         <Button name='Confirm New Password'  type='submit'/>
       </form>
-      </Float>
+      </Wrapper>
     );
   }
 }

@@ -9,9 +9,12 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 320px;
-  margin: 0 60px 80px 0;
   height: 40vh;
+  .searchContainer {
+    margin-bottom: 30px;
+  }
   .selectedContainer {
+    margin: 0 40px;
     background-color: ${props => props.theme.colors.lightbg};
   }
   .col3{

@@ -6,14 +6,14 @@ const placeholder = require('../../img/placeholder.png');
 const Image = styled.div`
 display: flex;
 justify-content: center;
-width: 100%;
+width: 300px;
   img {
     height: 165px;
     width: auto;
   }
 `; 
 
-const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
+//const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {
@@ -47,8 +47,11 @@ class UserImage extends React.Component {
   render() {
     const {images} = this.state;
     return (
-      <Image>
-        <img onClick={() => this.fileInput.click()} src={images[0]?images[0].url : placeholder} alt='avatar'/>
+      <Image className='userImage'>
+        <img 
+        onClick={() => this.fileInput.click()} 
+        src={images[0]?images[0].url : placeholder} 
+        alt='avatar'/>
         <input
           type='file'
           onChange={this.onChange}
