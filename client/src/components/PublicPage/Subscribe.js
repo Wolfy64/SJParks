@@ -34,9 +34,7 @@ const Form = styled.form`
     width: 300px;
     align-self: center;
     padding-bottom: 1rem;
-  }
-  .searchContainer {
-    background-color: white;
+    margin: 20px 0px;
   }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
@@ -123,7 +121,7 @@ class Subscribe extends React.Component {
     return (
       <Container>
         <h2>Subscribe</h2>
-        <Form id='subscribe' onSubmit={this.handleSubmit}>
+        <Form id="subscribe" onSubmit={this.handleSubmit}>
           <SearchPark
             parks={this.state.parks}
             addPark={park => this.handleAddPark(park)}
@@ -136,18 +134,18 @@ class Subscribe extends React.Component {
             deleteAllParks={this.handleDeleteAddAllPark}
           />
 
-          <div className='phoneField'>
+          <div className="phoneField">
             <Input
-              label='Phone'
-              placeholder='123-456-7890'
-              name='phone'
-              type='tel'
+              label="Phone"
+              placeholder="123-456-7890"
+              name="phone"
+              type="tel"
               onChange={this.handleChange}
               value={this.state.phone}
               error={hasErrors ? formErrors.phone : null}
             />
 
-            <Button name='I want to be informed!' />
+            <Button name="I want to be informed!" />
           </div>
         </Form>
       </Container>
