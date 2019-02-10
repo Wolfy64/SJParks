@@ -23,8 +23,7 @@ export default class Graph extends Component {
         }
     }
 
-    render(){
-        let mobileWidth = document.getElementById("graph");
+    render() {
         return (
             <div id="graph">
                 <LineChart width={this.state.width || window.innerWidth*0.30} height={this.state.height || window.innerWidth*0.18} data={data}>
