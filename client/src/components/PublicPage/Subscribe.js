@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
@@ -7,56 +6,7 @@ import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
-
-const Container = styled.div`
-  h2 {
-    display: none;
-  }
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    h2 {
-      display: block;
-      font-size: 1.5rem;
-      padding: 1rem;
-      margin: 1rem 0 -1rem 0;
-    }
-  }
-`;
-
-const Form = styled.form`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: center;
-  background-color: ${props => props.theme.colors.lightbg};
-
-  .phoneField {
-    width: 300px;
-    align-self: center;
-    padding-bottom: 1rem;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    margin: 20px 0px;
-=======
-=======
->>>>>>> Add Style
-  }
-  .searchContainer {
-    background-color: white;
-    height: 40vh;
-  }
-  .selectedContainer {
-    height: 40vh;
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
-  }
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    height: auto;
-  }
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    height: auto;
-  }
-`;
+import {SubscribeContainer, Form} from './styles';
 
 const initialState = {
   parks: [],
@@ -135,13 +85,9 @@ class Subscribe extends React.Component {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
     return (
-      <Container>
+      <SubscribeContainer>
         <h2>Subscribe</h2>
-<<<<<<< HEAD
-        <Form id="subscribe" onSubmit={this.handleSubmit}>
-=======
         <Form id='subscribe' onSubmit={this.handleSubmit}>
->>>>>>> Add Style
           <SearchPark
             parks={this.state.parks}
             addPark={park => this.handleAddPark(park)}
@@ -154,34 +100,21 @@ class Subscribe extends React.Component {
             deleteAllParks={this.handleDeleteAddAllPark}
           />
 
-<<<<<<< HEAD
-          <div className="phoneField">
-            <Input
-              label="Phone"
-              placeholder="123-456-7890"
-              name="phone"
-              type="tel"
-=======
           <div className='phoneField'>
             <Input
               label='Phone'
               placeholder='123-456-7890'
               name='phone'
               type='tel'
->>>>>>> Add Style
               onChange={this.handleChange}
               value={this.state.phone}
               error={hasErrors ? formErrors.phone : null}
             />
 
-<<<<<<< HEAD
-            <Button name="I want to be informed!" />
-=======
             <Button name='I want to be informed!' />
->>>>>>> Add Style
           </div>
         </Form>
-      </Container>
+      </SubscribeContainer>
     );
   }
 }

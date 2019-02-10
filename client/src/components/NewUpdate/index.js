@@ -3,39 +3,7 @@ import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
 import { parksDB } from '../../dummyDB';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 320px;
-  height: 40vh;
-  .searchContainer {
-    margin-bottom: 30px;
-  }
-  .selectedContainer {
-    margin: 0 40px;
-    background-color: ${props => props.theme.colors.lightbg};
-  }
-  .col3{
-      margin: 0 20px;
-      height: 100%;
-      width: 280px;
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    margin: 0 0 60px 0;
-    .selectedContainer {
-      width: 100vw;
-    }
-    .editMessage {
-      display: flex;
-      flex-direction: column;
-      button{
-        align-self: center;
-      }
-    }
-  }
-`
+import {Container} from './styles'
 
 class NewUpdate extends React.Component {
   state = {
@@ -73,22 +41,22 @@ class NewUpdate extends React.Component {
   render() {
     return (
       <>
-        <Wrapper>
+        <Container>
           <SearchPark
             parks={this.state.parks}
             selected={false}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
-        </Wrapper>
-        <Wrapper>
+        </Container>
+        <Container>
             <SelectedPark
               parks={this.state.parkSelected}
               deletePark={park => this.handleDeletePark(park)}
               deleteAllParks={this.handleDeleteAddAllPark}
             />
-        </Wrapper>
-        <Wrapper>
+        </Container>
+        <Container>
           <div className='col3'>
           {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
@@ -96,7 +64,7 @@ class NewUpdate extends React.Component {
               <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
           )}
           </div>
-        </Wrapper>
+        </Container>
       </>
     );
   }
