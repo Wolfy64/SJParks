@@ -214,6 +214,25 @@ function validateLoginInput(data) {
 	};
 }
 
+	// const { errors, isValid, user  } = validateLoginRequest(req.body);
+
+	// let errors = [];
+
+	// if (!user.email || !user.userName) {
+	// 	errors.push({
+	// 		candidate: [ user.email, user.userName ],
+	// 		msg: 'Invalid userName or password'
+	// 	});
+	// }
+
+	// if (!user.password) {
+	// 	errors.push({
+	// 		candidate: user.password,
+	// 		msg: 'Not a valid password'
+	// 	});
+	// }
+
+
 module.exports = {
 	validateUserInput,
 	validateParkInput,

@@ -35,7 +35,7 @@ class Login extends React.Component {
   }
 
   sendForm = data => {
-    makeRequest('/admin/login', 'POST', data)
+    makeRequest('/login', 'POST', data)
       .then(res => res.json())
       .then(res => {
         console.log('>> Login POST,', res)
