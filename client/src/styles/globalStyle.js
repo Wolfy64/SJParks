@@ -59,8 +59,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
   }
 
-  input,textarea {
-    outline-color: ${props => props.theme.colors.primary};
+  input:focus ,textarea:focus {
+    border-color: ${props => props.theme.colors.primary};
+    outline: none;
   }
 
 `;

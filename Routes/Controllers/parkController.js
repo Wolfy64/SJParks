@@ -35,7 +35,7 @@ function create(req, res) {
 	console.log('> Creating new park');
 	const {errors, isValid, data} = validateParkInput(req.body);
 	console.log('> Passed new park data validation');
-	if (!isValid) {
+	if (isValid/*!isvalid*/) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
@@ -131,7 +131,21 @@ function destroy(req, res) {
 		.catch((err) => console.log(err));
 }
 
-module.exports = {
+// const express = require('express');
+// const router = express.Router();
+
+// // @route /api/park
+// router.route('/api/parks')
+//   .get(index)
+//   .post(create);
+
+//   // @route /api/parks/_id/
+// router.route('/api/parks/:id')
+//   .get(read)
+//   .put(update)
+// 	.delete(destroy);
+	
+module.exports = /*router*/{
 	index,
 	read,
 	create,

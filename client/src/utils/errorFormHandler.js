@@ -14,7 +14,7 @@ const errorFormHandler = (type, value, options = {}) => {
   // If there is an error return the error message
   switch (type) {
     case 'text':
-      value.length < 3 && (error = msgErr.text);
+      value.length < 2 && (error = msgErr.text);
       break;
     case 'email':
       !RegExp(regex.mail).test(value) && (error = msgErr.mail);

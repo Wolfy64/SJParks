@@ -1,48 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
-
-const Container = styled.div`
-  h2 {
-    display: none;
-  }
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    h2 {
-      display: block;
-      font-size: 1.5rem;
-      padding: 1rem;
-      margin: 1rem 0 -1rem 0;
-    }
-  }
-`;
-
-const Form = styled.form`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  justify-items: center;
-  background-color: ${props => props.theme.colors.lightbg};
-  height: 40vh;
-
-  .phoneField {
-    width: 300px;
-    align-self: center;
-    padding-bottom: 1rem;
-  }
-  .searchContainer {
-    background-color: white;
-  }
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    height: auto;
-  }
-`;
+import {SubscribeContainer, Form} from './styles';
 
 const initialState = {
   parks: [],
@@ -56,6 +21,13 @@ class Subscribe extends React.Component {
   state = initialState;
 
   componentDidMount() {
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json)
+      .then(res => {
+        console.log('>>PublicPage/Subscribe GET,', res)
+      })
+      .catch(err => err)
+
     this.setState({ parks: parksDB });
   }
 
@@ -106,12 +78,12 @@ class Subscribe extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
-
-    fetch('/', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    makeRequest('/subscriptionLog', 'POST', dataForm)
+      .then(res => res.json())
+      .then( res => {
+        console.log('>> PublicPage/Subscribe POST:', res.json)
+      })
+      .catch(err => err)
 
     // Reset Form field
     this.setState(initialState);
@@ -121,7 +93,7 @@ class Subscribe extends React.Component {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
     return (
-      <Container>
+      <SubscribeContainer>
         <h2>Subscribe</h2>
         <Form id='subscribe' onSubmit={this.handleSubmit}>
           <SearchPark
@@ -150,7 +122,7 @@ class Subscribe extends React.Component {
             <Button name='I want to be informed!' />
           </div>
         </Form>
-      </Container>
+      </SubscribeContainer>
     );
   }
 }

@@ -5,8 +5,11 @@ import Input from './UI/Form/Input';
 import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
-  width: 300px;
-  padding: 1rem;
+  width: 100%;
+  max-width: 280px;
+  padding: 20px;
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 class SearchPark extends Component {
@@ -25,7 +28,7 @@ class SearchPark extends Component {
     const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 3);
+    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 5);
 
     const parkLi = showParkList.map(el => (
       <ParkLi

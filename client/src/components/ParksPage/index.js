@@ -1,29 +1,18 @@
 import React, { Component } from 'react';
-import Input from '../UI/Form/Input';
+import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import makeRequest from '../../utils/makeRequest'
 import SearchPark from '../SearchPark';
-import { parksDB } from '../../dummyDB';
+import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
-import styled from 'styled-components';
-
-const Col1 = styled.div`
-  width: 300px;
-  float: left;
-  padding: 20px;
-  margin: 0 5rem 0 0;
-`
-const Col2 = styled.div`
-  height: 100vh;
-  float: left;
-  background-color: ${props => props.theme.colors.lightbg};
-`
+import {Wrapper} from './styles';
 
 const initialState = {
   parks: [],
   showErrors: false,
-  newPark: '',
-  parkId: '',
+  newName: '',
+  newCode: '',
   parkFilter: [],
 };
 
@@ -31,6 +20,13 @@ export default class Parks extends Component {
   state = initialState;
 
   componentDidMount() {
+    makeRequest('/api/parks', 'GET')
+      .then(res =>  res.json())
+      .then(res => {
+        console.log('>> ParksPage.index GET res.parks,', res.parks)
+      })
+      .catch(err => err)
+
     this.setState({ parks: parksDB });
   }
 
@@ -55,8 +51,8 @@ export default class Parks extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { newPark, parkId, formErrors } = this.state;
-    const dataForm = { newPark, parkId };
+    const { newName, newCode, formErrors } = this.state;
+    const dataForm = { newName, newCode };
     const isValid = isFormValid(formErrors, dataForm);
 
     isValid
@@ -65,19 +61,13 @@ export default class Parks extends Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
-
-    fetch('/api/parks', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    makeRequest('/api/parks', 'POST', dataForm)
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> ParksPage/index POST,', res)       
+      })
+      .catch( err => err)
+    
 
     // Reset Form field
     this.setState(initialState);
@@ -96,40 +86,40 @@ export default class Parks extends Component {
 
   render() {
     return (
-      <div>
-        <Col1>
+      <>
+        <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
-              name='newPark'
+              name='newName'
               label='Name'
-              value={this.state.newPark}
+              value={this.state.newName}
               onChange={this.handleChange}
-              type='text'
-              placeholder='New Park...'
-              autoComplete='off'
+              type="text"
+              placeholder="New Park..."
+              autoComplete="off"
             />
             <Input
-              name='parkId'
+              name='newCode'
               label='Keyword'
-              value={this.state.parkId}
+              value={this.state.newCode}
               onChange={this.handleChange}
-              type='text'
-              placeholder='Park Id...'
-              autoComplete='off'
+              type="text"
+              placeholder="Park Id..."
+              autoComplete="off"
             />
 
-            <Button name='Create a new park' type='submit' />
+            <Button name="Create a new park" type="submit" />
           </form>
-        </Col1>
-        <Col2>
-          <SearchPark
-            parks={this.state.parks}
-            selected={true}
-            addPark={park => this.handleDeletePark(park)}
-            numShow={this.state.parks.length}
-          />
-        </Col2>
-      </div>
+        </Wrapper>
+        <Wrapper>
+            <SearchPark
+              parks={this.state.parks}
+              selected={true}
+              addPark={park => this.handleDeletePark(park)}
+              numShow={this.state.parks.length}
+            />
+        </Wrapper>
+      </>
     );
   }
 }

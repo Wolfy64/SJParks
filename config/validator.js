@@ -1,12 +1,13 @@
-/*jshint esversion: 6 */
 const db = require('../models');
 const validator = require('validator');
 const isEmpty = require('is-empty');
 
 /**
+ * Validates user input provided by an HTTP_request object
+ * 
  * @function validateUserInput 
  * @param {request.body} props
- * @desc Validates user input provided by an HTTP_request object
+ * 
  */
 function validateUserInput(props) {
 	console.log('> [12:20] Begin user Validation');
@@ -216,5 +217,6 @@ function validateLoginInput(data) {
 module.exports = {
 	validateUserInput,
 	validateParkInput,
+	// validateUpdateInput,
 	validateLoginInput
 };

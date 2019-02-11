@@ -126,7 +126,6 @@ Premium Access Admin is able to view:
 ### Users
 
 Premium Access Admin is able to view:
-
-- All users in the system
-- Add new users
-- Delete existing users
+* All users in the system
+* Add new users
+* Delete existing users

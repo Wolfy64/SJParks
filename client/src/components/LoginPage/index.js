@@ -1,51 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.dark};
-  display: grid;
-  align-content: center;
-
-  h1 {
-    text-align: center;
-  };
-
-  .card {
-    display: flex;
-    height: 400px;
-    max-width: 400px;
-  };
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  }
-`;
-
-const Form = styled.form`
-  display: grid;
-  width: 80%;
-  height: 250px;
-  max-width: 400px;
-  margin: auto;
-  background-color: ${props => props.theme.colors.light};
-  border-radius: 15px;
-  padding: 40px 30px 60px;
-  box-shadow: -5px 3px 3px black;
-
-  h1 {
-    text-align: center;
-  };
-
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  };
-`;
+import {Container, Form} from './styles'
 
 const initialState = {
   email: '',
@@ -69,12 +26,10 @@ class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-
     const dataForm = {
       email: this.state.email,
       password: this.state.password
     };
-
     this.sendForm(dataForm);
   }
 

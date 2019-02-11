@@ -8,7 +8,7 @@ const config = require('./keys');
 // const TwitterStrategy = require('passport-twitter').Strategy,
 // const FacebookStrategy = require('passport-facebook').Strategy;
 
-module.exports = (app) => {
+module.exports = app => {
 	/** Configure Express-Session */
 
 	const sessOpts = {
@@ -33,7 +33,6 @@ module.exports = (app) => {
 	app.use(session(sessOpts));
 
 	/** Flash */
-
 	app.use(flash());
 	app.use(function(req, res, next) {
 		res.locals.success_msg = req.flash('success_msg');
@@ -49,8 +48,7 @@ module.exports = (app) => {
 
 	/** Deserialize user from user._id */
 	passport.deserializeUser(function(userId, done) {
-		db.User
-			.findById(userId)
+		db.User.findById(userId)
 			.then(function(user) {
 				done(null, user);
 			})
@@ -60,15 +58,37 @@ module.exports = (app) => {
 	});
 
 	/** Configure Passport Strategies */
-// Local Strategy
-passport.use(
-	new LocalStrategy(
-		{ usernameField: 'email' },
-		(email, password, done) => {
+	// Local Strategy
+	passport.use(
+		/**new LocalStrategy(
+			{
+				usernameField: 'user[userName]',
+				passwordField: 'user[password]'
+			},
+			(username, password, done) => {
+				const errorMsg = { message: 'Invalid username or password' };
+
+				// Match user
+				db.User
+					.findOne({
+						userName: username
+					})
+					.then((matchedUser) => {
+						if (!matchedUser) {
+							return done(null, false, errorMsg);
+						}
+						return matchedUser
+							.validatePassword(password)
+							.then((isMatch) => done(null, isMatch ? matchedUser : false, isMatch ? null : errorMsg));
+					})
+					.catch(done);
+			}
+		) */
+		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
 			// Match user
-			const user = db.User.findOne({ email });
+			let user = await db.User.findOne({ email });
 			// Match password i
-			let isMatch = bcrypt.compare(password, user.password);
+			let isMatch = await user.validatePassword(password);
 			isMatch = true;
 			console.log('passport.js:18 login is forced to', isMatch);
 
@@ -82,72 +102,8 @@ passport.use(
 			});
 			console.log('token,', token);
 			return done(null, { token });
-		}
-	)
-);
-// 	// Local Strategy
-// 	passport.use(
-// 		new LocalStrategy(
-// 			{
-// 				usernameField: 'user[userName]',
-// 				passwordField: 'user[password]'
-// 			},
-// 			(username, password, done) => {
-// 				const errorMsg = { message: 'Invalid username or password' };
-
-// 				// Match user
-// 				db.User
-// 					.findOne({
-// 						userName: username
-// 					})
-// 					.then((matchedUser) => {
-// 						if (!matchedUser) {
-// 							return done(null, false, errorMsg);
-// 						}
-// 						return matchedUser
-// 							.validatePassword(password)
-// 							.then((isMatch) => done(null, isMatch ? matchedUser : false, isMatch ? null : errorMsg));
-// 					})
-// 					.catch(done);
-// 			}
-// 		)
-// 	);
-
-	// // Force-Dot-Com Strategy
-	// passport.use(new ForceDotComStrategy({
-	//     clientID: '[FDCID]',
-	//     clientSecret: '[FDCSECRET]',
-	//     callbackURL: 'https://127.0.0.1:' + config.port + '/token'
-	//   },
-	//   function (token, tokenSecret, profile, done) {
-	//     console.log(profile);
-	//     return done(null, profile);
-	//   }
-	// ));
-
-	// // Twitter Strategy
-	// passport.use(new TwitterStrategy({
-	//   consumerKey: '[TWITTERID]',
-	//   consumerSecret: '[TWITTERSECRET]',
-	//   callbackURL: 'https://127.0.0.1:' + config.port + '/twitter-token' //this will need to be dealt with
-	// }, function (token, tokenSecret, profile, done) {
-	//   process.nextTick(function () {
-	//     return done(null, profile);
-	//   });
-	// }));
-
-	// // Facebook Strategy
-	// passport.use(new FacebookStrategy({
-	//     clientID: '[FBID]',
-	//     clientSecret: '[FBSECRET]',
-	//     callbackURL: 'https://127.0.0.1:' + config.port + '/facebook-token'
-	//   },
-	//   function (accessToken, refreshToken, profile, done) {
-	//     process.nextTick(function () {
-	//       return done(null, profile);
-	//     });
-	//   }
-	// ));
+		})
+	);
 
 	/** Initialize Passport within the App*/
 	app.use(passport.initialize());

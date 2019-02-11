@@ -141,7 +141,21 @@ function destroy(req, res) {
 		.catch((err) => console.log(err));
 }
 
-module.exports = {
+// const express = require('express');
+// const router = express.Router();
+
+// // @route /api/subscriptionLogs
+// router.route('/api/subscriptionLogs')
+//   .get(api.subscriptionLogs.index)
+//   .post(api.subscriptionLogs.create);
+
+// // @route /api/subscriptionLogs/_id
+// router.route('/api/subscriptionLogs/:subscriptionLogId')
+//   .get(api.subscriptionLogs.read)
+//   .put(api.subscriptionLogs.update)
+//   .delete(api.subscriptionLogs.destroy);
+
+module.exports =  /*router*/{
   create,
   read,
   index,

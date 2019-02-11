@@ -11,8 +11,6 @@ router.route('/users/:userId').get(api.users.read).put(api.users.update).delete(
 
 router.route('/users/:userId/imageUp').post(api.users.uploadImage);
 
-// router.get('/user/:userID/dash', api.admins.displayDasboard);
-
 router.route('/users/:userId/parks').get(api.users.readAllParks);
 
 router.route('/users/:userId/updates').get(api.users.readAllUpdates);

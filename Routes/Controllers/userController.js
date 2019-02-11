@@ -1,9 +1,8 @@
-/*jshint esversion: 6 */
 // import UserImage from '../../client/src/components/ProfilePage/UserImage';
-const db = require('../../models');
 const cloudinary = require('cloudinary');
-const { validateUserInput } = require('../../config/validator');
+const db = require('../../models');
 const { respond } = require('../../lib');
+const { validateUserInput } = require('../../config/validator');
 
 /**
  * @public
@@ -54,7 +53,7 @@ function incoming(req, res) {
 					park.users.splice(index, 1);
 					park.save(function(err, updated) {
 						if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
-						// Log a new unsubscription event
+						// Log a new unsubscription event`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
 						new db.SubscriptionLog({ user: user._id, park: updated._id, subscribing: false }).save(function(
 							err,
 							newSubscriptionResult
@@ -67,12 +66,12 @@ function incoming(req, res) {
 			} else {
 				// Unsubscribe from all parks
 				// Has the user subscribed before?
-				if (!user.parks.length) return respond('You never subscribed to notifications from Parks and Rec');
+				if (!user.parks.length) return respond(res, false, { msg: 'You never subscribed to notifications from Parks and Rec'});
 				// Get all the user's parks
 				db.Park.find({ _id: { $in: user.parks } }, function(err, parks) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This should not happen!
-					if (!parks) return respond('Your parks have been destroyed by irrational disaster!', false);
+					if (!parks) return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
 					// Remove the user from each park document as above
 					parks.forEach((park) => {
 						const index = park.users.indexOf(user._id);
@@ -88,7 +87,7 @@ function incoming(req, res) {
 							});
 						}
 					});
-					respond('So sad to see you go! You have unsubscribed to notifications from Parks and Rec.');
+					respond(res, false, { msg: 'So sad to see you go! You have unsubscribed to notifications from Parks and Rec.' });
 				});
 			}
 		});
@@ -101,12 +100,12 @@ function incoming(req, res) {
 			db.User.findOne({ phone: phone }, (err, user) => {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				// We don't know this user
-				if (!user) return respond('new phony whudis ?', false);
+				if (!user) return respond(res, false, { msg: 'new phony whudis ?' });
 				// Get all the user's parks
 				db.Park.find({ _id: { $in: user.parks } }, (err, parks) => {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This shouldn't happen!
-					if (!parks) return respond('Hmmm? You have no parks to resubscribe to.', false);
+					if (!parks) return respond(res, false, { msg: 'Hmmm? You have no parks to resubscribe to.' });
 					// Resubscribe to all parks in user's list
 					parks.forEach((park) => {
 						if (park.users.indexOf(user._id) < 0) {
@@ -121,18 +120,17 @@ function incoming(req, res) {
 							});
 						}
 					});
-					respond('Thanks for resubscribing to notifications from San Jose Parks!');
+						respond(res, false, { msg: 'Thanks for resubscribing to notifications from San Jose Parks!'});
 				});
 			});
 		} else {
 			// 'start [parkcode]' equivalent to '[parkcode]' i.e. resubscribe process is same as subscription process
 			// Find the park
-			db.Park.findOne({ parkID: text[text.length - 1] }, function(err, park) {
+			db.Park.findOne({ parkID: text[text.length - 1] }, function (err, park) {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				if (!park)
 					return respond(
-						`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`,
-						false
+						res, false, { msg: `${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`}
 					);
 				// Find user
 				db.User.findOne({ phone: phone }, function(err, user) {
@@ -214,16 +212,16 @@ function read(req, res) {
  * @function index
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/user 
+ * @method GET /api/users 
  * @desc Get all users 
  */
 function index(req, res) {
 	db.User
-		.find()
+		.find({})
 		.sort({
 			userName: 1
 		})
-		.then((users) => respond(res, true, users))
+		.then((users) => res.status(267).json({success:true, users})/*respond(res, true, users) */)
 		.catch((err) => respond(res, false, { msg: err.message }));
 }
 
@@ -259,43 +257,228 @@ function create(req, res) {
 			});
 	}
 }
+/**
+function create(req, res)
+{
+	const {
+		isAdmin,
+		userName,
+		firstName,
+		lastName,
+		phone,
+		email,
+		password,
+		addPark,
+		addMessage
+	} = req.body;
+
+	let errors = [];
+
+	if (!userName || !firstName || !lastName || !phone || !email || !password)
+	{
+		errors.push({
+			msg: 'Please enter all fields'
+		});
+	}
+
+	if (password.length < 8)
+	{
+		errors.push({
+			msg: 'Password must be at least 8 characters'
+		});
+	}
+
+	if (errors.length > 0)
+	{
+		res.render('register', {
+			errors,
+			email,
+			password
+		});
+	} else
+	{
+		let user = null;
+		db.User.findOne({
+			userName: userName,
+			phone: phone,
+			email: email
+		}).then(userFound =>
+		{
+			if (userFound) user = userFound;
+		});
+		if (user != null)
+		{
+			errors.push({
+				msg: `Derp! User already exists!`,
+				user: user
+			})
+			res.render('register', {
+				errors,
+				user
+			});
+		} else
+		{
+
+			const newUser = new db.User({
+				isAdmin: isAdmin,
+				userName: userName,
+				firstName: firstName,
+				lastName: lastName,
+				phone: phone,
+				email: email
+			});
+
+			bcrypt.genSalt(16, (err, salt) =>
+			{
+				if (err) throw err;
+				newUser.salt = salt;
+				bcrypt.hash(password, newUser.salt, (err, hash) =>
+				{
+					if (err) throw err;
+					newUser.password = hash;
+
+					db.Park.findOne({
+						code: addPark
+					})
+						.then(park =>
+						{
+							if (park)
+							{
+								newUser.parks.push(park._id);
+							} else
+							{
+								const newPark = new db.Park({
+									code: addPark
+								});
+								newPark.users.push(newUser._id);
+								newPark
+									.save()
+									.then(park => newUser.parks.push(park._id))
+									.catch(err => console.log(err));
+							}
+						})
+						.catch(err => console.log(err))
+
+					db.Message.findOne({
+						message: addMessage
+					})
+						.exec((err, message) =>
+						{
+							if (message)
+							{
+								newUser.messages.push(message._id);
+							} else if (err || !message)
+							{
+								const newMessage = new db.Message({
+									author: newUser._id,
+									message: addMessage
+								});
+								newMessage.save().then(message =>
+									newUser.messages.push(message._id)).catch(err => console.log(err));
+							}
+						});
+
+					newUser.save()
+						.then(user =>
+						{
+							req.flash(
+								'success_msg',
+								'You are now registered and can log in'
+							);
+							res.status(220).send({
+								Success: true,
+								NewUser: user._id
+							});
+							res.redirect('/api/users/login');
+						})
+						.catch(err =>
+						{
+							res.status(420).send({
+								Success: false,
+								Error: err.message
+							});
+							res.redirect('/api/user');
+						});
+				}); // end Bcrypt.getPassword()
+			}); // end Bycrypt.getSaltsalter()
+		}
+	}
+	}
+	* /
 
 /**
  * @public
  * @function update
  * @param {request} req 
  * @param {response} res 
- * @method PUT /api/user/update/:id  
+ * @method PUT /api/user/:userId  
  * @desc Update an existing user by userId  
  */
 function update(req, res) {
 	const { /*errors,*/ isValid, data } = validateUserInput(req.body);
 
-	const options = {
-		setDefaultsOnInsert: true,
-		sort: 1,
-		new: false,
-		upsert: false,
-		runValidators: true,
-		select: null,
-		rawResult: false,
-		strict: false
-	};
-
 	if (!isValid) {
 		respond(res, false, { msg: `Could not update user: ${res.params.userId}` });
 	} else {
-		console.log(data);
+
+		/** 
+		 * These are the options for 'findByIdAndUpdate'. Please see the link that follows for *further details.
+		 * 
+		 * @see https://mongoosejs.com/docs/*api.html#model_Model.findByIdAndUpdate"} 
+		 * 
+		 * */
+	
+		const options = {
+			setDefaultsOnInsert: true,
+			sort: 1,
+			new: false,
+			upsert: false,
+			runValidators: true,
+			select: null,
+			rawResult: false,
+			strict: false
+		};
+		
 		db.User.findByIdAndUpdate(req.params.id, data, options, (err, foundUser) => {
 			if (err || !foundUser) respond(res, false, { msg: !foundUser ? 'Error finding user' : err.message });
 			if (foundUser) {
 				foundUser.setPassword(data.password);
+
+				db.Park.findOne({
+					name: data.addPark
+				})
+					.exec((err, park) => {
+						if (park) {
+							const newPark = new db.Park({
+								name: data.addPark
+							});
+							newPark.users.push(foundUser._id);
+							newPark.save().then(park =>
+								foundUser.parks.push(park._id));
+						}
+					});
+
+				db.Update.findOne({
+					update: data.addUpdate
+				})
+					.exec((err, update) => {
+						if (update) {
+							foundUser.updates.push(update._id);
+						} else if (err || !update) {
+							const newUpdate = new db.Update({
+								author: foundUser._id,
+								update: data.addUpdate
+							});
+							newUpdate.save().then(update =>
+								foundUser.updates.push(update._id));
+						}
+					});
+				
 				foundUser
 					.save()
 					.then((foundUser) =>
-						respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` })
-					)
-					.catch((err) => respond(res, false, { msg: err.message }));
+						respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` }))
+					.catch((err) => respond(res, false, { msg: err.update }));
 			}
 		});
 	}
@@ -350,7 +533,7 @@ function destroy(req, res) {
  * @function uploadImage
  * @param {request} req 
  * @param {response} res 
- * @method POST /api/user/_id/imageUp   
+ * @method POST /api/user/:userId/image   
  * @desc Upload a userImage for an existing user by id 
  */
 function uploadImage(req, res) {
@@ -372,13 +555,13 @@ function uploadImage(req, res) {
  * @function readAllParks
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/users/_id/parks  
+ * @method GET /api/users/:userId/parks  
  * @desc Retrive all parks to which user,_id is subscribed 
  */
 
 function readAllParks(req, res) {
 	db.User
-		.findById(req.params.id)
+		.findById(req.params.userId)
 		.populate('parks')
 		.then((user) => {
 			respond(res, true, user.parks);
@@ -430,19 +613,52 @@ function findPark(req, res) {
  * @param {request} req 
  * @param {response} res 
  * @method GET /api/users/:userId/updates/:updateId  
- * @desc Find a message, by message._id, that user._id has either sent or recieved 
+ * @desc Find a update, by update._id, that user._id has either sent or recieved 
  */
 function findUpdate(req, res) {
 	db.User
-		.findById(req.params.id)
+		.findById(req.params.userId)
 		.then((user) => {
-			const message = user.messages.find((message) => message._id === req.params.messageId);
-			respond(res, true, { userId: user._id, messageId: message._id });
+			const update = user.updates.find((update) => update._id === req.params.updateId);
+			respond(res, true, { userId: user._id, updateId: update._id });
 		})
 		.catch((err) => respond(res, false, err));
 }
 
-module.exports = {
+// const express = require('express');
+// const router = express.Router();
+
+// // @route /api/user
+// router.route('/api/users')
+// 	.get(index)
+// 	.post(create);
+
+// router.route('/admin/image-upload')
+// 	.post(uploadImage);
+
+// // @route /api/user/_id
+// router.route('/api/users/:userId')
+// 	.get(read)
+// 	.put(update)
+// 	.delete(destroy);
+
+//  // @route /api/users/_id/park
+// router.route('/api/users/:userId/parks')
+//   .get(readAllParks);
+
+// // @route /api/users/_id/updates
+// router.route('/api/users/:userId/updates')
+//   .get(readAllUpdates);
+
+// // @route /api/users/_id/park/_id
+// router.route('/api/users/:userId/parks/:parkId')
+//   .get(findPark);
+
+// // @route /api/user/_id/updates/_id
+// router.route('/api/users/:userId/updates/:updateId')
+//   .get(findUpdate);
+
+module.exports = /*router */{
 	incoming,
 	index,
 	read,

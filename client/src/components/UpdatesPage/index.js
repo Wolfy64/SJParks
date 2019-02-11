@@ -2,25 +2,7 @@ import React from 'react';
 import Graph from './Graph';
 import Post from './Historypost';
 import Button from '../UI/Generic/Button';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  text-align: center;
-  .recharts-surface {
-    margin-left: -3.5rem;
-    margin-right: 50px;
-  };
-  .updateButton {
-    margin: 50px;
-    width: 300px;
-  };
-  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-    .recharts-surface {
-      margin: unset;
-      width: fit-content;
-    }
-  }
-`;
+import {Wrapper} from './styles';
 
 class Updates extends React.Component {
   constructor() {

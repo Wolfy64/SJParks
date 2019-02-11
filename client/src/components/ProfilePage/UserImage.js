@@ -13,7 +13,7 @@ width: 100%;
   }
 `; 
 
-const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
+//const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {

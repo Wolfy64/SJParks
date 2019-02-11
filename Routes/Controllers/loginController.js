@@ -10,7 +10,7 @@ function loadReactRouter(req, res) {
 }
 
 function login(req, res, next) {
-	// const { errors, isValid, user  } = req.body;
+	// const { errors, isValid, user  } = validateLoginRequest(req.body);
 
 	// let errors = [];
 
@@ -30,24 +30,21 @@ function login(req, res, next) {
 	const isValid = true;
 	if (isValid) {
 		return passport.authenticate(
-			'local',
-			{
-				session: false,
-				successRedirect: '/dashboard', // fix this
-				failureRedirect: '/auth/login', // fix this
+			'local',/*,{
+		  	session: false,
+				successRedirect: '/admin/:user/updates',
+				failureRedirect: '/login',
 				failureFlash: true
-			},
-			(err, passportUser, info) => {
+			},*/ (err, passportUser, info) => {
 				if (err) return next(err);
 
 				if (passportUser) {
 					const user = passportUser;
 					user.token = passportUser.generateJWT();
-
 					return respond(res, true, { user: user.toAuthJSON() });
 				}
 
-				return respond(res, false, info);
+				if (info) return respond(res, false, info);
 			}
 		)(req, res, next);
 	}
@@ -88,18 +85,8 @@ function logout(req, res) {
 		console.log('User signed out.');
 	});
 	req.logout();
+	req.flash('success_msg', 'You are logged out');
 	res.redirect('/login');	
-}
-
-function crossOrginMiddleware(req, res, next) {
-	console.log('request', req.url, req.body, req.method);
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-token');
-	if (req.method === 'OPTIONS') {
-		res.end();
-	} else {
-		next();
-	}
 }
 
 module.exports = {
@@ -108,6 +95,5 @@ module.exports = {
 	ensureAuthenticated,
 	requireUserLogin,
 	requireAdminLogin,
-	crossOrginMiddleware,
 	logout,
 };

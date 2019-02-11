@@ -12,5 +12,4 @@ payLoad.url = payLoad.prod ? process.env.MONGODB_URI : payLoad.dev ? process.env
 payLoad.secret = process.env.APP_SECRET || 'Sick as the rhymes, of that kid thats behind';
 payLoad.port = payLoad.prod ? process.env.PORT : process.env.SERVER_PORT;
 
-
 module.exports = payLoad;

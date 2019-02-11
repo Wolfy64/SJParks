@@ -1,39 +1,24 @@
 import React from 'react';
+import makeRequest from '../../utils/makeRequest';
+import { parksDB } from '../../dummyDB';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
-import { parksDB } from '../../dummyDB';
-import styled from 'styled-components';
-
-const Col1 = styled.div`
-  width: 300px;
-  float: left;
-  margin: 0 20px;
-`
-const Col2 = styled.div`
-  float: left;
-  margin: 0 20px;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.lightbg};
-`
-
-const Col3 = styled.div`
-  float: left;
-  width: 300px;
-  margin: 3.7rem 20px 0;
-  .bottomAlign{
-    margin-top: 100px;
-  }
-`
+import {Container} from './styles'
 
 class NewUpdate extends React.Component {
   state = {
-    parks: [],
+    parks: parksDB,
     parkSelected: []
   };
 
   componentDidMount() {
-    this.setState({ parks: parksDB });
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> NewUpdate GET:', res)
+      })
+      .catch(err => err)
   }
 
   handleAddPark = park => {
@@ -62,28 +47,30 @@ class NewUpdate extends React.Component {
   render() {
     return (
       <>
-        <Col1>
+        <Container>
           <SearchPark
             parks={this.state.parks}
             selected={false}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
-        </Col1>
-        <Col2>
-          <SelectedPark
-            parks={this.state.parkSelected}
-            deletePark={park => this.handleDeletePark(park)}
-            deleteAllParks={this.handleDeleteAddAllPark}
-          />
-        </Col2>
-        <Col3>
+        </Container>
+        <Container>
+            <SelectedPark
+              parks={this.state.parkSelected}
+              deletePark={park => this.handleDeletePark(park)}
+              deleteAllParks={this.handleDeleteAddAllPark}
+            />
+        </Container>
+        <Container>
+          <div className='col3'>
           {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
           ) : (
               <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
           )}
-        </Col3>
+          </div>
+        </Container>
       </>
     );
   }

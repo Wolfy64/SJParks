@@ -1,11 +1,11 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files. See https://github.com/github/gitignore/blob/master/Node.gitignore for a good list of examples.
 
 # Temporary
- /views
-updateDB.code-workspace
-updateExpressServer.code-workspace
-userAuth[WIP]
- 
+package-lock
+/client/package-lock
+/client/yarn.lock
+yarn.lock
+
 # Dependencies
 /client/node_modules
 /node_modules

@@ -24,9 +24,9 @@ const SelectedPark = props => {
   ));
 
   return (
-    <Container>
+    <Container className='selectedContainer'>
       <ButtonText onClick={props.deleteAllParks}>Deselect All</ButtonText>
-      {selectedPark}
+      <div>{selectedPark}</div>
     </Container>
   );
 };
