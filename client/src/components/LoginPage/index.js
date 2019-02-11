@@ -1,8 +1,9 @@
 import React from 'react';
 import jwt_decode from 'jwt-decode';
+import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
-import {Container, Form} from './styles'
+import { Container, Form } from './styles';
 
 const initialState = {
   email: '',
@@ -33,23 +34,19 @@ class Login extends React.Component {
     this.sendForm(dataForm);
   }
 
-  sendForm = async dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
-    const res = await fetch('/login', payload);
-    const { token, message } = await res.json();
-
-    if (message) this.setState({ message });
-    if (token) {
-      localStorage.setItem('token', token);
-      global.location.reload(true);
-    }
+  sendForm = data => {
+    makeRequest('/admin/login', 'POST', data)
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> Login POST,', res)
+        const { token, message } = res;
+        if (message) this.setState({ message });
+        if (token) {
+          localStorage.setItem('token', token);
+          global.location.reload(true);
+        }
+      })
+      .catch(err => err)
 
     // Reset Form field
     this.setState(initialState);
