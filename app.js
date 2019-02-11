@@ -1,5 +1,6 @@
 /** Load Dependencies */
 require('dotenv-safe').load();
+const cors = require('cors');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -14,6 +15,7 @@ const config = require('./config');
 let app = express();
 
 /** View Engine */
+app.use(cors());
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, config.keys.path)));
 
