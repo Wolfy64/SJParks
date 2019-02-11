@@ -4,11 +4,9 @@ import ParkLi from './ParkLi';
 import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 300px;
-  padding: 20px;
-  height: 100%;
-  overflow-y: scroll;
+  width: 300px;
+  padding-top: 5rem;
+  overflow: auto;
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     padding-top: 1rem;

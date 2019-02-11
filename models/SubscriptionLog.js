@@ -7,14 +7,14 @@ const SubscriptionLogSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    park: {
+    parks: [{
         type: Schema.Types.ObjectId,
         ref: 'Park',
         required: true
-    },
+    }],
     subscribing: {
         type: Boolean,
-        required: true
+        default: true
     }
 }, {
     timestamps: true

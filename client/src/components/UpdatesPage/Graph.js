@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import makeRequest from '../../utils/makeRequest';
 
 const data = [
     {name: 'Jun', uv: 3000, pv: 2400, amt: 2400},
@@ -12,7 +13,7 @@ const data = [
 
 export default class Graph extends Component {
     state = {
-
+        data: data
     }
     componentDidMount() {
         if(window.innerWidth <= 768){
@@ -23,15 +24,18 @@ export default class Graph extends Component {
                 }
             )
         }
+        makeRequest('/api/subscriptionLog', 'GET')
+            .then(res => res.json())
+            .then(res => {
+                console.log('>> UpdatesPage/Graph GET,', res)
+            })
+            .catch(err => err)
     }
 
-    render(){
-        let mobileWidth = document.getElementById("graph");
-        console.log('current width: ', mobileWidth)
-        console.log('state width: ', this.state.width)
+    render() {
         return (
             <div id="graph">
-                <LineChart width={this.state.width || window.innerWidth*0.30} height={this.state.height || window.innerWidth*0.18} data={data}>
+                <LineChart width={this.state.width || window.innerWidth*0.30} height={this.state.height || window.innerWidth*0.18} data={this.state.data}>
                     <Line type="monotone" dataKey="uv" stroke="#004A75" />
                     <CartesianGrid stroke="#ddd" strokeDasharray="5 5" />
                     <XAxis dataKey="name" />

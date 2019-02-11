@@ -1,12 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
+<<<<<<< HEAD
 
 const Container = styled.div`
   h2 {
@@ -46,6 +47,9 @@ const Form = styled.form`
     height: auto;
   }
 `;
+=======
+import {SubscribeContainer, Form} from './styles';
+>>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
 
 const initialState = {
   parks: [],
@@ -59,6 +63,13 @@ class Subscribe extends React.Component {
   state = initialState;
 
   componentDidMount() {
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json)
+      .then(res => {
+        console.log('>>PublicPage/Subscribe GET,', res)
+      })
+      .catch(err => err)
+
     this.setState({ parks: parksDB });
   }
 
@@ -109,12 +120,12 @@ class Subscribe extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
-
-    fetch('/', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    makeRequest('/subscriptionLog', 'POST', dataForm)
+      .then(res => res.json())
+      .then( res => {
+        console.log('>> PublicPage/Subscribe POST:', res.json)
+      })
+      .catch(err => err)
 
     // Reset Form field
     this.setState(initialState);
@@ -124,9 +135,9 @@ class Subscribe extends React.Component {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
     return (
-      <Container>
+      <SubscribeContainer>
         <h2>Subscribe</h2>
-        <Form id="subscribe" onSubmit={this.handleSubmit}>
+        <Form id='subscribe' onSubmit={this.handleSubmit}>
           <SearchPark
             parks={this.state.parks}
             addPark={park => this.handleAddPark(park)}
@@ -139,21 +150,21 @@ class Subscribe extends React.Component {
             deleteAllParks={this.handleDeleteAddAllPark}
           />
 
-          <div className="phoneField">
+          <div className='phoneField'>
             <Input
-              label="Phone"
-              placeholder="123-456-7890"
-              name="phone"
-              type="tel"
+              label='Phone'
+              placeholder='123-456-7890'
+              name='phone'
+              type='tel'
               onChange={this.handleChange}
               value={this.state.phone}
               error={hasErrors ? formErrors.phone : null}
             />
 
-            <Button name="I want to be informed!" />
+            <Button name='I want to be informed!' />
           </div>
         </Form>
-      </Container>
+      </SubscribeContainer>
     );
   }
 }

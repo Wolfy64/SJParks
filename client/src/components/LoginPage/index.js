@@ -1,34 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import jwt_decode from 'jwt-decode';
+import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.dark};
-  display: grid;
-  align-content: center;
-`;
-
-const Form = styled.form`
-  display: grid;
-  width: 80%;
-  height: 250px;
-  max-width: 300px;
-  margin: auto;
-  background-color: ${props => props.theme.colors.light};
-  border-radius: 15px;
-  padding: 40px 30px 60px;
-  box-shadow: -5px 3px 3px black;
-  h1 {
-    text-align: center;
-  }
-  .message {
-    color: ${props => props.theme.colors.danger};
-  }
-`;
+import { Container, Form } from './styles';
 
 const initialState = {
   email: '',
@@ -43,12 +18,12 @@ class Login extends React.Component {
       const userID = jwt_decode(token).user._id;
       this.props.history.push(`/admin/${userID}/updates`);
     }
-  };
+  }
 
   handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+    const { name, value } = e.target
+    this.setState({ [name]: value })
+  }
 
   handleSubmit = e => {
     e.preventDefault();
@@ -57,25 +32,22 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.sendForm(dataForm);
-  };
+  }
 
-  sendForm = async dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
-    const res = await fetch('/login', payload);
-    const { token, message } = await res.json();
+  sendForm = data => {
+    makeRequest('/login', 'POST', data)
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> Login POST,', res)
+        const { token, message } = res;
+        if (message) this.setState({ message });
+        if (token) {
+          localStorage.setItem('token', token);
+          global.location.reload(true);
+        }
+      })
+      .catch(err => err)
 
-    if (message) this.setState({ message });
-    if (token) {
-      localStorage.setItem('token', token);
-      global.location.reload(true);
-    }
     // Reset Form field
     this.setState(initialState);
   };

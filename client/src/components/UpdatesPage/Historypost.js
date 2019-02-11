@@ -1,44 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import ButtonText from '../UI/Generic/ButtonText';
-
-const Primary = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: ${props=>props.theme.colors.primary};
-    color: ${props=>props.theme.colors.light};
-    i {
-        width: 15px;
-    }
-`;
-
-const Secondary = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 10px;
-    border-radius: 0 0 5px 5px;
-    background-color: ${props=>props.theme.colors.lightbg};
-    color: ${props=>props.theme.colors.dark};
-    .flexLabels{
-        display: inherit;
-        flex-wrap: inherit;
-    }
-`;
-
-const MiniLabel = styled.span`
-    padding: 5px;
-    border-radius: 5px;
-    margin: 5px;
-    background-color: ${props=>props.theme.colors.success};
-    color: ${props=>props.theme.colors.light};
-`;
-
-const Message = styled.div`
-    padding: 1rem;
-    color: ${props=>props.theme.colors.secondary}
-`;
+import {Primary, Secondary, MiniLabel, Message} from './styles';
 
 export default class Post extends React.Component {
     constructor() {

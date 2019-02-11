@@ -1,104 +1,143 @@
+/*jshint esversion: 6 */
 const mongoose = require('mongoose');
-// const crypto = require('../lib/cryptoHelper');
 const uniqueValidator = require('mongoose-unique-validator');
-
+const jwt = require('jsonwebtoken');
 const Schema = mongoose.Schema;
-const crypto = require('../lib/cryptoHelper');
+const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
 
-    salt: String,
+  active: {
+    type: Boolean,
+    default: true
+  },
 
-    firstName: {
-        type: String,
-        required: true,
-        max: 100
-    },
+  access: {
+    type: String,
+    default: 'basic'
+  },
 
-    lastName: {
-        type: String,
-        required: true,
-        max: 100
-    },
+  salt: String,
 
-    userName: {
-        type: String,
-        lowercase: true,
-        required: true,
-        match: [/^[a-zA-Z0-9]+$/, 'invalid username'],
-        index: true
-    },
+  imageUrl: String,
 
-    password: {
-        type: String,
-        required: [true, "Password Required"]
-    },
+  firstName: String,
 
-    admin: {
-        type: Boolean,
-        default: false
-    },
+  lastName: String,
 
-    email: {
-        type: String,
-        required: [true, "you must enter an email"],
-        match: [/\S+@\S+\.\S+/, 'is invalid'],
-        index: true
-    },
+  email: {
+    index: true,
+    type: String,
+    required: [true, 'you must enter an email']
+  },
 
-    phone: {
-        type: String,
-        /*match: [ /\d{3}-/d{3}/, "(999) 999 - 9999"],*/
-         required: [true, "you must enter a phone number"],
-        unique: true
-    },
+  phone: {
+    index: true,
+    type: String,
+    required: [true, 'you must enter a phone number']
+  },
 
-    parks: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Park'
-    }],
+  userName: {
+    index: true,
+    type: String,
+    required: [true, 'you must enter a username']
+  },
 
-    messages: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Messagelog'
-    }],
+  password: {
+    type: String,
+    required: [true,'you must provide a password'],
+  },
 
-    imageUrl: {
-        type: String
-    }
+  parks: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Park'
+  }],
+
+  updates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Update'
+  }],
 
 }, {
-    timestamps: true
+  timestamps: true
 });
 
-// TODO Creat Virtual Fields for optimization
-UserSchema.virtual('name-lf').get(() => {
-    return this.lastName + ', ' + this.firstName;
-});
-
-UserSchema.virtual('name-fl').get(() => {
-    return this.firstName + ' ' + this.lastName;
-});
-
+// Create Schema Virtuals
 UserSchema.virtual('name').set((x) => {
-    const N = x.split(' ');
-    this.firstName = x.split(',').length > 0 ? N[1] : N[0],
-    this.lastName = N.pop(N.indexOf(this.firstname));
+  const N = x.split(' ');
+  this.firstName = N[0];
+  this.lastName = N[1];
 });
 
-// UserSchema.virtual('activeSUBS').get(function () {
-//     return this.phone + '{' + this.parks + ' }'
-// });
+UserSchema.virtual('name').get(() => {
+  return  this.firstName + ' ' + this.lastName;
+});
 
-// UserSchema.methods.validate_password = function (password) {
-//     var hash = crypto.getPasswordHash(password, this.salt);
-//     return this.password === hash;
-// }
+UserSchema.virtual('subscriptions').get(function () {
+  return {
+    active: this.active,
+    access: this.access,
+    email: this.email,
+    twilio: {
+      phone: this.phone,
+      subscriptions: this.parks
+    }
+  };
+});
 
-// add 'Unique' validation to this schema
+UserSchema.set('toJSON', { getters: true, virtuals: true });
+
+// Configure Custom Validators
 UserSchema.plugin(uniqueValidator, {
-    type: 'mongoose-unique-validator'
+  type: 'mongoose-unique-validator'
 });
 
-const User = mongoose.model('User', UserSchema);
-module.exports = User;
+// Configure Schema methods
+/*
+"Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly  prevent binding this, so your method will not have access to the document and the above examples will not work."" 
+
+from: https://mongoosejs.com/docs/guide.html,
+ */
+
+UserSchema.methods.setPassword = function (newPassword){
+  bcrypt.genSalt(16, function (err, newSalt){
+    if (err) throw err;
+    this.salt = newSalt;
+    bcrypt.hash(newPassword, newSalt, function (err, newPasswordHash){
+      if (err) throw err;
+      this.password = newPasswordHash;
+    });
+  });
+};
+
+UserSchema.methods.validatePassword = function (candidatePassword){
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+      if (err) return reject(err);
+      resolve(isMatch);
+    });
+  });
+};
+
+UserSchema.methods.generateJWT = function(){
+  const today = new Date();
+  const expirationDate = new Date(today);
+  expirationDate.setDate(today.getDate() + 60);
+
+  return jwt.sign({
+    id: this._id,
+    userName: this.userName,
+    exp: parseInt(expirationDate.getTime() / 1000, 10),
+  }, require('config').secret);
+};
+
+UserSchema.methods.toAuthJSON = function (){
+  return {
+    _id: this._id,
+    name: this.name,
+    email: this.email,
+    token: this.generateJWT(),
+  };
+};
+
+module.exports = mongoose.model('User', UserSchema);

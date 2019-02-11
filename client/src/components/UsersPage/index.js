@@ -1,8 +1,9 @@
 import React from 'react';
 import UsersForm from './UsersForm';
 import UsersList from './UsersList';
-import styled from 'styled-components';
+import {Wrapper} from './styles';
 
+<<<<<<< HEAD
 const Wrapper = styled.div`
   width: 50%;
   .usersForm {
@@ -21,6 +22,8 @@ const Wrapper = styled.div`
   }
 `;
 
+=======
+>>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
 const Users = () => (
   <>
     <Wrapper>

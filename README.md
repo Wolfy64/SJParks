@@ -105,7 +105,6 @@ Special keys are:
 - And subscription keys created by the Admin.
 
 ## Admin User Flow
-
 ### Updates
 
 Admin selects the list of Subscribers and sends the message.
@@ -127,7 +126,6 @@ Premium Access Admin is able to view:
 ### Users
 
 Premium Access Admin is able to view:
-
-- All users in the system
-- Add new users
-- Delete existing users
+* All users in the system
+* Add new users
+* Delete existing users

@@ -1,54 +1,59 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema
+const Schema = mongoose.Schema;
 const uniqueValidator = require('mongoose-unique-validator');
 
-//DEF creating 'Park' schema
 const ParkSchema = new mongoose.Schema({
+    active: {
+        type: Boolean,
+        default: true
+    },
+    
     code: {
         type: String,
         unique: [true, 'Park code must be unique'],
         required: [true, 'Park code is required'],
-        validate: {
-            validator: x => /\s{8}/.test(x),
-            message: props => `${props.value} is not a valid park code!`
-        }
+        // validate: {
+        //     validator: x => /\s{8}/.test(x),
+        //     message: props => `${props.value} is not a valid park code!`
+        // }
     },
 
     name: {
         type: String,
         unique: [true, 'Park name must be unique'],
-        required: [true, 'Park name is required']
+        required: [true, 'Park name is required'],
+        // validate: {
+        //     validator: x => /\s{25}/.test(x),
+        //     message: props => `${props.value} is not a valid park name!`
+        // }
     },
-
-    users: [{
+    subscriptionLogs: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'subscriptionLog'
     }],
-
-    updatelog: [{
+    
+    messageLogs: [{
         type: Schema.Types.ObjectId,
-        ref: 'UpdateLog'
+        ref: 'messageLog'
     }]
 }, {
     timestamps: true
-});
+    });
 
-// index
-ParkSchema.index({
-    code: 1,
-    name: 1
-});
+ParkSchema.set('toJSON', { getters: true, virtuals: false });
+    
+ParkSchema.methods.addSubscriptionLog = (newSubscriptionLogId) => {
+    this.subscriptionLogs.push(newSubscriptionLogId);    
+};
 
-// connecting to unique validator
+ParkSchema.methods.addMessageLog = (newMessageLogId) => {
+    this.messageLogs.push(newMessageLogId);    
+};
+
+// ParkSchema.pre("save",)
 ParkSchema.plugin(uniqueValidator, {
     type: 'mongoose-unique-validator'
 });
-
-
-// ADD 'Unique' validator
-ParkSchema.plugin(uniqueValidator);
-
-//CREATE and EXPORT 'Park' model
 const Park = mongoose.model('Park', ParkSchema);
 
 module.exports = Park;

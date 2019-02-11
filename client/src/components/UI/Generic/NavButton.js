@@ -27,7 +27,6 @@ const NavButton = (props) => {
         return (
             <Btn onClick={props.onClick} type={props.type || 'button'}>{props.name || 'Unnamed'}</Btn>
         );
-    };
-};
-
+    }
+}
 export default NavButton;
