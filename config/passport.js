@@ -4,7 +4,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const db = require('../models/');
 const config = require('./keys');
-const jwt = require('express-jwt');
+// const ForceDotComStrategy = require('./lib/passport-forcedotcom').Strategy,
+// const TwitterStrategy = require('passport-twitter').Strategy,
+// const FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = (app) => {
 	/** Configure Express-Session */
@@ -50,6 +52,30 @@ module.exports = (app) => {
 	/** Configure Passport Strategies */
 	// Local Strategy
 	passport.use(
+		/**new LocalStrategy(
+			{
+				usernameField: 'user[userName]',
+				passwordField: 'user[password]'
+			},
+			(username, password, done) => {
+				const errorMsg = { message: 'Invalid username or password' };
+
+				// Match user
+				db.User
+					.findOne({
+						userName: username
+					})
+					.then((matchedUser) => {
+						if (!matchedUser) {
+							return done(null, false, errorMsg);
+						}
+						return matchedUser
+							.validatePassword(password)
+							.then((isMatch) => done(null, isMatch ? matchedUser : false, isMatch ? null : errorMsg));
+					})
+					.catch(done);
+			}
+		) */
 		new LocalStrategy(
 			{ usernameField: 'email' },
 			async (email, password, done) => {

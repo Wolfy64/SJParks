@@ -38,7 +38,7 @@ router
 	.route('/api/messageLogs/:messageLogId')
 	.get(api.messageLogs.read)
 	.put(api.messageLogs.update)
-	// .delete(api.messageLogs.destroy);
+	.delete(api.messageLogs.destroy);
 
 	/** SubscriptionLogs */
 router.route('/api/subscriptionLogs').get(api.subscriptionLogs.index).post(api.subscriptionLogs.create);

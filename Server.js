@@ -5,7 +5,6 @@ const http = require('http');
 require('dotenv-safe').load();
 const webapp = require('./App');
 const config = require('./config');
-
 console.log(`> Running Server in ${process.env.NODE_ENV} mode...`);
 
 /** Configure Mongoose */
@@ -31,4 +30,3 @@ const server = http.createServer(webapp);
 
 /** Deploy Express-App to Local-Host*/
 server.listen(config.keys.port, () => console.log(`> Express Server Deployed @url: http://localhost:${config.keys.port}...`));
- 

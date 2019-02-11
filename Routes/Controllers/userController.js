@@ -428,15 +428,15 @@ function update(req, res) {
 		 * 
 		 * */
 	
-	const options = {
-		setDefaultsOnInsert: true,
-		sort: 1,
-		new: false,
-		upsert: false,
-		runValidators: true,
-		select: null,
-		rawResult: false,
-		strict: false
+		const options = {
+			setDefaultsOnInsert: true,
+			sort: 1,
+			new: false,
+			upsert: false,
+			runValidators: true,
+			select: null,
+			rawResult: false,
+			strict: false
 		};
 		
 		db.User.findByIdAndUpdate(req.params.id, data, options, (err, foundUser) => {
@@ -447,13 +447,8 @@ function update(req, res) {
 				db.Park.findOne({
 					name: data.addPark
 				})
-					.exec((err, park) =>
-					{
-						if (park)
-						{
-							foundUser.parks.push(park._id);
-						} else if (err || !park)
-						{
+					.exec((err, park) => {
+						if (park) {
 							const newPark = new db.Park({
 								name: data.addPark
 							});
@@ -466,13 +461,10 @@ function update(req, res) {
 				db.Update.findOne({
 					update: data.addUpdate
 				})
-					.exec((err, update) =>
-					{
-						if (update)
-						{
+					.exec((err, update) => {
+						if (update) {
 							foundUser.updates.push(update._id);
-						} else if (err || !update)
-						{
+						} else if (err || !update) {
 							const newUpdate = new db.Update({
 								author: foundUser._id,
 								update: data.addUpdate
@@ -485,8 +477,7 @@ function update(req, res) {
 				foundUser
 					.save()
 					.then((foundUser) =>
-						respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` })
-					)
+						respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` }))
 					.catch((err) => respond(res, false, { msg: err.update }));
 			}
 		});
@@ -532,12 +523,7 @@ function destroy(req, res) {
 					.catch((err) => console.log(err));
 			});
 
-			user.remove()
-				.then((removedUser) => respond(res, true, /*removedUser*/{
-          success: true,
-          deleted: removedUser
-        }))
-				.catch((err) => console.log(err));
+			user.remove().then((removedUser) => res(res, true, removedUser)).catch((err) => console.log(err));
 		})
 		.catch((err) => console.log(err));
 }

@@ -31,6 +31,7 @@ function login(req, res, next) {
 	if (isValid) {
 		return passport.authenticate(
 			'local',/*,{
+		  	session: false,
 				successRedirect: '/admin/:user/updates',
 				failureRedirect: '/login',
 				failureFlash: true
