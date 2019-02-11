@@ -3,4 +3,4 @@ module.exports.parks = require("./parkController");
 module.exports.messages = require("./updateController");
 module.exports.messageLogs = require("./messageLogController");
 module.exports.subscriptionLogs = require("./subscriptionLogController"); 
-module.exports.admins = require("./loginController");
+module.exports.admin = require("./loginController");

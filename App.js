@@ -49,7 +49,8 @@ app.use(function(req, res, next) {
 });
 
 // router.all('/api/*', ensureAuthenticated);
-app.use('/admin', router.auth);
+app.post('/login', router.auth); //admin.admin.login
+
 app.use('/api', router.api);
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client', config.keys.clientPath, 'index.html')));

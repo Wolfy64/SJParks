@@ -9,47 +9,6 @@ function loadReactRouter(req, res) {
 	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 
-function login(req, res, next) {
-	// const { errors, isValid, user  } = validateLoginRequest(req.body);
-
-	// let errors = [];
-
-	// if (!user.email || !user.userName) {
-	// 	errors.push({
-	// 		candidate: [ user.email, user.userName ],
-	// 		msg: 'Invalid userName or password'
-	// 	});
-	// }
-
-	// if (!user.password) {
-	// 	errors.push({
-	// 		candidate: user.password,
-	// 		msg: 'Not a valid password'
-	// 	});
-	// }
-	const isValid = true;
-	if (isValid) {
-		return passport.authenticate(
-			'local',/*,{
-		  	session: false,
-				successRedirect: '/admin/:user/updates',
-				failureRedirect: '/login',
-				failureFlash: true
-			},*/ (err, passportUser, info) => {
-				if (err) return next(err);
-
-				if (passportUser) {
-					const user = passportUser;
-					user.token = passportUser.generateJWT();
-					return respond(res, true, { user: user.toAuthJSON() });
-				}
-
-				if (info) return respond(res, false, info);
-			}
-		)(req, res, next);
-	}
-}
-
 // Session Handling
 function requireAdminLogin(req, res, next) {
 	if (req.session.admin) next();
@@ -91,7 +50,6 @@ function logout(req, res) {
 
 module.exports = {
 	loadReactRouter,
-	login,
 	ensureAuthenticated,
 	requireUserLogin,
 	requireAdminLogin,

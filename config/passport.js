@@ -4,12 +4,11 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const db = require('../models/');
 const config = require('./keys');
-// const ForceDotComStrategy = require('./lib/passport-forcedotcom').Strategy,
-// const TwitterStrategy = require('passport-twitter').Strategy,
-// const FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = app => {
 	/** Configure Express-Session */
+
+	console.log('[passport.js] runs');
 
 	const sessOpts = {
 		secret: config.secret,
@@ -20,12 +19,12 @@ module.exports = app => {
 		cookie: {
 			httpOnly: true,
 			maxAge: 20 * 60 * 1000,
-			// activeDuration: 5 * 60 * 1000,
+			activeDuration: 5 * 60 * 1000,
 			secure: false
 		}
 	};
 
-	if (config.prod || config.dev) {
+	if (config.prod) {
 		app.set('trust proxy', 1);
 		sessOpts.cookie.secure = true;
 	}
@@ -33,13 +32,13 @@ module.exports = app => {
 	app.use(session(sessOpts));
 
 	/** Flash */
-	app.use(flash());
-	app.use(function(req, res, next) {
-		res.locals.success_msg = req.flash('success_msg');
-		res.locals.error_msg = req.flash('error_msg');
-		res.locals.error = req.flash('error');
-		next();
-	});
+	// app.use(flash());
+	// app.use(function(req, res, next) {
+	// 	res.locals.success_msg = req.flash('success_msg');
+	// 	res.locals.error_msg = req.flash('error_msg');
+	// 	res.locals.error = req.flash('error');
+	// 	next();
+	// });
 
 	/** Serialize user to user._id  */
 	passport.serializeUser((user, done) => {
@@ -60,6 +59,26 @@ module.exports = app => {
 	/** Configure Passport Strategies */
 	// Local Strategy
 	passport.use(
+		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+			console.log('[passport] localStrategy');
+			// Match user
+			let user = await db.User.findOne({ email });
+			// Match password i
+			let isMatch = await user.validatePassword(password);
+			isMatch = true;
+			console.log('[passport] login is forced to', isMatch);
+
+			if (!user || !isMatch) {
+				return done(null, false, { message: 'Email or Password incorrect' });
+			}
+
+			// Set up JWT
+			const token = jwt.sign({ user }, config.secret, {
+				expiresIn: '1d'
+			});
+			console.log('token,', token);
+			return done(null, { token });
+		})
 		/**new LocalStrategy(
 			{
 				usernameField: 'user[userName]',
@@ -84,25 +103,6 @@ module.exports = app => {
 					.catch(done);
 			}
 		) */
-		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-			// Match user
-			let user = await db.User.findOne({ email });
-			// Match password i
-			let isMatch = await user.validatePassword(password);
-			isMatch = true;
-			console.log('passport.js:18 login is forced to', isMatch);
-
-			if (!user || !isMatch) {
-				return done(null, false, { message: 'Email or Password incorrect' });
-			}
-
-			// Set up JWT
-			const token = jwt.sign({ user }, config.secret, {
-				expiresIn: '1d'
-			});
-			console.log('token,', token);
-			return done(null, { token });
-		})
 	);
 
 	/** Initialize Passport within the App*/
