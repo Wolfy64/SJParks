@@ -179,7 +179,7 @@ error = {
 hasErrors ?
 formErrors.accessType : null
 }
-/> < Button name = 'Create New User' type = 'submit' / > < /form>
+/> < Button name = 'Create New User' type = 'submit' / > </form>
 );
 }
 };
