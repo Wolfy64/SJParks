@@ -5,6 +5,35 @@ const passport = require('passport');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
+function login (req, res, next) {    
+    const isValid = true;
+    
+	if (isValid) {
+        console.log('[login.req.body]', req.body)
+        const payload = passport.authenticate(
+            'local', 
+            (err, passport, info) => {
+                console.log('[login.passport.authenticate]', err, passport.user, info);
+				if (err) return next(err);
+
+				if (passport) {
+					const user = passport.user;
+					user.token = user.generateJWT();
+					return respond(res, true, { user: user.toAuthJSON() });
+				}
+
+				if (info) return respond(res, false, info);
+
+				return respond(res, false)
+			}
+        )(req, res, next);
+
+        console.log('[login] payload,', payload)
+        
+        return payload;
+	}
+}
+
 function loadReactRouter(req, res) {
 	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
@@ -20,7 +49,6 @@ function requireUserLogin(req, res, next) {
 	else res.redirect('/login');
 }
 
-
 // 	passport.authenticate('jwt', {
 // 		session: false
 // 	}),
@@ -29,7 +57,7 @@ function requireUserLogin(req, res, next) {
 // 			user: req.user
 // 		});
 // 	}
-// 
+
 function ensureAuthenticated(req, res, next) {
 	
 	if (req.isAuthenticated()) {
@@ -49,9 +77,10 @@ function logout(req, res) {
 }
 
 module.exports = {
+	login,
 	loadReactRouter,
 	ensureAuthenticated,
 	requireUserLogin,
 	requireAdminLogin,
-	logout,
+	logout
 };
