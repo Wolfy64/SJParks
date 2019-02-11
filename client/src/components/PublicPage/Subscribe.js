@@ -7,7 +7,45 @@ import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
 import { parksDB } from '../../dummyDB';
-import {SubscribeContainer, Form} from './styles';
+
+const Container = styled.div`
+  h2 {
+    display: none;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    h2 {
+      display: block;
+      font-size: 1.5rem;
+      padding: 1rem;
+      margin: 1rem 0 -1rem 0;
+    }
+  }
+`;
+
+const Form = styled.form`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-items: center;
+  background-color: ${props => props.theme.colors.lightbg};
+
+  .phoneField {
+    width: 300px;
+    align-self: center;
+    padding-bottom: 1rem;
+  }
+  .searchContainer {
+    background-color: white;
+    height: 40vh;
+  }
+  .selectedContainer {
+    height: 40vh;
+  }
+
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+    height: auto;
+  }
+`;
 
 const initialState = {
   parks: [],
