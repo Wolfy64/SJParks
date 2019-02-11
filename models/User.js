@@ -128,7 +128,7 @@ UserSchema.methods.generateJWT = function(){
     id: this._id,
     userName: this.userName,
     exp: parseInt(expirationDate.getTime() / 1000, 10),
-  }, require('config').secret);
+  }, require('../config').secret);
 };
 
 UserSchema.methods.toAuthJSON = function (){

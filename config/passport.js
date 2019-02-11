@@ -1,15 +1,14 @@
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const db = require('../models/');
-const config = require('./keys');
+const config = require('./');
+const { respond } = require('../lib');
 
 module.exports = app => {
 	/** Configure Express-Session */
-
-	console.log('[passport.js] runs');
-
 	const sessOpts = {
 		secret: config.secret,
 		resave: false,
@@ -60,7 +59,7 @@ module.exports = app => {
 	// Local Strategy
 	passport.use(
 		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-			console.log('[passport] localStrategy');
+			console.log('[passport] localStrategy', email, password);
 			// Match user
 			let user = await db.User.findOne({ email });
 			// Match password i
@@ -73,11 +72,11 @@ module.exports = app => {
 			}
 
 			// Set up JWT
-			const token = jwt.sign({ user }, config.secret, {
+			user.token = jwt.sign({ user }, config.keys.secret, {
 				expiresIn: '1d'
 			});
-			console.log('token,', token);
-			return done(null, { token });
+			console.log('[passport] done, token', user.token.slice(0,5));
+			return done(null, { user });
 		})
 		/**new LocalStrategy(
 			{
