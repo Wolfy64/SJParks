@@ -9,25 +9,11 @@ import Button from '../UI/Generic/Button';
 
 const Wrapper = styled.div`
   width: 300px;
-<<<<<<< HEAD
-  float: left;
-  padding: 20px;
-  margin: 0 5rem 0 0;
-  @media screen and (max-width: ${props => props.theme.displays.mobileL}) {
-    margin: unset;
-  }
-`;
-const Col2 = styled.div`
-  height: 100vh;
-  float: left;
-  background-color: ${props => props.theme.colors.lightbg};
-`;
-=======
   margin-right: 5rem;
-  .searchContainer{
-    background-color: ${(props) => props.theme.colors.lightbg}
+  .searchContainer {
+    background-color: ${props => props.theme.colors.lightbg};
   }
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     display: flex;
     justify-content: center;
     width: 100vw;
@@ -35,25 +21,18 @@ const Col2 = styled.div`
     form {
       width: 300px;
     }
-    .searchContainer{
+    .searchContainer {
       margin-top: 30px;
     }
   }
-`
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
+`;
 
 const initialState = {
   parks: [],
   showErrors: false,
-<<<<<<< HEAD
-  newPark: '',
-  parkId: '',
-  parkFilter: []
-=======
   newName: '',
   newCode: '',
-  parkFilter: [],
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
+  parkFilter: []
 };
 
 export default class Parks extends Component {
@@ -136,30 +115,18 @@ export default class Parks extends Component {
         <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
-<<<<<<< HEAD
-              name="newPark"
+              name="newName"
               label="Name"
-              value={this.state.newPark}
-=======
-              name='newName'
-              label='Name'
               value={this.state.newName}
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
               onChange={this.handleChange}
               type="text"
               placeholder="New Park..."
               autoComplete="off"
             />
             <Input
-<<<<<<< HEAD
-              name="parkId"
+              name="newCode"
               label="Keyword"
-              value={this.state.parkId}
-=======
-              name='newCode'
-              label='Keyword'
               value={this.state.newCode}
->>>>>>> 7c0f245f40c570c4fcf22fdd8356d20f1b53769c
               onChange={this.handleChange}
               type="text"
               placeholder="Park Id..."
@@ -170,12 +137,12 @@ export default class Parks extends Component {
           </form>
         </Wrapper>
         <Wrapper>
-            <SearchPark
-              parks={this.state.parks}
-              selected={true}
-              addPark={park => this.handleDeletePark(park)}
-              numShow={this.state.parks.length}
-            />
+          <SearchPark
+            parks={this.state.parks}
+            selected={true}
+            addPark={park => this.handleDeletePark(park)}
+            numShow={this.state.parks.length}
+          />
         </Wrapper>
       </>
     );
