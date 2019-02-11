@@ -12,7 +12,7 @@
     "client": "cd client && yarn start",
     "server": "nodemon Server.js",
     "test": "NODE_ENV=test concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
-    "dev": "NODE_ENV=development concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "dependencies": {
     "acorn": "^6.0.5",
