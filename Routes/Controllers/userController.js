@@ -1,8 +1,8 @@
 // import UserImage from '../../client/src/components/ProfilePage/UserImage';
-const db = require('../../models');
 const cloudinary = require('cloudinary');
-const { validateUserInput } = require('../../config/validator');
+const db = require('../../models');
 const { respond } = require('../../lib');
+const { validateUserInput } = require('../../config/validator');
 
 /**
  * @public
@@ -118,7 +118,7 @@ function incoming(req, res) {
 										subscribing: true
 									}).save((err, newSubscriptionResult) => {});
 							});
-						}`${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
+						}
 					});
 						respond(res, false, { msg: 'Thanks for resubscribing to notifications from San Jose Parks!'});
 				});
@@ -212,16 +212,16 @@ function read(req, res) {
  * @function index
  * @param {request} req 
  * @param {response} res 
- * @method GET /api/user 
+ * @method GET /api/users 
  * @desc Get all users 
  */
 function index(req, res) {
 	db.User
-		.find()
+		.find({})
 		.sort({
 			userName: 1
 		})
-		.then((users) => respond(res, true, users))
+		.then((users) => res.status(267).json({success:true, users})/*respond(res, true, users) */)
 		.catch((err) => respond(res, false, { msg: err.message }));
 }
 

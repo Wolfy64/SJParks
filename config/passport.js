@@ -8,7 +8,7 @@ const config = require('./keys');
 // const TwitterStrategy = require('passport-twitter').Strategy,
 // const FacebookStrategy = require('passport-facebook').Strategy;
 
-module.exports = (app) => {
+module.exports = app => {
 	/** Configure Express-Session */
 
 	const sessOpts = {
@@ -32,6 +32,15 @@ module.exports = (app) => {
 
 	app.use(session(sessOpts));
 
+	/** Flash */
+	app.use(flash());
+	app.use(function(req, res, next) {
+		res.locals.success_msg = req.flash('success_msg');
+		res.locals.error_msg = req.flash('error_msg');
+		res.locals.error = req.flash('error');
+		next();
+	});
+
 	/** Serialize user to user._id  */
 	passport.serializeUser((user, done) => {
 		return done(null, user._id);
@@ -39,8 +48,7 @@ module.exports = (app) => {
 
 	/** Deserialize user from user._id */
 	passport.deserializeUser(function(userId, done) {
-		db.User
-			.findById(userId)
+		db.User.findById(userId)
 			.then(function(user) {
 				done(null, user);
 			})
@@ -76,30 +84,27 @@ module.exports = (app) => {
 					.catch(done);
 			}
 		) */
-		new LocalStrategy(
-			{ usernameField: 'email' },
-			async (email, password, done) => {
-				// Match user
-				let user = await db.User.findOne({ email })
-				// Match password i
-				let isMatch = await user.vali
-				isMatch = true;
-				console.log('passport.js:18 login is forced to', isMatch);
+		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+			// Match user
+			let user = await db.User.findOne({ email });
+			// Match password i
+			let isMatch = await user.vali;
+			isMatch = true;
+			console.log('passport.js:18 login is forced to', isMatch);
 
-				if (!user || !isMatch) {
-					return done(null, false, { message: 'Email or Password incorrect' });
-				}
-
-				// Set up JWT
-				const token = jwt.sign({ user }, config.secret, {
-					expiresIn: '1d'
-				});
-				console.log('token,', token);
-				return done(null, { token });
+			if (!user || !isMatch) {
+				return done(null, false, { message: 'Email or Password incorrect' });
 			}
-		)
+
+			// Set up JWT
+			const token = jwt.sign({ user }, config.secret, {
+				expiresIn: '1d'
+			});
+			console.log('token,', token);
+			return done(null, { token });
+		})
 	);
-	
+
 	/** Initialize Passport within the App*/
 	app.use(passport.initialize());
 

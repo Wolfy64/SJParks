@@ -5,7 +5,7 @@ package-lock
 /client/package-lock
 /client/yarn.lock
 yarn.lock
-/Routes/apiManifest
+
 # Dependencies
 /client/node_modules
 /node_modules

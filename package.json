@@ -25,6 +25,7 @@
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
     "express-flash": "0.0.2",
+    "express-form-data": "^2.0.8",
     "express-jwt": "^5.3.1",
     "express-request-id": "^1.4.1",
     "express-session": "^1.15.6",
