@@ -1,10 +1,11 @@
 import React from 'react';
 import Textarea from '../UI/Form/Textarea';
+import makeRequest from '../../utils/makeRequest';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import capsFirstLetter from '../../utils/capsFirstLetter';
 import Button from '../UI/Generic/Button';
-import {Title, Preview} from './styles'
+import {Title, Preview} from './styles';
 
 const initialState = {
   message: '',
@@ -62,12 +63,12 @@ class EditMessage extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
-
-    fetch('/admin/newupdate', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    makeRequest('/admin/newupdate', 'POST', dataForm)
+    .then(res => res.json())
+    .then(res => {
+      console.log('>> NewUpdate.EditMessage:70 POST.res, ', res)
+    })
+    .catch(err => err)
 
     // Reset Form field
     this.setState(initialState);

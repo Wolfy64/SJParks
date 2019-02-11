@@ -2,6 +2,7 @@ import React from 'react';
 import Input from '../UI/Form/Input';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
+import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
@@ -20,6 +21,13 @@ class Subscribe extends React.Component {
   state = initialState;
 
   componentDidMount() {
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json)
+      .then(res => {
+        console.log('>>PublicPage/Subscribe GET,', res)
+      })
+      .catch(err => err)
+
     this.setState({ parks: parksDB });
   }
 
@@ -70,12 +78,12 @@ class Subscribe extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = { method: 'POST', body: JSON.stringify(dataForm) };
-
-    fetch('/', payload)
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-    console.log('SEND DATA', dataForm);
+    makeRequest('/subscriptionLog', 'POST', dataForm)
+      .then(res => res.json())
+      .then( res => {
+        console.log('>> PublicPage/Subscribe POST:', res.json)
+      })
+      .catch(err => err)
 
     // Reset Form field
     this.setState(initialState);
