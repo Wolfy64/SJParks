@@ -2,7 +2,6 @@
 require('dotenv-safe').load();
 const path = require('path');
 // const cors = require('cors');
-const flash = require('connect-flash');
 const logger = require('morgan');
 const express = require('express');
 const addRequestId = require('express-request-id')();
@@ -52,6 +51,8 @@ app.use(function(req, res, next) {
 // router.all('/api/*', ensureAuthenticated);
 app.use('/admin', router.auth);
 app.use('/api', router.api);
+
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client', config.keys.clientPath, 'index.html')));
 
 /** Error Handlers */
 app.use((err, req, res, next) => {

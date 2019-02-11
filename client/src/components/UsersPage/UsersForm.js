@@ -91,7 +91,7 @@ const UsersForm = class userInput extends React.Component {
       body: JSON.stringify(dataForm)
     };
 
-    fetch('/api/users', payload)
+    makeRequest('/api/users', payload)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('>> TEST: sending data \n', dataForm);
