@@ -1,18 +1,24 @@
 import React from 'react';
+import makeRequest from '../../utils/makeRequest';
+import { parksDB } from '../../dummyDB';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
-import { parksDB } from '../../dummyDB';
 import {Container} from './styles'
 
 class NewUpdate extends React.Component {
   state = {
-    parks: [],
+    parks: parksDB,
     parkSelected: []
   };
 
   componentDidMount() {
-    this.setState({ parks: parksDB });
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> NewUpdate GET:', res)
+      })
+      .catch(err => err)
   }
 
   handleAddPark = park => {

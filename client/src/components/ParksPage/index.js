@@ -20,10 +20,12 @@ export default class Parks extends Component {
   state = initialState;
 
   componentDidMount() {
-    makeRequest('/api/parks', 'GET').then(res => {
-      const { parks } = res.json();
-      console.log('>> ParksPage.index:25 GET res.parks,', parks)
-    }).catch(err => err)
+    makeRequest('/api/parks', 'GET')
+      .then(res =>  res.json())
+      .then(res => {
+        console.log('>> ParksPage.index GET res.parks,', res.parks)
+      })
+      .catch(err => err)
 
     this.setState({ parks: parksDB });
   }
@@ -67,7 +69,12 @@ export default class Parks extends Component {
 
   handleSendForm = dataForm => {
     makeRequest('/api/parks', 'POST', dataForm)
-    console.log('>>New Park: ', dataForm);
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> ParksPage/index POST,', res)       
+      })
+      .catch( err => err)
+    
 
     // Reset Form field
     this.setState(initialState);
