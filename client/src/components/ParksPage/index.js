@@ -2,45 +2,18 @@ import React, { Component } from 'react';
 import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
-import makeRequest from '../../utils/makeRequest'
+import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import Input from '../UI/Form/Input';
 import Button from '../UI/Generic/Button';
-<<<<<<< HEAD
-
-const Wrapper = styled.div`
-  width: 300px;
-  margin-right: 5rem;
-  .searchContainer {
-    background-color: ${props => props.theme.colors.lightbg};
-  }
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    display: flex;
-    justify-content: center;
-    width: 100vw;
-    margin: 0 auto;
-    form {
-      width: 300px;
-    }
-    .searchContainer {
-      margin-top: 30px;
-    }
-  }
-`;
-=======
-import {Wrapper} from './styles';
->>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
+import { Wrapper } from './styles';
 
 const initialState = {
   parks: [],
   showErrors: false,
   newName: '',
   newCode: '',
-<<<<<<< HEAD
   parkFilter: []
-=======
-  parkFilter: [],
->>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
 };
 
 export default class Parks extends Component {
@@ -48,19 +21,26 @@ export default class Parks extends Component {
 
   componentDidMount() {
     makeRequest('/api/parks', 'GET')
-      .then(res =>  res.json())
+      .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage.index GET res.parks,', res.parks)
+        console.log('>> ParksPage.index GET res.parks,', res.parks);
       })
-      .catch(err => err)
+      .catch(err => err);
 
     this.setState({ parks: parksDB });
   }
 
   handleDeletePark = park => {
-    if (window.confirm("Delete ".concat(park.name)
-    .concat(" and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE"))) {
-      console.log('>> ', park.name, ' was removed.')
+    if (
+      window.confirm(
+        'Delete '
+          .concat(park.name)
+          .concat(
+            ' and all of its subscribers from the system? \nTHIS ACTION CANNOT BE UNDONE'
+          )
+      )
+    ) {
+      console.log('>> ', park.name, ' was removed.');
     }
   };
 
@@ -91,10 +71,9 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage/index POST,', res)       
+        console.log('>> ParksPage/index POST,', res);
       })
-      .catch( err => err)
-    
+      .catch(err => err);
 
     // Reset Form field
     this.setState(initialState);
@@ -117,13 +96,8 @@ export default class Parks extends Component {
         <Wrapper>
           <form onSubmit={this.handleSubmit}>
             <Input
-<<<<<<< HEAD
               name="newName"
               label="Name"
-=======
-              name='newName'
-              label='Name'
->>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
               value={this.state.newName}
               onChange={this.handleChange}
               type="text"
@@ -131,13 +105,8 @@ export default class Parks extends Component {
               autoComplete="off"
             />
             <Input
-<<<<<<< HEAD
               name="newCode"
               label="Keyword"
-=======
-              name='newCode'
-              label='Keyword'
->>>>>>> 3ece4f469ac81cafabbf085cba4fbcb209256ea5
               value={this.state.newCode}
               onChange={this.handleChange}
               type="text"
