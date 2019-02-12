@@ -1,7 +1,7 @@
 const controllers = require('./Controllers');
 const router = require('express').Router();
 
-router.post('/login', controllers.admin.login);
+router.post('/login', controllers.admin.login)
 
 // router.get('/', admin.loadReactRouter);
 

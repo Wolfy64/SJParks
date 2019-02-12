@@ -1,28 +1,24 @@
 /*jshint esversion: 6 */
 const path = require('path');
-const passport = require('passport');
-// const db = require('../../models');
+//const passport = require('passport');
+const db = require('../../models');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-async function login(req, res, next) {
+function login(req, res, next) {
   const isValid = true;
 
   if (isValid) {
     console.log('[login.req.body]', req.body);
 
-    let user = await db.User.findOne({ email });
-    console.log('TCL: login -> user', user);
-
-    return user;
-    // console.log('TCL: login -> user', user)
+    let user = db.User.findOne({ email });
     // Match password i
     // let isMatch = await user.validatePassword(password);
-    // isMatch = true;
-    // console.log('[login] login is forced to', isMatch);
-    // const token = user.generateJWT();
-    // console.log('[login] token', token);
-    // return respond(res, true, { token })
+    isMatch = true;
+    console.log('[login] login is forced to', isMatch);
+    const token = user.generateJWT();
+    console.log('[login] token', token);
+    return respond(res, true, { token });
 
     // const payload = passport.authenticate(
     //     'local',
