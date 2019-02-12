@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 
   if (token) {
     const user = jwt.verify(token, config.keys.secret);
-    res.json(JSON.stringify(user));
+    res.json({ user });
   }
 
   next();
