@@ -1,46 +1,32 @@
 /*jshint esversion: 6 */
 const path = require('path');
-//const passport = require('passport');
 const db = require('../../models');
+//const passport = require('passport');
 // const config = require('../../config');
-const { respond } = require('../../lib');
+// const { respond } = require('../../lib');
+
+const bcrypt = require('bcrypt');
 
 async function login(req, res, next) {
-  //res.cookie('dummyCookie', 'hi')
-  console.log('[login] respond', respond);
-  const isValid = true;
-  if (isValid) {
-    console.log('[login] req', req.body);
-    let user = await db.User.findOne({ email: req.body.email });
-    console.log('[login] user', user.email);
-    // Match password i
-    // let isMatch = await user.validatePassword(password);
-    isMatch = true;
-    const token = user.generateJWT();
-    console.log('[login] token', token.slice(0, 5));
-    respond.respond(res.cookie('token', token), true, { token });
-    // const payload = passport.authenticate(
-    //     'local',
-    //     (err, passport, info) => {
-    //         console.log('[login.passport.authenticate]', err, passport.user, info);
-    // 		if (err) return next(err);
+  const { email, password } = req.body;
 
-    // 		if (passport) {
-    // 			const user = passport.user;
-    // 			user.generateJWT();
-    // 			return respond(res, true, { user: user.toAuthJSON() });
-    // 		}
+  const user = await db.User.findOne({ email });
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // const isMatch = await user.validatePassword(password);
+  const isMatch = true;
+  console.log('TCL: login -> isMatch', isMatch);
 
-    // 		if (info) return respond(res, false, info);
+  if (!user || !isMatch)
+    res.json({ message: 'User or Password do not match !' });
 
-    // 		return respond(res, false)
-    // 	}
-    // )(req, res, next);
+  // Set JWT into the cookie
+  res.cookie('token', user.generateJWT(), {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    secure: false
+  });
 
-    // console.log('[login] payload,', payload)
-
-    // return payload;
-  }
+  next();
 }
 
 function loadReactRouter(req, res) {
