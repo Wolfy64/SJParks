@@ -5,47 +5,39 @@ const path = require('path');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-async function login(req, res, next) {
-  const isValid = true;
+function login (req, res, next) {    
+    const isValid = true;
+    console.log('TEST [login] ', req.body);
+	if (isValid) {		
+		let user = db.User.findOne({ email });
+		// Match password i
+		// let isMatch = await user.validatePassword(password);
+		isMatch = true;
+		const token = user.generateJWT();
+		console.log('TEST [login] token', token);
+		return 'hello'
+        // const payload = passport.authenticate(
+        //     'local', 
+        //     (err, passport, info) => {
+        //         console.log('[login.passport.authenticate]', err, passport.user, info);
+		// 		if (err) return next(err);
 
-  if (isValid) {
-    console.log('[login.req.body]', req.body);
+		// 		if (passport) {
+		// 			const user = passport.user;
+		// 			user.generateJWT();
+		// 			return respond(res, true, { user: user.toAuthJSON() });
+		// 		}
 
-    let user = await db.User.findOne({ email });
-    console.log('TCL: login -> user', user);
+		// 		if (info) return respond(res, false, info);
 
-    return user;
-    // console.log('TCL: login -> user', user)
-    // Match password i
-    // let isMatch = await user.validatePassword(password);
-    // isMatch = true;
-    // console.log('[login] login is forced to', isMatch);
-    // const token = user.generateJWT();
-    // console.log('[login] token', token);
-    // return respond(res, true, { token })
+		// 		return respond(res, false)
+		// 	}
+        // )(req, res, next);
 
-    // const payload = passport.authenticate(
-    //     'local',
-    //     (err, passport, info) => {
-    //         console.log('[login.passport.authenticate]', err, passport.user, info);
-    // 		if (err) return next(err);
-
-    // 		if (passport) {
-    // 			const user = passport.user;
-    // 			user.generateJWT();
-    // 			return respond(res, true, { user: user.toAuthJSON() });
-    // 		}
-
-    // 		if (info) return respond(res, false, info);
-
-    // 		return respond(res, false)
-    // 	}
-    // )(req, res, next);
-
-    // console.log('[login] payload,', payload)
-
-    // return payload;
-  }
+        // console.log('[login] payload,', payload)
+        
+        // return payload;
+	}
 }
 
 function loadReactRouter(req, res) {
