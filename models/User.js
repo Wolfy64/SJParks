@@ -124,11 +124,14 @@ UserSchema.methods.generateJWT = function(){
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
 
-  return jwt.sign({
-    id: this._id,
-    userName: this.userName,
-    exp: parseInt(expirationDate.getTime() / 1000, 10),
-  }, require('../config').secret);
+  return jwt.sign(
+    {
+      id: this._id,
+      userName: this.userName,
+      exp: parseInt(expirationDate.getTime() / 1000, 10),
+    }, 
+    require('../config').secret),
+    {expiresIn: 600};
 };
 
 UserSchema.methods.toAuthJSON = function (){

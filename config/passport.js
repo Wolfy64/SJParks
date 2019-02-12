@@ -63,7 +63,7 @@ module.exports = app => {
 			// Match user
 			let user = await db.User.findOne({ email });
 			// Match password i
-			let isMatch = await user.validatePassword(password);
+			// let isMatch = await user.validatePassword(password);
 			isMatch = true;
 			console.log('[passport] login is forced to', isMatch);
 
@@ -72,11 +72,18 @@ module.exports = app => {
 			}
 
 			// Set up JWT
-			user.token = jwt.sign({ user }, config.keys.secret, {
+			const token = 
+				jwt.sign(
+					{ 
+						userName: user.userName, 
+						userId: user._id,
+						access: user.access,  
+					}, 
+				config.keys.secret, { 
 				expiresIn: '1d'
 			});
-			console.log('[passport] done, token', user.token.slice(0,5));
-			return done(null, { user });
+			console.log('[passport] done, token', token);
+			return done(null, { token });
 		})
 		/**new LocalStrategy(
 			{
