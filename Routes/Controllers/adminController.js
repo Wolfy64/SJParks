@@ -1,21 +1,24 @@
 /*jshint esversion: 6 */
 const path = require('path');
 //const passport = require('passport');
- const db = require('../../models');
+const db = require('../../models');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-function login (req, res, next) {
-    const isValid = true;
-    console.log('TEST [login] ', req.body);
+async function login (req, res, next) {    
+	//res.cookie('dummyCookie', 'hi')
+	console.log('[login] respond', respond)
+	const isValid = true;
 	if (isValid) {
-		let user = db.User.findOne({ email });
+		console.log('[login] req', req.body);		
+		let user = await db.User.findOne({email: req.body.email});
+		console.log('[login] user', user.email);
 		// Match password i
 		// let isMatch = await user.validatePassword(password);
 		isMatch = true;
 		const token = user.generateJWT();
-		console.log('TEST [login] token', token);
-		return 'hello'
+		console.log('[login] token', token.slice(0, 5));
+		respond.respond(res.cookie('token', token), true, { token });
         // const payload = passport.authenticate(
         //     'local',
         //     (err, passport, info) => {

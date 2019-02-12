@@ -33,6 +33,9 @@ app.use(
 /** Passport */
 // config.passport(app);
 
+/* JWT Authentication */
+//app.use()
+
 /** Routes */
 app.use(function(req, res, next) {
 	console.log('request', req.url, req.body, req.method);

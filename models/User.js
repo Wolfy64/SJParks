@@ -120,18 +120,20 @@ UserSchema.methods.validatePassword = function (candidatePassword){
 };
 
 UserSchema.methods.generateJWT = function(){
+  console.log('[generateJWT]')
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
-
-  return jwt.sign(
+  const token = jwt.sign(
     {
-      id: this._id,
+      _id: this._id,
       userName: this.userName,
-      exp: parseInt(expirationDate.getTime() / 1000, 10),
+      expirationDate: parseInt(expirationDate.getTime() / 1000, 10),
     }, 
-    require('../config').secret),
-    {expiresIn: 600};
+    require('../config/keys').secret,
+    { expiresIn: 600})
+  console.log('[generateJWT]', token.slice(0, 5))
+  return token;
 };
 
 UserSchema.methods.toAuthJSON = function (){
