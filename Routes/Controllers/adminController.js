@@ -5,42 +5,42 @@ const db = require('../../models');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-async function login (req, res, next) {    
-	//res.cookie('dummyCookie', 'hi')
-	console.log('[login] respond', respond)
-	const isValid = true;
-	if (isValid) {
-		console.log('[login] req', req.body);		
-		let user = await db.User.findOne({email: req.body.email});
-		console.log('[login] user', user.email);
-		// Match password i
-		// let isMatch = await user.validatePassword(password);
-		isMatch = true;
-		const token = user.generateJWT();
-		console.log('[login] token', token.slice(0, 5));
-		respond.respond(res.cookie('token', token), true, { token });
-        // const payload = passport.authenticate(
-        //     'local',
-        //     (err, passport, info) => {
-        //         console.log('[login.passport.authenticate]', err, passport.user, info);
-		// 		if (err) return next(err);
+async function login(req, res, next) {
+  //res.cookie('dummyCookie', 'hi')
+  console.log('[login] respond', respond);
+  const isValid = true;
+  if (isValid) {
+    console.log('[login] req', req.body);
+    let user = await db.User.findOne({ email: req.body.email });
+    console.log('[login] user', user.email);
+    // Match password i
+    // let isMatch = await user.validatePassword(password);
+    isMatch = true;
+    const token = user.generateJWT();
+    console.log('[login] token', token.slice(0, 5));
+    respond.respond(res.cookie('token', token), true, { token });
+    // const payload = passport.authenticate(
+    //     'local',
+    //     (err, passport, info) => {
+    //         console.log('[login.passport.authenticate]', err, passport.user, info);
+    // 		if (err) return next(err);
 
-		// 		if (passport) {
-		// 			const user = passport.user;
-		// 			user.generateJWT();
-		// 			return respond(res, true, { user: user.toAuthJSON() });
-		// 		}
+    // 		if (passport) {
+    // 			const user = passport.user;
+    // 			user.generateJWT();
+    // 			return respond(res, true, { user: user.toAuthJSON() });
+    // 		}
 
-		// 		if (info) return respond(res, false, info);
+    // 		if (info) return respond(res, false, info);
 
-		// 		return respond(res, false)
-		// 	}
-        // )(req, res, next);
+    // 		return respond(res, false)
+    // 	}
+    // )(req, res, next);
 
-        // console.log('[login] payload,', payload)
+    // console.log('[login] payload,', payload)
 
-        // return payload;
-	}
+    // return payload;
+  }
 }
 
 function loadReactRouter(req, res) {
