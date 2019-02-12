@@ -5,75 +5,80 @@ const jwt = require('jsonwebtoken');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema(
+  {
+    active: {
+      type: Boolean,
+      default: true
+    },
 
-  active: {
-    type: Boolean,
-    default: true
+    access: {
+      type: String,
+      default: 'basic'
+    },
+
+    salt: String,
+
+    imageUrl: String,
+
+    firstName: String,
+
+    lastName: String,
+
+    email: {
+      index: true,
+      type: String,
+      required: [true, 'you must enter an email']
+    },
+
+    phone: {
+      index: true,
+      type: String,
+      required: [true, 'you must enter a phone number']
+    },
+
+    userName: {
+      index: true,
+      type: String,
+      required: [true, 'you must enter a username']
+    },
+
+    password: {
+      type: String,
+      required: [true, 'you must provide a password']
+    },
+
+    parks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Park'
+      }
+    ],
+
+    updates: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Update'
+      }
+    ]
   },
-
-  access: {
-    type: String,
-    default: 'basic'
-  },
-
-  salt: String,
-
-  imageUrl: String,
-
-  firstName: String,
-
-  lastName: String,
-
-  email: {
-    index: true,
-    type: String,
-    required: [true, 'you must enter an email']
-  },
-
-  phone: {
-    index: true,
-    type: String,
-    required: [true, 'you must enter a phone number']
-  },
-
-  userName: {
-    index: true,
-    type: String,
-    required: [true, 'you must enter a username']
-  },
-
-  password: {
-    type: String,
-    required: [true,'you must provide a password'],
-  },
-
-  parks: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Park'
-  }],
-
-  updates: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Update'
-  }],
-
-}, {
-  timestamps: true
-});
+  {
+    timestamps: true
+  }
+);
 
 // Create Schema Virtuals
-UserSchema.virtual('name').set((x) => {
+UserSchema.virtual('name').set(x => {
   const N = x.split(' ');
   this.firstName = N[0];
   this.lastName = N[1];
 });
 
 UserSchema.virtual('name').get(() => {
-  return  this.firstName + ' ' + this.lastName;
+  return this.firstName + ' ' + this.lastName;
 });
 
-UserSchema.virtual('subscriptions').get(function () {
+UserSchema.virtual('subscriptions').get(function() {
   return {
     active: this.active,
     access: this.access,
@@ -94,23 +99,23 @@ UserSchema.plugin(uniqueValidator, {
 
 // Configure Schema methods
 /*
-"Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly  prevent binding this, so your method will not have access to the document and the above examples will not work."" 
+"Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly  prevent binding this, so your method will not have access to the document and the above examples will not work.""
 
 from: https://mongoosejs.com/docs/guide.html,
  */
 
-UserSchema.methods.setPassword = function (newPassword){
-  bcrypt.genSalt(16, function (err, newSalt){
+UserSchema.methods.setPassword = function(newPassword) {
+  bcrypt.genSalt(16, function(err, newSalt) {
     if (err) throw err;
     this.salt = newSalt;
-    bcrypt.hash(newPassword, newSalt, function (err, newPasswordHash){
+    bcrypt.hash(newPassword, newSalt, function(err, newPasswordHash) {
       if (err) throw err;
       this.password = newPasswordHash;
     });
   });
 };
 
-UserSchema.methods.validatePassword = function (candidatePassword){
+UserSchema.methods.validatePassword = function(candidatePassword) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
       if (err) return reject(err);
@@ -119,8 +124,7 @@ UserSchema.methods.validatePassword = function (candidatePassword){
   });
 };
 
-UserSchema.methods.generateJWT = function(){
-  console.log('[generateJWT]')
+UserSchema.methods.generateJWT = function() {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
@@ -128,20 +132,21 @@ UserSchema.methods.generateJWT = function(){
     {
       _id: this._id,
       userName: this.userName,
-      expirationDate: parseInt(expirationDate.getTime() / 1000, 10),
-    }, 
+      expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
+    },
     require('../config/keys').secret,
-    { expiresIn: 600})
-  console.log('[generateJWT]', token.slice(0, 5))
+    { expiresIn: 600 }
+  );
+
   return token;
 };
 
-UserSchema.methods.toAuthJSON = function (){
+UserSchema.methods.toAuthJSON = function() {
   return {
     _id: this._id,
     name: this.name,
     email: this.email,
-    token: this.generateJWT(),
+    token: this.generateJWT()
   };
 };
 
