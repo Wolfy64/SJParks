@@ -47,9 +47,8 @@ app.use((req, res, next) => {
   const { token } = req.cookies;
 
   if (token) {
-    console.log('TCL: token', token);
     const user = jwt.verify(token, config.keys.secret);
-    res.json({ user });
+    res.json(JSON.stringify(user));
   }
 
   next();
