@@ -1,5 +1,6 @@
 import React from 'react';
-import jwt_decode from 'jwt-decode';
+import jwt from 'jsonwebtoken';
+import Cookies from 'universal-cookie';
 import Parks from './components/ParksPage';
 import Users from './components/UsersPage';
 import Updates from './components/UpdatesPage';
@@ -9,25 +10,25 @@ import PublicPage from './components/PublicPage';
 import NoMatch from './components/UI/NoMatch';
 import Login from './components/LoginPage';
 import { Route, Switch } from 'react-router-dom';
-
 import Layout from './components/Layout';
 
 class App extends React.Component {
   state = { isAdmin: false };
 
   componentDidMount() {
-    let token = localStorage.getItem('token');
+    const cookie = new Cookies()
+    let token = cookie.get('token');
     if (token) {
-      token = jwt_decode(token);
-      // Chek if the token is expired
-      const isValid = Date.now() / 1000 < token.exp;
-      if (!isValid) localStorage.removeItem('token');
-      this.setState({ isAdmin: isValid });
+      token = jwt.decode(token);
+      this.setState({ 
+        token,
+        isAdmin: true 
+      });
     }
   }
 
   render() {
-    const { isAdmin } = this.state;
+    const { isAdmin, token } = this.state;
 
     let routes = (
       <Switch>
@@ -39,7 +40,7 @@ class App extends React.Component {
 
     if (isAdmin) {
       routes = (
-        <Layout>
+        <Layout user={token}>
           <Switch>
             <Route path="/admin/:id/newupdate" component={NewUpdate} />
             <Route path="/admin/:id/updates" component={Updates} />

@@ -20,15 +20,6 @@ export default class SideBar extends React.Component {
     menu: false
   };
 
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.setState({
-        userID: jwt_decode(token).user._id
-      });
-    }
-  }
-
   logout = () => {
     localStorage.removeItem('token');
     window.location.replace('/login');
@@ -51,8 +42,9 @@ export default class SideBar extends React.Component {
   };
 
   render() {
+    const { user } = this.props;
+    console.log(user)
     return (
-
       <NavContainer>
         <div className="title">
           <h1>SJParks</h1>
@@ -66,21 +58,21 @@ export default class SideBar extends React.Component {
           <ul>
             <li>
               <NavButton
-                to={`/admin/${this.state.userID}/updates`}
+                to={`/admin/${user._id}/updates`}
                 name="Updates"
                 action="updatePage"
               />
             </li>
             <li>
               <NavButton
-                to={`/admin/${this.state.userID}/parks`}
+                to={`/admin/${user._id}/parks`}
                 name="Parks"
                 action="parkPage"
               />
             </li>
             <li>
               <NavButton
-                to={`/admin/${this.state.userID}/users`}
+                to={`/admin/${user._id}/users`}
                 name="Users"
                 action="userPage"
               />
