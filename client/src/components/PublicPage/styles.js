@@ -124,7 +124,13 @@ export const SubscribeContainer = styled.div`
   h2 {
     display: none;
   }
-
+  .searchContainer {
+    width: 100%;
+    background-color: white;
+  }
+  .selectedContainer {
+    width: 100%;
+  }
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     h2 {
       display: block;
@@ -147,16 +153,12 @@ export const Form = styled.form`
     padding-bottom: 1rem;
     margin: 20px 0px;
   }
-  .searchContainer {
-    background-color: white;
-    height: 40vh;
-  }
-  .selectedContainer {
-    height: 40vh;
-  }
 
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     height: auto;
+    .searchContainer {
+      
+    }
   }
 `;
 
