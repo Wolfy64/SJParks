@@ -7,19 +7,15 @@ const { respond } = require('../../lib');
 
 function login (req, res, next) {    
     const isValid = true;
-    
-	if (isValid) {
-		console.log('[login.req.body]', req.body)
-		
+    console.log('TEST [login] ', req.body);
+	if (isValid) {		
 		let user = db.User.findOne({ email });
 		// Match password i
 		// let isMatch = await user.validatePassword(password);
 		isMatch = true;
-		console.log('[login] login is forced to', isMatch);
 		const token = user.generateJWT();
-		console.log('[login] token', token);
-		return respond(res, true, { token })
-
+		console.log('TEST [login] token', token);
+		return 'hello'
         // const payload = passport.authenticate(
         //     'local', 
         //     (err, passport, info) => {
