@@ -274,13 +274,13 @@
 			"WIP": true
 		},
 		{
-			"route": "/admin/users/:userId/imageUplaod",
+			"route": "/admin/users/:userId/uploadImage",
 			"method": "POST",
-			"desc": " Upload a @userId's profile image and stores the picture in '_dirname/client/public' directory",
+			"desc": " Uploads a @userId's profile image to Cloudinary and stores url reference in User object",
 			"params": {
 				"type": "imageObject.url"
 			},
-			"function": "api.users.uploadPhoto",
+			"function": "api.users.uploadImage",
 			"response": {
 				"type": "JSON",
 				"genMethod": "SERVER"
