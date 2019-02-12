@@ -11,10 +11,10 @@ const Page = styled.div`
   }
 `;
 
-const Layout = ({ children }) => (
+const Layout = ({ children, user }) => (
   <>
-    <Topnav />
-    <SideBar />
+    <Topnav user={ user } />
+    <SideBar user={ user } />
     <Page>{children}</Page>
   </>
 );

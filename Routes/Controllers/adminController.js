@@ -5,17 +5,28 @@ const db = require('../../models');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
+<<<<<<< HEAD
 function login (req, res, next) {
     const isValid = true;
     console.log('TEST [login] ', req.body);
 	if (isValid) {
 		let user = db.User.findOne({ email });
+=======
+async function login (req, res, next) {    
+	//res.cookie('dummyCookie', 'hi')
+	console.log('[login] respond', respond)
+	const isValid = true;
+	if (isValid) {
+		console.log('[login] req', req.body);		
+		let user = await db.User.findOne({email: req.body.email});
+		console.log('[login] user', user.email);
+>>>>>>> 643b28e816b7053d10c7547c2606f2e750822cf7
 		// Match password i
 		// let isMatch = await user.validatePassword(password);
 		isMatch = true;
 		const token = user.generateJWT();
-		console.log('TEST [login] token', token);
-		return 'hello'
+		console.log('[login] token', token.slice(0, 5));
+		respond.respond(res.cookie('token', token), true, { token });
         // const payload = passport.authenticate(
         //     'local',
         //     (err, passport, info) => {

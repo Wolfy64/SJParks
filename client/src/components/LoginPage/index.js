@@ -1,5 +1,6 @@
 import React from 'react';
-import jwt_decode from 'jwt-decode';
+import Cookies from 'universal-cookie';
+import jwt from 'jsonwebtoken';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
@@ -13,9 +14,11 @@ class Login extends React.Component {
   state = initialState;
 
   componentDidMount() {
-    const token = localStorage.getItem('token');
+    const cookies = new Cookies();
+    const token = jwt.decode(cookies.get('token'));
+    console.log(token)
     if (token) {
-      const userID = jwt_decode(token).user._id;
+      const userID = token._id
       this.props.history.push(`/admin/${userID}/updates`);
     }
   }
