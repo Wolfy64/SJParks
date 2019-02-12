@@ -9,7 +9,7 @@ function openNav() {
 }
 
 function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("navbar").style.marginTop = "-400px";
   document.getElementById("hid").style.display = "none";
 }
 
