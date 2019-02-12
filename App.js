@@ -1,12 +1,10 @@
 /** Load Dependencies */
 require('dotenv-safe').load();
 const path = require('path');
-// const cors = require('cors');
 const logger = require('morgan');
 const express = require('express');
 const addRequestId = require('express-request-id')();
 const formData = require('express-form-data');
-
 /** Load Configurations */
 const router = require('./Routes');
 const config = require('./config');
@@ -14,7 +12,6 @@ const config = require('./config');
 let app = express();
 
 /** View Engine */
-// app.use(cors());
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, config.keys.path)));
 
@@ -34,7 +31,7 @@ app.use(
 );
 
 /** Passport */
-config.passport(app);
+// config.passport(app);
 
 /** Routes */
 app.use(function(req, res, next) {
@@ -48,12 +45,11 @@ app.use(function(req, res, next) {
 	}
 });
 
-// router.all('/api/*', ensureAuthenticated);
-app.post('/login', router.auth); //admin.admin.login
-
 app.use('/api', router.api);
 
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'client', config.keys.clientPath, 'index.html')));
+// router.all('/api/*', ensureAuthenticated);
+app.post('/login', router.auth);
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, config.keys.path, 'index.html')));
 
 /** Error Handlers */
 app.use((err, req, res, next) => {
