@@ -6,20 +6,19 @@ export const Wrapper = styled.div`
   #graph{
     display: flex;
     justify-content: center;
-    margin-left: -40px;
-  }
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
-    width: 100vw;
-    margin: 0;
-    .updateButton {
-      margin: 30px auto;
-    }
+    margin-left: -60px;
   }
   .updateButton {
     display: flex;
     justify-content: center;
-    margin: 50px auto;
   };
+  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    width: 100vw;
+    margin: 0;
+    .updateButton {
+     
+    }
+  }
 `;
 
 /*****************  Historypost  ****************/

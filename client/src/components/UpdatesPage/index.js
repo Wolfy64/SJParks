@@ -101,7 +101,7 @@ class Updates extends React.Component {
 
   render() {
     return (
-      <div>
+      <>
         <Wrapper>
           <Graph className="recharts-surface" />
           <Button
@@ -115,7 +115,7 @@ class Updates extends React.Component {
             <Post key={post._id} post={post} />
           ))}
         </Wrapper>
-      </div>
+      </>
     );
   }
 }

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  width: 300px;
-  margin-right: 5rem;
+  width: 40%;
+  margin-right: 5%;
   .searchContainer{
     background-color: ${(props) => props.theme.colors.lightbg}
   }
