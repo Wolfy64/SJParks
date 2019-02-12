@@ -5,11 +5,11 @@ import Input from './UI/Form/Input';
 import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 280px;
-  padding: 20px;
-  height: 100%;
-  overflow-y: scroll;
+  .innerWrapper {
+    padding: 20px;
+    overflow-y: scroll;
+    height: inherit;
+  }
 `;
 
 class SearchPark extends Component {
@@ -41,6 +41,7 @@ class SearchPark extends Component {
 
     return (
       <Container className='searchContainer'>
+      <div className='innerWrapper'>
         <Input
           name='filter'
           value={filter}
@@ -55,6 +56,7 @@ class SearchPark extends Component {
         )}
 
         <ul>{parkLi}</ul>
+        </div>
       </Container>
     );
   }

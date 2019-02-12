@@ -4,12 +4,10 @@ import ParkLi from './ParkLi';
 import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
-  width: 300px;
-  padding-top: 5rem;
-  overflow: auto;
-
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-    padding-top: 1rem;
+  .innerWrapper {
+    padding: 20px;
+    overflow-y: scroll;
+    height: inherit;
   }
 `;
 
@@ -25,8 +23,10 @@ const SelectedPark = props => {
 
   return (
     <Container className='selectedContainer'>
-      <ButtonText onClick={props.deleteAllParks}>Deselect All</ButtonText>
-      <div>{selectedPark}</div>
+      <div className='innerWrapper'>
+        <ButtonText onClick={props.deleteAllParks}>Deselect All</ButtonText>
+        <div>{selectedPark}</div>
+      </div>
     </Container>
   );
 };
