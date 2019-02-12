@@ -5,10 +5,10 @@ const path = require('path');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-function login (req, res, next) {    
+function login (req, res, next) {
     const isValid = true;
     console.log('TEST [login] ', req.body);
-	if (isValid) {		
+	if (isValid) {
 		let user = db.User.findOne({ email });
 		// Match password i
 		// let isMatch = await user.validatePassword(password);
@@ -17,7 +17,7 @@ function login (req, res, next) {
 		console.log('TEST [login] token', token);
 		return 'hello'
         // const payload = passport.authenticate(
-        //     'local', 
+        //     'local',
         //     (err, passport, info) => {
         //         console.log('[login.passport.authenticate]', err, passport.user, info);
 		// 		if (err) return next(err);
@@ -35,7 +35,7 @@ function login (req, res, next) {
         // )(req, res, next);
 
         // console.log('[login] payload,', payload)
-        
+
         // return payload;
 	}
 }
