@@ -42,13 +42,17 @@ app.use(
 /** Use Express middleware to handle cookies (JWT) */
 app.use(cookieParser());
 
+app.post('/login', router.auth);
+
 /** JWT Authentication */
 app.use((req, res, next) => {
   const { token } = req.cookies;
 
+  if (!token) res.json({ user: null });
+
   if (token) {
     const user = jwt.verify(token, config.keys.secret);
-    res.json({ user });
+    res.json(user);
   }
 
   next();
@@ -56,7 +60,6 @@ app.use((req, res, next) => {
 
 /** Routes */
 app.use(function(req, res, next) {
-  console.log('request', req.url, req.body, req.method);
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
@@ -72,10 +75,9 @@ app.use(function(req, res, next) {
 app.use('/api', router.api);
 
 // router.all('/api/*', ensureAuthenticated);
-app.post('/login', router.auth);
-app.get('*', (req, res) =>
-  res.sendFile(path.join(__dirname, config.keys.path, 'index.html'))
-);
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
+});
 
 /** Error Handlers */
 app.use((err, req, res, next) => {
