@@ -5,6 +5,7 @@ const db = require('../../models');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
+<<<<<<< HEAD
 function login(req, res, next) {
   const isValid = true;
 
@@ -42,6 +43,41 @@ function login(req, res, next) {
 
     // return payload;
   }
+=======
+function login (req, res, next) {    
+    const isValid = true;
+    console.log('TEST [login] ', req.body);
+	if (isValid) {		
+		let user = db.User.findOne({ email });
+		// Match password i
+		// let isMatch = await user.validatePassword(password);
+		isMatch = true;
+		const token = user.generateJWT();
+		console.log('TEST [login] token', token);
+		return 'hello'
+        // const payload = passport.authenticate(
+        //     'local', 
+        //     (err, passport, info) => {
+        //         console.log('[login.passport.authenticate]', err, passport.user, info);
+		// 		if (err) return next(err);
+
+		// 		if (passport) {
+		// 			const user = passport.user;
+		// 			user.generateJWT();
+		// 			return respond(res, true, { user: user.toAuthJSON() });
+		// 		}
+
+		// 		if (info) return respond(res, false, info);
+
+		// 		return respond(res, false)
+		// 	}
+        // )(req, res, next);
+
+        // console.log('[login] payload,', payload)
+        
+        // return payload;
+	}
+>>>>>>> 95aeafb0191453245d3fb1e4cb5dd522838fd801
 }
 
 function loadReactRouter(req, res) {
