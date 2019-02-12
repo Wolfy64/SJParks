@@ -5,28 +5,38 @@ const passport = require('passport');
 // const config = require('../../config');
 const { respond } = require('../../lib');
 
-function login (req, res, next) {    
+async function login (req, res, next) {    
     const isValid = true;
     
 	if (isValid) {
-        console.log('[login.req.body]', req.body)
-        const payload = passport.authenticate(
-            'local', 
-            (err, passport, info) => {
-                console.log('[login.passport.authenticate]', err, passport.user, info);
-				if (err) return next(err);
+		console.log('[login.req.body]', req.body)
+		
+		let user = await db.User.findOne({ email });
+		// Match password i
+		// let isMatch = await user.validatePassword(password);
+		isMatch = true;
+		console.log('[login] login is forced to', isMatch);
+		const token = user.generateJWT();
+		console.log('[login] token', token);
+		return respond(res, true, { token })
 
-				if (passport) {
-					const user = passport.user;
-					user.token = user.generateJWT();
-					return respond(res, true, { user: user.toAuthJSON() });
-				}
+        // const payload = passport.authenticate(
+        //     'local', 
+        //     (err, passport, info) => {
+        //         console.log('[login.passport.authenticate]', err, passport.user, info);
+		// 		if (err) return next(err);
 
-				if (info) return respond(res, false, info);
+		// 		if (passport) {
+		// 			const user = passport.user;
+		// 			user.generateJWT();
+		// 			return respond(res, true, { user: user.toAuthJSON() });
+		// 		}
 
-				return respond(res, false)
-			}
-        )(req, res, next);
+		// 		if (info) return respond(res, false, info);
+
+		// 		return respond(res, false)
+		// 	}
+        // )(req, res, next);
 
         console.log('[login] payload,', payload)
         
