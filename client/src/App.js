@@ -1,6 +1,4 @@
 import React from 'react';
-import jwt from 'jsonwebtoken';
-import Cookies from 'universal-cookie';
 import Parks from './components/ParksPage';
 import Users from './components/UsersPage';
 import Updates from './components/UpdatesPage';
@@ -14,7 +12,9 @@ import Layout from './components/Layout';
 import makeRequest from './utils/makeRequest';
 
 class App extends React.Component {
-  state = { isAdmin: false };
+  state = { 
+    isAdmin: false
+  };
 
   async componentDidMount() {
     const request = await makeRequest('/auth', 'GET');
@@ -24,8 +24,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAdmin, user } = this.state;
-    console.log(user);
+    const {token} = this.state;
 
     let routes = (
       <Switch>
@@ -34,19 +33,20 @@ class App extends React.Component {
         <Route component={NoMatch} />
       </Switch>
     );
-
-    if (isAdmin) {
+    
+    if (token) {
+    console.log('[App.js] data', token)
       routes = (
-        <Layout user={user}>
-          <Switch>
-            <Route path="/admin/:id/newupdate" component={NewUpdate} />
-            <Route path="/admin/:id/updates" component={Updates} />
-            <Route path="/admin/:id/parks" component={Parks} />
-            <Route path="/admin/:id/users" component={Users} />
-            <Route path="/admin/:id/profile" component={ProfilePage} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Layout>
+          <Layout data={token}>
+            <Switch>
+              <Route path="/admin/:id/newupdate" component={NewUpdate} />
+              <Route path="/admin/:id/updates" component={Updates} />
+              <Route path="/admin/:id/parks" component={Parks} />
+              <Route path="/admin/:id/users" component={Users} />
+              <Route path="/admin/:id/profile" component={ProfilePage} />
+              <Route component={NoMatch} />
+            </Switch>
+          </Layout>
       );
     }
 
