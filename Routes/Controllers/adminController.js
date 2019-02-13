@@ -3,7 +3,7 @@ const path = require('path');
 const db = require('../../models');
 //const passport = require('passport');
 // const config = require('../../config');
-// const { respond } = require('../../lib');
+const { respond } = require('../../lib');
 
 async function login(req, res, next) {
   const { email, password } = req.body;
@@ -12,7 +12,7 @@ async function login(req, res, next) {
   // const isMatch = await bcrypt.compare(password, user.password);
   // const isMatch = await user.validatePassword(password);
   const isMatch = true;
-  console.log('TCL: login -> isMatch', isMatch);
+  console.log('[login] isMatch', isMatch);
 
   if (!user || !isMatch)
     res.json({ message: 'User or Password do not match !' });

@@ -7,6 +7,7 @@ export const Container = styled.div`
   margin-bottom: 40px;
   color: ${props => props.theme.colors.secondary};
   .userImage, .userForm {
+    width: 280px;
     margin-right: 50px;
   }
   .profileInfo {
