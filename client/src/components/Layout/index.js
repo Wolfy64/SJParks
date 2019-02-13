@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Topnav from '../TopNav/TopNav';
 import SideBar from '../SideBar';
+import AppProvider from '../../utils/AppProvider';
 
 const Page = styled.div`
   margin: 0 80px 0 240px;
@@ -13,12 +14,12 @@ const Page = styled.div`
   }
 `;
 
-const Layout = ({ children, user }) => (
-  <>
-    <Topnav user={ user } />
-    <SideBar user={ user } />
+const Layout = ({ children, data }) => (
+  <AppProvider data={data}>
+    <Topnav />
+    <SideBar user={data} />
     <Page>{children}</Page>
-  </>
+  </AppProvider>
 );
 
 export default Layout;
