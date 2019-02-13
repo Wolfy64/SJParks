@@ -16,12 +16,12 @@ import makeRequest from './utils/makeRequest';
 class App extends React.Component {
   state = { isAdmin: false };
 
-  async componentDidMount() {
-    const request = await makeRequest('/auth', 'GET');
-    const user = await request.json();
+  // async componentDidMount() {
+  //   const request = await makeRequest('/auth', 'GET');
+  //   const user = await request.json();
 
-    if (user._id) this.setState({ isAdmin: true, user });
-  }
+  //   if (user._id) this.setState({ isAdmin: true, user });
+  // }
 
   render() {
     const { isAdmin, user } = this.state;
