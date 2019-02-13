@@ -42,6 +42,7 @@ app.use(
 /** Use Express middleware to handle cookies (JWT) */
 app.use(cookieParser());
 
+app.get('/logout', router.auth);
 app.post('/login', router.auth);
 
 /** JWT Authentication */

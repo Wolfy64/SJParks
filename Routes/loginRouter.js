@@ -1,7 +1,9 @@
 const controllers = require('./Controllers');
 const router = require('express').Router();
 
-router.post('/login', controllers.admin.login)
+router.post('/login', controllers.admin.login);
+
+router.get('/logout', controllers.admin.logout);
 
 // router.get('/', admin.loadReactRouter);
 
@@ -19,7 +21,5 @@ router.post('/login', controllers.admin.login)
 // router.get('/dashboard', admin.requireLogin, admin.displayUserDashboard);
 
 // router.get('/welcome', admin.displayWelcomePage);
-
-// router.get('/logout', admin.logout);
 
 module.exports = router;
