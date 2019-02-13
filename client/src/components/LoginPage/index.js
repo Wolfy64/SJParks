@@ -1,6 +1,4 @@
 import React from 'react';
-import Cookies from 'universal-cookie';
-import jwt from 'jsonwebtoken';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
@@ -12,17 +10,6 @@ const initialState = {
 };
 class Login extends React.Component {
   state = initialState;
-
-  // componentDidMount() {
-  //   const cookies = new Cookies();
-  // 	console.log('TCL: Login -> componentDidMount -> cookies', cookies)
-  //   const token = jwt.decode(cookies.get('token'));
-  //   console.log('TCL: Login -> componentDidMount -> token2', token);
-  //   if (token) {
-  //     const userID = token._id;
-  //     this.props.history.push(`/admin/${userID}/updates`);
-  //   }
-  // }
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -38,22 +25,13 @@ class Login extends React.Component {
     this.sendForm(dataForm);
   };
 
-  sendForm = data => {
-    makeRequest('/login', 'POST', data)
-      .then(res => res.json())
-      .then(res => {
-        console.log('>> Login POST,', res);
-        const { token, message } = res;
-        if (message) this.setState({ message });
-        if (token) {
-          localStorage.setItem('token', token);
-          global.location.reload(true);
-        }
-      })
-      .catch(err => err);
+  sendForm = async data => {
+    const request = await makeRequest('/login', 'POST', data);
+    const response = await request.json();
+    const { message, user } = response;
 
-    // Reset Form field
-    this.setState(initialState);
+    if (message) this.setState({ message });
+    if (user) global.location.reload(true);
   };
 
   render() {
