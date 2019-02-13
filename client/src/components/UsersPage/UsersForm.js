@@ -6,6 +6,7 @@ import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import Button from '../UI/Generic/Button';
 
+
 /** [H] I Need to make this match with current BE*/
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
@@ -82,19 +83,13 @@ const UsersForm = class userInput extends React.Component {
   };
 
   handleSendForm = dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
 
-    makeRequest('/api/users', payload)
+    makeRequest('/api/users', 'POST', dataForm)
       .then(res => console.log(res))
       .catch(err => console.log(err));
     console.log('>> TEST: sending data \n', dataForm);
+
+    
 
     // Reset Form field
     this.setState(initialState);
