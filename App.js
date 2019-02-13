@@ -45,18 +45,18 @@ app.use(cookieParser());
 app.post('/login', router.auth);
 
 /** JWT Authentication */
-app.use((req, res, next) => {
-  const { token } = req.cookies;
+// app.use((req, res, next) => {
+//   const { token } = req.cookies;
 
-  if (!token) res.json({ user: null });
+//   if (!token) res.json({ user: null });
 
-  if (token) {
-    const user = jwt.verify(token, config.keys.secret);
-    res.json(user);
-  }
+//   if (token) {
+//     const user = jwt.verify(token, config.keys.secret);
+//     res.json(user);
+//   }
 
-  next();
-});
+//   next();
+// });
 
 /** Routes */
 app.use(function(req, res, next) {

@@ -1,4 +1,6 @@
 import React from 'react';
+import Cookies from 'universal-cookie';
+import jwt from 'jsonwebtoken';
 import Parks from './components/ParksPage';
 import Users from './components/UsersPage';
 import Updates from './components/UpdatesPage';
@@ -23,6 +25,16 @@ class App extends React.Component {
   //   if (user._id) this.setState({ isAdmin: true, user });
   // }
 
+  componentDidMount() {
+   const cookie = new Cookies()
+     let token = cookie.get('token');
+     if (token) {
+       token = jwt.decode(token);
+       this.setState({ 
+         token,
+       });
+     }
+   }
   render() {
     const {token} = this.state;
 
@@ -52,7 +64,7 @@ class App extends React.Component {
 
     return (
       <>
-        {user && <Redirect to={`/admin/${user._id}/updates`} />}
+        {token && <Redirect to={`/admin/${token._id}/updates`} />}
         {routes}
       </>
     );
