@@ -26,6 +26,8 @@ async function login(req, res, next) {
     secure: false
   });
 
+  res.json({ user });
+
   next();
 }
 
