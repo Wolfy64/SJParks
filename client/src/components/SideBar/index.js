@@ -1,7 +1,7 @@
 import React from 'react';
-import jwt_decode from 'jwt-decode';
+import Cookie from 'universal-cookie';
 import NavButton from '../UI/Generic/NavButton';
-import {NavContainer} from './styles';
+import { NavContainer } from './styles';
 
 function openNav() {
   document.getElementById("navbar").style.marginTop = "0px";
@@ -9,7 +9,7 @@ function openNav() {
 }
 
 function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-300px";
+  document.getElementById("navbar").style.marginTop = "-400px";
   document.getElementById("hid").style.display = "none";
 }
 
@@ -21,7 +21,8 @@ export default class SideBar extends React.Component {
   };
 
   logout = () => {
-    localStorage.removeItem('token');
+    const cookie = new Cookie()
+    cookie.remove('token');
     window.location.replace('/login');
   };
 
