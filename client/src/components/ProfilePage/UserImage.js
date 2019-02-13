@@ -1,16 +1,17 @@
 import React from 'react';
+import { Consumer } from '../../utils/Context';
+import makeRequest from '../../utils/makeRequest';
 import styled from 'styled-components';
 
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
-display: flex;
-justify-content: center;
-width: 100%;
-  img {
-    height: 165px;
-    width: auto;
-  }
+  display: flex;
+  justify-content: center;
+    img {
+      height: 165px;
+      width: auto;
+    }
 `; 
 
 //const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
@@ -19,11 +20,11 @@ const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 class UserImage extends React.Component {
   state = {
     showError: false,
-    images: []
   };
 
   //Image Upload
-  onChange = e => {
+  onChange = (user, e) => {
+    console.log('[Image] user ', e.target)
     const files = Array.from(e.target.files)
     const formData = new FormData()
 
@@ -31,59 +32,39 @@ class UserImage extends React.Component {
       formData.append(i, file)
     })
 
-    fetch('/admin/image-upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(images => {
-      this.setState({ 
-        images
+    makeRequest(`admin/users/${user._id}/uploadImage`, 'POST', formData)
+      .then(res => res.json())
+      .then(imageUrl => {
+        this.setState({ 
+          imageUrl
+        })
       })
-    })
-    .catch(err => console.log(err));
+      .catch(err => err);
   }
-  
-  // onChange = e => {
-  //   const file = e.target.files[0];
-  //   const isTypeValid = IMAGE_TYPES.includes(file.type);
-  //   const isSizeValid = file.size / 1024 / 1024 <= 2; // Less than 2MB
-
-    // Check if the form has error
-  //   if ((!isTypeValid, !isSizeValid)) this.setState({ showError: true });
-
-  //   if ((isTypeValid, isSizeValid)) {
-  //     fetch(`admin/image-upload`, {
-  //       method: 'POST',
-  //       body: file
-  //     })
-  //       .then(res => res.json())
-  //       .catch(err => console.log(err));
-
-  //     console.log('Data Send', file);
-  //   }
-  // };
 
   render() {
-    let {imagePreviewUrl} = this.state;
+    let {imageUrl} = this.state;
     let imagePreview = null;
-    if(imagePreviewUrl){
-      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={imagePreviewUrl} alt ='avatar'/>);
+    if(imageUrl){
+      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={imagePreview} alt ='avatar'/>);
     } else {
       imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={placeholder} alt ='avatar'/>)
     }
     return (
-      <Image>
-          {/* <img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={placeholder} alt='avatar'/> */}
-          {imagePreview}
+      <Consumer> 
+      {user => (
+      <Image className='userImage'>
+        {imagePreview}
         <input
           type='file'
-          onChange={this.onChange}
+          onChange={(e) => this.onChange(user, e)}
           style={{ display: 'none' }}
           ref={fileInput => (this.fileInput = fileInput)}
         />
         {this.state.showError ? <span>{ERROR}</span> : null}
       </Image>
+      )}
+      </Consumer>
     );
   }
 }

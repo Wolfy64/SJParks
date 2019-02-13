@@ -1,4 +1,5 @@
 import React from 'react';
+import { Consumer } from '../../utils/Context';
 import Graph from './Graph';
 import Post from './Historypost';
 import Button from '../UI/Generic/Button';
@@ -102,14 +103,18 @@ class Updates extends React.Component {
   render() {
     return (
       <>
-        <Wrapper>
-          <Graph className="recharts-surface" />
-          <Button
-            className="updateButton"
-            to="/admin/:id/newupdate"
-            name="New Text Update"
-          />
-        </Wrapper>
+        <Consumer>
+        {user => (
+          <Wrapper>
+            <Graph className="recharts-surface" />
+            <Button
+              className="updateButton"
+              to={`/admin/${user._id}/newupdate`}
+              name="New Text Update"
+            />
+          </Wrapper>
+        )}
+        </Consumer>
         <Wrapper>
           {this.state.history.map(post => (
             <Post key={post._id} post={post} />

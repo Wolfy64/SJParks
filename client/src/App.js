@@ -13,7 +13,9 @@ import { Route, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
 
 class App extends React.Component {
-  state = { isAdmin: false };
+  state = { 
+    isAdmin: false
+  };
 
   componentDidMount() {
     const cookie = new Cookies()
@@ -28,7 +30,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isAdmin, token } = this.state;
+    const {token} = this.state;
 
     let routes = (
       <Switch>
@@ -37,19 +39,20 @@ class App extends React.Component {
         <Route component={NoMatch} />
       </Switch>
     );
-
-    if (isAdmin) {
+    
+    if (token) {
+    console.log('[App.js] data', token)
       routes = (
-        <Layout user={token}>
-          <Switch>
-            <Route path="/admin/:id/newupdate" component={NewUpdate} />
-            <Route path="/admin/:id/updates" component={Updates} />
-            <Route path="/admin/:id/parks" component={Parks} />
-            <Route path="/admin/:id/users" component={Users} />
-            <Route path="/admin/:id/profile" component={ProfilePage} />
-            <Route component={NoMatch} />
-          </Switch>
-        </Layout>
+          <Layout data={token}>
+            <Switch>
+              <Route path="/admin/:id/newupdate" component={NewUpdate} />
+              <Route path="/admin/:id/updates" component={Updates} />
+              <Route path="/admin/:id/parks" component={Parks} />
+              <Route path="/admin/:id/users" component={Users} />
+              <Route path="/admin/:id/profile" component={ProfilePage} />
+              <Route component={NoMatch} />
+            </Switch>
+          </Layout>
       );
     }
 
