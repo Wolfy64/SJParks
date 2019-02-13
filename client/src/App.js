@@ -9,26 +9,23 @@ import ProfilePage from './components/ProfilePage';
 import PublicPage from './components/PublicPage';
 import NoMatch from './components/UI/NoMatch';
 import Login from './components/LoginPage';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
+import makeRequest from './utils/makeRequest';
 
 class App extends React.Component {
   state = { isAdmin: false };
 
-  componentDidMount() {
-    const cookie = new Cookies()
-    let token = cookie.get('token');
-    if (token) {
-      token = jwt.decode(token);
-      this.setState({ 
-        token,
-        isAdmin: true 
-      });
-    }
+  async componentDidMount() {
+    const request = await makeRequest('/auth', 'GET');
+    const user = await request.json();
+
+    if (user._id) this.setState({ isAdmin: true, user });
   }
 
   render() {
-    const { isAdmin, token } = this.state;
+    const { isAdmin, user } = this.state;
+    console.log(user);
 
     let routes = (
       <Switch>
@@ -40,7 +37,7 @@ class App extends React.Component {
 
     if (isAdmin) {
       routes = (
-        <Layout user={token}>
+        <Layout user={user}>
           <Switch>
             <Route path="/admin/:id/newupdate" component={NewUpdate} />
             <Route path="/admin/:id/updates" component={Updates} />
@@ -53,7 +50,12 @@ class App extends React.Component {
       );
     }
 
-    return routes;
+    return (
+      <>
+        {user && <Redirect to={`/admin/${user._id}/updates`} />}
+        {routes}
+      </>
+    );
   }
 }
 
