@@ -13,20 +13,21 @@ const initialState = {
 class Login extends React.Component {
   state = initialState;
 
-  componentDidMount() {
-    const cookies = new Cookies();
-    const token = jwt.decode(cookies.get('token'));
-    console.log(token)
-    if (token) {
-      const userID = token._id
-      this.props.history.push(`/admin/${userID}/updates`);
-    }
-  }
+  // componentDidMount() {
+  //   const cookies = new Cookies();
+  // 	console.log('TCL: Login -> componentDidMount -> cookies', cookies)
+  //   const token = jwt.decode(cookies.get('token'));
+  //   console.log('TCL: Login -> componentDidMount -> token2', token);
+  //   if (token) {
+  //     const userID = token._id;
+  //     this.props.history.push(`/admin/${userID}/updates`);
+  //   }
+  // }
 
   handleChange = e => {
-    const { name, value } = e.target
-    this.setState({ [name]: value })
-  }
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -35,13 +36,13 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.sendForm(dataForm);
-  }
+  };
 
   sendForm = data => {
     makeRequest('/login', 'POST', data)
       .then(res => res.json())
       .then(res => {
-        console.log('>> Login POST,', res)
+        console.log('>> Login POST,', res);
         const { token, message } = res;
         if (message) this.setState({ message });
         if (token) {
@@ -49,7 +50,7 @@ class Login extends React.Component {
           global.location.reload(true);
         }
       })
-      .catch(err => err)
+      .catch(err => err);
 
     // Reset Form field
     this.setState(initialState);
