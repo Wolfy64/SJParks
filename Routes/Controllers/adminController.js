@@ -5,8 +5,6 @@ const db = require('../../models');
 // const config = require('../../config');
 // const { respond } = require('../../lib');
 
-const bcrypt = require('bcrypt');
-
 async function login(req, res, next) {
   const { email, password } = req.body;
 
@@ -63,13 +61,17 @@ function ensureAuthenticated(req, res, next) {
 }
 
 // Logout current user
-function logout(req, res) {
-  req.session.destroy(() => {
-    console.log('User signed out.');
-  });
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/login');
+function logout(req, res, next) {
+  // res.clearCookie('token');
+  res.json({ user: { logout: true } });
+  res.redirect('/');
+  // next();
+  // req.session.destroy(() => {
+  //   console.log('User signed out.');
+  // });
+  // req.logout();
+  // req.flash('success_msg', 'You are logged out');
+  // res.redirect('/login');
 }
 
 module.exports = {
