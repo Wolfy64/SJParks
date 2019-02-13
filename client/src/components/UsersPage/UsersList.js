@@ -1,5 +1,6 @@
 import React from 'react';
 import User from './User';
+import makeRequest from '../../utils/makeRequest';
 
 const DATA = [
   {
@@ -31,6 +32,11 @@ class UserList extends React.Component {
   componentDidMount() {
     // Get data from the db
     this.setState({ users: DATA });
+    // GET User List
+    makeRequest('/api/users','GET')
+    .then(res => res.json())
+    .then(res => console.log('UsersList',res))
+    .catch(err => err);
   }
 
   handleDelete(id) {

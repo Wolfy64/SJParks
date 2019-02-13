@@ -5,6 +5,7 @@ import isFormValid from '../../utils/isFormValid';
 import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import Button from '../UI/Generic/Button';
+import { json } from 'body-parser';
 
 
 /** [H] I Need to make this match with current BE*/
@@ -85,15 +86,21 @@ const UsersForm = class userInput extends React.Component {
   handleSendForm = dataForm => {
 
     makeRequest('/api/users', 'POST', dataForm)
-      .then(res => console.log(res))
+      .then(res => res.json())
+      .then(res => console.log('UsersForm',res))
       .catch(err => console.log(err));
-    console.log('>> TEST: sending data \n', dataForm);
+      console.log('>> TEST: sending data \n', dataForm);
 
     
 
     // Reset Form field
     this.setState(initialState);
   };
+
+  
+
+  
+
 
   render() {
     const {
