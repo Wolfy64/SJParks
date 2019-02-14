@@ -18,7 +18,8 @@ function closeNav() {
 export default class SideBar extends React.Component {
   state = {
     menuIcon: 'fa fa-bars',
-    menu: false
+    menu: false,
+    active: 'Updates'
   };
 
   logout = async () => {
@@ -46,18 +47,28 @@ export default class SideBar extends React.Component {
     }
   };
 
+  toggleActive = (name) => {
+    console.log('[SideBar] toggleActive', name)
+    this.setState (
+      {
+        active: {name}
+      }
+    )
+  }
+
   render() {
-    const { user } = this.props;
-    console.log(user);
+    const {active, menuIcon} = this.state;
     return (
-      <NavContainer>
-        <div className="title">
-          <h1>SJParks</h1>
-          <p>Admin</p>
-        </div>
-        <div className="menuIcon" onClick={this.toggleMenu}>
-          <i className={this.state.menuIcon} />
-        </div>
+      <Consumer> 
+      {user => (
+        <NavContainer>
+          <div className="title">
+            <h1>SJParks</h1>
+            <p>Admin</p>
+          </div>
+          <div className='menuIcon' onClick={this.toggleMenu}>
+            <i className={menuIcon}/>
+          </div>
 
           <div id="navbar">
             <ul>
@@ -66,6 +77,8 @@ export default class SideBar extends React.Component {
                   to={`/admin/${user._id}/updates`}
                   name="Updates"
                   action="updatePage"
+                  active={active}
+                  toggleActive={this.toggleActive}
                 />
               </li>
               <li>
@@ -73,6 +86,8 @@ export default class SideBar extends React.Component {
                   to={`/admin/${user._id}/parks`}
                   name="Parks"
                   action="parkPage"
+                  active={active}
+                  toggleActive={this.toggleActive}
                 />
               </li>
               <li>
@@ -80,6 +95,8 @@ export default class SideBar extends React.Component {
                   to={`/admin/${user._id}/users`}
                   name="Users"
                   action="userPage"
+                  active={active}
+                  toggleActive={this.toggleActive}
                 />
               </li>
             </ul>
