@@ -6,6 +6,10 @@ export const Wrapper = styled.div`
   .searchContainer{
     background-color: ${(props) => props.theme.colors.lightbg}
   }
+  form {
+    max-width: 300px;
+  }
+  
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     display: flex;
     justify-content: center;
@@ -13,9 +17,11 @@ export const Wrapper = styled.div`
     margin: 0 auto;
     form {
       width: 300px;
+      margin: 0 20px;
     }
     .searchContainer{
       margin-top: 30px;
+      width: 100vw;
     }
   }
 `

@@ -7,6 +7,8 @@ import ButtonText from './UI/Generic/ButtonText';
 const Container = styled.div`
   .innerWrapper {
     padding: 20px;
+    max-width: 300px;
+    margin: 0 auto;
     overflow-y: scroll;
     height: inherit;
   }
