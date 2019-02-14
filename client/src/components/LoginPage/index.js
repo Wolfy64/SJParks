@@ -1,37 +1,26 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
 import { Container, Form } from './styles';
 
-const initialState = {
-  email: '',
-  password: ''
-};
 class Login extends React.Component {
-  state = initialState;
+  state = { email: '', password: '' };
 
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    const dataForm = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    this.sendForm(dataForm);
-  };
 
-  sendForm = async data => {
-    const request = await makeRequest('/login', 'POST', data);
-    const response = await request.json();
-    const { message, user } = response;
+    const request = await makeRequest('/login', 'POST', this.state);
+    const { user, message } = await request.json();
 
+    if (user) this.props.history.push('/');
     if (message) this.setState({ message });
-    if (user) global.location.reload(true);
   };
 
   render() {
@@ -62,6 +51,7 @@ class Login extends React.Component {
             onChange={this.handleChange}
             required
           />
+
           <Button type="submit" name="LOGIN" />
         </Form>
       </Container>
@@ -69,4 +59,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
