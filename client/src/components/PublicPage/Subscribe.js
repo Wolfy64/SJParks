@@ -21,12 +21,12 @@ class Subscribe extends React.Component {
   state = initialState;
 
   componentDidMount() {
-    makeRequest('/api/parks', 'GET')
-      .then(res => res.json)
-      .then(res => {
-        console.log('>>PublicPage/Subscribe GET,', res);
-      })
-      .catch(err => err);
+    makeRequest('/api/parks');
+    // .then(res => res.json)
+    // .then(res => {
+    //   console.log('>>PublicPage/Subscribe GET,', res);
+    // })
+    // .catch(err => err);
 
     this.setState({ parks: parksDB });
   }

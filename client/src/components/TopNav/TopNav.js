@@ -1,4 +1,4 @@
-import React, { Component, createContext } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavContainer } from './styles';
 import profileImg from '../../img/Placeholder2.jpg';
