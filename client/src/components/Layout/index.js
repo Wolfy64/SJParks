@@ -17,7 +17,7 @@ const Page = styled.div`
 const Layout = ({ children, data }) => (
   <AppProvider data={data}>
     <Topnav />
-    <SideBar user={data} />
+    <SideBar />
     <Page>{children}</Page>
   </AppProvider>
 );
