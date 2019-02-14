@@ -40,7 +40,7 @@ class Login extends React.Component {
     makeRequest('/login', 'POST', data)
       .then(res => res.json())
       .then(res => {
-        console.log('>> Login POST,', res)
+        console.log('[Login]', res)
         const { token, message } = res;
         if (message) this.setState({ message });
         if (token) {
