@@ -1,8 +1,6 @@
 import React from 'react';
-import Cookie from 'universal-cookie';
-import { Consumer } from '../../utils/Context';
 import NavButton from '../UI/Generic/NavButton';
-import makeRequest from '../../utils/makeRequest';
+// import makeRequest from '../../utils/makeRequest';
 import { NavContainer } from './styles';
 
 function openNav() {
@@ -23,9 +21,9 @@ export default class SideBar extends React.Component {
   };
 
   logout = async () => {
-    const request = await makeRequest('/logout', 'GET');
-    const response = await request.json();
-    console.log('TCL: SideBar -> logout -> response', response);
+    // const request = await makeRequest('/logout', 'GET');
+    // const response = await request.json();
+    // console.log('TCL: SideBar -> logout -> response', response);
     // const cookie = new Cookie();
     // cookie.remove('token');
     // window.location.replace('/login');
@@ -57,56 +55,38 @@ export default class SideBar extends React.Component {
   }
 
   render() {
-    const {active, menuIcon} = this.state;
+    const { user } = this.props;
     return (
-      <Consumer> 
-      {user => (
-        <NavContainer>
-          <div className="title">
-            <h1>SJParks</h1>
-            <p>Admin</p>
-          </div>
-          <div className='menuIcon' onClick={this.toggleMenu}>
-            <i className={menuIcon}/>
-          </div>
+      <NavContainer>
+        <div className="title">
+          <h1>SJParks</h1>
+          <p>Admin</p>
+        </div>
+        <div className="menuIcon" onClick={this.toggleMenu}>
+          <i className={this.state.menuIcon} />
+        </div>
 
-          <div id="navbar">
-            <ul>
-              <li>
-                <NavButton
-                  to={`/admin/${user._id}/updates`}
-                  name="Updates"
-                  action="updatePage"
-                  active={active}
-                  toggleActive={this.toggleActive}
-                />
-              </li>
-              <li>
-                <NavButton
-                  to={`/admin/${user._id}/parks`}
-                  name="Parks"
-                  action="parkPage"
-                  active={active}
-                  toggleActive={this.toggleActive}
-                />
-              </li>
-              <li>
-                <NavButton
-                  to={`/admin/${user._id}/users`}
-                  name="Users"
-                  action="userPage"
-                  active={active}
-                  toggleActive={this.toggleActive}
-                />
-              </li>
-            </ul>
-            
-            <div className="logout">
+        <div id="navbar">
+          <ul>
+            <li>
               <NavButton
-                onClick={this.logout}
-                type="submit"
-                name="Logout"
-                action="logoutPage"
+                to={`/admin/${user._id}/updates`}
+                name="Updates"
+                action="updatePage"
+              />
+            </li>
+            <li>
+              <NavButton
+                to={`/admin/${user._id}/parks`}
+                name="Parks"
+                action="parkPage"
+              />
+            </li>
+            <li>
+              <NavButton
+                to={`/admin/${user._id}/users`}
+                name="Users"
+                action="userPage"
               />
             </li>
           </ul>
