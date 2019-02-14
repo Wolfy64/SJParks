@@ -5,6 +5,7 @@ import isFormValid from '../../utils/isFormValid';
 import Button from '../UI/Generic/Button';
 import styled from 'styled-components';
 import makeRequest from '../../utils/makeRequest';
+import {Consumer} from '../../utils/Context'
 
 const Wrapper = styled.div`
   width: 280px;
@@ -34,7 +35,7 @@ class PasswordForm extends React.Component {
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e, user) => {
     e.preventDefault();
     const { formErrors, newPassword, repeatPassword } = this.state;
     const passIsEqual = repeatPassword === newPassword;
@@ -50,12 +51,14 @@ class PasswordForm extends React.Component {
     }
 
     if (isValid) {
-      const userId = 12345;
-      makeRequest(`/admin/users/${userId}/contact`, 'PUT', newPassword);
-      console.log('SEND DATA', newPassword);
-
-      // Reset Form field
-      this.setState(initialState);
+      makeRequest(`/admin/users/${user._id}/contact`, 'PUT', newPassword)
+        .then(res => res.json())
+        .then(res => {
+          console.log('[ProfilePage.Password]', res)
+          // Reset Form field
+          this.setState(initialState);
+        })
+        .catch(err => err)
     } else {
       this.setState({ showErrors: true });
     }
@@ -66,8 +69,10 @@ class PasswordForm extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
+      <Consumer>
+      { user => (
       <Wrapper>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(e) => this.handleSubmit(e, user)}>
           <Input
             label="Current Password"
             placeholder="Current Password"
@@ -101,6 +106,8 @@ class PasswordForm extends React.Component {
           <Button name="Confirm New Password" type="submit" />
         </form>
       </Wrapper>
+      )}
+      </Consumer>
     );
   }
 }
