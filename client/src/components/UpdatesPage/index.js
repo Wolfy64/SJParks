@@ -1,9 +1,8 @@
 import React from 'react';
-import { Consumer } from '../../utils/Context';
 import Graph from './Graph';
 import Post from './Historypost';
 import Button from '../UI/Generic/Button';
-import {Wrapper} from './styles';
+import { Wrapper } from './styles';
 
 class Updates extends React.Component {
   constructor() {
@@ -101,20 +100,22 @@ class Updates extends React.Component {
   }
 
   render() {
+    // const { user } = this.props;
+    const user = {
+      _id: 123
+    };
+
     return (
       <>
-        <Consumer>
-        {user => (
-          <Wrapper>
-            <Graph className="recharts-surface" />
-            <Button
-              className="updateButton"
-              to={`/admin/${user._id}/newupdate`}
-              name="New Text Update"
-            />
-          </Wrapper>
-        )}
-        </Consumer>
+        <Wrapper>
+          <Graph className="recharts-surface" />
+          <Button
+            className="updateButton"
+            to={`/admin/${user._id}/newupdate`}
+            name="New Text Update"
+          />
+        </Wrapper>
+
         <Wrapper>
           {this.state.history.map(post => (
             <Post key={post._id} post={post} />
