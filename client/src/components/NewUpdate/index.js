@@ -16,7 +16,10 @@ class NewUpdate extends React.Component {
     makeRequest('/api/parks', 'GET')
       .then(res => res.json())
       .then(res => {
-        console.log('>> NewUpdate GET:', res)
+        console.log('[NewUpdate] GET:', res)
+        this.setState({
+          parks: res
+        })
       })
       .catch(err => err)
   }
@@ -24,24 +27,33 @@ class NewUpdate extends React.Component {
   handleAddPark = park => {
     const { parkSelected } = this.state;
     const isSelected = parkSelected.find(el => el._id === park._id);
-
     if (!isSelected) this.setState({ parkSelected: [...parkSelected, park] });
+    this.setState({
+      parks: [
+        ...this.state.parks.filter(el => el._id !== park._id)
+      ]
+    });
   };
 
   handleAddAllPark = () => {
-    this.setState({ parkSelected: [...this.state.parks] });
+    this.setState({ 
+      parkSelected: [...this.state.parks],
+      parks: []
+    });
   };
 
   handleDeletePark = park => {
     this.setState({
       parkSelected: [
         ...this.state.parkSelected.filter(el => el._id !== park._id)
-      ]
+      ],
+      parks: [...this.state.parks, park] 
     });
   };
 
   handleDeleteAddAllPark = () => {
-    this.setState({ parkSelected: [] });
+    this.setState({parks: [...this.state.parks, ...this.state.parkSelected]});
+    this.setState({parkSelected: []});
   };
 
   render() {
