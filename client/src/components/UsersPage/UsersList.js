@@ -35,7 +35,7 @@ class UserList extends React.Component {
     // GET User List
     makeRequest('/api/users','GET')
     .then(res => res.json())
-    .then(res => console.log('UsersList',res))
+    .then(res => console.log('[UsersList]',res))
     .catch(err => err);
   }
 
