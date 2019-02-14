@@ -7,9 +7,10 @@ export const Container = styled.div`
   height: fit-content;
   .searchContainer {
     margin-bottom: 50px;
-    margin-right: 50px;
+    width: 100%;
   }
   .selectedContainer {
+    width: 100%;
     background-color: ${props => props.theme.colors.lightbg};
   }
   .col3{
