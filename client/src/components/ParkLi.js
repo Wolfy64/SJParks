@@ -15,7 +15,7 @@ const Label = styled.div`
 
 const ParkLi = props => (
   <Label selected={props.selected} onClick={props.clicked}>
-      <span>{props.park.name} - {props.park.parkID}</span>
+      <span>{props.park.name} - {props.park.code}</span>
       {props.selected? <i className="fa fa-times"></i> : <i className="fa fa-plus"></i>}
   </Label>
 );
