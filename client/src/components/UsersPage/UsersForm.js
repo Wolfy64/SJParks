@@ -5,7 +5,6 @@ import isFormValid from '../../utils/isFormValid';
 import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import Button from '../UI/Generic/Button';
-import { json } from 'body-parser';
 
 
 /** [H] I Need to make this match with current BE*/

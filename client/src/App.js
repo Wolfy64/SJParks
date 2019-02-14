@@ -9,9 +9,9 @@ import ProfilePage from './components/ProfilePage';
 import PublicPage from './components/PublicPage';
 import NoMatch from './components/UI/NoMatch';
 import Login from './components/LoginPage';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, /*Redirect,*/ Switch } from 'react-router-dom';
 import Layout from './components/Layout';
-import makeRequest from './utils/makeRequest';
+// import makeRequest from './utils/makeRequest';
 
 class App extends React.Component {
   state = { 
