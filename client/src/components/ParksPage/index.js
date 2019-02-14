@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import makeRequest from '../../utils/makeRequest';
