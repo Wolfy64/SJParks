@@ -16,6 +16,7 @@ const Btn = styled.button`
   :hover {
     background: white;
     color: ${props => props.delete ? "#580808" : "#083C5B"};
+    cursor: pointer;
   }
 `;
 

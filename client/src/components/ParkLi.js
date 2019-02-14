@@ -11,6 +11,9 @@ const Label = styled.div`
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  :hover{
+    cursor: pointer;
+  }
 `;
 
 const ParkLi = props => (
