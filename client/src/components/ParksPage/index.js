@@ -40,7 +40,13 @@ export default class Parks extends Component {
           )
       )
     ) {
-      console.log('>> ', park.name, ' was removed.');
+      makeRequest('/api/parks', 'DELETE')
+      .then(res => res.json())
+      .then(res => {
+        console.log('>> ', park.name, ' was removed.');
+        console.log('>> ParksPage DELETE res.parks,', res);
+      })
+      .catch(err => err);
     }
   };
 
