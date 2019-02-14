@@ -4,12 +4,12 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   width: 320px;
-  height: 40vh;
+  height: fit-content;
   .searchContainer {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    margin-right: 50px;
   }
   .selectedContainer {
-    margin: 0 40px;
     background-color: ${props => props.theme.colors.lightbg};
   }
   .col3{
@@ -19,8 +19,12 @@ export const Container = styled.div`
   }
   @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
     margin: 0 0 60px 0;
-    .selectedContainer {
+    width: 100vw;
+    .selectedContainer,  .searchContainer {
       width: 100vw;
+      margin-right: 0;
+      margin-bottom: 50px;
+      height: inherit;
     }
     .editMessage {
       display: flex;
