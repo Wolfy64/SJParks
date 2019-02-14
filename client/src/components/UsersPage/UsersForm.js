@@ -17,8 +17,8 @@ const SELECT_OPTIONS = {
 const initialState = {
   accessType: 'Updates Only',
   fullName: 'Irina',
-  userName: 'irishka2863',
-  userEmail: 'irishka2863@yahoo.com',
+  phone: '4084552057',
+  email: 'irishka2863@yahoo.com',
   password: '123456',
   confirmPassword: '123456',
   showErrors: false
@@ -49,18 +49,18 @@ const UsersForm = class userInput extends React.Component {
     const {
       accessType,
       confirmPassword,
-      userEmail,
+      email,
       formErrors,
       fullName,
       password,
-      userName
+      phone
     } = this.state;
     const dataForm = {
       accessType,
-      userEmail,
+      email,
       fullName,
       password,
-      userName
+      phone
     };
     const passIsEqual = password === confirmPassword;
     const isValid = isFormValid(formErrors, dataForm);
@@ -75,11 +75,10 @@ const UsersForm = class userInput extends React.Component {
     }
 
     isValid
-      ?
-      this.handleSendForm(dataForm) :
-      this.setState({
-        showErrors: true
-      });
+      ? this.handleSendForm(dataForm) 
+      : this.setState({
+          showErrors: true
+        });
   };
 
   handleSendForm = dataForm => {
@@ -112,19 +111,19 @@ const UsersForm = class userInput extends React.Component {
           value={this.state.fullName}
           error={ hasErrors ? formErrors.fullName : null }
         /> 
-        < Input label='User Id' placeholder='john42' name='userName' type='text' onChange={this.handleChange}
-          value={this.state.userName}
-          error={ hasErrors ? formErrors.userName : null }
+        < Input label='Phone' placeholder='4084552057' name='phone' type='text' onChange={this.handleChange}
+          value={this.state.phone}
+          error={ hasErrors ? formErrors.phone : null }
         /> 
-        < Input label='Email' placeholder='john.doe@mail.com' name='userEmail' type='email' onChange={this.handleChange}
-          value={this.state.userEmail}
-          error={hasErrors  ?formErrors.userEmail : null }
+        < Input label='Email' placeholder='john.doe@mail.com' name='email' type='email' onChange={this.handleChange}
+          value={this.state.email}
+          error={hasErrors  ?formErrors.email : null }
         /> 
         < Input label='Password' placeholder='Password' name='password' type='password' onChange={this.handleChange}
           value={this.state.password}
           error={hasErrors ? formErrors.password : null }
         /> 
-        < Input label='Confirm Password' placeholder='Confirm Password' name='confirmPassword' type='password' onChange={this.handleChange}
+        < Input suggested='new-password' label='Confirm Password' placeholder='Confirm Password' name='confirmPassword' type='password' onChange={this.handleChange}
           value={this.state.confirmPassword}
           error={hasErrors ? formErrors.confirmPassword : null }
         /> 
