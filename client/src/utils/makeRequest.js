@@ -4,7 +4,7 @@ const DefaultHeaders = {
 };
 
 const makeRequest = (path, method, payload, headers = DefaultHeaders) => {
-    console.log('>> utils.makeRequest.path: ', path);
+    console.log('[makeRequest]', path, method, (payload || ''));
     const options = {
         method: method,
         headers: headers,
