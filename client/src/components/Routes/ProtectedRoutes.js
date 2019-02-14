@@ -8,9 +8,9 @@ import Users from '../UsersPage';
 import ProfilePage from '../ProfilePage';
 import NoMatch from '../UI/NoMatch';
 
-const ProtectedRoutes = () => {
+const ProtectedRoutes = ({ user }) => {
   return (
-    <Layout data={'token'}>
+    <Layout user={user}>
       <Switch>
         <Route path="/admin/:id/newupdate" component={NewUpdate} />
         <Route path="/admin/:id/updates" component={Updates} />

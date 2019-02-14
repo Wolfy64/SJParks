@@ -8,14 +8,18 @@ class App extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/api/');
-    const { isAuthenticated } = await request.json();
+    const { isAuthenticated, user } = await request.json();
 
-    this.setState({ isAuthenticated });
+    this.setState({ isAuthenticated, user });
   }
 
   render() {
-    const { isAuthenticated } = this.state;
-    const Routes = isAuthenticated ? <ProtectedRoutes /> : <PublicRoutes />;
+    const { isAuthenticated, user } = this.state;
+    const Routes = isAuthenticated ? (
+      <ProtectedRoutes user={user} />
+    ) : (
+      <PublicRoutes />
+    );
     return Routes;
   }
 }
