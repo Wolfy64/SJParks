@@ -23,13 +23,12 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'GET')
       .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage.index GET res.parks,', res.parks);
+        console.log('[ParksPage] GET,', res)
+        this.setState({ parks: res });
       })
       .catch(err => err);
-
-    this.setState({ parks: parksDB });
   }
-
+  
   handleDeletePark = park => {
     if (
       window.confirm(
@@ -43,8 +42,7 @@ export default class Parks extends Component {
       makeRequest('/api/parks', 'DELETE')
       .then(res => res.json())
       .then(res => {
-        console.log('>> ', park.name, ' was removed.');
-        console.log('>> ParksPage DELETE res.parks,', res);
+        console.log('[ParksPage] DELETE', res);
       })
       .catch(err => err);
     }
@@ -77,7 +75,8 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage/index POST,', res);
+        console.log('[ParksPage] POST,', res);
+        window.location.reload(true);
       })
       .catch(err => err);
 
