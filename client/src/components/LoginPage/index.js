@@ -1,15 +1,12 @@
 import React from 'react';
+import { withRouter } from 'react-router';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
 import { Container, Form } from './styles';
 
-const initialState = {
-  email: '',
-  password: ''
-};
 class Login extends React.Component {
-  state = initialState;
+  state = { email: '', password: '' };
 
   componentDidMount() {
     const cookies = new Cookies();
@@ -27,31 +24,14 @@ class Login extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    const dataForm = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    this.sendForm(dataForm);
-  };
 
-  sendForm = data => {
-    makeRequest('/login', 'POST', data)
-      .then(res => res.json())
-      .then(res => {
-        console.log('[Login]', res)
-        const { token, message } = res;
-        if (message) this.setState({ message });
-        if (token) {
-          localStorage.setItem('token', token);
-          global.location.reload(true);
-        }
-      })
-      .catch(err => err)
+    const request = await makeRequest('/login', 'POST', this.state);
+    const { user, message } = await request.json();
 
+    if (user) this.props.history.push('/');
     if (message) this.setState({ message });
-    if (user) global.location.reload(true);
   };
 
   render() {
@@ -82,6 +62,7 @@ class Login extends React.Component {
             onChange={this.handleChange}
             required
           />
+
           <Button type="submit" name="LOGIN" />
         </Form>
       </Container>
@@ -89,4 +70,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
