@@ -64,7 +64,7 @@ class App extends React.Component {
 
     return (
       <>
-        {token && <Redirect to={`/admin/${token._id}/updates`} />}
+        {/* {token && <Redirect to={`/admin/${token._id}/updates`} />} */}
         {routes}
       </>
     );
