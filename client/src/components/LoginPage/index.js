@@ -19,7 +19,7 @@ class Login extends React.Component {
     const request = await makeRequest('/login', 'POST', this.state);
     const { user, message } = await request.json();
 
-    if (user) this.props.history.push('/');
+    if (user) window.location.reload();
     if (message) this.setState({ message });
   };
 
