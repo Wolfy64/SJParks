@@ -66,12 +66,11 @@ class EditMessage extends React.Component {
     makeRequest('/admin/newupdate', 'POST', dataForm)
     .then(res => res.json())
     .then(res => {
-      console.log('>> NewUpdate.EditMessage:70 POST.res, ', res)
+      console.log('[EditMessage] POST ', res)
+      // Reset Form field
+      this.setState(initialState);
     })
     .catch(err => err)
-
-    // Reset Form field
-    this.setState(initialState);
   };
 
   render() {

@@ -130,8 +130,8 @@ function validateParkInput(props) {
 
 	// prepare data
 	console.log('> Preparing Data');
-	data.name = !isEmpty(props.name) ? props.name : '';
-	data.code = !isEmpty(props.code) ? props.code : '';
+	data.name = !isEmpty(props.newName) ? props.newName : '';
+	data.code = !isEmpty(props.newCode) ? props.newCode : '';
 	// data.subscriptionLog = !isEmpty(props.addSubscriptionLog) ? props.addSubscriptionLog : '';
 	// data.messageLog = !isEmpty(props.addMessageLog) ? props.addMessageLog : '';
 

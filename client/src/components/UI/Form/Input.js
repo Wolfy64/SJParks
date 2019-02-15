@@ -32,6 +32,7 @@ const Input = props => (
       type={props.type}
       value={props.value}
       onChange={props.onChange}
+      autoComplete={props.name}
     />
 
     {props.error && <span>{props.error}</span>}

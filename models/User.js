@@ -135,7 +135,7 @@ UserSchema.methods.generateJWT = function() {
       expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
     },
     require('../config/keys').secret,
-    { expiresIn: 600 }
+    { expiresIn: '30 days' }
   );
 
   return token;

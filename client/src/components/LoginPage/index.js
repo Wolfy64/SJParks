@@ -1,28 +1,12 @@
 import React from 'react';
-import Cookies from 'universal-cookie';
-import jwt from 'jsonwebtoken';
+import { withRouter } from 'react-router';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
 import { Container, Form } from './styles';
 
-const initialState = {
-  email: '',
-  password: ''
-};
 class Login extends React.Component {
-  state = initialState;
-
-  componentDidMount() {
-    const cookies = new Cookies();
-  	console.log('TCL: Login -> componentDidMount -> cookies', cookies)
-    const token = jwt.decode(cookies.get('token'));
-    console.log('TCL: Login -> componentDidMount -> token2', token);
-    if (token) {
-      const userID = token._id;
-      this.props.history.push(`/admin/${userID}/updates`);
-    }
-  }
+  state = { email: '', password: '' };
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -31,29 +15,13 @@ class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const dataForm = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    this.sendForm(dataForm);
-  };
 
-  sendForm = data => {
-    makeRequest('/login', 'POST', data)
+    makeRequest('/login', 'POST', this.state )
       .then(res => res.json())
-      .then(res => {
-        console.log('>> Login POST,', res)
-        const { token, message } = res;
-        if (message) this.setState({ message });
-        if (token) {
-          localStorage.setItem('token', token);
-          global.location.reload(true);
-        }
+      .then(user => {
+        window.location.replace(`/admin/${user._id}/updates`);
       })
       .catch(err => err)
-
-    // Reset Form field
-    this.setState(initialState);
   };
 
   render() {
@@ -84,6 +52,7 @@ class Login extends React.Component {
             onChange={this.handleChange}
             required
           />
+
           <Button type="submit" name="LOGIN" />
         </Form>
       </Container>
@@ -91,4 +60,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

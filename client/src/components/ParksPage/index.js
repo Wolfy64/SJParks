@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import makeRequest from '../../utils/makeRequest';
@@ -23,13 +22,12 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'GET')
       .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage.index GET res.parks,', res.parks);
+        console.log('[ParksPage] GET,', res)
+        this.setState({ parks: res });
       })
       .catch(err => err);
-
-    this.setState({ parks: parksDB });
   }
-
+  
   handleDeletePark = park => {
     if (
       window.confirm(
@@ -40,7 +38,12 @@ export default class Parks extends Component {
           )
       )
     ) {
-      console.log('>> ', park.name, ' was removed.');
+      makeRequest('/api/parks', 'DELETE')
+      .then(res => res.json())
+      .then(res => {
+        console.log('[ParksPage] DELETE', res);
+      })
+      .catch(err => err);
     }
   };
 
@@ -71,7 +74,8 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
       .then(res => {
-        console.log('>> ParksPage/index POST,', res);
+        console.log('[ParksPage] POST,', res);
+        window.location.reload(true);
       })
       .catch(err => err);
 

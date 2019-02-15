@@ -6,9 +6,10 @@ import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
   .innerWrapper {
+    margin: 0 auto;
+    max-width: 280px;
     padding: 20px;
     overflow-y: scroll;
-    height: inherit;
   }
 `;
 

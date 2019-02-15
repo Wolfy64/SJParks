@@ -9,7 +9,7 @@ const Page = styled.div`
   display: flex;
   flex-wrap: wrap;
   z-index: 0;
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     margin: 100px 0;
   }
 `;
@@ -17,7 +17,7 @@ const Page = styled.div`
 const Layout = ({ children, data }) => (
   <AppProvider data={data}>
     <Topnav />
-    <SideBar user={data} />
+    <SideBar />
     <Page>{children}</Page>
   </AppProvider>
 );
