@@ -16,7 +16,6 @@ const makeRequest = (
   };
 
   if (payload) options.body = JSON.stringify(payload);
-  console.log('[makeRequest]', path, method, payload || '')
   return fetch(path, options);
 };
 

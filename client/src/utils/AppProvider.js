@@ -5,9 +5,8 @@ class AppProvider extends Component {
   state = {
     data: this.props.data
   }
-  
   render() {
-    console.log('[AppProvider]', this.state.data)
+    if(!this.state.data) console.log('[AppProvider]', this.state.data);
     return (
       <Provider
         value={this.state.data}
