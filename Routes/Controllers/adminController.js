@@ -3,7 +3,7 @@ const path = require('path');
 const db = require('../../models');
 //const passport = require('passport');
 // const config = require('../../config');
-const { respond } = require('../../lib');
+// const { respond } = require('../../lib');
 
 async function login(req, res, next) {
   const { email, password } = req.body;
@@ -62,9 +62,8 @@ function ensureAuthenticated(req, res, next) {
 
 // Logout current user
 function logout(req, res, next) {
-  // res.clearCookie('token');
-  res.json({ user: { logout: true } });
-  res.redirect('/');
+  res.clearCookie('token');
+  res.send(205);
   // next();
   // req.session.destroy(() => {
   //   console.log('User signed out.');
