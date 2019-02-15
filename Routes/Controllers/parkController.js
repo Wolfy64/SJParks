@@ -118,8 +118,9 @@ function read(req, res) {
  * @desc Delete An park by ObjectId
  */
 function destroy(req, res) {
+	console.log('[parkController] body', req.body)
 	db.Park
-		.findByIdAndDelete(req.params.id)
+		.findByIdAndDelete(req.body._id)
 		.then((park) =>
 			park.remove().then((removedpark) =>
 				res.status(296).json({
