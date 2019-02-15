@@ -21,9 +21,7 @@ const UserSchema = new mongoose.Schema(
 
     imageUrl: String,
 
-    firstName: String,
-
-    lastName: String,
+    fullName: String,
 
     email: {
       index: true,
@@ -35,12 +33,6 @@ const UserSchema = new mongoose.Schema(
       index: true,
       type: String,
       required: [true, 'you must enter a phone number']
-    },
-
-    userName: {
-      index: true,
-      type: String,
-      required: [true, 'you must enter a username']
     },
 
     password: {
