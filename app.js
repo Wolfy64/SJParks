@@ -10,8 +10,9 @@ const jwt = require('jsonwebtoken');
 // const formData = require('express-form-data');
 
 /** Load Configurations */
-const router = require('./Routes');
+require('dotenv-safe').load();
 const config = require('./config');
+const router = require('./routes').create();
 
 let app = express();
 
@@ -73,11 +74,10 @@ app.use((req, res, next) => {
 // });
 
 app.use('/api', router.api);
+// app.post('/login', router.auth);
 
 // router.all('/api/*', ensureAuthenticated);
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
-// });
+// app.get('*', (req, res) => res.sendFile(path.join(__dirname, config.keys.path)));
 
 /** Error Handlers */
 // app.use((err, req, res, next) => {

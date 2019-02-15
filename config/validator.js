@@ -22,20 +22,20 @@ function validateUserInput(props) {
 	data.fullName = !isEmpty(props.fullName) ? props.fullName : '';
 	data.phone = !isEmpty(props.phone) ? props.phone : '';
 	data.email = !isEmpty(props.email) ? props.email : '';
-	// data.addPark.code = !isEmpty(props.addPark.code) ? props.addPark.code : '';
-	// data.addPark.name = !isEmpty(props.addPark.name) ? props.addPark.name : '';
-	// data.addUpdate.author = !isEmpty(props.addUpdate.author) ? props.addUpdate.author : '';
-	// data.addUpdate.auther = !isEmpty(props.addUpdate) ? props.addUpdate : '';
-	console.log(`> [29:22] Prepared data: ${JSON.stringify(data)}`);
+	if( !isEmpty(props.addPark.code)) queries.park.code = props.addPark.code;
+	if( !isEmpty(props.addPark.name)) queries.park.name = props.addPark.name;
+	if( !isEmpty(props.addUpdate.author)) queries.update.author = props.addUpdate.author;
+	if( !isEmpty(props.addUpdate.message)) queries.update.message = props.addUpdate.message;
 
 	// prepare validator queries
 	console.log('> [32:22] Preparing queries');
-	// queries.Park = { code: data.addPark.code, name: data.addPark.name };
-	// queries.Update = { message: data.addUpdate.message, author: data.addUpdate.author };
-	queries.User = {
+	queries.user = {
+		userName: data.userName,
 		phone: data.phone,
 		email: data.email
 	};
+
+	data.queries = queries;
 
 	console.log(`> [41:19] Prepared queries: ${JSON.stringify(queries)}`);
 
@@ -82,27 +82,6 @@ function validateUserInput(props) {
 	}
 	console.log('[7]' + errors.toString());
 
-	// db.Update
-	// 	.findOne(queries.Update)
-	// 	.then((x) => data.addUpdate = x._id)
-	// 	.catch((err) => errors.push({ msg: `Could not find a Update with that @userId`, errThrown: err }));
-	// console.log('[8]'+errors.toString());
-
-	// db.Park
-	// 	.findOne(queries.Park)
-	// 	.then((x) => data.appPark = x._id)
-	// 	.catch((err) => errors.push({ msg: `Could not find a  with that @parkId`, errThrown: err }));
-	// console.log('[9]'+errors);
-
-	// db.User
-	// 	.findOne(queries.User)
-	// 	.then((userFound) => {
-	// 		console.log(`found a user`);
-	// 		errors.push({ msg: `A user with @userId: ${userFound._id} was found with the given information` });
-	// 	})
-	// 	.catch((err) => console.error(err));
-	// console.log('[10]'+errors.toString());
-	
 	console.log(`> [111:23] End User Validation. ***** Errors: ${errors.toString()}, IsValid: ${errors.length === 0}, Data: ${JSON.stringify(data)}*****`);
 	return {
 		errors,
@@ -112,9 +91,10 @@ function validateUserInput(props) {
 }
 
 /**
+ * Validates park input provided by an HTTP_request object
  * @function validateParkInput 
  * @param {request.body} props
- * @desc Validates park input provided by an HTTP_request object
+ * @public
  */
 function validateParkInput(props) {
 	console.log('> validating park');
