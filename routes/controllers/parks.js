@@ -1,6 +1,8 @@
+/*jshint esversion: 8 */
 const db = require('../../models');
 const { validateParkInput } = require('../../config/validator');
 const { respond } = require('../../lib');
+
 /**
  * @public
  * @function index
@@ -118,6 +120,7 @@ function read(req, res) {
  * @desc Delete An park by ObjectId
  */
 function destroy(req, res) {
+	console.log('[parkController] body', req.body);
 	db.Park
 		.findByIdAndDelete(req.params.id)
 		.then((foundPark) =>
@@ -143,10 +146,4 @@ router.route('/api/parks/:id')
   .put(update)
 	.delete(destroy);
 	
-module.exports = router/*{
-	index,
-	read,
-	create,
-	update,
-	destroy
-}*/;
+module.exports = router;

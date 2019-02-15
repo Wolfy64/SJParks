@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 // const db = require('../models');
 const validator = require('validator');
 const isEmpty = require('is-empty');

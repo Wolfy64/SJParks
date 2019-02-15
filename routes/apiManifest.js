@@ -1,4 +1,5 @@
-﻿module.exports = {
+﻿/*jshint esversion: 8 */
+module.exports = {
 	name: "SJParks Endpoints",
 	version: "2.0.1",
 	message: "Welcome to the San Jose Parks App! Here is some information about its api:",
