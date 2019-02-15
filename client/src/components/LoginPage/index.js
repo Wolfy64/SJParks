@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router';
 import makeRequest from '../../utils/makeRequest';
 import Button from '../UI/Generic/Button';
 import Input from '../UI/Form/Input';
@@ -70,4 +69,4 @@ class Login extends React.Component {
   }
 }
 
-export default withRouter(Login);
+export default Login;
