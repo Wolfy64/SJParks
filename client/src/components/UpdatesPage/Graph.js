@@ -25,16 +25,22 @@ export default class Graph extends Component {
   componentDidMount() {
     if (window.innerWidth <= 768) {
       this.setState({
-        width: document.body.clientWidth - 20,
+        width: document.body.clientWidth - 60,
         height: 0.5 * window.innerWidth
       });
     }
-    makeRequest('/api/subscriptionLog', 'GET');
-    // .then(res => res.json())
-    // .then(res => {
-    //     console.log('>> UpdatesPage/Graph GET,', res)
-    // })
-    // .catch(err => err)
+    makeRequest('/api/messageLogs', 'GET')
+      .then(res => res.json())
+      .then(res => {
+          console.log('[messageLogs] GET', res)
+      })
+      .catch(err => err)
+    makeRequest('/api/subscriptionLogs', 'GET')
+      .then(res => res.json())
+      .then(res => {
+          console.log('[subscriptionLogs] GET', res)
+      })
+      .catch(err => err)
   }
 
   render() {
