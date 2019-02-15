@@ -7,7 +7,7 @@ const { config } = require('../config');
 // var apiManifest = require('../config/apiManifest');
 
 /** Users */
-router.route('/users').get(controllers.users.index).post(controllers.users.create); 
+router.route('/users').get(controllers.users.index).post(controllers.users.create);
 
 router.route('/users/:userId').get(controllers.users.read).put(controllers.users.update).delete(controllers.users.destroy);
 
@@ -30,7 +30,9 @@ router.route('/parks')
 router.route('/parks/:id').get(controllers.parks.read).put(controllers.parks.update);
 
 /** Updates */
-router.route('/api/updates').get(controllers.parks.index).post(controllers.parks.create);
+router.route('/updates')
+	.get(controllers.updates.index)
+	.post(controllers.updates.send);
 
 router.route('/api/updates/:updateId').get(controllers.parks.read).put(controllers.parks.update).delete(controllers.parks.destroy);
 
@@ -45,7 +47,7 @@ router
 	.put(controllers.messageLogs.update)
 	.delete(controllers.messageLogs.destroy);
 
-	/** SubscriptionLogs */
+/** SubscriptionLogs */
 router.route('/subscriptionLogs')
 	.get(controllers.subscriptionLogs.index)
 	.post(controllers.subscriptionLogs.create);

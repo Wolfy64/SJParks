@@ -1,14 +1,14 @@
 import React from 'react';
 import makeRequest from '../../utils/makeRequest';
-import { parksDB } from '../../dummyDB';
+import { Consumer } from '../../utils/Context';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
-import {Container} from './styles'
+import { Container } from './styles'
 
 class NewUpdate extends React.Component {
   state = {
-    parks: parksDB,
+    parks: [],
     parkSelected: []
   };
 
@@ -36,7 +36,7 @@ class NewUpdate extends React.Component {
   };
 
   handleAddAllPark = () => {
-    this.setState({ 
+    this.setState({
       parkSelected: [...this.state.parks],
       parks: []
     });
@@ -47,43 +47,49 @@ class NewUpdate extends React.Component {
       parkSelected: [
         ...this.state.parkSelected.filter(el => el._id !== park._id)
       ],
-      parks: [...this.state.parks, park] 
+      parks: [...this.state.parks, park]
     });
   };
 
   handleDeleteAddAllPark = () => {
-    this.setState({parks: [...this.state.parks, ...this.state.parkSelected]});
-    this.setState({parkSelected: []});
+    this.setState({ parks: [...this.state.parks, ...this.state.parkSelected] });
+    this.setState({ parkSelected: [] });
   };
 
   render() {
     return (
-      <>
-        <Container>
-          <SearchPark
-            parks={this.state.parks}
-            selected={false}
-            addPark={park => this.handleAddPark(park)}
-            addAllParks={this.handleAddAllPark}
-          />
-        </Container>
-        <Container>
-            <SelectedPark
-              parks={this.state.parkSelected}
-              deletePark={park => this.handleDeletePark(park)}
-              deleteAllParks={this.handleDeleteAddAllPark}
-            />
-        </Container>
-        <Container>
-          <div className='col3'>
-          {this.state.parkSelected.length === 0 ? (
-              <p>Select parks you want to reach</p>
-          ) : (
-              <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
-          )}
-          </div>
-        </Container>
-      </>
+      <Consumer>
+        {user => (
+          <>
+            <Container>
+              <SearchPark
+                parks={this.state.parks}
+                selected={false}
+                addPark={park => this.handleAddPark(park)}
+                addAllParks={this.handleAddAllPark}
+              />
+            </Container>
+            <Container>
+              <SelectedPark
+                parks={this.state.parkSelected}
+                deletePark={park => this.handleDeletePark(park)}
+                deleteAllParks={this.handleDeleteAddAllPark}
+              />
+            </Container>
+            <Container>
+              <div className='col3'>
+                {this.state.parkSelected.length === 0 ? (
+                  <p>Select parks you want to reach</p>
+                ) : (
+                    <EditMessage
+                      _id={user._id}
+                      parks={this.state.parkSelected} />
+                  )}
+              </div>
+            </Container>
+          </>
+        )}
+      </Consumer>
     );
   }
 }

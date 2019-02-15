@@ -5,7 +5,7 @@ import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import capsFirstLetter from '../../utils/capsFirstLetter';
 import Button from '../UI/Generic/Button';
-import {Title, Preview} from './styles';
+import { Title, Preview } from './styles';
 
 const initialState = {
   message: '',
@@ -18,17 +18,19 @@ const initialState = {
 class EditMessage extends React.Component {
   state = initialState;
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { parks, _id } = this.props;
+    await this.setState({parks, _id})
     this.handleParksTitle();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.titles !== prevProps.titles) this.handleParksTitle();
+    if (this.props.parks !== prevProps.parks) this.handleParksTitle();
   }
 
   handleParksTitle = () => {
-    const parksTitle = this.props.titles
-      .map(el => capsFirstLetter(el))
+    const parksTitle = this.state.parks
+      .map(park => park.name)
       .reduce((acc, red) => acc + `, ${red}`)
       .concat(',');
 
@@ -51,26 +53,26 @@ class EditMessage extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { formErrors, parksTitle, title } = this.state;
-    let { message } = this.state;
+    const { formErrors, title, parksTitle, message, parks, _id } = this.state;
     const isValid = isFormValid(formErrors, message);
 
-    if (title) message = `${parksTitle} \n${message}`;
+    if (title) this.setState({
+      message: `${parksTitle}\n${message}`
+    })
 
     isValid
-      ? this.handleSendForm(message)
+      ? this.handleSendForm({ message, parks, _id })
       : this.setState({ showErrors: true });
   };
 
-  handleSendForm = dataForm => {
-    makeRequest('/admin/newupdate', 'POST', dataForm)
-    .then(res => res.json())
-    .then(res => {
-      console.log('[EditMessage] POST ', res)
-      // Reset Form field
-      this.setState(initialState);
-    })
-    .catch(err => err)
+  handleSendForm = payload => {
+    makeRequest('/api/updates', 'POST', payload)
+      .then(res => res.json())
+      .then(res => {
+        console.log('[NewUpdate] POST ', res)
+        this.setState(initialState);
+      })
+      .catch(err => err)
   };
 
   render() {
@@ -101,12 +103,12 @@ class EditMessage extends React.Component {
           error={hasErrors && formErrors.message}
           required
         />
-        {message 
-        ? <Preview> <p>
-          {title 
-          ? parksTitle+" "+message
-          : message}</p></Preview>
-        : <Preview><p>...Message Preview</p></Preview>
+        {message
+          ? <Preview> <p>
+            {title
+              ? `${parksTitle} ${message}`
+              : message}</p></Preview>
+          : <Preview><p>...Message Preview</p></Preview>
         }
         <Button className='button' name='SUBMIT' />
       </form>
