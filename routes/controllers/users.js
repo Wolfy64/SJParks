@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 // import UserImage from '../../client/src/components/ProfilePage/UserImage';
 const cloudinary = require('cloudinary');
 const db = require('../../models');

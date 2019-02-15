@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 /** Load Dependencies */
 require('dotenv-safe').load();
 const cors = require('cors');

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const db = require('../models');
 module.exports.dbSeedEngine = (Lists) => {
   var seeder = [

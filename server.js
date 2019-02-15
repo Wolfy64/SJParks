@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 /** Load Dependencies */
 const http = require('http');
 

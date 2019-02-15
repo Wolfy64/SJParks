@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const LocalStrategy = require('passport-local').Strategy;

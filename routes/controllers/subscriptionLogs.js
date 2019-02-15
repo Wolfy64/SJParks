@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 8 */
 const db = require('../../models');
 const { respond } = require('../../lib/responseSender');
 

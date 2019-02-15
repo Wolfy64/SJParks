@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 require('dotenv-safe').config({
   allowEmptyValues: process.env.NODE_ENV !== 'production'
 });

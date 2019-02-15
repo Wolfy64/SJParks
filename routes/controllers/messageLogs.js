@@ -1,6 +1,6 @@
-/*jshint esversion: 6 */
-const db = require('../../models');
-const { respond } = require('../../lib/responseSender');
+/*jshint esversion: 8 */
+// const db = require('../../models');
+// const { respond } = require('../../lib');
 
 // @route GET api/messageLogs/
 // @desc Get all messageLog's
