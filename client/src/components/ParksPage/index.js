@@ -38,10 +38,13 @@ export default class Parks extends Component {
           )
       )
     ) {
-      makeRequest('/api/parks', 'DELETE')
+      console.log(park._id)
+      makeRequest('/api/parks', 'DELETE', {_id: park._id})
       .then(res => res.json())
       .then(res => {
-        console.log('[ParksPage] DELETE', res);
+        this.setState({
+          parks: this.state.parks.filter(e => e._id !== park._id)
+        })
       })
       .catch(err => err);
     }
@@ -73,14 +76,21 @@ export default class Parks extends Component {
   handleSendForm = dataForm => {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
-      .then(res => {
-        console.log('[ParksPage] POST,', res);
-        window.location.reload(true);
+      .then(park => {
+        if(park._id) {
+          const parks = this.state.parks
+          parks.unshift(park)
+          console.log('[ParksPage] POST,', parks);
+          this.setState({
+            parks,
+            newName: '',
+            newCode: ''
+          })
+        } else {
+          console.log('[ParksPage] POST,', park.message)
+        }
       })
       .catch(err => err);
-
-    // Reset Form field
-    this.setState(initialState);
   };
 
   handleFilter = e => {

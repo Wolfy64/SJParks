@@ -22,9 +22,12 @@ router.route('/users/:userId/parks/:parkId').get(controllers.users.findPark);
 router.route('/users/:userId/updates/:updateId').get(controllers.users.findUpdate);
 
 /** Parks */
-router.route('/parks').get(controllers.parks.index).post(controllers.parks.create);
+router.route('/parks')
+	.get(controllers.parks.index)
+	.post(controllers.parks.create)
+	.delete(controllers.parks.destroy)
 
-router.route('/parks/:id').get(controllers.parks.read).put(controllers.parks.update).delete(controllers.parks.destroy);
+router.route('/parks/:id').get(controllers.parks.read).put(controllers.parks.update);
 
 /** Updates */
 router.route('/api/updates').get(controllers.parks.index).post(controllers.parks.create);
