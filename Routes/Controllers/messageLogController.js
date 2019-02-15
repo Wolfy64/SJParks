@@ -1,11 +1,18 @@
 /*jshint esversion: 6 */
-// const db = require('../../models');
-// const { respond } = require('../../lib');
+const db = require('../../models');
+const { respond } = require('../../lib/responseSender');
 
-// @route GET api/messageLog/
+// @route GET api/messageLogs/
 // @desc Get all messageLog's
 // @access Public
-function index(req, res) {}
+function index(req, res) {
+  respond(res, true, '[messageLogs]')
+  // db.messageLog
+  //   .find({})
+  //   .sort()
+  //   .then((messageLogs) => respond(res, true, messageLogs))
+	// 	.catch((err) => respond(res, false, {msg: err.message}));
+}
 
 // @route GET api/messageLog/:messageLogId
 // @desc find a messageLog with '_id = messageLogId'

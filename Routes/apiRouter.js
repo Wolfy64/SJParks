@@ -35,7 +35,9 @@ router.route('/api/updates').get(controllers.parks.index).post(controllers.parks
 router.route('/api/updates/:updateId').get(controllers.parks.read).put(controllers.parks.update).delete(controllers.parks.destroy);
 
 /** MessageLogs */
-router.route('/api/messageLogs').get(controllers.messageLogs.index).post(controllers.messageLogs.create);
+router.route('/messageLogs')
+	.get(controllers.messageLogs.index)
+	.post(controllers.messageLogs.create);
 
 router
 	.route('/api/messageLogs/:messageLogId')
@@ -44,7 +46,9 @@ router
 	.delete(controllers.messageLogs.destroy);
 
 	/** SubscriptionLogs */
-router.route('/api/subscriptionLogs').get(controllers.subscriptionLogs.index).post(controllers.subscriptionLogs.create);
+router.route('/subscriptionLogs')
+	.get(controllers.subscriptionLogs.index)
+	.post(controllers.subscriptionLogs.create);
 
 router
 	.route('/api/subscriptionLogs/:subscriptionLogId')

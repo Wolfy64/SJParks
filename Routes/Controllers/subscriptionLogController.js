@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const db = require('../../models');
-const { respond } = require('../../lib');
+const { respond } = require('../../lib/responseSender');
 
 
 /**
@@ -12,11 +12,12 @@ const { respond } = require('../../lib');
  * @desc Get all subscriptionLogs
  */
 function index(req, res) {
-  db.SubscriptionLog
-    .find()
-    .sort()
-    .then((subscriptionLogs) => respond(res, true, subscriptionLogs))
-		.catch((err) => respond(res, false, {msg: err.message}));
+  respond(res, true, '[subscriptionLogs]')
+  // db.SubscriptionLog
+  //   .find({})
+  //   .sort()
+  //   .then((subscriptionLogs) => respond(res, true, subscriptionLogs))
+	// 	.catch((err) => respond(res, false, {msg: err.message}));
 }
 
 /**
