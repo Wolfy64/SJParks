@@ -55,9 +55,8 @@ function ensureAuthenticated(req, res, next) {
 
 // Logout current user
 function logout(req, res, next) {
-  // res.clearCookie('token');
-  res.json({ user: { logout: true } });
-  res.redirect('/');
+  res.clearCookie('token');
+  res.status(205).send('logout');
   // next();
   // req.session.destroy(() => {
   //   console.log('User signed out.');
