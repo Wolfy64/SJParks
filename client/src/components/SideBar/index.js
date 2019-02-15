@@ -1,7 +1,7 @@
 import React from 'react';
 import {Consumer} from '../../utils/Context'
 import NavButton from '../UI/Generic/NavButton';
-// import makeRequest from '../../utils/makeRequest';
+import makeRequest from '../../utils/makeRequest';
 import { NavContainer } from './styles';
 
 function openNav() {
@@ -14,7 +14,7 @@ function closeNav() {
   document.getElementById('hid').style.display = 'none';
 }
 
-export default class SideBar extends React.Component {
+class SideBar extends React.Component {
   state = {
     menuIcon: 'fa fa-bars',
     menu: false,
@@ -22,12 +22,13 @@ export default class SideBar extends React.Component {
   };
 
   logout = async () => {
-    // const request = await makeRequest('/logout', 'GET');
-    // const response = await request.json();
-    // console.log('TCL: SideBar -> logout -> response', response);
-    // const cookie = new Cookie();
-    // cookie.remove('token');
-    // window.location.replace('/login');
+    await makeRequest('/logout')
+      .then(res => res.json())
+      .then(res => {
+        console.log('[logout]', res)
+      })
+      .catch(err => err)
+    window.location.replace('/login');
   };
 
   toggleMenu = () => {
@@ -115,3 +116,5 @@ export default class SideBar extends React.Component {
     );
   }
 }
+
+export default SideBar;

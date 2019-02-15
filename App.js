@@ -33,9 +33,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.post('/login', router.auth);
-app.get('/logout', router.auth);
-
 /** Passport */
 // config.passport(app);
 
@@ -71,6 +68,9 @@ app.use(function(req, res, next) {
 });
 
 app.use('/api', router.api);
+app.post('/login', router.auth);
+app.get('/logout', router.auth);
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
