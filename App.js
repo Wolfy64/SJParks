@@ -1,12 +1,13 @@
 /** Load Dependencies */
 require('dotenv-safe').load();
-const path = require('path');
-const logger = require('morgan');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+const logger = require('morgan');
 const addRequestId = require('express-request-id')();
 const formData = require('express-form-data');
+
 /** Load Configurations */
 const router = require('./Routes');
 const config = require('./config');
@@ -28,13 +29,12 @@ app.use(
 );
 
 /** Parser */
-app.use(formData.parse());
+// app.use(formData.parse());
 app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-);
+app.use(express.urlencoded());
+
+app.post('/login', router.auth);
+app.get('/logout', router.auth);
 
 /** Passport */
 // config.passport(app);
@@ -42,17 +42,15 @@ app.use(
 /** Use Express middleware to handle cookies (JWT) */
 app.use(cookieParser());
 
-app.post('/login', router.auth);
-
 /** JWT Authentication */
+
 // app.use((req, res, next) => {
 //   const { token } = req.cookies;
-
-//   if (!token) res.json({ user: null });
+//   const auth = { isAuthenticated: false };
 
 //   if (token) {
-//     const user = jwt.verify(token, config.keys.secret);
-//     res.json(user);
+//     auth.isAuthenticated = true;
+//     auth.user = jwt.verify(token, config.keys.secret);
 //   }
 
 //   next();
@@ -74,18 +72,17 @@ app.use(function(req, res, next) {
 
 app.use('/api', router.api);
 
-// router.all('/api/*', ensureAuthenticated);
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
 });
 
 /** Error Handlers */
-app.use((err, req, res, next) => {
-  res.status(500).json({
-    errors: {
-      message: err
-    }
-  });
-});
+// app.use((err, req, res, next) => {
+//   res.status(500).json({
+//     errors: {
+//       message: err
+//     }
+//   });
+// });
 
 module.exports = app;

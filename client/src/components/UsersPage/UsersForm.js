@@ -6,7 +6,6 @@ import Input from '../UI/Form/Input';
 import Select from '../UI/Form/Select';
 import Button from '../UI/Generic/Button';
 
-
 /** [H] I Need to make this match with current BE*/
 const SELECT_OPTIONS = {
   updates: 'Updates Only',
@@ -28,11 +27,7 @@ const UsersForm = class userInput extends React.Component {
   state = initialState;
 
   handleChange = e => {
-    const {
-      name,
-      type,
-      value
-    } = e.target;
+    const { name, type, value } = e.target;
 
     this.setState({
       [name]: value,
@@ -75,14 +70,13 @@ const UsersForm = class userInput extends React.Component {
     }
 
     isValid
-      ? this.handleSendForm(dataForm) 
+      ? this.handleSendForm(dataForm)
       : this.setState({
           showErrors: true
         });
   };
 
   handleSendForm = dataForm => {
-
     makeRequest('/api/users', 'POST', dataForm)
       .then(res => res.json())
       .then(res => console.log('[UsersForm]', res))
@@ -92,16 +86,8 @@ const UsersForm = class userInput extends React.Component {
     this.setState(initialState);
   };
 
-
-
-
-
-
   render() {
-    const {
-      formErrors,
-      showErrors
-    } = this.state;
+    const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
 
     /** [H] I Need to make this match with current BE*/

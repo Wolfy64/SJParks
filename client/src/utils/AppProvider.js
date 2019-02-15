@@ -7,6 +7,7 @@ class AppProvider extends Component {
   }
   
   render() {
+    console.log('[AppProvider]', this.state.data)
     return (
       <Provider
         value={this.state.data}
