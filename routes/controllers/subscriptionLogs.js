@@ -13,9 +13,7 @@ const router = express.Router();
  * @desc Get all subscriptionLogs
  */
 function index(req, res) {
-  db.SubscriptionLog.find()
-    .then(payload => respond(res, true, { payload }))
-    .catch(err => respond(res, false, { message: err.message }));
+  respond(res, true, '[subscriptionLogs]');
   // db.SubscriptionLog
   //   .find({})
   //   .sort()
