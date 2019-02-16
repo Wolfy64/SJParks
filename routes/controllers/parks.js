@@ -1,7 +1,9 @@
 /*jshint esversion: 8 */
-const db = require('../../models');
-const { validateParkInput } = require('../../config/validator');
+const express = require('express');
+const router = express.Router();
+const { validateParkInput } = require('../../configurations');
 const { respond } = require('../../lib');
+const db = require('../../models');
 
 /**
  * @public
@@ -131,9 +133,6 @@ function destroy(req, res) {
 		)
 		.catch((err) => console.log(err));
 }
-
-const express = require('express');
-const router = express.Router();
 
 // @route /api/park
 router.route('/api/parks')
