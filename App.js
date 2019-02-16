@@ -2,7 +2,6 @@
 require('dotenv-safe').load();
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const path = require('path');
 const logger = require('morgan');
 const addRequestId = require('express-request-id')();
@@ -39,20 +38,6 @@ app.use(express.urlencoded());
 /** Use Express middleware to handle cookies (JWT) */
 app.use(cookieParser());
 
-/** JWT Authentication */
-
-// app.use((req, res, next) => {
-//   const { token } = req.cookies;
-//   const auth = { isAuthenticated: false };
-
-//   if (token) {
-//     auth.isAuthenticated = true;
-//     auth.user = jwt.verify(token, config.keys.secret);
-//   }
-
-//   next();
-// });
-
 /** Routes */
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -70,7 +55,6 @@ app.use(function(req, res, next) {
 app.use('/api', router.api);
 app.post('/login', router.auth);
 app.get('/logout', router.auth);
-
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
