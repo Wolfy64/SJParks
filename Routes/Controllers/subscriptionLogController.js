@@ -2,46 +2,46 @@
 const db = require('../../models');
 const { respond } = require('../../lib/responseSender');
 
-
 /**
  * @public
  * @function index
- * @param {request} req 
- * @param {response} res 
- * @method GET /api/subscriptionLog 
+ * @param {request} req
+ * @param {response} res
+ * @method GET /api/subscriptionLog
  * @desc Get all subscriptionLogs
  */
 function index(req, res) {
-  respond(res, true, '[subscriptionLogs]')
+  db.SubscriptionLog.find()
+    .then(payload => respond(res, true, { payload }))
+    .catch(err => respond(res, false, { message: err.message }));
   // db.SubscriptionLog
   //   .find({})
   //   .sort()
   //   .then((subscriptionLogs) => respond(res, true, subscriptionLogs))
-	// 	.catch((err) => respond(res, false, {msg: err.message}));
+  // 	.catch((err) => respond(res, false, {msg: err.message}));
 }
 
 /**
  * @public
  * @function read
- * @param {request} req 
- * @param {response} res 
- * @method GET api/subscriptionLog/:subscriptionLogId 
+ * @param {request} req
+ * @param {response} res
+ * @method GET api/subscriptionLog/:subscriptionLogId
  * @desc find a subscriptionLog with '_id = subscriptionLogId'
  */
 function read(req, res) {
-  db.SubscriptionLog
-  .findById(req.params.subscriptionLogId)
-  .then((subscriptionLog) => respond(res, true, subscriptionLog))
-  .catch((err) => respond(res, false, {msg: err.message}));
+  db.SubscriptionLog.findById(req.params.subscriptionLogId)
+    .then(subscriptionLog => respond(res, true, subscriptionLog))
+    .catch(err => respond(res, false, { msg: err.message }));
 }
 
 /**
  * @public
  * @function create
- * @param {request} req 
- * @param {response} res 
- * @method POST /api/subscriptionLog 
- * @desc Create a new subscriptionLog 
+ * @param {request} req
+ * @param {response} res
+ * @method POST /api/subscriptionLog
+ * @desc Create a new subscriptionLog
  */
 function create(req, res) {
   console.log(req.body);
@@ -56,90 +56,124 @@ function create(req, res) {
   newSubscriptionLog
     .save()
     .then(log => respond(res, true, log))
-    .catch(err => respond(res,false, {msg: err.message}));
+    .catch(err => respond(res, false, { msg: err.message }));
 }
 
 /**
  * @public
  * @function edit
- * @param {request} req 
- * @param {response} res 
- * @method PUT /api/subscriptionLog/:subscriptionLogId 
+ * @param {request} req
+ * @param {response} res
+ * @method PUT /api/subscriptionLog/:subscriptionLogId
  * @desc Update a subscriptionLog givrn it's subscriptionLogId
  */
-function edit(req, res) { }
+function edit(req, res) {}
 
 /**
  * @public
  * @function destroy
- * @param {request} req 
- * @param {response} res 
- * @method DELETE api/subscriptionLog/:subscriptionLogId  
- * @desc Delete a subscriptionLog with '_id = subscriptionLogId' 
+ * @param {request} req
+ * @param {response} res
+ * @method DELETE api/subscriptionLog/:subscriptionLogId
+ * @desc Delete a subscriptionLog with '_id = subscriptionLogId'
  */
 function destroy(req, res) {
-
   // Find a subscriptionLog by subscriptionLogId
-  db.SubscriptionLog
-		.findByIdAndDelete({
-			_id: req.params.subscriptionLogId
-		})
-    .then((subscriptionLog) => {
+  db.SubscriptionLog.findByIdAndDelete({
+    _id: req.params.subscriptionLogId
+  })
+    .then(subscriptionLog => {
       console.log(subscriptionLog);
 
       // Remove this subscriptionLog from each associated park
       subscriptionLog.parks.forEach(parkId => {
-
-       // Find the associated park, by parkId
-        db.Park
-          .findById(parkId)
-          .populate('subscriptionLogs') 
+        // Find the associated park, by parkId
+        db.Park.findById(parkId)
+          .populate('subscriptionLogs')
           .then(foundPark => {
             console.log(foundPark._id);
 
             // Remove subscriptionLog from foundPark
-            foundPark.subscriptionLogs = foundPark.subscriptionLogs.filter(log => log._id !== subscriptionLog._id);
+            foundPark.subscriptionLogs = foundPark.subscriptionLogs.filter(
+              log => log._id !== subscriptionLog._id
+            );
 
             // Save foundPark to db.
             foundPark
               .save()
-              .then(savedPark => console.log(`A park was saved to the db while destroying a subscriptionLog, here is it's parkId: ${savedPark._Id}`))
-              .catch(err => console.log(` Had trouble saving ${foundPark._id}. Here is the error thrown: ${err}`));
+              .then(savedPark =>
+                console.log(
+                  `A park was saved to the db while destroying a subscriptionLog, here is it's parkId: ${
+                    savedPark._Id
+                  }`
+                )
+              )
+              .catch(err =>
+                console.log(
+                  ` Had trouble saving ${
+                    foundPark._id
+                  }. Here is the error thrown: ${err}`
+                )
+              );
           })
-          .catch(err => console.log(`Had trouble finding a park while destroying subscriptionLog: ${subscriptionLog._id}. Here is the error thrown: ${err}`));
+          .catch(err =>
+            console.log(
+              `Had trouble finding a park while destroying subscriptionLog: ${
+                subscriptionLog._id
+              }. Here is the error thrown: ${err}`
+            )
+          );
       });
 
-      // Find  a user by subscriptionLog.user._id 
-      db.User
-        .findById(subscriptionLog.user)
+      // Find  a user by subscriptionLog.user._id
+      db.User.findById(subscriptionLog.user)
         .then(foundUser => {
           console.log(foundUser);
 
-          // From foundUser, filter out any parkIDs belonging to a park in this subscriptionLog 
-          foundUser.parks.filter(parkId => !subscriptionLog.parks.includes(parkId));
+          // From foundUser, filter out any parkIDs belonging to a park in this subscriptionLog
+          foundUser.parks.filter(
+            parkId => !subscriptionLog.parks.includes(parkId)
+          );
 
           // Save foundUser to db
           foundUser
             .save()
-            .then(savedUser => console.log(`A user was saved to the db while destroying a subscriptionLog, here is it's userId: ${savedUser._Id}`))
-            .catch(err => console.log(`Had trouble saving ${foundUser._id}. Here is the error thrown: ${err}`));
-          
-         })
-        .catch(err => console.log(`Had trouble finding a user while destroying subscriptionLog: ${subscriptionLog._id}. Here is the error thrown: ${err}`));
-      
-    // Remove the subscriptionLog from db
+            .then(savedUser =>
+              console.log(
+                `A user was saved to the db while destroying a subscriptionLog, here is it's userId: ${
+                  savedUser._Id
+                }`
+              )
+            )
+            .catch(err =>
+              console.log(
+                `Had trouble saving ${
+                  foundUser._id
+                }. Here is the error thrown: ${err}`
+              )
+            );
+        })
+        .catch(err =>
+          console.log(
+            `Had trouble finding a user while destroying subscriptionLog: ${
+              subscriptionLog._id
+            }. Here is the error thrown: ${err}`
+          )
+        );
+
+      // Remove the subscriptionLog from db
       subscriptionLog
-				.remove()
-        .then((removedSubscriptionLog) => {
+        .remove()
+        .then(removedSubscriptionLog => {
           console.log(removedSubscriptionLog);
           respond(res, true, { msg: removedSubscriptionLog._id });
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
           respond(res, false, { msg: err.message });
         });
-		})
-		.catch((err) => console.log(err));
+    })
+    .catch(err => console.log(err));
 }
 
 // const express = require('express');
@@ -156,7 +190,7 @@ function destroy(req, res) {
 //   .put(api.subscriptionLogs.update)
 //   .delete(api.subscriptionLogs.destroy);
 
-module.exports =  /*router*/{
+module.exports = /*router*/ {
   create,
   read,
   index,

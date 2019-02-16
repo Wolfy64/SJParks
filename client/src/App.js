@@ -9,11 +9,14 @@ class App extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/api/auth');
-    const { success, user } = await request.json();
+    const { success, payload } = await request.json();
 
-    this.setState({ isAuthenticated: success, user });
+    this.setState({
+      isAuthenticated: success,
+      user: payload
+    });
 
-    if (user) this.props.history.push(`/admin/${user._id}/updates`);
+    if (success) this.props.history.push(`/admin/${payload._id}/updates`);
   }
 
   render() {

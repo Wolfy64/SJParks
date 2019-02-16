@@ -53,10 +53,9 @@ function requireUserLogin(req, res, next) {
 async function ensureAuthenticated(req, res) {
   const { token } = req.cookies;
 
-  await jwt.verify(token, config.keys.secret, (err, user) => {
-    if (err) respond(res, false, { message: 'Invalid token' });
-    respond(res, true, { user });
-  });
+  token
+    ? respond(res, true, { payload: jwt.verify(token, config.keys.secret) })
+    : respond(res, false, { message: 'Invalid token' });
 }
 
 // Logout current user

@@ -1,94 +1,99 @@
 import React from 'react';
 import ButtonText from '../UI/Generic/ButtonText';
-import {Primary, Secondary, MiniLabel, Message} from './styles';
+import { Primary, Secondary, MiniLabel, Message } from './styles';
 
 export default class Post extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            loadMore: false,
-            isOpen: false
-        };
-    }
+  state = {
+    loadMore: false,
+    isOpen: false
+  };
 
-    showMore = () => {
-        this.state.loadMore
-        ? this.setState({ loadMore: false })
-        : this.setState({ loadMore: true });
-    };
-    open = () => {
-        this.state.isOpen
-        ? this.setState({ isOpen: false })
-        : this.setState({ isOpen: true });
-    };
+  componentDidMount() {
+    console.log(this.props.post);
+  }
 
-    render() {
-        return (
-        <>
-            {this.state.isOpen ? (
-            <>
-                <Primary onClick={this.open}>
-                    <div>
-                        <i className='fas fa-caret-down'/>
-                        <span>{this.props.post.name}</span>
-                    </div>
-                    <p>
-                        {this.props.post.date} at {this.props.post.time}
-                    </p>
-                </Primary>
+  showMore = () => {
+    this.state.loadMore
+      ? this.setState({ loadMore: false })
+      : this.setState({ loadMore: true });
+  };
 
-                <Secondary>
-                    {this.props.post.parkIDs.length < 3 ? (
-                        <div className='flexLabels'>
-                            {this.props.post.parkIDs.map((parkID, index) => (
-                                <MiniLabel key={index}>{parkID}</MiniLabel>
-                            ))}
-                        </div>
-                    ) : (
-                        <>
-                            {this.state.loadMore ? (
-                                <>
-                                    <div className='flexLabels'>
-                                        {this.props.post.parkIDs.map((parkID, index) => (
-                                            <MiniLabel key={index}>{parkID}</MiniLabel>
-                                        ))}
-                                    </div>
-                                    <ButtonText onClick={this.showMore}>
-                                        Show less
-                                    </ButtonText>
-                                </>
-                            ) : (
-                                <>
-                                    <div className='flexLabels'>
-                                        {this.props.post.parkIDs.slice(0, 3).map((parkID, index) => (
-                                            <MiniLabel key={index}>{parkID}</MiniLabel>
-                                        ))}
-                                    </div>
-                                    <ButtonText onClick={this.showMore}>
-                                        {this.props.post.parkIDs.length > 3
-                                        ? (this.props.post.parkIDs.length - 3).toString() +
-                                            ' more..'
-                                        : null}
-                                    </ButtonText>
-                                </>
-                            )}
-                        </>
-                    )}
-                </Secondary>
-                <Message><p>{this.props.post.message}</p></Message>
-            </>
-            ) : (
-                <Primary onClick={this.open}>
-                    <div>
-                        <i className='fas fa-caret-right' />
-                        <span>{this.props.post.name}</span>
-                    </div>
-                    <p>
-                        {this.props.post.date} at {this.props.post.time}
-                    </p>
-                </Primary>
-            )}
-        </>
-        );
-    }
+  open = () => {
+    this.state.isOpen
+      ? this.setState({ isOpen: false })
+      : this.setState({ isOpen: true });
+  };
+
+  render() {
+    const { post } = this.props;
+    const createdAt = new Date(post.createdAt);
+    const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(
+      createdAt
+    );
+    return (
+      <>
+        {this.state.isOpen ? (
+          <>
+            <Primary onClick={this.open}>
+              <div>
+                <i className='fas fa-caret-down' />
+                <span>{post.author}</span>
+              </div>
+              <p>{post.createdAt}</p>
+            </Primary>
+
+            <Secondary>
+              {post.parks.length < 3 ? (
+                <div className='flexLabels'>
+                  {post.parks.map((parkID, index) => (
+                    <MiniLabel key={index}>{parkID}</MiniLabel>
+                  ))}
+                </div>
+              ) : (
+                <>
+                  {this.state.loadMore ? (
+                    <>
+                      <div className='flexLabels'>
+                        {post.parks.map((parkID, index) => (
+                          <MiniLabel key={index}>{parkID}</MiniLabel>
+                        ))}
+                      </div>
+                      <ButtonText onClick={this.showMore}>Show less</ButtonText>
+                    </>
+                  ) : (
+                    <>
+                      <div className='flexLabels'>
+                        {post.parks.slice(0, 3).map((parkID, index) => (
+                          <MiniLabel key={index}>{parkID}</MiniLabel>
+                        ))}
+                      </div>
+                      <ButtonText onClick={this.showMore}>
+                        {post.parks.length > 3
+                          ? (post.parks.length - 3).toString() + ' more..'
+                          : null}
+                      </ButtonText>
+                    </>
+                  )}
+                </>
+              )}
+            </Secondary>
+            <Message>
+              <p>{post.message}</p>
+            </Message>
+          </>
+        ) : (
+          <Primary onClick={this.open}>
+            <div>
+              <i className='fas fa-caret-right' />
+              <span>{post.author}</span>
+            </div>
+            <p>
+              {month} {createdAt.getDate()}, {createdAt.getFullYear()} at{' '}
+              {createdAt.getHours()}:{createdAt.getMinutes()}
+            </p>
+          </Primary>
+        )}
+      </>
+    );
+  }
 }
