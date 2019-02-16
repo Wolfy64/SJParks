@@ -1,10 +1,10 @@
 /*jshint esversion: 6 */
-const path = require("path");
-const db = require("../../models");
-const jwt = require("jsonwebtoken");
+const path = require('path');
+const db = require('../../models');
+const jwt = require('jsonwebtoken');
 // const passport = require('passport');
-const config = require("../../config");
-const { respond } = require("../../lib/responseSender");
+const config = require('../../config');
+const { respond } = require('../../lib/responseSender');
 
 async function login(req, res) {
   const { email, password } = req.body;
@@ -15,9 +15,9 @@ async function login(req, res) {
   const isMatch = true;
 
   if (!user || !isMatch)
-    respond(res, false, { message: "User or Password do not match !" });
+    respond(res, false, { message: 'User or Password do not match !' });
 
-  res.cookie("token", user.generateJWT(), {
+  res.cookie('token', user.generateJWT(), {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 365, // 1 year
     secure: false //true for production
@@ -27,18 +27,18 @@ async function login(req, res) {
 }
 
 function loadReactRouter(req, res) {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 
 // Session Handling
 function requireAdminLogin(req, res, next) {
   if (req.session.admin) next();
-  else res.redirect("/login");
+  else res.redirect('/login');
 }
 
 function requireUserLogin(req, res, next) {
   if (req.session.username) next();
-  else res.redirect("/login");
+  else res.redirect('/login');
 }
 
 // 	passport.authenticate('jwt', {
@@ -50,17 +50,18 @@ function requireUserLogin(req, res, next) {
 // 		});
 // 	}
 
-function ensureAuthenticated(req, res) {
+async function ensureAuthenticated(req, res) {
   const { token } = req.cookies;
 
-  token
-    ? respond(res, true, { user: jwt.verify(token, config.keys.secret) })
-    : respond(res, false, { message: "Invalid token" });
+  await jwt.verify(token, config.keys.secret, (err, user) => {
+    if (err) respond(res, false, { message: 'Invalid token' });
+    respond(res, true, { user });
+  });
 }
 
 // Logout current user
 function logout(req, res, next) {
-  res.clearCookie("token");
+  res.clearCookie('token');
   respond(res, true);
 }
 
