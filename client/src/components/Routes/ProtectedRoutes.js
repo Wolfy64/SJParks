@@ -1,12 +1,12 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Layout from '../Layout';
-import NewUpdate from '../NewUpdate';
-import Updates from '../UpdatesPage';
-import Parks from '../ParksPage';
-import Users from '../UsersPage';
-import ProfilePage from '../ProfilePage';
-import NoMatch from '../UI/NoMatch';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import Layout from "../Layout";
+import NewUpdate from "../NewUpdate";
+import Updates from "../UpdatesPage";
+import Parks from "../ParksPage";
+import Users from "../UsersPage";
+import ProfilePage from "../ProfilePage";
+import NoMatch from "../UI/NoMatch";
 
 const ProtectedRoutes = ({ user }) => {
   return (

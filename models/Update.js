@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+//const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 
 const UpdateSchema = new mongoose.Schema({
@@ -13,10 +13,6 @@ const UpdateSchema = new mongoose.Schema({
         required: true,
         index: true
     },
-    log: [{
-        type: Schema.Types.ObjectId,
-        ref: 'MessageLog'
-    }],
     parks: [{
         type: Schema.Types.ObjectId,
         ref: 'Park'
@@ -26,9 +22,9 @@ const UpdateSchema = new mongoose.Schema({
     });
      
 // add 'Unique' validation to this schema
-UpdateSchema.plugin(uniqueValidator, {
-    type: 'mongoose-unique-validator'
-});
+// UpdateSchema.plugin(uniqueValidator, {
+//     type: 'mongoose-unique-validator'
+// });
 
-const Update = mongoose.model('Message', UpdateSchema);
+const Update = mongoose.model('Update', UpdateSchema);
 module.exports = Update;

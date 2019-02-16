@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const db = require('../../models');
-const { respond } = require('../../lib');
+const { respond } = require('../../lib/responseSender');
 
 /**
  * @public
@@ -11,14 +11,13 @@ const { respond } = require('../../lib');
  * @desc Get all updates's  
  */
 function index(req, res) {
-	db.Update
-		.find()
-		.sort({
-			username: 1,
-			phone: 1
-		})
-		.then((users) => respond(res, true, users))
-		.catch((err) => respond(res, false, err));
+    db.Update
+        .find()
+        .sort({
+            timestamp: 1,
+        })
+        .then((updates) => respond(res, true, updates))
+        .catch((err) => respond(res, false, err));
 }
 
 /**
@@ -30,9 +29,9 @@ function index(req, res) {
  * @desc  Read an update with '_id:updateId'
  */
 function read(req, res) {
-	db.Update.findById(req.params.updateId)
-		.then((user) => respond(res, true, user))
-		.catch((err) => respond(res, false, err));
+    db.Update.findById(req.params.updateId)
+        .then((user) => respond(res, true, user))
+        .catch((err) => respond(res, false, err));
 }
 
 /**
@@ -46,35 +45,40 @@ function read(req, res) {
 function create(req, res) {}
 
 function send(req, res) {
-    const messageSender = require('../lib');  
-    
+    //const messageSender = require('../../lib/messageSender');
+
     // Get message info from form submission   
-    const message = req.body.message;
-    const parkID = req.body.parkID;   
-    console.log(req.session);   
-    if (!message) {
-        respond(res, false, { msg:'Reason: Empty message.'});   
-    } else if (typeof (parkID) === 'string') {
-        respond(res, false, {msg:'Reason: No park selected'});
-    }
-    else {
-        // TODO prettify res with message displayed     
-        respond(res, true, { msg:`Message: ${message}\nSent to parks: ${parkID}\nSent by: ${req.session.username}`});
-        
+    const { message, parks, _id } = req.body;
+        // TODO prettify res with message displayed  
+        db.User.find({ _id })
+            .then(users => users.map(author => {
+                const newUpdate = new db.Update({ message, parks, author });
+                console.log(newUpdate);
+                newUpdate
+                    .save()
+                    .then((update) => {
+                        console.log(`New update created. newUpdate: ${update._id}`);
+                        respond(res, true, { message: "success" });
+                    })
+                    .catch((err) => {
+                        respond(res, false, err);
+                    });
+            }))
+
         // Send messages to all users subscribed
-    // to parks in Parks     
-        db.User
-            .find({ parks: { $in: parkID } })
-            .populate("subscription")
-          .then((users) => messageSender.sendMessageToSubscribers(users, message, ''))
-          .catch((err) => respond(res, true, err));
-    }
+        // to parks in Parks     
+        // db.User
+        //     .find({ parks: { $in: parkID } })
+        //     .populate("subscription")
+        //     .then((users) => messageSender.sendMessageToSubscribers(users, message, ''))
+        //     .catch((err) => respond(res, true, err));
+
 
 }
 
 // @route UPDATE api/message/:messageId @desc Update a message with '_id =
 // messageId' @access Public
-function edit(req, res) {}
+function edit(req, res) { }
 
 // @route DELETE api/message/:messageId @desc Delete a message with '_id =
 // messageId' @access Public

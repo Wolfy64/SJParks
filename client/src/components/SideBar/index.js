@@ -1,47 +1,56 @@
-import React from 'react';
-import NavButton from '../UI/Generic/NavButton';
-import makeRequest from '../../utils/makeRequest';
-import { NavContainer } from './styles';
+import React from "react";
+import NavButton from "../UI/Generic/NavButton";
+import makeRequest from "../../utils/makeRequest";
+import { NavContainer } from "./styles";
 
 function openNav() {
-  document.getElementById('navbar').style.marginTop = '0px';
-  document.getElementById('hid').style.display = 'block';
+  document.getElementById("navbar").style.marginTop = "0px";
+  document.getElementById("hid").style.display = "block";
 }
 
 function closeNav() {
-  document.getElementById('navbar').style.marginTop = '-400px';
-  document.getElementById('hid').style.display = 'none';
+  document.getElementById("navbar").style.marginTop = "-400px";
+  document.getElementById("hid").style.display = "none";
 }
 
 class SideBar extends React.Component {
   state = {
-    menuIcon: 'fa fa-bars',
-    menu: false
+    menuIcon: "fa fa-bars",
+    menu: false,
+    active: "Updates"
   };
 
   logout = async () => {
-    const request = await makeRequest('/logout');
-    if (request.status === 205) window.location.replace('/');
+    const request = await makeRequest("/logout");
+    if (request.status === 200) window.location.replace("/login");
   };
 
   toggleMenu = () => {
-    if (this.state.menuIcon === 'fa fa-bars') {
+    if (this.state.menuIcon === "fa fa-bars") {
       openNav();
       this.setState({
-        menuIcon: 'fa fa-times',
+        menuIcon: "fa fa-times",
         menu: true
       });
     } else {
       closeNav();
       this.setState({
-        menuIcon: 'fa fa-bars',
+        menuIcon: "fa fa-bars",
         menu: false
       });
     }
   };
 
+  toggleActive = name => {
+    this.setState({
+      active: { name }
+    });
+  };
+
   render() {
+    const { active, menuIcon } = this.state;
     const { user } = this.props;
+
     return (
       <NavContainer>
         <div className="title">
@@ -49,7 +58,7 @@ class SideBar extends React.Component {
           <p>Admin</p>
         </div>
         <div className="menuIcon" onClick={this.toggleMenu}>
-          <i className={this.state.menuIcon} />
+          <i className={menuIcon} />
         </div>
 
         <div id="navbar">
@@ -59,6 +68,8 @@ class SideBar extends React.Component {
                 to={`/admin/${user._id}/updates`}
                 name="Updates"
                 action="updatePage"
+                active={active}
+                toggleActive={this.toggleActive}
               />
             </li>
             <li>
@@ -66,6 +77,8 @@ class SideBar extends React.Component {
                 to={`/admin/${user._id}/parks`}
                 name="Parks"
                 action="parkPage"
+                active={active}
+                toggleActive={this.toggleActive}
               />
             </li>
             <li>
@@ -73,10 +86,11 @@ class SideBar extends React.Component {
                 to={`/admin/${user._id}/users`}
                 name="Users"
                 action="userPage"
+                active={active}
+                toggleActive={this.toggleActive}
               />
             </li>
           </ul>
-
           <div className="logout">
             <NavButton
               onClick={this.logout}

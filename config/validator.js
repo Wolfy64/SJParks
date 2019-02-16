@@ -18,7 +18,6 @@ function validateUserInput(props) {
 	// prepare data
 	console.log('> [18:19] Preparing Data');
 	data.access = !isEmpty(props.access) ? props.access : 'basic';
-	data.userName = !isEmpty(props.userName) ? props.userName : '';
 	data.password = !isEmpty(props.password) ? props.password : '';
 	data.name = !isEmpty(props.name) ? props.name : '';
 	data.phone = !isEmpty(props.phone) ? props.phone : '';
@@ -34,7 +33,6 @@ function validateUserInput(props) {
 	// queries.Park = { code: data.addPark.code, name: data.addPark.name };
 	// queries.Update = { message: data.addUpdate.message, author: data.addUpdate.author };
 	queries.User = {
-		userName: data.userName,
 		phone: data.phone,
 		email: data.email
 	};
@@ -55,10 +53,6 @@ function validateUserInput(props) {
 	}
 	console.log('[2]' + errors.toString());
 
-	if (validator.isEmpty(data.userName)) {
-		console.log(`userName was empy`);
-		errors.push({ msg: 'userName field is required' });
-	}
 	console.log('[3]' + errors.toString());
 
 	if (validator.isEmpty(data.password)) {
@@ -130,8 +124,8 @@ function validateParkInput(props) {
 
 	// prepare data
 	console.log('> Preparing Data');
-	data.name = !isEmpty(props.name) ? props.name : '';
-	data.code = !isEmpty(props.code) ? props.code : '';
+	data.name = !isEmpty(props.newName) ? props.newName : '';
+	data.code = !isEmpty(props.newCode) ? props.newCode : '';
 	// data.subscriptionLog = !isEmpty(props.addSubscriptionLog) ? props.addSubscriptionLog : '';
 	// data.messageLog = !isEmpty(props.addMessageLog) ? props.addMessageLog : '';
 

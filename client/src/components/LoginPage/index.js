@@ -1,11 +1,12 @@
-import React from 'react';
-import makeRequest from '../../utils/makeRequest';
-import Button from '../UI/Generic/Button';
-import Input from '../UI/Form/Input';
-import { Container, Form } from './styles';
+import React from "react";
+import { withRouter } from "react-router";
+import makeRequest from "../../utils/makeRequest";
+import Button from "../UI/Generic/Button";
+import Input from "../UI/Form/Input";
+import { Container, Form } from "./styles";
 
 class Login extends React.Component {
-  state = { email: '', password: '' };
+  state = { email: "", password: "" };
 
   handleChange = e => {
     const { name, value } = e.target;
@@ -15,11 +16,10 @@ class Login extends React.Component {
   handleSubmit = async e => {
     e.preventDefault();
 
-    const request = await makeRequest('/login', 'POST', this.state);
-    const { user, message } = await request.json();
+    const request = await makeRequest("/login", "POST", this.state);
+    const { success, message } = await request.json();
 
-    if (user) window.location.reload();
-    if (message) this.setState({ message });
+    success ? window.location.reload() : this.setState({ message });
   };
 
   render() {
@@ -58,4 +58,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

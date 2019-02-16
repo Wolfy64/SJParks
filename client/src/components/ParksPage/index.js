@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { parksDB } from '../../dummyDB';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import makeRequest from '../../utils/makeRequest';
@@ -20,16 +19,15 @@ export default class Parks extends Component {
   state = initialState;
 
   componentDidMount() {
-    makeRequest('/api/parks', 'GET');
-    // .then(res => res.json())
-    // .then(res => {
-    //   console.log('>> ParksPage.index GET res.parks,', res.parks);
-    // })
-    // .catch(err => err);
-
-    this.setState({ parks: parksDB });
+    makeRequest('/api/parks', 'GET')
+      .then(res => res.json())
+      .then(res => {
+        console.log('[ParksPage] GET,', res)
+        this.setState({ parks: res });
+      })
+      .catch(err => err);
   }
-
+  
   handleDeletePark = park => {
     if (
       window.confirm(
@@ -40,7 +38,15 @@ export default class Parks extends Component {
           )
       )
     ) {
-      console.log('>> ', park.name, ' was removed.');
+      console.log(park._id)
+      makeRequest('/api/parks', 'DELETE', {_id: park._id})
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          parks: this.state.parks.filter(e => e._id !== park._id)
+        })
+      })
+      .catch(err => err);
     }
   };
 
@@ -70,13 +76,21 @@ export default class Parks extends Component {
   handleSendForm = dataForm => {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
-      .then(res => {
-        console.log('>> ParksPage/index POST,', res);
+      .then(park => {
+        if(park._id) {
+          const parks = this.state.parks
+          parks.unshift(park)
+          console.log('[ParksPage] POST,', parks);
+          this.setState({
+            parks,
+            newName: '',
+            newCode: ''
+          })
+        } else {
+          console.log('[ParksPage] POST,', park.message)
+        }
       })
       .catch(err => err);
-
-    // Reset Form field
-    this.setState(initialState);
   };
 
   handleFilter = e => {

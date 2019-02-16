@@ -60,7 +60,7 @@ class User extends React.Component {
               <i className='fas fa-caret-down' />
               <span>{user.fullName}</span>
             </div> 
-            <div className='end'>{user.id}</div>
+            <div className='end'>{user.access}</div>
           </Primary>
           <>{userDetails}</>
         </>
@@ -73,7 +73,7 @@ class User extends React.Component {
               <i className='fas fa-caret-right' />
               <span>{user.fullName}</span>
             </div> 
-            <div className='end'>{user.id}</div>
+            <div className='end'>{user.access}</div>
           </Primary>
           <>{userDetails}</>
         </>

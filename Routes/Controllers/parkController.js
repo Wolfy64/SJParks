@@ -35,7 +35,7 @@ function create(req, res) {
 	console.log('> Creating new park');
 	const {errors, isValid, data} = validateParkInput(req.body);
 	console.log('> Passed new park data validation');
-	if (isValid/*!isvalid*/) {
+	if (!isValid) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
@@ -45,7 +45,7 @@ function create(req, res) {
 		NewPark
 			.save()
 			.then((park) => {
-				console.log(`New park created. NewPark: ${park._id}`);
+				console.log(`New park created. NewPark._id: ${park._id}`);
 				respond(res, true, park);
 			})
 			.catch((err) => {
@@ -118,8 +118,9 @@ function read(req, res) {
  * @desc Delete An park by ObjectId
  */
 function destroy(req, res) {
+	console.log('[parkController] body', req.body)
 	db.Park
-		.findByIdAndDelete(req.params.id)
+		.findByIdAndDelete(req.body._id)
 		.then((park) =>
 			park.remove().then((removedpark) =>
 				res.status(296).json({
