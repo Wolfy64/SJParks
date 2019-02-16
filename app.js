@@ -11,8 +11,7 @@ const jwt = require('jsonwebtoken');
 // const formData = require('express-form-data');
 
 /** Load Configurations */
-require('dotenv-safe').load();
-const config = require('./config');
+const config = require('./configurations');
 const router = require('./routes').create();
 
 let app = express();
