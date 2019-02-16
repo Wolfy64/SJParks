@@ -1,9 +1,11 @@
 /*jshint esversion: 8 */
 // import UserImage from '../../client/src/components/ProfilePage/UserImage';
+const express = require('express');
 const cloudinary = require('cloudinary');
+const { validateUserInput } = require('../../configurations');
+const { respond } = require('../../lib');
 const db = require('../../models');
-const { respond } = require('../../lib/responseSender');
-const { validateUserInput } = require('../../config/validator');
+const router = express.Router();
 
 /**
  * @public
@@ -12,7 +14,7 @@ const { validateUserInput } = require('../../config/validator');
  * @param { response } res
  * @desc Create a function to handle Twilio SMS / MMS webhook requests 
  */
-function incoming(req, res) {
+async function incoming(req, res) {
 	const defaultResponseMessage =
 		"Sorry, we didn't understand that. Available commands are: ROSE - Municipal Rose Garden, BH - Bramhall Park, DM - Del Monte Park or STOP";
 
@@ -201,11 +203,13 @@ function incoming(req, res) {
  * @method GET /api/user/:userId 
  * @desc Read a user by userId 
  */
-function read(req, res) {
-	db.User
+async function read(req, res) {
+
+	const user = await db.User
 		.findById(req.params.userId)
-		.then((user) => respond(res, true, user))
 		.catch((err) => respond(res, false, err));
+	
+	return respond(res, true, user);
 }
 
 /**
@@ -216,14 +220,16 @@ function read(req, res) {
  * @method GET /api/users 
  * @desc Get all users 
  */
-function index(req, res) {
-	db.User
+async function index(req, res) {
+	
+	const users = await db.User
 		.find({})
 		.sort({
 			userName: 1
 		})
-		.then((users) => res.status(267).json({success:true, users})/*respond(res, true, users) */)
-		.catch((err) => respond(res, false, { msg: err.message }));
+		.catch((err) => respond(res, false, err));
+	
+	return respond(res, true, users);
 }
 
 /**
@@ -234,8 +240,8 @@ function index(req, res) {
  * @method POST api/user/ 
  * @desc Create An New user 
  */
-function create(req, res) {
-	const { errors, isValid, data } = validateUserInput(req.body);
+async function create(req, res) {
+	const { errors, isValid, data } = await validateUserInput(req.body);
 
 	if (!isValid) {
 		console.log({ success: false, error: errors });
@@ -629,40 +635,37 @@ function findUpdate(req, res) {
 		.catch((err) => respond(res, false, err));
 }
 
-// const express = require('express');
-// const router = express.Router();
+// @route /api/user
+router.route('/api/users')
+	.get(index)
+	.post(create);
 
-// // @route /api/user
-// router.route('/api/users')
-// 	.get(index)
-// 	.post(create);
+router.route('/admin/image-upload')
+	.post(uploadImage);
 
-// router.route('/admin/image-upload')
-// 	.post(uploadImage);
+// @route /api/user/_id
+router.route('/api/users/:userId')
+	.get(read)
+	.put(update)
+	.delete(destroy);
 
-// // @route /api/user/_id
-// router.route('/api/users/:userId')
-// 	.get(read)
-// 	.put(update)
-// 	.delete(destroy);
+ // @route /api/users/_id/park
+router.route('/api/users/:userId/parks')
+  .get(readAllParks);
 
-//  // @route /api/users/_id/park
-// router.route('/api/users/:userId/parks')
-//   .get(readAllParks);
+// @route /api/users/_id/updates
+router.route('/api/users/:userId/updates')
+  .get(readAllUpdates);
 
-// // @route /api/users/_id/updates
-// router.route('/api/users/:userId/updates')
-//   .get(readAllUpdates);
+// @route /api/users/_id/park/_id
+router.route('/api/users/:userId/parks/:parkId')
+  .get(findPark);
 
-// // @route /api/users/_id/park/_id
-// router.route('/api/users/:userId/parks/:parkId')
-//   .get(findPark);
+// @route /api/user/_id/updates/_id
+router.route('/api/users/:userId/updates/:updateId')
+  .get(findUpdate);
 
-// // @route /api/user/_id/updates/_id
-// router.route('/api/users/:userId/updates/:updateId')
-//   .get(findUpdate);
-
-module.exports = /*router */{
+module.exports = router /*{
 	incoming,
 	index,
 	read,
@@ -674,4 +677,4 @@ module.exports = /*router */{
 	readAllUpdates,
 	findPark,
 	findUpdate
-};
+}*/;

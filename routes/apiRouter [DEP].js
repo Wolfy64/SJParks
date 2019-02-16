@@ -1,10 +1,9 @@
 /*jshint esversion: 8 */
 const path = require('path');
 const express = require('express');
-/** Load Configurations  */
 const router = express.Router();
-const controllers = require('./Controllers');
-const { config } = require('../../config');
+const controllers = require('./controllers');
+const { config } = require('../config');
 // var apiManifest = require('../config/apiManifest');
 
 /** Users */

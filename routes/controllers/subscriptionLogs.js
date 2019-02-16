@@ -1,6 +1,8 @@
 /*jshint esversion: 8 */
 const db = require('../../models');
-const { respond } = require('../../lib/responseSender');
+const { respond } = require('../../lib');
+const express = require('express');
+const router = express.Router();
 
 /**
  * @public
@@ -176,24 +178,21 @@ function destroy(req, res) {
     .catch(err => console.log(err));
 }
 
-// const express = require('express');
-// const router = express.Router();
+// @route /api/subscriptionLogs
+router.route('/api/subscriptionLogs')
+  .get(index)
+  .post(create);
 
-// // @route /api/subscriptionLogs
-// router.route('/api/subscriptionLogs')
-//   .get(api.subscriptionLogs.index)
-//   .post(api.subscriptionLogs.create);
+// @route /api/subscriptionLogs/_id
+router.route('/api/subscriptionLogs/:subscriptionLogId')
+  .get(read)
+  .put(edit)
+  .delete(destroy);
 
-// // @route /api/subscriptionLogs/_id
-// router.route('/api/subscriptionLogs/:subscriptionLogId')
-//   .get(api.subscriptionLogs.read)
-//   .put(api.subscriptionLogs.update)
-//   .delete(api.subscriptionLogs.destroy);
-
-module.exports = /*router*/ {
+module.exports =  router/*{
   create,
   read,
   index,
   edit,
   destroy
-};
+}*/;
