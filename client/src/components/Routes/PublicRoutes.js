@@ -1,14 +1,13 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import PublicPage from '../PublicPage';
-import Login from '../LoginPage';
-import NoMatch from '../UI/NoMatch';
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import PublicPage from "../PublicPage";
+import Login from "../LoginPage";
 
 const PublicRoutes = () => (
   <Switch>
     <Route path="/" component={PublicPage} exact />
     <Route path="/login" component={Login} />
-    <Route component={NoMatch} />
+    <Route component={() => <Redirect to="/login" />} />
   </Switch>
 );
 

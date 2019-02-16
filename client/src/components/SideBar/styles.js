@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const NavContainer = styled.div`
   border-right: solid 3px ${props => props.theme.colors.primary};
@@ -9,11 +9,11 @@ export const NavContainer = styled.div`
   height: 100vh;
   color: ${props => props.theme.colors.lightbg};
   z-index: 3;
-  @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     width: 100%;
     height: auto;
     background-color: transparent;
-    #navbar{
+    #navbar {
       margin-top: -400px;
       padding-top: 70px;
       -webkit-transition: all 0.5s ease;
@@ -22,7 +22,7 @@ export const NavContainer = styled.div`
       background: ${props => props.theme.colors.dark};
       border-bottom: solid 3px ${props => props.theme.colors.primary};
     }
-  };
+  }
 
   .logout {
     position: absolute;
@@ -32,7 +32,7 @@ export const NavContainer = styled.div`
       position: relative;
       bottom: 0px;
     }
-  };
+  }
 
   .title {
     text-align: center;
@@ -41,8 +41,8 @@ export const NavContainer = styled.div`
     h1 {
       font-size: 1.8em;
       margin-bottom: 0.3rem;
-    };
-    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    }
+    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
       display: none;
     }
   }
@@ -55,15 +55,19 @@ export const NavContainer = styled.div`
     position: fixed;
     right: 0px;
     justify-content: center;
-    @media screen and (max-width: ${(props) => props.theme.displays.tablet}) {
+    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
       display: block;
     }
   }
 
-  #hid{
+  #hid {
     height: 100vh;
     width: 100%;
     background-color: transparent;
     display: none;
+  }
+
+  .active {
+    background-color: ${props => props.theme.colors.primary};
   }
 `;

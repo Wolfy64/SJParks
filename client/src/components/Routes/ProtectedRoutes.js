@@ -1,16 +1,16 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Layout from '../Layout';
-import NewUpdate from '../NewUpdate';
-import Updates from '../UpdatesPage';
-import Parks from '../ParksPage';
-import Users from '../UsersPage';
-import ProfilePage from '../ProfilePage';
-import NoMatch from '../UI/NoMatch';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import Layout from "../Layout";
+import NewUpdate from "../NewUpdate";
+import Updates from "../UpdatesPage";
+import Parks from "../ParksPage";
+import Users from "../UsersPage";
+import ProfilePage from "../ProfilePage";
+import NoMatch from "../UI/NoMatch";
 
-const ProtectedRoutes = (props) => {
+const ProtectedRoutes = ({ user }) => {
   return (
-    <Layout data={props.data}>
+    <Layout user={user}>
       <Switch>
         <Route path="/admin/:id/newupdate" component={NewUpdate} />
         <Route path="/admin/:id/updates" component={Updates} />

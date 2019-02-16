@@ -1,27 +1,25 @@
-import React from 'react';
-import { withRouter } from 'react-router';
-import makeRequest from '../../utils/makeRequest';
-import Button from '../UI/Generic/Button';
-import Input from '../UI/Form/Input';
-import { Container, Form } from './styles';
+import React from "react";
+import { withRouter } from "react-router";
+import makeRequest from "../../utils/makeRequest";
+import Button from "../UI/Generic/Button";
+import Input from "../UI/Form/Input";
+import { Container, Form } from "./styles";
 
 class Login extends React.Component {
-  state = { email: '', password: '' };
+  state = { email: "", password: "" };
 
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
 
-    makeRequest('/login', 'POST', this.state )
-      .then(res => res.json())
-      .then(user => {
-        window.location.replace(`/admin/${user._id}/updates`);
-      })
-      .catch(err => err)
+    const request = await makeRequest("/login", "POST", this.state);
+    const { success, message } = await request.json();
+
+    success ? window.location.reload() : this.setState({ message });
   };
 
   render() {
