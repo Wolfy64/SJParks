@@ -6,12 +6,12 @@ const { respond } = require('../../lib/responseSender');
 // @desc Get all messageLog's
 // @access Public
 function index(req, res) {
-  respond(res, true, '[messageLogs]')
+  respond(res, true, '[messageLogs]');
   // db.messageLog
   //   .find({})
   //   .sort()
   //   .then((messageLogs) => respond(res, true, messageLogs))
-	// 	.catch((err) => respond(res, false, {msg: err.message}));
+  // 	.catch((err) => respond(res, false, {msg: err.message}));
 }
 
 // @route GET api/messageLog/:messageLogId

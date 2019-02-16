@@ -123,7 +123,7 @@ UserSchema.methods.generateJWT = function() {
   const token = jwt.sign(
     {
       _id: this._id,
-      userName: this.userName,
+      fullName: this.fullName,
       expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
     },
     require('../config/keys').secret,
@@ -133,13 +133,13 @@ UserSchema.methods.generateJWT = function() {
   return token;
 };
 
-UserSchema.methods.toAuthJSON = function() {
-  return {
-    _id: this._id,
-    name: this.name,
-    email: this.email,
-    token: this.generateJWT()
-  };
-};
+// UserSchema.methods.toAuthJSON = function() {
+//   return {
+//     _id: this._id,
+//     fullName: this.fullName,
+//     email: this.email,
+//     token: this.generateJWT()
+//   };
+// };
 
 module.exports = mongoose.model('User', UserSchema);
