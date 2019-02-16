@@ -1,12 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { NavContainer } from "./styles";
-import profileImg from "../../img/Placeholder2.jpg";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { NavContainer } from './styles';
+import profileImg from '../../img/Placeholder2.jpg';
 
 const TopNav = props => (
   <NavContainer>
     <Link to={`/admin/${props.user._id}/profile`}>
-      <img className="profileImg" src={profileImg} alt="User Avatar" />
+      <img className='profileImg' src={profileImg} alt='User Avatar' />
     </Link>
   </NavContainer>
 );
