@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import Topnav from '../TopNav/TopNav';
-import SideBar from '../SideBar';
+import React from "react";
+import styled from "styled-components";
+import Topnav from "../TopNav/TopNav";
+import SideBar from "../SideBar";
 
 const Page = styled.div`
   margin: 0 80px 0 240px;
