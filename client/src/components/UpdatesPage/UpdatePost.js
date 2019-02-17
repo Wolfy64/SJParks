@@ -2,7 +2,7 @@ import React from 'react';
 import ButtonText from '../UI/Generic/ButtonText';
 import { Primary, Secondary, MiniLabel, Message } from './styles';
 
-export default class Post extends React.Component {
+export default class UpdatePost extends React.Component {
   state = {
     loadMore: false,
     isOpen: false
@@ -37,7 +37,7 @@ export default class Post extends React.Component {
             <Primary onClick={this.open}>
               <div>
                 <i className='fas fa-caret-down' />
-                <span>{post.author}</span>
+                <span>{post.author.fullName}</span>
               </div>
               <p>{post.createdAt}</p>
             </Primary>
