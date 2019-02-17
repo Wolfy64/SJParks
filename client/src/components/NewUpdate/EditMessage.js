@@ -12,7 +12,8 @@ const initialState = {
   hasTitle: true,
   parksTitle: '',
   showError: false,
-  formErrors: null
+  formErrors: null,
+  _id: ''
 };
 
 class EditMessage extends React.Component {
@@ -20,7 +21,7 @@ class EditMessage extends React.Component {
 
   async componentDidMount() {
     const { parks, user } = this.props;
-    await this.setState({ parks, author: user.fullName });
+    await this.setState({ parks, _id: user._id });
 
     this.updateTitle();
   }
@@ -60,7 +61,7 @@ class EditMessage extends React.Component {
       parksTitle,
       message,
       parks,
-      author
+      _id
     } = this.state;
     const isValid = isFormValid(formErrors, message);
 
@@ -70,11 +71,12 @@ class EditMessage extends React.Component {
       });
 
     isValid
-      ? this.handleSendForm({ message, parks, author })
+      ? this.handleSendForm({ message, parks, _id })
       : this.setState({ showErrors: true });
   };
 
   handleSendForm = payload => {
+    console.log('[NewUpdate] payload', payload)
     makeRequest('/api/updates', 'POST', payload)
       .then(res => res.json())
       .then(res => {

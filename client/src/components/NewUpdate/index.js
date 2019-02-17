@@ -12,13 +12,12 @@ class NewUpdate extends React.Component {
   };
 
   componentDidMount() {
-    makeRequest('/api/parks', 'GET')
+    makeRequest('/api/parks')
       .then(res => res.json())
       .then(res => {
-        console.log('[NewUpdate] GET parks', res);
         this.setState({
           parks: res
-        });
+        })
       })
       .catch(err => err);
   }

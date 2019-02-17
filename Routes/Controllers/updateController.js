@@ -47,8 +47,10 @@ function send(req, res) {
 
   // parkIDs.forEach(park => db.Park.find({ park }).then(park => park.name));
 
-  db.User.find({ _id }).then(users =>
+  db.User.find({ _id }).then(users => {
     users.map(author => {
+			console.log('TCL: send -> author', author)
+      
       const newUpdate = new db.Update({
         message,
         parks,
@@ -65,6 +67,7 @@ function send(req, res) {
           respond(res, false, err);
         });
     })
+  }
   );
 
   // Send messages to all users subscribed
