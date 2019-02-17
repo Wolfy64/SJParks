@@ -14,7 +14,7 @@ const SELECT_OPTIONS = {
 
 /** [H] I Need to make this match with current BE*/
 const initialState = {
-  accessType: 'Updates Only',
+  access: 'Updates Only',
   fullName: 'Irina',
   phone: '4084552057',
   email: 'irishka2863@yahoo.com',
@@ -25,7 +25,7 @@ const initialState = {
 
 const UsersForm = class userInput extends React.Component {
   state = initialState;
-
+  
   handleChange = e => {
     const { name, type, value } = e.target;
 
@@ -42,7 +42,7 @@ const UsersForm = class userInput extends React.Component {
     e.preventDefault();
     /** [H] I Need to make this match with current BE*/
     const {
-      accessType,
+      access,
       confirmPassword,
       email,
       formErrors,
@@ -51,7 +51,7 @@ const UsersForm = class userInput extends React.Component {
       phone
     } = this.state;
     const dataForm = {
-      accessType,
+      access,
       email,
       fullName,
       password,
@@ -69,23 +69,16 @@ const UsersForm = class userInput extends React.Component {
       });
     }
 
-    isValid
-      ? this.handleSendForm(dataForm)
-      : this.setState({
-          showErrors: true
-        });
+    if(isValid){
+      this.props.handleSendForm(dataForm)
+      this.setState(initialState);
+    } else {
+      this.setState({
+        showErrors: true
+      });
+    }
   };
 
-  handleSendForm = dataForm => {
-    makeRequest('/api/users', 'POST', dataForm)
-      .then(res => res.json())
-      .then(res => console.log('UsersForm', res))
-      .catch(err => console.log(err));
-    console.log('>> TEST: sending data \n', dataForm);
-
-    // Reset Form field
-    this.setState(initialState);
-  };
 
   render() {
     const { formErrors, showErrors } = this.state;
@@ -138,17 +131,15 @@ const UsersForm = class userInput extends React.Component {
           type="password"
           onChange={this.handleChange}
           value={this.state.confirmPassword}
-          error={hasErrors ? formErrors.confirmPassword : null}
-        />{' '}
-        <Select
-          name="accessType"
-          options={SELECT_OPTIONS}
-          label="Access Type"
+          error={hasErrors ? formErrors.confirmPassword : null }
+        /> 
+        < Select name='access' options={ SELECT_OPTIONS }
+          label='Access Type'
           onChange={this.handleChange}
-          value={this.state.accessType}
-          error={hasErrors ? formErrors.accessType : null}
-        />{' '}
-        <Button name="Create New User" type="submit" />{' '}
+          value={this.state.access}
+          error={hasErrors ? formErrors.access : null }
+        /> 
+        < Button name='Create New User' type='submit' /> 
       </form>
     );
   }

@@ -240,20 +240,19 @@ function create(req, res) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
-		console.log(data);
 		const newUser = new db.User(data);
 
 		newUser.setPassword(data.password);
-		console.log(newUser);
 		newUser
 			.save()
 			.then((user) => {
-				console.log(`New user created. NewUser: ${user._id}`);
-				respond(res, true, user);
+				console.log(`[userController] New user created. NewUser: ${user._id}`);
+				respond(res, true, {user});
 			})
 			.catch((err) => {
-				errors.push(new Error({ msg: 'Could not save user', error: err }));
-				respond(res, false, errors);
+				console.log(`[userController] Could not save user: ${err}`);
+				errors.push(new Error({ message: 'Could not save user', error: err }));
+				respond(res, false, { message: err });
 			});
 	}
 }
@@ -489,14 +488,16 @@ function update(req, res) {
  * @function destroy
  * @param {request} req 
  * @param {response} res 
- * @method DELETE api/user/:id  
+ * @method DELETE api/users  
  * @desc Delete an existing user by id  
  */
 
 function destroy(req, res) {
+	const user = req.body;
+
 	db.User
 		.findByIdAndDelete({
-			_id: req.params.id
+			_id: user._id
 		})
 		.then((user) => {
 			user.parks.forEach((park) => {
@@ -509,21 +510,23 @@ function destroy(req, res) {
 					.catch((err) => console.log(err));
 			});
 
-			user.Updates.forEach((update) => {
-				db.Update
-					.find({
-						author: update.author
-					})
-					.then((docs) => {
-						docs.forEach((doc) => {
-							doc.users.pop(user._id);
-							doc.save();
-						});
-					})
-					.catch((err) => console.log(err));
-			});
+			if (user.Updates) {
+				user.Updates.forEach((update) => {
+					db.Update
+						.find({
+							author: update.author
+						})
+						.then((docs) => {
+							docs.forEach((doc) => {
+								doc.users.pop(user._id);
+								doc.save();
+							});
+						})
+						.catch((err) => console.log(err));
+				});
+			}
 
-			user.remove().then((removedUser) => res(res, true, removedUser)).catch((err) => console.log(err));
+			user.remove().then((removedUser) => respond(res, true, {payload:removedUser})).catch((err) => respond(res, false, {message:err}));
 		})
 		.catch((err) => console.log(err));
 }

@@ -31,7 +31,7 @@ const Details = styled.div`
 
 class User extends React.Component {
   state = { showUser: false };
-
+  
   handleShowUser = () => this.setState({ showUser: !this.state.showUser });
 
   render() {
