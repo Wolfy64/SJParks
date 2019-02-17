@@ -22,7 +22,6 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'GET')
       .then(res => res.json())
       .then(res => {
-        console.log('[ParksPage] GET,', res)
         this.setState({ parks: res });
       })
       .catch(err => err);

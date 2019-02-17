@@ -18,14 +18,14 @@ app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, config.keys.path)));
 
 /** Logger */
-app.use(addRequestId);
-logger.token('id', req => req.sessionID.split('-')[0]);
-app.use(logger('combined' /*, {skip: (req, res) => res.statusCode < 400 }*/));
-app.use(
-  logger(
-    '> [:date[iso]] :method :url :status :response-time ms - :res[content-length] >'
-  )
-);
+// app.use(addRequestId);
+// logger.token('id', req => req.sessionID.split('-')[0]);
+// app.use(logger('combined' /*, {skip: (req, res) => res.statusCode < 400 }*/));
+// app.use(
+//   logger(
+//     '> [:date[iso]] :method :url :status :response-time ms - :res[content-length] >'
+//   )
+// );
 
 /** Parser */
 // app.use(formData.parse());

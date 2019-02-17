@@ -7,9 +7,14 @@ const { config } = require('../config');
 // var apiManifest = require('../config/apiManifest');
 
 /** Users */
-router.route('/users').get(controllers.users.index).post(controllers.users.create);
+router.route('/users')
+	.get(controllers.users.index)
+	.post(controllers.users.create)
+	.delete(controllers.users.destroy)
+	.put(controllers.users.update)
 
-router.route('/users/:userId').get(controllers.users.read).put(controllers.users.update).delete(controllers.users.destroy);
+router.route('/users/:userId')
+	.get(controllers.users.read)
 
 router.route('/users/:userId/uploadImage').post(controllers.users.uploadImage);
 

@@ -19,7 +19,7 @@ function validateUserInput(props) {
 	console.log('> [18:19] Preparing Data');
 	data.access = !isEmpty(props.access) ? props.access : 'basic';
 	data.password = !isEmpty(props.password) ? props.password : '';
-	data.name = !isEmpty(props.name) ? props.name : '';
+	data.fullName = !isEmpty(props.fullName) ? props.fullName : '';
 	data.phone = !isEmpty(props.phone) ? props.phone : '';
 	data.email = !isEmpty(props.email) ? props.email : '';
 	// data.addPark.code = !isEmpty(props.addPark.code) ? props.addPark.code : '';
