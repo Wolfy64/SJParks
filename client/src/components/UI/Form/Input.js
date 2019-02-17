@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0.4rem 0;
   label {
     color: ${props => props.theme.colors.secondary};
     margin: 0.6rem 0 0.3rem 0.3rem;
@@ -31,6 +32,7 @@ const Input = props => (
       type={props.type}
       value={props.value}
       onChange={props.onChange}
+      autoComplete={props.name}
     />
 
     {props.error && <span>{props.error}</span>}

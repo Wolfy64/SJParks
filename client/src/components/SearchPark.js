@@ -5,8 +5,12 @@ import Input from './UI/Form/Input';
 import ButtonText from './UI/Generic/ButtonText';
 
 const Container = styled.div`
-  width: 300px;
-  padding: 1rem;
+  .innerWrapper {
+    margin: 0 auto;
+    max-width: 280px;
+    padding: 20px;
+    overflow-y: scroll;
+  }
 `;
 
 class SearchPark extends Component {
@@ -25,7 +29,7 @@ class SearchPark extends Component {
     const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 3);
+    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 5);
 
     const parkLi = showParkList.map(el => (
       <ParkLi
@@ -38,6 +42,7 @@ class SearchPark extends Component {
 
     return (
       <Container className='searchContainer'>
+      <div className='innerWrapper'>
         <Input
           name='filter'
           value={filter}
@@ -52,6 +57,7 @@ class SearchPark extends Component {
         )}
 
         <ul>{parkLi}</ul>
+        </div>
       </Container>
     );
   }

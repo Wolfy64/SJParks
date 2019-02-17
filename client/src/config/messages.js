@@ -1,5 +1,5 @@
 export const msgErr = {
-  text: 'Minimum 3 characaters',
+  text: 'Minimum 2 characaters',
   mail: 'Invalid email address',
   phone: 'Invalid phone number',
   pass: 'Minimum 6 characaters',

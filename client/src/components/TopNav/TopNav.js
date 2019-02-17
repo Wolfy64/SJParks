@@ -1,28 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { NavContainer } from './styles';
+import profileImg from '../../img/Placeholder2.jpg';
 
-const Nav = styled.nav`
-  display: flex;
-  justify-content: flex-end;
-  height: 50px;
-  padding: 10px;
-
-  img {
-    height: 36px;
-    width: auto;
-    border-radius: 50%;
-  }
-`;
-
-const profileImg = require('../../img/Placeholder2.jpg');
-
-const TopNav = () => (
-  <Nav className='navbar'>
-    <Link to='/admin/profile'>
-      <img src={profileImg} alt='User Avatar' />
+const TopNav = props => (
+  <NavContainer>
+    <Link to={`/admin/${props.user._id}/profile`}>
+      <img className='profileImg' src={profileImg} alt='User Avatar' />
     </Link>
-  </Nav>
+  </NavContainer>
 );
 
 export default TopNav;

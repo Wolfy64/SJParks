@@ -1,30 +1,9 @@
 import React from 'react';
+import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
-import { parksDB } from '../../dummyDB';
-import styled from 'styled-components';
-
-const Col1 = styled.div`
-  width: 300px;
-  float: left;
-  margin: 0 20px;
-`
-const Col2 = styled.div`
-  float: left;
-  margin: 0 20px;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.lightbg};
-`
-
-const Col3 = styled.div`
-  float: left;
-  width: 300px;
-  margin: 3.7rem 20px 0;
-  .bottomAlign{
-    margin-top: 100px;
-  }
-`
+import { Container } from './styles';
 
 class NewUpdate extends React.Component {
   state = {
@@ -33,57 +12,82 @@ class NewUpdate extends React.Component {
   };
 
   componentDidMount() {
-    this.setState({ parks: parksDB });
+    makeRequest('/api/parks')
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          parks: res
+        })
+      })
+      .catch(err => err);
   }
 
   handleAddPark = park => {
     const { parkSelected } = this.state;
     const isSelected = parkSelected.find(el => el._id === park._id);
-
     if (!isSelected) this.setState({ parkSelected: [...parkSelected, park] });
+    this.setState({
+      parks: [...this.state.parks.filter(el => el._id !== park._id)]
+    });
   };
 
   handleAddAllPark = () => {
-    this.setState({ parkSelected: [...this.state.parks] });
+    const { parks } = this.state;
+    if (parks) {
+      this.setState({
+        parkSelected: [...this.state.parks],
+        parks: []
+      });
+    }
   };
 
   handleDeletePark = park => {
     this.setState({
       parkSelected: [
         ...this.state.parkSelected.filter(el => el._id !== park._id)
-      ]
+      ],
+      parks: [...this.state.parks, park]
     });
   };
 
   handleDeleteAddAllPark = () => {
-    this.setState({ parkSelected: [] });
+    const { parks, parkSelected } = this.state;
+    if (parkSelected) {
+      this.setState({
+        parks: [...parks, ...parkSelected]
+      });
+      this.setState({ parkSelected: [] });
+    }
   };
 
   render() {
+    const { user } = this.props;
     return (
       <>
-        <Col1>
+        <Container>
           <SearchPark
             parks={this.state.parks}
             selected={false}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
-        </Col1>
-        <Col2>
+        </Container>
+        <Container>
           <SelectedPark
             parks={this.state.parkSelected}
             deletePark={park => this.handleDeletePark(park)}
             deleteAllParks={this.handleDeleteAddAllPark}
           />
-        </Col2>
-        <Col3>
-          {this.state.parkSelected.length === 0 ? (
+        </Container>
+        <Container>
+          <div className='col3'>
+            {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
-          ) : (
-              <EditMessage titles={this.state.parkSelected.map(el => el.name)} />
-          )}
-        </Col3>
+            ) : (
+              <EditMessage user={user} parks={this.state.parkSelected} />
+            )}
+          </div>
+        </Container>
       </>
     );
   }

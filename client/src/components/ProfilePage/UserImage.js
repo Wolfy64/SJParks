@@ -1,29 +1,30 @@
 import React from 'react';
+import { Consumer } from '../../utils/Context';
+import makeRequest from '../../utils/makeRequest';
 import styled from 'styled-components';
 
 const placeholder = require('../../img/placeholder.png');
 
 const Image = styled.div`
-display: flex;
-justify-content: center;
-width: 100%;
-  img {
-    height: 165px;
-    width: auto;
-  }
+  display: flex;
+  justify-content: center;
+    img {
+      height: 165px;
+      width: auto;
+    }
 `; 
 
-const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
+//const IMAGE_TYPES = ['image/png', 'image/gif', 'image/jpeg'];
 const ERROR = 'The files must be less than 2MB and .png, .gif, .jpeg';
 
 class UserImage extends React.Component {
   state = {
     showError: false,
-    images: []
   };
 
   //Image Upload
-  onChange = e => {
+  onChange = (user, e) => {
+    console.log('[Image] user ', e.target)
     const files = Array.from(e.target.files)
     const formData = new FormData()
 
@@ -31,32 +32,39 @@ class UserImage extends React.Component {
       formData.append(i, file)
     })
 
-    fetch('/admin/image-upload', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(images => {
-      this.setState({ 
-        images
+    makeRequest(`admin/users/${user._id}/uploadImage`, 'POST', formData)
+      .then(res => res.json())
+      .then(imageUrl => {
+        this.setState({ 
+          imageUrl
+        })
       })
-    })
-    .catch(err => console.log(err));
+      .catch(err => err);
   }
 
   render() {
-    const {images} = this.state;
+    let {imageUrl} = this.state;
+    let imagePreview = null;
+    if(imageUrl){
+      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={imagePreview} alt ='avatar'/>);
+    } else {
+      imagePreview = (<img onChange={this.handleImageChange} onClick={() => this.fileInput.click()} src={placeholder} alt ='avatar'/>)
+    }
     return (
-      <Image>
-        <img onClick={() => this.fileInput.click()} src={images[0]?images[0].url : placeholder} alt='avatar'/>
+      <Consumer> 
+      {user => (
+      <Image className='userImage'>
+        {imagePreview}
         <input
           type='file'
-          onChange={this.onChange}
+          onChange={(e) => this.onChange(user, e)}
           style={{ display: 'none' }}
           ref={fileInput => (this.fileInput = fileInput)}
         />
         {this.state.showError ? <span>{ERROR}</span> : null}
       </Image>
+      )}
+      </Consumer>
     );
   }
 }

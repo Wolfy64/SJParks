@@ -1,130 +1,61 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '../UI/Generic/Button';
-import Input from '../UI/Form/Input';
+import React from "react";
+import { withRouter } from "react-router";
+import makeRequest from "../../utils/makeRequest";
+import Button from "../UI/Generic/Button";
+import Input from "../UI/Form/Input";
+import { Container, Form } from "./styles";
 
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: ${props => props.theme.colors.dark};
-  display: grid;
-  align-content: center;
-
-  h1 {
-    text-align: center;
-  }
-
-  .card {
-    display: flex;
-    height: 400px;
-    max-width: 400px;
-  }
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  }
-`;
-
-const Form = styled.form`
-  display: grid;
-  width: 80%;
-  height: 250px;
-  max-width: 400px;
-  margin: auto;
-  background-color: ${props => props.theme.colors.light};
-  border-radius: 15px;
-  padding: 40px 30px 60px;
-  box-shadow: -5px 3px 3px black;
-
-  h1 {
-    text-align: center;
-  }
-
-  .message {
-    text-align: center;
-    color: ${props => props.theme.colors.danger};
-  }
-`;
-
-const initialState = {
-  email: '',
-  password: ''
-};
 class Login extends React.Component {
-  state = initialState;
+  state = { email: "", password: "" };
 
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
 
-    const dataForm = {
-      email: this.state.email,
-      password: this.state.password
-    };
+    const request = await makeRequest("/login", "POST", this.state);
+    const { success, message } = await request.json();
 
-    this.sendForm(dataForm);
-  };
-
-  sendForm = async dataForm => {
-    const payload = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataForm)
-    };
-
-    const res = await fetch('/login', payload);
-    const data = await res.json();
-
-    this.setState({ message: data.message });
-
-    // If Admin redirect
-    if (data.admin) this.props.history.push(`/admin/${data._id}/user`);
-
-    // Reset Form field
-    this.setState(initialState);
+    success ? window.location.reload() : this.setState({ message });
   };
 
   render() {
     const { email, password, message } = this.state;
-
     return (
       <Container>
         <Form onSubmit={this.handleSubmit}>
           <h1>SJParks</h1>
 
-          {message && <span className='message'>{message}</span>}
+          {message && <span className="message">{message}</span>}
 
           <Input
-            name='email'
-            label='User ID:'
-            placeholder='Enter Your Username'
-            type='text'
+            name="email"
+            label="User ID:"
+            placeholder="Enter Your Username"
+            type="text"
             value={email}
             onChange={this.handleChange}
             required
           />
 
           <Input
-            name='password'
-            label='Password:'
-            placeholder='Enter Password'
-            type='password'
+            name="password"
+            label="Password:"
+            placeholder="Enter Password"
+            type="password"
             value={password}
             onChange={this.handleChange}
             required
           />
-          <Button type='submit' name='LOGIN' />
+
+          <Button type="submit" name="LOGIN" />
         </Form>
       </Container>
     );
   }
 }
 
-export default Login;
+export default withRouter(Login);

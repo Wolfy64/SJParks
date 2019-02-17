@@ -1,17 +1,21 @@
 import React from 'react';
+import styled from 'styled-components'
 
-// const Area = styled.div`
-//   width: 300px;
+const Area = styled.div`
+  grid-column: span 2;
+  textarea {
+    border: solid 1px ${props => props.theme.colors.lightbg};
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.7em;
+    min-height: 100px;
+    width: calc(100% - 12px);
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+`
 
-//   textarea{
-//     padding: 5px;
-//     border-radius: 5px;
-//     width: 288px;
-//     min-height: 100px;
-//   }
-// `;
 const Textarea = props => (
-  <div>
+  <Area>
     <label htmlFor={props.name}>{props.label}</label>
 
     <textarea
@@ -24,7 +28,7 @@ const Textarea = props => (
     />
 
     {props.error && <span>{props.error}</span>}
-  </div>
+  </Area>
 );
 
 export default Textarea;

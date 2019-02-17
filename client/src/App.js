@@ -1,46 +1,33 @@
 import React from 'react';
-import Parks from './components/ParksPage';
-import Users from './components/UsersPage';
-import Updates from './components/UpdatesPage';
-import NewUpdate from './components/NewUpdate';
-import ProfilePage from './components/ProfilePage';
-import PublicPage from './components/PublicPage';
-import NoMatch from './components/UI/NoMatch';
-import Login from './components/LoginPage';
-import { Route, Switch } from 'react-router-dom';
-
-import Layout from './components/Layout';
+import { withRouter } from 'react-router';
+import PublicRoutes from './components/Routes/PublicRoutes';
+import ProtectedRoutes from './components/Routes/ProtectedRoutes';
+import makeRequest from './utils/makeRequest';
 
 class App extends React.Component {
-  state = { isConnected: true };
+  state = { isAuthenticated: false };
+
+  async componentDidMount() {
+    const request = await makeRequest('/api/auth');
+    const { success, payload } = await request.json();
+
+    this.setState({
+      isAuthenticated: success,
+      user: payload
+    });
+
+    if (success) this.props.history.push(`/admin/${payload._id}/updates`);
+  }
 
   render() {
-    let routes = (
-      <Switch>
-        <Route path='/' component={PublicPage} exact />
-        <Route path='/login' component={Login} />
-        <Route component={NoMatch} />
-      </Switch>
+    const { isAuthenticated, user } = this.state;
+    const Routes = isAuthenticated ? (
+      <ProtectedRoutes user={user} />
+    ) : (
+      <PublicRoutes />
     );
-
-    if (this.state.isConnected) {
-      routes = (
-        <Layout>
-          <Switch>
-            <Route path='/admin/newupdate' component={NewUpdate} />
-            <Route path='/admin/updates' component={Updates} />
-            <Route path='/admin/parks' component={Parks} />
-            <Route path='/admin/users' component={Users} />
-            <Route path='/admin/profile' component={ProfilePage} />
-            <Route path='/' component={PublicPage} exact />
-            <Route component={NoMatch} />
-          </Switch>
-        </Layout>
-      );
-    }
-
-    return routes;
+    return Routes;
   }
 }
 
-export default App;
+export default withRouter(App);

@@ -1,30 +1,32 @@
+/** Load Dependencies */
+const http = require('http');
+
+/** Load Configurations */
 require('dotenv-safe').load();
+const webapp = require('./App');
 const config = require('./config');
-// process.env.NODE_ENV === "development";
-console.log(`>[SERVER:004:025]> Running index in ${process.env.NODE_ENV} mode...`);
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//************************************************************** Connect MongoDB ***************************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
+console.log(`> Running Server in ${process.env.NODE_ENV} mode...`);
+
+/** Configure Mongoose */
+const mongoose = require('mongoose',{
+  useMongoClient: true
+});
+mongoose.set('debug', true);
+mongoose.Promise = global.Promise;
+
 const opts = {
   useCreateIndex: true,
   useNewUrlParser: true,
   useFindAndModify: false
-}
+};
 
-const mongoose = require('mongoose');
-const db = config.keys.mongoUrl;
+/** Connect Mongoose to MongoDB */
+mongoose.connect(config.keys.url, opts)
+  .then(() => console.log(`> MongoDB connected...`))
+  .catch(err => console.error(err));
 
-mongoose.connect(db, opts)
-  .then(() => console.log(`>[SERVER:020:020]> MongoDB Connected @uri: ${db}...`))
-  .catch(err => console.error(`>[SERVER:021:044]> An error occured while attempting to connect to MongoDB with @uri: ${db}. Error thrown: ${err.message}...`));
-
-mongoose.Promise = global.Promise;
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//*********************************************************** Deploy Express Webapp ************************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
-const http = require('http');
-const webapp = require('./App');
+/** Create Express-App Server */
 const server = http.createServer(webapp);
-const port = require('./config').keys.port;
-server.listen(port, () => console.log(`>[SERVER:032:054]> Express Server Deployed @url: http://localhost:${port}...`));
+
+/** Deploy Express-App to Local-Host*/
+server.listen(config.keys.port, () => console.log(`> Express Server Deployed @url: http://localhost:${config.keys.port}...`));

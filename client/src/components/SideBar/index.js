@@ -1,57 +1,109 @@
-import React from 'react';
-import styled from 'styled-components';
-import NavButton from '../UI/Generic/NavButton';
+import React from "react";
+import NavButton from "../UI/Generic/NavButton";
+import makeRequest from "../../utils/makeRequest";
+import { NavContainer } from "./styles";
 
-const SideNav = styled.div`
-  border-right: solid 3px ${props=>props.theme.colors.primary};
-  position: fixed;
-  top: 0;
-  background: ${props=>props.theme.colors.dark};
-  width: 150px;
-  height: 100vh;
-  color: ${props=>props.theme.colors.lightbg};
+function openNav() {
+  document.getElementById("navbar").style.marginTop = "0px";
+  document.getElementById("hid").style.display = "block";
+}
 
-  .logout {
-    position: absolute;
-    bottom: 10px;
-    width: inherit;
+function closeNav() {
+  document.getElementById("navbar").style.marginTop = "-400px";
+  document.getElementById("hid").style.display = "none";
+}
+
+class SideBar extends React.Component {
+  state = {
+    menuIcon: "fa fa-bars",
+    menu: false,
+    active: "Updates"
   };
 
-  .title {
-    text-align: center;
-    margin: 1rem 0;
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 0.3rem;
-    };
+  logout = async () => {
+    const request = await makeRequest("/logout");
+    if (request.status === 200) window.location.replace("/login");
   };
+
+  toggleMenu = () => {
+    if (this.state.menuIcon === "fa fa-bars") {
+      openNav();
+      this.setState({
+        menuIcon: "fa fa-times",
+        menu: true
+      });
+    } else {
+      closeNav();
+      this.setState({
+        menuIcon: "fa fa-bars",
+        menu: false
+      });
+    }
+  };
+
+  toggleActive = name => {
+    this.setState({
+      active: { name }
+    });
+  };
+
+  render() {
+    const { active, menuIcon } = this.state;
+    const { user } = this.props;
+
+    return (
+      <NavContainer>
+        <div className="title">
+          <h1>SJParks</h1>
+          <p>Admin</p>
+        </div>
+        <div className="menuIcon" onClick={this.toggleMenu}>
+          <i className={menuIcon} />
+        </div>
+
+        <div id="navbar">
+          <ul>
+            <li>
+              <NavButton
+                to={`/admin/${user._id}/updates`}
+                name="Updates"
+                action="updatePage"
+                active={active}
+                toggleActive={this.toggleActive}
+              />
+            </li>
+            <li>
+              <NavButton
+                to={`/admin/${user._id}/parks`}
+                name="Parks"
+                action="parkPage"
+                active={active}
+                toggleActive={this.toggleActive}
+              />
+            </li>
+            <li>
+              <NavButton
+                to={`/admin/${user._id}/users`}
+                name="Users"
+                action="userPage"
+                active={active}
+                toggleActive={this.toggleActive}
+              />
+            </li>
+          </ul>
+          <div className="logout">
+            <NavButton
+              onClick={this.logout}
+              type="submit"
+              name="Logout"
+              action="logoutPage"
+            />
+          </div>
+        </div>
+        <div id="hid" onClick={this.toggleMenu} />
+      </NavContainer>
+    );
   }
-`;
-
-const SideBar = () => (
-  <SideNav>
-    <div className='title'>
-      <h1>SJParks</h1>
-      <p>Admin</p>
-    </div>
-    <ul className='navbar-nav'>
-      <li>
-        <NavButton to='/admin/updates' name='Updates' action='updatePage' />
-      </li>
-      <li>
-        <NavButton to='/admin/parks' name='Parks' action='parkPage' />
-      </li>
-      <li>
-        <NavButton to='/admin/users' name='Users' action='userPage' />
-      </li>
-    </ul>
-
-    <div className='logout'>
-      <form action="/login/out" method="POST">
-        <NavButton type='submit' name='Logout' action='logoutPage' />
-      </form>
-    </div>
-  </SideNav>
-);
+}
 
 export default SideBar;

@@ -1,26 +1,15 @@
 require('dotenv-safe').config({
-  allowEmptyValues: true
+  allowEmptyValues: process.env.NODE_ENV !== 'production'
 });
 require('dotenv-safe').load();
-const dev = process.env.NODE_ENV === 'development';
-const prod = process.env.NODE_ENV === 'production';
-const test = process.env.NODE_ENV === 'test';
-var path, url, secret, port, accountSid, authToken, twilioNumber;
+let payLoad = {};
 
-path = prod ? 'build' : dev ? 'public' : 'test';
-url = dev ? process.env.MLAB_URI : test ? process.env.TEST_MONGO_URL: process.env.MONGO_URI;
-secret = dev || prod ? process.env.APP_SECRET : 'keyboard cat';
-port = prod ? process.env.PORT : process.env.SERVER_PORT;
-accountSid = dev || prod ? process.env.TWILIO_ACCOUNT_SID : null;
-authToken = dev || prod ? process.env.TWILIO_AUTH_TOKEN : null;
-twilioNumber = dev || prod ? process.env.TWILIO_NUMBER : null;
+payLoad.dev = process.env.NODE_ENV === 'development';
+payLoad.prod = process.env.NODE_ENV === 'production';
+payLoad.test = process.env.NODE_ENV === 'test';
+payLoad.path = payLoad.prod ? 'client/build' : 'client/public';
+payLoad.url = payLoad.prod ? process.env.MONGODB_URI : payLoad.dev ? process.env.MLAB_URI : process.env.TEST_MONGO_URL;
+payLoad.secret = process.env.APP_SECRET || 'Sick as the rhymes, of that kid thats behind';
+payLoad.port = payLoad.prod ? process.env.PORT : process.env.SERVER_PORT;
 
-module.exports = {
-  clientPath: path,
-  mongoUrl: url,
-  secret: secret,
-  port: port,
-  accountSid: accountSid,
-  authToken: authToken,
-  twilioNumber: twilioNumber
-};
+module.exports = payLoad;

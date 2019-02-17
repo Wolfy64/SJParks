@@ -1,105 +1,72 @@
+/** Load Dependencies */
 require('dotenv-safe').load();
+const express = require('express');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const logger = require('morgan');
-const flash = require('connect-flash');
-const passport = require('passport');
-const expressLayouts = require('express-ejs-layouts');
 const addRequestId = require('express-request-id')();
-const session = require('express-session');
-const express = require('express');
-const app = express();
-const config = require('./config/');
 const formData = require('express-form-data');
 
-console.log(`>[WEBAPP:012:030]> Creating WebApp...`);
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//********************************************************* Configure App Middleware ***********************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
+/** Load Configurations */
+const router = require('./Routes');
+const config = require('./config');
 
-// @desc Configuring View Engine
-app.use(expressLayouts);
+let app = express();
 
-app.set('view engine', 'ejs');
-// app.set('view engine', 'pug');
+/** View Engine */
+app.set('view engine', 'pug');
+app.use(express.static(path.join(__dirname, config.keys.path)));
 
+/** Logger */
+// app.use(addRequestId);
+// logger.token('id', req => req.sessionID.split('-')[0]);
+// app.use(logger('combined' /*, {skip: (req, res) => res.statusCode < 400 }*/));
+// app.use(
+//   logger(
+//     '> [:date[iso]] :method :url :status :response-time ms - :res[content-length] >'
+//   )
+// );
 
-// @desc Configuring URL Parser
-app.use(express.urlencoded({
-    extended: false
-}));
-
-// @desc Configuring JSON Parser
+/** Parser */
+// app.use(formData.parse());
 app.use(express.json());
-app.use(formData.parse());
+app.use(express.urlencoded());
 
-// @desc Configuring Express Session
-app.use(session({
-    secret: config.keys.secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 10 * 1000,
-        //activeDuration: 5 * 60 * 1000,
-        httpOnly: true,
-        secure: false
-    }
-}));
+/** Passport */
+// config.passport(app);
 
-// @desc Configuring Passport
-config.pass(passport);
-app.use(passport.initialize());
-app.use(passport.session());
+/** Use Express middleware to handle cookies (JWT) */
+app.use(cookieParser());
 
-// @desc Configuring Express Flash
-app.use(flash());
-
-// @desc Configuring Morgan Logger
-app.use(addRequestId);
-logger.token('id', (req) => req.sessionID.split('-')[0]);
-app.use(logger('combined', {
-    skip: (req, res) => {
-        return res.statusCode < 400
-    }
-}));
-app.use(logger(">[:date[iso] req: Method = :method, Url = :url ]> "));
-app.use(logger(">[:date[iso] res: Status = :status, ]> "));
-
-//----------------------------------------------------------------------------------------------------------------------------------------------
-//*********************************************************** Configure App Routes *************************************************************
-//----------------------------------------------------------------------------------------------------------------------------------------------
-
-// @desc Configuring Access to Project by Code from any Origin
-app.use(function (req, res, next) {
-    // console.log('request', req.url, req.body, req.method);
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-token");
-    if (req.method === 'OPTIONS') {
-        res.end();
-    } else {
-        next();
-    }
+/** Routes */
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, x-token'
+  );
+  if (req.method === 'OPTIONS') {
+    res.end();
+  } else {
+    next();
+  }
 });
 
-// // @desc Configuring Session Handling
-// app.use((req, res, next) =>{
-//   if (req.session.admin) next();
-//   else res.redirect('api/user/login');
+app.use('/api', router.api);
+app.post('/login', router.auth);
+app.get('/logout', router.auth);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
+});
+
+/** Error Handlers */
+// app.use((err, req, res, next) => {
+//   res.status(500).json({
+//     errors: {
+//       message: err
+//     }
+//   });
 // });
 
-// @desc Configuring Flash Messages
-app.use(function (req, res, next) {
-    res.locals.success_msg = req.flash('success_msg');
-    res.locals.error_msg = req.flash('error_msg');
-    res.locals.error = req.flash('error');
-    next();
-});
-
-// @desc Configuring View Index
-
-// console.log('>[WEBAPP:089:027]>', path.join(__dirname, 'client', config.keys.clientPath));
-// app.use(express.static(path.join(__dirname, 'client', config.keys.clientPath)));
-
-app.use('/', require("./Routes"));
-
-console.log(`>[WEBAPP:092:026]> ...WebApp Created`);
 module.exports = app;
