@@ -1,6 +1,6 @@
 import React from 'react';
 import Graph from './Graph';
-import Post from './Historypost';
+import UpdatePost from './UpdatePost';
 import Button from '../UI/Generic/Button';
 import { Wrapper } from './styles';
 import makeRequest from '../../utils/makeRequest';
@@ -13,7 +13,7 @@ class Updates extends React.Component {
     const { success, payload, message } = await request.json();
     success
       ? this.setState({ history: payload })
-      : this.setState({ history: message });
+      : this.setState({ message });
   }
 
   render() {
@@ -31,7 +31,7 @@ class Updates extends React.Component {
 
         <Wrapper>
           {this.state.history.map(post => (
-            <Post key={post._id} post={post} />
+            <UpdatePost key={post._id} post={post} />
           ))}
         </Wrapper>
       </>
