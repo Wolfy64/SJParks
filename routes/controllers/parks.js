@@ -1,6 +1,5 @@
-/*jshint esversion: 8 */
-const express = require('express');
-const router = express.Router();
+/*jshint esversion: 8 */ 
+const router = require('express').Router();
 const { validateParkInput } = require('../../configurations');
 const { respond } = require('../../lib');
 const db = require('../../models');

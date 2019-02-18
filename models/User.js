@@ -1,121 +1,153 @@
 /*jshint esversion: 8 */
 const mongoose = require('mongoose');
+// const validator  = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const jwt = require('jsonwebtoken');
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema(
-  {
-    active: {
-      type: Boolean,
-      default: true
-    },
+	{
+		active: {
+			type: Boolean,
+			default: true
+		},
 
-    access: {
-      type: String,
-      default: 'basic'
-    },
+		access: {
+			type: String,
+			default: 'basic'
+		},
 
-    salt: String,
+		salt: String,
 
-    imageUrl: String,
+		imageUrl: String,
 
-    fullName: String,
+		firstName: String,
 
-    email: {
-      index: true,
-      type: String,
-      required: [true, 'you must enter an email']
-    },
+		lastName: String,
 
-    phone: {
-      index: true,
-      type: String,
-      required: [true, 'you must enter a phone number']
-    },
+		email: {
+			index: true,
+			type: String,
+			required: [true, 'you must enter an email']
+		},
 
-    password: {
-      type: String,
-      required: [true, 'you must provide a password']
-    },
+		phone: {
+			index: true,
+			type: String,
+			required: [true, 'you must enter a phone number']
+		},
 
-    parks: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Park'
-      }
-    ],
+		password: {
+			type: String,
+			required: [true, 'you must provide a password']
+		},
 
-    updates: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Update'
-      }
-    ]
-  },
-  {
-    timestamps: true
-  }
+		parks: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Park'
+			}
+		],
+
+		updates: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: 'Update'
+			}
+		]
+	},
+	{
+		timestamps: true
+	}
 );
 
 // Create Schema Virtuals
-UserSchema.virtual('name').set(x => {
-  const N = x.split(' ');
-  this.firstName = N[0];
-  this.lastName = N[1];
+UserSchema.virtual('name').set(function(props) {
+	const N = props.split(' ');
+	this.firstName = N[0];
+	this.lastName = N[1];
 });
 
-UserSchema.virtual('name').get(() => {
-  return this.firstName + ' ' + this.lastName;
+UserSchema.virtual('name').get(function() {
+	return this.firstName + ' ' + this.lastName;
 });
 
-UserSchema.virtual('subscriptions').get(function() {
-  return {
-    active: this.active,
-    access: this.access,
-    email: this.email,
-    twilio: {
-      phone: this.phone,
-      subscriptions: this.parks
-    }
-  };
+UserSchema.virtual('subscription').set(function(props) {
+	const { access, active, email, twilio } = props;
+	this.active = active;
+	this.access = access;
+	this.email = email;
+	if (twilio.phone) this.twilio.phone = twilio.phone;
+	if (twilio.subscriptions) this.twilio.subscriptions.push(twilio.subscriptions);
+});
+
+UserSchema.virtual('subscription').get(function() {
+	return {
+		active: this.active,
+		access: this.access,
+		email: this.email,
+		twilio: {
+			phone: this.phone,
+			subscriptions: this.parks
+		}
+	};
 });
 
 UserSchema.set('toJSON', { getters: true, virtuals: true });
 
 // Configure Custom Validators
 UserSchema.plugin(uniqueValidator, {
-  type: 'mongoose-unique-validator'
+	type: 'mongoose-unique-validator'
 });
 
-// Configure Schema methods
-/*
-"Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly  prevent binding this, so your method will not have access to the document and the above examples will not work.""
-
-from: https://mongoosejs.com/docs/guide.html,
+/**
+ * Schema Methods
+ * 
+ * @property
+      " Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly prevent binding this, so your method will not have access to the documen."
+ *
+ * @see  https://mongoosejs.com/docs/guide.html,
  */
 
+/**
+ * Set user password
+ * 
+ * @param {string} newPassword
+ * 
+ */
 UserSchema.methods.setPassword = function(newPassword) {
-  bcrypt.genSalt(16, function(err, newSalt) {
-    if (err) throw err;
-    this.salt = newSalt;
-    bcrypt.hash(newPassword, newSalt, function(err, newPasswordHash) {
-      if (err) throw err;
-      this.password = newPasswordHash;
-    });
-  });
+	bcrypt.genSalt(16, function(err, newSalt) {
+		if (err) throw err;
+		this.salt = newSalt;
+		bcrypt.hash(newPassword, newSalt, function(err, newPasswordHash) {
+			if (err) throw err;
+			this.password = newPasswordHash;
+		});
+	});
 };
 
+/**
+ * Validate user  password
+ * 
+ * @param {string} candidatePassword
+ * 
+ */
 UserSchema.methods.validatePassword = function(candidatePassword) {
-  return new Promise((resolve, reject) => {
-    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-      if (err) return reject(err);
-      resolve(isMatch);
-    });
-  });
+	return new Promise((resolve, reject) => {
+		bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+			if (err) return reject(err);
+			resolve(isMatch);
+		});
+	});
 };
 
+/**
+ * Generate web token
+ * 
+ * @returns {jwt} token
+ * 
+ */
 UserSchema.methods.generateJWT = function() {
   const today = new Date();
   const expirationDate = new Date(today);
@@ -123,23 +155,24 @@ UserSchema.methods.generateJWT = function() {
   const token = jwt.sign(
     {
       _id: this._id,
-      fullName: this.fullName,
+			userName: this.userName,
       expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
     },
-    require('../config/keys').secret,
+    config.keys.secret,
     { expiresIn: '30 days' }
   );
 
   return token;
 };
 
-// UserSchema.methods.toAuthJSON = function() {
-//   return {
-//     _id: this._id,
-//     fullName: this.fullName,
-//     email: this.email,
-//     token: this.generateJWT()
-//   };
-// };
+
+UserSchema.methods.toAuthJSON = function() {
+	return {
+		_id: this._id,
+		name: this.name,
+		email: this.email,
+		token: this.generateJWT()
+	};
+};
 
 module.exports = mongoose.model('User', UserSchema);

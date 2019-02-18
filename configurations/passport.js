@@ -1,16 +1,81 @@
 /*jshint esversion: 8 */
+const uuid = require('uuid/v4');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
+const addRequestId = require('express-request-id')();
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const formData = require('express-form-data');
+const morgan = require('morgan');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const flash = require('connect-flash');
 const db = require('../models/');
-const config = require('./');
-const { respond } = require('../lib');
+const config = require('./keys');
+const { respond } = require('./lib');
 
 module.exports = app => {
-	/** Configure Express-Session */
+	/** 
+	 * Configure Passport Strategies 
+	 * 
+	 * @description "The local strategy require a `verify` function which receives the credentials 
+	 * (`username` and `password`) submitted by the user.  The function must verify 
+	 * that the password is correct and then invoke `cb` with a user object, w
+	 * hich will be set at `req.user` in route handlers after authentication."
+	 * 
+	 * @param {}
+	 * @param {}
+	 * @return {}
+	 */
+	passport.use(
+		new LocalStrategy(
+			{
+				usernameField: 'user[email]',
+				passwordField: 'user[password]'
+			},
+			async (email, password, done) => {
+				const errorMsg = { message: 'Invalid credentials' };
+				const user = await db.User.findOne({ email}).catch(done);
+				if (!user) return done(null, false, errorMsg);
+				const isMatch = await user.validatePassword(password);
+				const token = await user.generateJWT();
+
+				return done(null, isMatch ? { token } : false, isMatch ? null : errorMsg);
+			}
+		)
+	);
+
+
+	/**
+	 * Configure `Passport` authenticated session persistence.
+	 * 
+	 * @description 
+	 * "In order to restore authentication state across HTTP requests, 
+	 * `Passport` needs to `serialize` users into and `deserialize` users 
+	 * out of the `session`.
+	 * 
+	 **/
+	passport.serializeUser((user, done) => done(null, user._id));
+	passport.deserializeUser(async (userId, done) => {
+		const user = await db.User.findById(userId).catch(err => done(err));
+		return done(null, user);
+	});
+
+
+	/** 
+	 * Configure all application middleware's
+	 * 
+	 * @description 
+	 * Use `application-level` middleware for common functionality, 
+	 * including `logging`, `parsing`, and `session` handling. 
+	 * 
+	 * */
+	
 	const sessOpts = {
+		genid: (req) => {
+			return uuid() // use UUIDs for session IDs
+		},
+		store: new FileStore(),
 		secret: config.secret,
 		resave: false,
 		saveUninitialized: true,
@@ -28,94 +93,19 @@ module.exports = app => {
 		app.set('trust proxy', 1);
 		sessOpts.cookie.secure = true;
 	}
-
+	app.use(addRequestId);
+	morgan.token('id', req => req.sessionID.split('-')[0]);
+	app.use(morgan('combined'));
+	app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
+	app.use(cookieParser());
 	app.use(session(sessOpts));
+	app.use(formData.parse());
+	app.use(express.json());
+	app.use(express.urlencoded({}));
+	app.use(flash());
 
-	/** Flash */
-	// app.use(flash());
-	// app.use(function(req, res, next) {
-	// 	res.locals.success_msg = req.flash('success_msg');
-	// 	res.locals.error_msg = req.flash('error_msg');
-	// 	res.locals.error = req.flash('error');
-	// 	next();
-	// });
-
-	/** Serialize user to user._id  */
-	passport.serializeUser((user, done) => {
-		return done(null, user._id);
-	});
-
-	/** Deserialize user from user._id */
-	passport.deserializeUser(function(userId, done) {
-		db.User.findById(userId)
-			.then(function(user) {
-				done(null, user);
-			})
-			.catch(function(err) {
-				done(err);
-			});
-	});
-
-	/** Configure Passport Strategies */
-	// Local Strategy
-	passport.use(
-		new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
-			console.log('[passport] localStrategy', email, password);
-			// Match user
-			let user = await db.User.findOne({ email });
-			// Match password i
-			// let isMatch = await user.validatePassword(password);
-			isMatch = true;
-			console.log('[passport] login is forced to', isMatch);
-
-			if (!user || !isMatch) {
-				return done(null, false, { message: 'Email or Password incorrect' });
-			}
-
-			// Set up JWT
-			const token = 
-				jwt.sign(
-					{ 
-						userName: user.userName, 
-						userId: user._id,
-						access: user.access,  
-					}, 
-				config.keys.secret, { 
-				expiresIn: '1d'
-			});
-			console.log('[passport] done, token', token);
-			return done(null, { token });
-		})
-		/**new LocalStrategy(
-			{
-				usernameField: 'user[userName]',
-				passwordField: 'user[password]'
-			},
-			(username, password, done) => {
-				const errorMsg = { message: 'Invalid username or password' };
-
-				// Match user
-				db.User
-					.findOne({
-						userName: username
-					})
-					.then((matchedUser) => {
-						if (!matchedUser) {
-							return done(null, false, errorMsg);
-						}
-						return matchedUser
-							.validatePassword(password)
-							.then((isMatch) => done(null, isMatch ? matchedUser : false, isMatch ? null : errorMsg));
-					})
-					.catch(done);
-			}
-		) */
-	);
-
-	/** Initialize Passport within the App*/
+	/** Passport initialization */
 	app.use(passport.initialize());
-
-	/** Add Passport to Express-Session instance */
 	app.use(passport.session());
 
 	return app;
