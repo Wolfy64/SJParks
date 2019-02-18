@@ -1,11 +1,13 @@
 /*jshint esversion: 8 */
 // import UserImage from '../../client/src/components/ProfilePage/UserImage';
-const express = require('express');
+// import Login from '../../client/src/components/LoginPage/index';
 const cloudinary = require('cloudinary');
-const { validateUserInput } = require('../../configurations');
-const { respond } = require('../../lib');
-const db = require('../../models');
+const express = require('express');
 const router = express.Router();
+
+const { db } = require('../../models');
+const { respond } = require('../../lib');
+const { validateUserInput } = require('../../configurations');
 
 /**
  * @public
@@ -212,6 +214,21 @@ async function read(req, res) {
 	return respond(res, true, user);
 }
 
+/*
+function read(req, res) {
+	return new Promise(async function(resolve, reject) {
+		await db.User.findById(req.params.userId, () => {
+			if (err || !user) {
+				console.log(err);
+				reject(err);
+			} else {
+				resolve(user);
+			}
+		});
+	});
+}
+*/
+
 /**
  * @public
  * @function index
@@ -231,6 +248,22 @@ async function index(req, res) {
 	
 	return respond(res, true, users);
 }
+/*
+async function index(req, res) {
+	return new Promise(async (resolve, reject) => {
+		await db.User
+			.find()
+			.sort({
+				userName: 1
+			})
+			.then(users => resolve(users))
+			.catch(err => {
+				console.log(err);
+				reject(err);
+			});
+	});
+}
+*/
 
 /**
  * @public
@@ -242,11 +275,22 @@ async function index(req, res) {
  */
 async function create(req, res) {
 	const { errors, isValid, data } = await validateUserInput(req.body);
+		/*
+			return new Promise(async (resolve, reject) => {
+		if (!isValid) {
+			console.log({ success: false, error: errors });
+			reject(errors);
+		} else {
+			await db.User.findOne();
+		}
+	});
+		*/
 
 	if (!isValid) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
+		console.log(data);
 		const newUser = new db.User(data);
 
 		newUser.setPassword(data.password);
@@ -342,8 +386,10 @@ function create(req, res)
 				{
 					if (err) throw err;
 					newUser.password = hash;
+				}); // end Bcrypt.getPassword()
+			}); // end Bycrypt.getSaltsalter()
 
-					db.Park.findOne({
+			db.Park.findOne({
 						code: addPark
 					})
 						.then(park =>
@@ -395,7 +441,7 @@ function create(req, res)
 								Success: true,
 								NewUser: user._id
 							});
-							res.redirect('/api/users/login');
+							res.redirect('/login');
 						})
 						.catch(err =>
 						{
@@ -405,20 +451,18 @@ function create(req, res)
 							});
 							res.redirect('/api/user');
 						});
-				}); // end Bcrypt.getPassword()
-			}); // end Bycrypt.getSaltsalter()
 		}
 	}
 	}
 	* /
 
-/**
+/**  
+ * Update an existing user by userId 
+ * 
  * @public
- * @function update
  * @param {request} req 
  * @param {response} res 
- * @method PUT /api/user/:userId  
- * @desc Update an existing user by userId  
+ * @method PUT /api/user/:userId
  */
 function update(req, res) {
 	const { /*errors,*/ isValid, data } = validateUserInput(req.body);
@@ -490,13 +534,15 @@ function update(req, res) {
 	}
 }
 
-/**
- * @public
+/**  
+ * Delete an existing user by id 
+ * 
+ * @method DELETE api/user/:id 
  * @function destroy
  * @param {request} req 
  * @param {response} res 
- * @method DELETE api/users  
- * @desc Delete an existing user by id  
+ * @public
+ * 
  */
 
 function destroy(req, res) {
@@ -533,18 +579,20 @@ function destroy(req, res) {
 				});
 			}
 
-			user.remove().then((removedUser) => respond(res, true, {payload:removedUser})).catch((err) => respond(res, false, {message:err}));
+			user.remove().then((removedUser) => respond(res, true, removedUser)).catch((err) => respond(res, false, err));
 		})
 		.catch((err) => console.log(err));
 }
 
 /**
- * @public
+ * Upload a userImage for an existing user by id 
+ * 
+ * @method POST /api/user/:userId/image   
  * @function uploadImage
  * @param {request} req 
  * @param {response} res 
- * @method POST /api/user/:userId/image   
- * @desc Upload a userImage for an existing user by id 
+ * @public
+ * 
  */
 function uploadImage(req, res) {
 	cloudinary.config({
@@ -618,12 +666,12 @@ function findPark(req, res) {
 }
 
 /**
+ * Find a update, by updateId, that userId has either sent or recieved
+ * 
  * @public
- * @function findUpdate
  * @param {request} req 
  * @param {response} res 
  * @method GET /api/users/:userId/updates/:updateId  
- * @desc Find a update, by update._id, that user._id has either sent or recieved 
  */
 function findUpdate(req, res) {
 	db.User
@@ -636,43 +684,41 @@ function findUpdate(req, res) {
 }
 
 // @route /api/user
-router.route('/api/users')
+router.route('/')
 	.get(index)
 	.post(create);
 
-router.route('/admin/image-upload')
+router.route('/uploadImage')
 	.post(uploadImage);
 
 // @route /api/user/_id
-router.route('/api/users/:userId')
+router.route('/:userId')
 	.get(read)
 	.put(update)
 	.delete(destroy);
 
  // @route /api/users/_id/park
-router.route('/api/users/:userId/parks')
+router.route('/:userId/parks')
   .get(readAllParks);
 
 // @route /api/users/_id/updates
-router.route('/api/users/:userId/updates')
+router.route('/:userId/updates')
   .get(readAllUpdates);
 
 // @route /api/users/_id/park/_id
-router.route('/api/users/:userId/parks/:parkId')
+router.route('/:userId/parks/:parkId')
   .get(findPark);
 
 // @route /api/user/_id/updates/_id
-router.route('/api/users/:userId/updates/:updateId')
+router.route('/:userId/updates/:updateId')
   .get(findUpdate);
 
 module.exports = router /*{
 	incoming,
 	index,
+	login,
+	logout,
 	read,
-	create,
-	update,
-	destroy,
-	uploadImage,
 	readAllParks,
 	readAllUpdates,
 	findPark,

@@ -12,15 +12,15 @@ const db = require('../../models');
  * @method GET /api/parks
  * @desc This will return the index of parks 
  */
-function index(req, res) {
-	db.Park
+async function index(req, res) {
+	const parks = await db.Park
 		.find()
 		.sort({
 			code: 1,
 			name: 1
 		})
-		.then((parks) => respond(res, true, parks))
 		.catch((err) => respond(res, false, err));
+	respond(res, true, parks);
 }
 
 /**
@@ -134,12 +134,12 @@ function destroy(req, res) {
 }
 
 // @route /api/park
-router.route('/api/parks')
+router.route('/')
   .get(index)
   .post(create);
 
   // @route /api/parks/_id/
-router.route('/api/parks/:id')
+router.route('/:id')
   .get(read)
   .put(update)
 	.delete(destroy);
