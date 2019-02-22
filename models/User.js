@@ -1,4 +1,5 @@
 /*jshint esversion: 8 */
+// import { jwt } from 'jsonwebtoken';
 const mongoose = require('mongoose');
 // const validator  = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
@@ -96,16 +97,24 @@ UserSchema.virtual('subscription').get(function() {
 
 UserSchema.set('toJSON', { getters: true, virtuals: true });
 
-// Configure Custom Validators
+/** Configure Custom Validators */ 
 UserSchema.plugin(uniqueValidator, {
 	type: 'mongoose-unique-validator'
+});
+
+UserSchema.pre('save', async function (next) {
+	console.log(`Entered 'pre' save hook`);
+	var user = this;
+	if (!user.isModified('password')) return next();
+	await user.setPassword(user.password);
+	next();
 });
 
 /**
  * Schema Methods
  * 
  * @property
-      " Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly prevent binding this, so your method will not have access to the documen."
+      " Do not declare methods using ES6 arrow functions (=>). Arrow functions explicitly prevent binding this, so your method will not have access to the document and the above *examples will not work."
  *
  * @see  https://mongoosejs.com/docs/guide.html,
  */
@@ -116,15 +125,14 @@ UserSchema.plugin(uniqueValidator, {
  * @param {string} newPassword
  * 
  */
-UserSchema.methods.setPassword = function(newPassword) {
-	bcrypt.genSalt(16, function(err, newSalt) {
-		if (err) throw err;
-		this.salt = newSalt;
-		bcrypt.hash(newPassword, newSalt, function(err, newPasswordHash) {
-			if (err) throw err;
-			this.password = newPasswordHash;
-		});
-	});
+UserSchema.methods.setPassword = async function setPassword(newPassword) {
+	console.log(`[User Model] setting password`);
+	var salt = await bcrypt.genSaltSync(16);
+	this.salt = salt;
+
+	var password = await bcrypt.hashSync(newPassword, this.salt);
+	this.password = password;
+	console.log(`Pasword has been set to ${this.password}`);
 };
 
 /**
@@ -133,9 +141,9 @@ UserSchema.methods.setPassword = function(newPassword) {
  * @param {string} candidatePassword
  * 
  */
-UserSchema.methods.validatePassword = function(candidatePassword) {
-	return new Promise((resolve, reject) => {
-		bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+UserSchema.methods.validatePassword = async function(candidatePassword) {
+	return new Promise(async (resolve, reject) => {
+		await bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
 			if (err) return reject(err);
 			resolve(isMatch);
 		});
@@ -149,23 +157,25 @@ UserSchema.methods.validatePassword = function(candidatePassword) {
  * 
  */
 UserSchema.methods.generateJWT = function() {
-  const today = new Date();
-  const expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 60);
-  const token = jwt.sign(
-    {
-      _id: this._id,
+	const today = new Date();
+	const expirationDate = new Date(today);
+	expirationDate.setDate(today.getDate() + 30);
+	const token = jwt.sign(
+		{
+			_id: this._id,
 			userName: this.userName,
-      expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
-    },
-    config.keys.secret,
-    { expiresIn: '30 days' }
-  );
-
-  return token;
+			access: this.access,
+			expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
+		},
+		require('../config/keys').secret,
+		{ expiresIn: '30 days' }
+	);
+	return token;
 };
 
-
+/**
+ * 
+ */
 UserSchema.methods.toAuthJSON = function() {
 	return {
 		_id: this._id,

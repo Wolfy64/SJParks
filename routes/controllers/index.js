@@ -1,5 +1,8 @@
-module.exports.users = require("./users");
-module.exports.parks = require("./parks");
-module.exports.updates = require("./updates");
-module.exports.messageLogs = require("./messageLogs");
-module.exports.subscriptionLogs = require("./subscriptionLogs");
+/*jshint esversion: 8 */
+module.exports = {
+  users: require("./users"),
+  parks: require("./parks"),
+  updates: require("./updates"),
+  messageLogs: require("./messageLogs"),
+  subscriptionLogs: require("./subscriptionLogs")
+};

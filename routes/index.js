@@ -10,11 +10,16 @@ const {
   messageLogs,
 } = require('./controllers');
 
-apiRouter.param('userId', async (req, res, next, userId) => { 
-  req.user = await db.User.findById(userId);
+users.param('userId', async (req, res, next, userId) => {
+  const user = await db.User
+    .findById(userId)
+    .catch(err => {
+      req.error = err;
+      next();
+    });
+  if (user) req.user = user;
   return next();
 });
-
 apiRouter.use('/users' , users);
 apiRouter.use('/parks' , parks);
 apiRouter.use('/updates' , updates);

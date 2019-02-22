@@ -5,9 +5,9 @@ const cloudinary = require('cloudinary');
 const express = require('express');
 const router = express.Router();
 
-const { db } = require('../../models');
-const { respond } = require('../../lib');
-const { validateUserInput } = require('../../configurations');
+const db = require('../../models');
+const respond = require('../../lib').respond;
+const validateUserInput = require('../../configurations/validator').validateUserInput;
 
 /**
  * @public
@@ -23,10 +23,13 @@ async function incoming(req, res) {
 	// Get the user's phone number
 	const phone = req.body.From;
 	// Split the user's text message into array of individual words
-	const text = (req.body.Body || 'empty').toLowerCase().split(' ').filter((x) => x);
+	const text = (req.body.Body || 'empty')
+		.toLowerCase()
+		.split(' ')
+		.filter(x => x);
 	// We only handle messages of at most two words
 	// Messages with two words must begin with either the word 'start' or 'stop'
-	if (text[2] || (text[1] && ![ 'start', 'stop' ].includes(text[0]))) return respond(defaultResponseMessage);
+	if (text[2] || (text[1] && !['start', 'stop'].includes(text[0]))) return respond(defaultResponseMessage);
 
 	// Handle user unsubscription requests
 	if (text[0] === 'stop') {
@@ -71,14 +74,16 @@ async function incoming(req, res) {
 			} else {
 				// Unsubscribe from all parks
 				// Has the user subscribed before?
-				if (!user.parks.length) return respond(res, false, { msg: 'You never subscribed to notifications from Parks and Rec'});
+				if (!user.parks.length)
+					return respond(res, false, { msg: 'You never subscribed to notifications from Parks and Rec' });
 				// Get all the user's parks
 				db.Park.find({ _id: { $in: user.parks } }, function(err, parks) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This should not happen!
-					if (!parks) return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
+					if (!parks)
+						return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
 					// Remove the user from each park document as above
-					parks.forEach((park) => {
+					parks.forEach(park => {
 						const index = park.users.indexOf(user._id);
 						if (index >= 0) {
 							park.users.splice(index, 1);
@@ -92,7 +97,9 @@ async function incoming(req, res) {
 							});
 						}
 					});
-					respond(res, false, { msg: 'So sad to see you go! You have unsubscribed to notifications from Parks and Rec.' });
+					respond(res, false, {
+						msg: 'So sad to see you go! You have unsubscribed to notifications from Parks and Rec.'
+					});
 				});
 			}
 		});
@@ -112,7 +119,7 @@ async function incoming(req, res) {
 					// This shouldn't happen!
 					if (!parks) return respond(res, false, { msg: 'Hmmm? You have no parks to resubscribe to.' });
 					// Resubscribe to all parks in user's list
-					parks.forEach((park) => {
+					parks.forEach(park => {
 						if (park.users.indexOf(user._id) < 0) {
 							park.users.push(user._id);
 							park.save(function(err, updated) {
@@ -125,18 +132,18 @@ async function incoming(req, res) {
 							});
 						}
 					});
-						respond(res, false, { msg: 'Thanks for resubscribing to notifications from San Jose Parks!'});
+					respond(res, false, { msg: 'Thanks for resubscribing to notifications from San Jose Parks!' });
 				});
 			});
 		} else {
 			// 'start [parkcode]' equivalent to '[parkcode]' i.e. resubscribe process is same as subscription process
 			// Find the park
-			db.Park.findOne({ parkID: text[text.length - 1] }, function (err, park) {
+			db.Park.findOne({ parkID: text[text.length - 1] }, function(err, park) {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				if (!park)
-					return respond(
-						res, false, { msg: `${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`}
-					);
+					return respond(res, false, {
+						msg: `${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
+					});
 				// Find user
 				db.User.findOne({ phone: phone }, function(err, user) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
@@ -146,9 +153,21 @@ async function incoming(req, res) {
 							phone: phone,
 							firstName: 'Need2Update',
 							lastName: 'Need2Update',
-							email: 'Need2Update@adam.henry' + Math.random().toString(36).slice(2),
-							userName: 'Need2Update' + Math.random().toString(36).slice(2),
-							password: 'Need2Update' + Math.random().toString(36).slice(2)
+							email:
+								'Need2Update@adam.henry' +
+								Math.random()
+									.toString(36)
+									.slice(2),
+							userName:
+								'Need2Update' +
+								Math.random()
+									.toString(36)
+									.slice(2),
+							password:
+								'Need2Update' +
+								Math.random()
+									.toString(36)
+									.slice(2)
 						});
 					// Already subscribed
 					if (park.users.indexOf(user._id) >= 0)
@@ -205,29 +224,14 @@ async function incoming(req, res) {
  * @method GET /api/user/:userId 
  * @desc Read a user by userId 
  */
+
 async function read(req, res) {
-
-	const user = await db.User
-		.findById(req.params.userId)
-		.catch((err) => respond(res, false, err));
-	
-	return respond(res, true, user);
-}
-
-/*
-function read(req, res) {
 	return new Promise(async function(resolve, reject) {
-		await db.User.findById(req.params.userId, () => {
-			if (err || !user) {
-				console.log(err);
-				reject(err);
-			} else {
-				resolve(user);
-			}
-		});
+		console.log(req.user);
+		if (req.user) resolve(respond(res, true, req.user));
+		reject(respond(res, false, req.error));
 	});
 }
-*/
 
 /**
  * @public
@@ -237,33 +241,22 @@ function read(req, res) {
  * @method GET /api/users 
  * @desc Get all users 
  */
-async function index(req, res) {
-	
-	const users = await db.User
-		.find({})
-		.sort({
-			userName: 1
-		})
-		.catch((err) => respond(res, false, err));
-	
-	return respond(res, true, users);
-}
-/*
+
 async function index(req, res) {
 	return new Promise(async (resolve, reject) => {
-		await db.User
+		const users = await db.User
 			.find()
 			.sort({
 				userName: 1
 			})
-			.then(users => resolve(users))
 			.catch(err => {
 				console.log(err);
-				reject(err);
+				return reject(respond(res, false, err));
 			});
+
+		return resolve(respond(res, true, users));
 	});
 }
-*/
 
 /**
  * @public
@@ -275,186 +268,20 @@ async function index(req, res) {
  */
 async function create(req, res) {
 	const { errors, isValid, data } = await validateUserInput(req.body);
-		/*
-			return new Promise(async (resolve, reject) => {
-		if (!isValid) {
-			console.log({ success: false, error: errors });
-			reject(errors);
-		} else {
-			await db.User.findOne();
-		}
-	});
-		*/
 
 	if (!isValid) {
-		console.log({ success: false, error: errors });
+		console.log({ success: false, errors });
 		respond(res, false, errors);
 	} else {
+		delete data.queries;
 		console.log(data);
-		const newUser = new db.User(data);
+		var newUser = new db.User(data);
+		await newUser.save().catch(err => console.log(err));
 
-		newUser.setPassword(data.password);
-		newUser
-			.save()
-			.then((user) => {
-				console.log(`[userController] New user created. NewUser: ${user._id}`);
-				respond(res, true, {user});
-			})
-			.catch((err) => {
-				console.log(`[userController] Could not save user: ${err}`);
-				errors.push(new Error({ message: 'Could not save user', error: err }));
-				respond(res, false, { message: err });
-			});
+		console.log(newUser);
+		respond(res, true, newUser);
 	}
 }
-/**
-function create(req, res)
-{
-	const {
-		isAdmin,
-		userName,
-		firstName,
-		lastName,
-		phone,
-		email,
-		password,
-		addPark,
-		addMessage
-	} = req.body;
-
-	let errors = [];
-
-	if (!userName || !firstName || !lastName || !phone || !email || !password)
-	{
-		errors.push({
-			msg: 'Please enter all fields'
-		});
-	}
-
-	if (password.length < 8)
-	{
-		errors.push({
-			msg: 'Password must be at least 8 characters'
-		});
-	}
-
-	if (errors.length > 0)
-	{
-		res.render('register', {
-			errors,
-			email,
-			password
-		});
-	} else
-	{
-		let user = null;
-		db.User.findOne({
-			userName: userName,
-			phone: phone,
-			email: email
-		}).then(userFound =>
-		{
-			if (userFound) user = userFound;
-		});
-		if (user != null)
-		{
-			errors.push({
-				msg: `Derp! User already exists!`,
-				user: user
-			})
-			res.render('register', {
-				errors,
-				user
-			});
-		} else
-		{
-
-			const newUser = new db.User({
-				isAdmin: isAdmin,
-				userName: userName,
-				firstName: firstName,
-				lastName: lastName,
-				phone: phone,
-				email: email
-			});
-
-			bcrypt.genSalt(16, (err, salt) =>
-			{
-				if (err) throw err;
-				newUser.salt = salt;
-				bcrypt.hash(password, newUser.salt, (err, hash) =>
-				{
-					if (err) throw err;
-					newUser.password = hash;
-				}); // end Bcrypt.getPassword()
-			}); // end Bycrypt.getSaltsalter()
-
-			db.Park.findOne({
-						code: addPark
-					})
-						.then(park =>
-						{
-							if (park)
-							{
-								newUser.parks.push(park._id);
-							} else
-							{
-								const newPark = new db.Park({
-									code: addPark
-								});
-								newPark.users.push(newUser._id);
-								newPark
-									.save()
-									.then(park => newUser.parks.push(park._id))
-									.catch(err => console.log(err));
-							}
-						})
-						.catch(err => console.log(err))
-
-					db.Message.findOne({
-						message: addMessage
-					})
-						.exec((err, message) =>
-						{
-							if (message)
-							{
-								newUser.messages.push(message._id);
-							} else if (err || !message)
-							{
-								const newMessage = new db.Message({
-									author: newUser._id,
-									message: addMessage
-								});
-								newMessage.save().then(message =>
-									newUser.messages.push(message._id)).catch(err => console.log(err));
-							}
-						});
-
-					newUser.save()
-						.then(user =>
-						{
-							req.flash(
-								'success_msg',
-								'You are now registered and can log in'
-							);
-							res.status(220).send({
-								Success: true,
-								NewUser: user._id
-							});
-							res.redirect('/login');
-						})
-						.catch(err =>
-						{
-							res.status(420).send({
-								Success: false,
-								Error: err.message
-							});
-							res.redirect('/api/user');
-						});
-		}
-	}
-	}
-	* /
 
 /**  
  * Update an existing user by userId 
@@ -464,20 +291,20 @@ function create(req, res)
  * @param {response} res 
  * @method PUT /api/user/:userId
  */
-function update(req, res) {
-	const { /*errors,*/ isValid, data } = validateUserInput(req.body);
+async function update(req, res) {
+	const { errors, isValid, data } = validateUserInput(req.body);
 
 	if (!isValid) {
-		respond(res, false, { msg: `Could not update user: ${res.params.userId}` });
+		console.log(errors);
+		respond(res, false, errors);
 	} else {
-
 		/** 
 		 * These are the options for 'findByIdAndUpdate'. Please see the link that follows for *further details.
 		 * 
 		 * @see https://mongoosejs.com/docs/*api.html#model_Model.findByIdAndUpdate"} 
 		 * 
 		 * */
-	
+
 		const options = {
 			setDefaultsOnInsert: true,
 			sort: 1,
@@ -488,49 +315,32 @@ function update(req, res) {
 			rawResult: false,
 			strict: false
 		};
-		
-		db.User.findByIdAndUpdate(req.params.id, data, options, (err, foundUser) => {
-			if (err || !foundUser) respond(res, false, { msg: !foundUser ? 'Error finding user' : err.message });
-			if (foundUser) {
-				foundUser.setPassword(data.password);
 
-				db.Park.findOne({
-					name: data.addPark
-				})
-					.exec((err, park) => {
-						if (park) {
-							const newPark = new db.Park({
-								name: data.addPark
-							});
-							newPark.users.push(foundUser._id);
-							newPark.save().then(park =>
-								foundUser.parks.push(park._id));
-						}
-					});
+		const foundUser = await db.User.findByIdAndUpdate(req.params.id, data, options).catch(err => console.log(err));
 
-				db.Update.findOne({
-					update: data.addUpdate
-				})
-					.exec((err, update) => {
-						if (update) {
-							foundUser.updates.push(update._id);
-						} else if (err || !update) {
-							const newUpdate = new db.Update({
-								author: foundUser._id,
-								update: data.addUpdate
-							});
-							newUpdate.save().then(update =>
-								foundUser.updates.push(update._id));
-						}
+		newPark.users.push(foundUser._id);
+		newPark.save().then(park => foundUser.parks.push(park._id));
+
+		db.Update
+			.findOne({
+				update: data.addUpdate
+			})
+			.exec((err, update) => {
+				if (update) {
+					foundUser.updates.push(update._id);
+				} else if (err || !update) {
+					const newUpdate = new db.Update({
+						author: foundUser._id,
+						update: data.addUpdate
 					});
-				
-				foundUser
-					.save()
-					.then((foundUser) =>
-						respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` }))
-					.catch((err) => respond(res, false, { msg: err.update }));
-			}
-		});
+					newUpdate.save().then(update => foundUser.updates.push(update._id));
+				}
+			});
+
+		foundUser
+			.save()
+			.then(foundUser => respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` }))
+			.catch(err => respond(res, false, { msg: err.update }));
 	}
 }
 
@@ -552,36 +362,39 @@ function destroy(req, res) {
 		.findByIdAndDelete({
 			_id: user._id
 		})
-		.then((user) => {
-			user.parks.forEach((park) => {
+		.then(user => {
+			user.parks.forEach(park => {
 				db.Park
 					.findById(park)
-					.then((doc) => {
+					.then(doc => {
 						doc.users.pop(user._id);
 						doc.save();
 					})
-					.catch((err) => console.log(err));
+					.catch(err => console.log(err));
 			});
 
 			if (user.Updates) {
-				user.Updates.forEach((update) => {
+				user.Updates.forEach(update => {
 					db.Update
 						.find({
 							author: update.author
 						})
-						.then((docs) => {
-							docs.forEach((doc) => {
+						.then(docs => {
+							docs.forEach(doc => {
 								doc.users.pop(user._id);
 								doc.save();
 							});
 						})
-						.catch((err) => console.log(err));
+						.catch(err => console.log(err));
 				});
 			}
 
-			user.remove().then((removedUser) => respond(res, true, removedUser)).catch((err) => respond(res, false, err));
+			user
+				.remove()
+				.then(removedUser => respond(res, true, removedUser))
+				.catch(err => respond(res, false, err));
 		})
-		.catch((err) => console.log(err));
+		.catch(err => console.log(err));
 }
 
 /**
@@ -601,9 +414,11 @@ function uploadImage(req, res) {
 		api_secret: process.env.CLOUDINARY_API_SECRET
 	});
 	const values = Object.values(req.files);
-	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
+	const promises = values.map(image => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => respond(res, false, err));
+	Promise.all(promises)
+		.then(results => respond(res, true, results))
+		.catch(err => respond(res, false, err));
 
 	res.status(200);
 }
@@ -621,10 +436,10 @@ function readAllParks(req, res) {
 	db.User
 		.findById(req.params.userId)
 		.populate('parks')
-		.then((user) => {
+		.then(user => {
 			respond(res, true, user.parks);
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -640,10 +455,10 @@ function readAllUpdates(req, res) {
 	db.User
 		.findById(req.params.id)
 		.populate('updates')
-		.then((user) => {
+		.then(user => {
 			respond(res, true, user.updates);
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -658,11 +473,11 @@ function readAllUpdates(req, res) {
 function findPark(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then((user) => {
-			const park = user.parks.find((park) => park._id === req.params.parkId);
+		.then(user => {
+			const park = user.parks.find(park => park._id === req.params.parkId);
 			respond(res, true, { userId: user._id, parkId: park._id });
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -676,42 +491,39 @@ function findPark(req, res) {
 function findUpdate(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then((user) => {
-			const update = user.updates.find((update) => update._id === req.params.updateId);
+		.then(user => {
+			const update = user.updates.find(update => update._id === req.params.updateId);
 			respond(res, true, { userId: user._id, updateId: update._id });
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 // @route /api/user
-router.route('/')
+router
+	.route('/')
 	.get(index)
 	.post(create);
 
-router.route('/uploadImage')
-	.post(uploadImage);
+router.route('/uploadImage').post(uploadImage);
 
 // @route /api/user/_id
-router.route('/:userId')
+router
+	.route('/:userId')
 	.get(read)
 	.put(update)
 	.delete(destroy);
 
- // @route /api/users/_id/park
-router.route('/:userId/parks')
-  .get(readAllParks);
+// @route /api/users/_id/park
+router.route('/:userId/parks').get(readAllParks);
 
 // @route /api/users/_id/updates
-router.route('/:userId/updates')
-  .get(readAllUpdates);
+router.route('/:userId/updates').get(readAllUpdates);
 
 // @route /api/users/_id/park/_id
-router.route('/:userId/parks/:parkId')
-  .get(findPark);
+router.route('/:userId/parks/:parkId').get(findPark);
 
 // @route /api/user/_id/updates/_id
-router.route('/:userId/updates/:updateId')
-  .get(findUpdate);
+router.route('/:userId/updates/:updateId').get(findUpdate);
 
 module.exports = router /*{
 	incoming,
