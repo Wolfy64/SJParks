@@ -1,109 +1,73 @@
 import React from 'react';
+import Title from './Title';
+import BurgerIcon from './BurgerIcon';
 import NavButton from '../UI/Generic/NavButton';
 import makeRequest from '../../utils/makeRequest';
 import { NavContainer } from './styles';
 
-function openNav() {
-  document.getElementById('navbar').style.marginTop = '0px';
-  document.getElementById('hid').style.display = 'block';
-}
+import { NavLink } from 'react-router-dom';
 
-function closeNav() {
-  document.getElementById('navbar').style.marginTop = '-400px';
-  document.getElementById('hid').style.display = 'none';
-}
-
-class SideBar extends React.Component {
+class NavBar extends React.Component {
   state = {
-    menuIcon: 'fa fa-bars',
-    menu: false,
-    active: 'Updates'
+    isMobile: false,
+    show: true
   };
+
+  componentDidMount() {
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
+  }
+
+  onWindowResize = () => this.setState({ isMobile: window.innerWidth < 768 });
 
   logout = async () => {
     const request = await makeRequest('/logout');
     if (request.status === 200) window.location.replace('/login');
   };
 
-  toggleMenu = () => {
-    if (this.state.menuIcon === 'fa fa-bars') {
-      openNav();
-      this.setState({
-        menuIcon: 'fa fa-times',
-        menu: true
-      });
-    } else {
-      closeNav();
-      this.setState({
-        menuIcon: 'fa fa-bars',
-        menu: false
-      });
-    }
-  };
-
-  toggleActive = name => {
-    this.setState({
-      active: { name }
-    });
-  };
+  toggle = () => this.setState({ show: !this.state.show });
 
   render() {
-    const { active, menuIcon } = this.state;
+    const { isMobile, show } = this.state;
     const { user } = this.props;
+    const url = `/admin/${user._id}`;
 
     return (
-      <NavContainer>
-        <div className="title">
-          <h1>SJParks</h1>
-          <p>Admin</p>
-        </div>
-        <div className="menuIcon" onClick={this.toggleMenu}>
-          <i className={menuIcon} />
-        </div>
+      <NavContainer isMobile={isMobile} show={show}>
+        {isMobile ? (
+          <BurgerIcon open={!show} toggle={this.toggle} />
+        ) : (
+          <Title />
+        )}
 
-        <div id="navbar">
-          <ul>
-            <li>
-              <NavButton
-                to={`/admin/${user._id}/updates`}
-                name="Updates"
-                action="updatePage"
-                active={active}
-                toggleActive={this.toggleActive}
-              />
-            </li>
-            <li>
-              <NavButton
-                to={`/admin/${user._id}/parks`}
-                name="Parks"
-                action="parkPage"
-                active={active}
-                toggleActive={this.toggleActive}
-              />
-            </li>
-            <li>
-              <NavButton
-                to={`/admin/${user._id}/users`}
-                name="Users"
-                action="userPage"
-                active={active}
-                toggleActive={this.toggleActive}
-              />
-            </li>
-          </ul>
-          <div className="logout">
-            <NavButton
-              onClick={this.logout}
-              type="submit"
-              name="Logout"
-              action="logoutPage"
-            />
-          </div>
-        </div>
-        <div id="hid" onClick={this.toggleMenu} />
+        <ul>
+          <li>
+            <NavLink className="link" to={`${url}/updates`}>
+              Updates
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="link" to={`${url}/parks`}>
+              Parks
+            </NavLink>
+          </li>
+          <li>
+            <NavLink className="link" to={`${url}/users`}>
+              Users
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/login" className="link logout" onClick={this.logout}>
+              Logout
+            </NavLink>
+          </li>
+        </ul>
       </NavContainer>
     );
   }
 }
 
-export default SideBar;
+export default NavBar;

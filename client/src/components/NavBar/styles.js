@@ -1,70 +1,48 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const NavContainer = styled.div`
   border-right: solid 3px ${props => props.theme.colors.primary};
   position: fixed;
   top: 0;
-  background: ${props => props.theme.colors.dark};
-  width: 150px;
-  height: 100vh;
+  background: ${props =>
+    props.isMobile ? 'transparent' : props.theme.colors.dark};
+  width: ${props => (props.isMobile ? '100%' : '150px')};
+  height: ${props => (props.isMobile ? 'auto%' : '100vh')};
   color: ${props => props.theme.colors.lightbg};
-  z-index: 3;
-  @media screen and (max-width: ${props => props.theme.displays.tablet}) {
+  z-index: 2;
+
+  ul {
+    margin-top: ${props => (props.show ? 'none' : '-400px')};
+    padding-top: ${props => (props.show ? 'none' : '70px')};
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    border-bottom: solid 3px
+      ${props => (props.isMobile ? props.theme.colors.primary : 'none')};
+  }
+
+  li:last-child {
     width: 100%;
-    height: auto;
-    background-color: transparent;
-    #navbar {
-      margin-top: -400px;
-      padding-top: 70px;
-      -webkit-transition: all 0.5s ease;
-      -moz-transition: all 0.5s ease;
-      transition: all 0.5s ease;
-      background: ${props => props.theme.colors.dark};
-      border-bottom: solid 3px ${props => props.theme.colors.primary};
+    position: ${props => (props.isMobile ? 'relative' : 'absolute')};
+    bottom: ${props => (props.isMobile ? '0px' : '10px')};
+  }
+
+  .link {
+    display: block;
+    text-decoration: none;
+    font-size: 0.8rem;
+    padding: ${props => (props.isMobile ? '22px 10px' : '10px')};
+    text-align: ${props => (props.isMobile ? 'center' : 'left')};
+    color: ${props => props.theme.colors.lightbg};
+    background-color: ${props => props.theme.colors.dark};
+
+    :hover {
+      background-color: ${props => props.theme.colors.secondary};
     }
   }
 
   .logout {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-      position: relative;
-      bottom: 0px;
-    }
-  }
-
-  .title {
     text-align: center;
-    margin: 1rem 0;
-    background: ${props => props.theme.colors.dark};
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 0.3rem;
-    }
-    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-      display: none;
-    }
-  }
-
-  .menuIcon {
-    display: none;
-    height: 20px;
-    width: 30px;
-    padding: 40px 20px;
-    position: fixed;
-    right: 0px;
-    justify-content: center;
-    @media screen and (max-width: ${props => props.theme.displays.tablet}) {
-      display: block;
-    }
-  }
-
-  #hid {
-    height: 100vh;
-    width: 100%;
-    background-color: transparent;
-    display: none;
   }
 
   .active {
