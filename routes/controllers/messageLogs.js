@@ -1,6 +1,8 @@
-/*jshint esversion: 6 */
-const db = require('../../models');
-const { respond } = require('../../lib/responseSender');
+/*jshint esversion: 8 */
+// const db = require('../../models');
+// const { respond } = require('../../lib');
+const express = require('express');
+const router = express.Router();
 
 // @route GET api/messageLogs/
 // @desc Get all messageLog's
@@ -34,10 +36,22 @@ function update(req, res) {}
 // @access Public
 function destroy(req, res) {}
 
-module.exports = {
-  index,
-  read,
-  create,
-  update,
-  destroy
-};
+/** MessageLogs */
+router
+	.route('/api/messageLogs')
+	.get(index)
+	.post(create);
+
+router
+	.route('/api/messageLogs/:messageLogId')
+	.get(read)
+	.put(update)
+	.delete(destroy);
+
+module.exports = router/*{
+	index,
+	read,
+	create,
+	update,
+	destroy
+}*/;

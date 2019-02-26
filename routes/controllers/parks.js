@@ -1,6 +1,9 @@
+/*jshint esversion: 8 */ 
+const router = require('express').Router();
+const { validateParkInput } = require('../../configurations');
+const { respond } = require('../../lib');
 const db = require('../../models');
-const { validateParkInput } = require('../../config/validator');
-const { respond } = require('../../lib/responseSender');
+
 /**
  * @public
  * @function index
@@ -9,15 +12,15 @@ const { respond } = require('../../lib/responseSender');
  * @method GET /api/parks
  * @desc This will return the index of parks 
  */
-function index(req, res) {
-	db.Park
+async function index(req, res) {
+	const parks = await db.Park
 		.find()
 		.sort({
 			code: 1,
 			name: 1
 		})
-		.then((parks) => respond(res, true, parks))
 		.catch((err) => respond(res, false, err));
+	respond(res, true, parks);
 }
 
 /**
@@ -35,7 +38,7 @@ function create(req, res) {
 	console.log('> Creating new park');
 	const {errors, isValid, data} = validateParkInput(req.body);
 	console.log('> Passed new park data validation');
-	if (!isValid) {
+	if (isValid/*!isvalid*/) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
@@ -45,7 +48,7 @@ function create(req, res) {
 		NewPark
 			.save()
 			.then((park) => {
-				console.log(`New park created. NewPark._id: ${park._id}`);
+				console.log(`New park created. NewPark: ${park._id}`);
 				respond(res, true, park);
 			})
 			.catch((err) => {
@@ -118,38 +121,27 @@ function read(req, res) {
  * @desc Delete An park by ObjectId
  */
 function destroy(req, res) {
-	console.log('[parkController] body', req.body)
+	console.log('[parkController] body', req.body);
 	db.Park
-		.findByIdAndDelete(req.body._id)
-		.then((park) =>
-			park.remove().then((removedpark) =>
-				res.status(296).json({
-					success: true,
-					deleted: removedpark
-				})
-			)
+		.findByIdAndDelete(req.params.id)
+		.then((foundPark) =>
+			foundPark
+				.remove()
+				.then(removedPark => respond(res, true, removedPark))
+				.catch(err => console.log(err))	
 		)
 		.catch((err) => console.log(err));
 }
 
-// const express = require('express');
-// const router = express.Router();
+// @route /api/park
+router.route('/')
+  .get(index)
+  .post(create);
 
-// // @route /api/park
-// router.route('/api/parks')
-//   .get(index)
-//   .post(create);
-
-//   // @route /api/parks/_id/
-// router.route('/api/parks/:id')
-//   .get(read)
-//   .put(update)
-// 	.delete(destroy);
+  // @route /api/parks/_id/
+router.route('/:id')
+  .get(read)
+  .put(update)
+	.delete(destroy);
 	
-module.exports = /*router*/{
-	index,
-	read,
-	create,
-	update,
-	destroy
-};
+module.exports = router;

@@ -1,7 +1,7 @@
-﻿﻿module.exports = {
+﻿/*jshint esversion: 8 */
+module.exports = {
 	name: "SJParks Endpoints",
 	version: "2.0.1",
-	lastUpdated: "",
 	message: "Welcome to the San Jose Parks App! Here is some information about its api:",
 	documentationUrl: "https://github.com/irishka2863/SJParks/blob/master/README.md",
 	"baseUrl": "https://github.com/irishka2863/SJParks/",
@@ -271,7 +271,7 @@
 				"type": "JSON",
 				"genMethod": "SERVER"
 			},
-			"WIP": true
+			"WIP": false
 		},
 		{
 			"route": "/admin/users/:userId/uploadImage",

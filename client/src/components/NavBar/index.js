@@ -1,7 +1,6 @@
 import React from 'react';
 import Title from './Title';
 import BurgerIcon from './BurgerIcon';
-import NavButton from '../UI/Generic/NavButton';
 import makeRequest from '../../utils/makeRequest';
 import { NavContainer } from './styles';
 
