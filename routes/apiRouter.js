@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 /** Load Configurations  */
 const router = express.Router();
-const api = require('./Controllers');
+const controllers = require('./Controllers');
 const { config } = require('../config');
 // var apiManifest = require('../config/apiManifest');
 
@@ -11,26 +11,26 @@ router.route('/users')
 	.get(controllers.users.index)
 	.post(controllers.users.create)
 	.delete(controllers.users.destroy)
-	.put(controllers.users.update)
+	.put(controllers.users.update);
 
 router.route('/users/:userId')
-	.get(controllers.users.read)
+	.get(controllers.users.read);
 
-router.route('/users/:userId/uploadImage').post(api.users.uploadImage);
+router.route('/users/:userId/uploadImage').post(controllers.users.uploadImage);
 
-router.route('/users/:userId/parks').get(api.users.readAllParks);
+router.route('/users/:userId/parks').get(controllers.users.readAllParks);
 
-router.route('/users/:userId/updates').get(api.users.readAllUpdates);
+router.route('/users/:userId/updates').get(controllers.users.readAllUpdates);
 
-router.route('/users/:userId/parks/:parkId').get(api.users.findPark);
+router.route('/users/:userId/parks/:parkId').get(controllers.users.findPark);
 
-router.route('/users/:userId/updates/:updateId').get(api.users.findUpdate);
+router.route('/users/:userId/updates/:updateId').get(controllers.users.findUpdate);
 
 /** Parks */
 router.route('/parks')
 	.get(controllers.parks.index)
 	.post(controllers.parks.create)
-	.delete(controllers.parks.destroy)
+	.delete(controllers.parks.destroy);
 
 router.route('/parks/:id').get(controllers.parks.read).put(controllers.parks.update);
 
@@ -39,7 +39,7 @@ router.route('/updates')
 	.get(controllers.updates.index)
 	.post(controllers.updates.send);
 
-router.route('/api/updates/:updateId').get(api.parks.read).put(api.parks.update).delete(api.parks.destroy);
+router.route('/api/updates/:updateId').get(controllers.parks.read).put(controllers.parks.update).delete(controllers.parks.destroy);
 
 /** MessageLogs */
 router.route('/messageLogs')
@@ -48,9 +48,9 @@ router.route('/messageLogs')
 
 router
 	.route('/api/messageLogs/:messageLogId')
-	.get(api.messageLogs.read)
-	.put(api.messageLogs.update)
-	.delete(api.messageLogs.destroy);
+	.get(controllers.messageLogs.read)
+	.put(controllers.messageLogs.update)
+	.delete(controllers.messageLogs.destroy);
 
 /** SubscriptionLogs */
 router.route('/subscriptionLogs')
@@ -59,8 +59,10 @@ router.route('/subscriptionLogs')
 
 router
 	.route('/api/subscriptionLogs/:subscriptionLogId')
-	.get(api.subscriptionLogs.read)
-	.put(api.subscriptionLogs.edit)
-	.delete(api.subscriptionLogs.destroy);
+	.get(controllers.subscriptionLogs.read)
+	.put(controllers.subscriptionLogs.edit)
+	.delete(controllers.subscriptionLogs.destroy);
+
+router.get('/auth', controllers.admin.ensureAuthenticated);
 
 module.exports = router;

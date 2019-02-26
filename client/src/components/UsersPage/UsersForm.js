@@ -86,50 +86,24 @@ const UsersForm = class userInput extends React.Component {
 
     /** [H] I Need to make this match with current BE*/
     return (
-      <form className="usersForm" onSubmit={this.handleSubmit}>
-        {' '}
-        <Input
-          label="Full Name"
-          placeholder="John Doe"
-          name="fullName"
-          type="text"
-          onChange={this.handleChange}
+      <form className='usersForm' onSubmit={this.handleSubmit} autoComplete='on' > 
+        < Input  label='Full Name' placeholder='John Doe' name='fullName' type='text' onChange={this.handleChange}
           value={this.state.fullName}
-          error={hasErrors ? formErrors.fullName : null}
-        />{' '}
-        <Input
-          label="User Id"
-          placeholder="john42"
-          name="userName"
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.userName}
-          error={hasErrors ? formErrors.userName : null}
-        />{' '}
-        <Input
-          label="Email"
-          placeholder="john.doe@mail.com"
-          name="userEmail"
-          type="email"
-          onChange={this.handleChange}
-          value={this.state.userEmail}
-          error={hasErrors ? formErrors.userEmail : null}
-        />{' '}
-        <Input
-          label="Password"
-          placeholder="Password"
-          name="password"
-          type="password"
-          onChange={this.handleChange}
+          error={ hasErrors ? formErrors.fullName : null }
+        /> 
+        < Input label='Phone' placeholder='4084552057' name='phone' type='text' onChange={this.handleChange}
+          value={this.state.phone}
+          error={ hasErrors ? formErrors.phone : null }
+        /> 
+        < Input label='Email' placeholder='john.doe@mail.com' name='email' type='email' onChange={this.handleChange}
+          value={this.state.email}
+          error={hasErrors  ?formErrors.email : null }
+        /> 
+        < Input label='Password' placeholder='Password' name='password' type='password' onChange={this.handleChange}
           value={this.state.password}
-          error={hasErrors ? formErrors.password : null}
-        />{' '}
-        <Input
-          label="Confirm Password"
-          placeholder="Confirm Password"
-          name="confirmPassword"
-          type="password"
-          onChange={this.handleChange}
+          error={hasErrors ? formErrors.password : null }
+        /> 
+        < Input suggested='new-password' label='Confirm Password' placeholder='Confirm Password' name='confirmPassword' type='password' onChange={this.handleChange}
           value={this.state.confirmPassword}
           error={hasErrors ? formErrors.confirmPassword : null }
         /> 

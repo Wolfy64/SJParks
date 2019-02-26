@@ -1,8 +1,7 @@
 /*jshint esversion: 8 */
-// const db = require('../models');
+const db = require('../models');
 const validator = require('validator');
 const isEmpty = require('is-empty');
-
 /**
  * Validates user input provided by an HTTP_request object
  * 
@@ -10,28 +9,30 @@ const isEmpty = require('is-empty');
  * @param {request.body} props
  * 
  */
-function validateUserInput(props) {
+function validateUserInput(props, userId = null) {
 	return new Promise(async (resolve, reject) => {
-		console.log('> [12:20] Begin user Validation');
+		console.log('> [012:20] Begin user Validation');
 		const errors = [];
 		const data = {};
 		const queries = {};
-
-		// prepare data
-		console.log('> [18:19] Preparing Data');
+		console.log('> [018:19] Preparing Data');
 		data.access = !isEmpty(props.access) ? props.access : 'basic';
-		data.userName = !isEmpty(props.userNames) ? props.userName : '';
+		data.userName = !isEmpty(props.userName) ? props.userName : '';
 		data.password = !isEmpty(props.password) ? props.password : '';
 		data.name = !isEmpty(props.name) ? props.name : '';
 		data.phone = !isEmpty(props.phone) ? props.phone : '';
 		data.email = !isEmpty(props.email) ? props.email : '';
+
 		if (!isEmpty(props.addPark)) {
+			console.log(`> [27:25] queries.park:${props.addPark}`);
 			queries.park = {};
 			const { code, name } = props.addPark;
 			if (code) queries.park.code = code;
 			if (name) queries.park.name = name;
 		}
+
 		if (!isEmpty(props.addUpdate)) {
+			console.log(`> [35:26] props.addUpdate:${props.addUpdate}`);
 			queries.update = {};
 			const { author, message } = props.addUpdate;
 			if (author) queries.update.author = author;
@@ -39,45 +40,40 @@ function validateUserInput(props) {
 		}
 
 		// prepare validator queries
-		console.log('> [32:22] Preparing queries');
+		console.log('> [042:25] Preparing queries');
 		queries.user = {
 			userName: data.userName,
 			phone: data.phone,
 			email: data.email
 		};
+		console.log(`> [49:24] Find a user By(${queries.user})`);
 
 		if (validator.isEmpty(data.userName)) {
+			console.log(`> [049:25] userName:${data.userName}`);
 			delete queries.user.userName;
 			errors.push(new Error('UserName field is required'));
+			console.log(`> [049:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
 		}
+
 		if (validator.isEmpty(data.phone)) {
+			console.log(`> [054:25] phone:${data.phone}`);
 			delete queries.user.phone;
 			errors.push(new Error('Phone field is required'));
+			console.log(`> [054:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
 		}
 
 		if (validator.isEmpty(data.email)) {
+			console.log(`> [060:25] email:${data.email}`);
 			delete queries.user.email;
 			errors.push(new Error('Email field is required'));
+			console.log(`> [060:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
 		}
-
-		const user = await db.User.findOne(queries.user).catch(err => console.error(err));
-		if (user) errors.push(new Error('Derp! this user already exists'));
-
-		const park = await db.Park
-			.findOne(queries.park)
-			.catch(err => errors.push(new Error('We had trouble finding that that park')));
-		if (park) data.parks = [park];
-
-		const update = await db.Update
-			.findOne(queries.update)
-			.catch(err => errors.push(new Error('We had trouble finding that that update')));
-		if (update) data.updates = [update];
 
 		if (validator.isEmpty(data.password)) {
+			console.log(`> [066:25] password ${data.password}`);
 			errors.push(new Error('Password field is required'));
+			console.log(`> [066:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
 		}
-
-		data.queries = queries;
 
 		if (
 			!validator.isLength(data.password, {
@@ -85,23 +81,74 @@ function validateUserInput(props) {
 				max: 30
 			})
 		) {
+			console.log(`> [089:25] password ${data.password}`);
 			errors.push(new Error('Password must be at least 6 and no more than 30 characters in length'));
+			console.log(
+				`> [089:25] There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`
+			);
 		}
 
-		// misc validator checks
 		if (!validator.isAlphanumeric(data.access)) {
+			console.log(`> [099:25] access: ${data.access}`);
 			errors.push(new Error('Access must be alpha-numeric'));
+			console.log(`There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`);
 		}
 
 		if (!validator.isMobilePhone(data.phone)) {
+			console.log(`> [104:25] phone: ${data.phone}`);
 			errors.push(new Error('Phone is invalid'));
+			console.log(
+				`> [104:25] There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`
+			);
 		}
 
-		const isValid = isEmpty(errors);
-		if (isValid) {
-			resolve({ isValid, data });
+		if (queries.user) {
+			const user = await db.User.findOne(queries.user).catch(err => console.error(err));
+			console.log(`> [071:25] queries.user:${queries.user}`);
+			// console.error(err);
+			if (user) {
+				if (userId === user._id) {
+					data._id = userId;
+					delete data.queries.user;
+				} else if (userId === null || typeof userId === 'undefined') {
+					errors.push(new Error('Derp! this user already exists'));
+					console.log(`> [071:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
+				}
+			} else if (!user && userId === null) {
+				
+			}
+		}
+
+		const park = await db.Park.findOne(queries.park).catch(err => {
+			// console.error(err);
+			console.log(`> [075:25] queries.park:${queries.park}`);
+			errors.push(new Error('We had trouble finding that that park'));
+			console.log(`> [075:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
+		});
+		if (park) {
+			data.parks = [park._id];
 		} else {
-			reject({ isValid, errors });
+			data.parks = [];
+		}
+
+		// const update = await db.Update.findOne(queries.update).catch(err => {
+		// 	// console.error(err);
+		// 	console.log(`> [081:25] queries.update:${queries.update}`);
+		// 	if(!update)errors.push(new Error('We had trouble finding that that update'));
+		// 	console.log(`> [081:25] There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`);
+		// });
+		// if (update) data.updates = [update];
+
+		data.queries = queries;
+
+		const isValid = isEmpty(errors);
+		console.log(isValid);
+		if (isValid) {
+			console.log(`> [111:25] data: ${data}`);
+			resolve({ errors, isValid, data });
+		} else {
+			console.log(`> [114:25] error: ${errors}`);
+			reject({ errors, isValid, data });
 		}
 	});
 }

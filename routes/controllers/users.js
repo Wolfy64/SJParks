@@ -23,25 +23,22 @@ async function incoming(req, res) {
 	// Get the user's phone number
 	const phone = req.body.From;
 	// Split the user's text message into array of individual words
-	const text = (req.body.Body || 'empty')
-		.toLowerCase()
-		.split(' ')
-		.filter(x => x);
+	const text = (req.body.Body || 'empty').toLowerCase().split(' ').filter((x) => x);
 	// We only handle messages of at most two words
 	// Messages with two words must begin with either the word 'start' or 'stop'
-	if (text[2] || (text[1] && !['start', 'stop'].includes(text[0]))) return respond(defaultResponseMessage);
+	if (text[2] || (text[1] && ![ 'start', 'stop' ].includes(text[0]))) return respond(defaultResponseMessage);
 
 	// Handle user unsubscription requests
 	if (text[0] === 'stop') {
 		// Find the user document
-		db.User.findOne({ phone: phone }, (err, user) => {
+		await db.User.findOne({ phone: phone }, async (err, user) => {
 			if (err) return respond(res, false, { msg: 'Derp! Please text back again later.' });
 			// We don't know this user
 			if (!user) return respond(res, false, { msg: 'new phony whudis ?' });
 			// Handle targeted unsubscription requests
 			if (text[1]) {
 				// Find the park
-				db.Park.findOne({ code: text[1] }, (err, park) => {
+				await db.Park.findOne({ code: text[1] }, (err, park) => {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.' });
 					if (!park)
 						return respond(res, false, {
@@ -77,13 +74,13 @@ async function incoming(req, res) {
 				if (!user.parks.length)
 					return respond(res, false, { msg: 'You never subscribed to notifications from Parks and Rec' });
 				// Get all the user's parks
-				db.Park.find({ _id: { $in: user.parks } }, function(err, parks) {
+				await db.Park.find({ _id: { $in: user.parks } }, function(err, parks) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This should not happen!
 					if (!parks)
 						return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
 					// Remove the user from each park document as above
-					parks.forEach(park => {
+					parks.forEach((park) => {
 						const index = park.users.indexOf(user._id);
 						if (index >= 0) {
 							park.users.splice(index, 1);
@@ -109,17 +106,17 @@ async function incoming(req, res) {
 		// Resubscribe to all prior unsubscriptions or send list of park codes
 		if (text[0] === 'start' && !text[1]) {
 			// Find the user
-			db.User.findOne({ phone: phone }, (err, user) => {
+			await db.User.findOne({ phone: phone }, async (err, user) => {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				// We don't know this user
 				if (!user) return respond(res, false, { msg: 'new phony whudis ?' });
 				// Get all the user's parks
-				db.Park.find({ _id: { $in: user.parks } }, (err, parks) => {
+				await db.Park.find({ _id: { $in: user.parks } }, (err, parks) => {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// This shouldn't happen!
 					if (!parks) return respond(res, false, { msg: 'Hmmm? You have no parks to resubscribe to.' });
 					// Resubscribe to all parks in user's list
-					parks.forEach(park => {
+					parks.forEach((park) => {
 						if (park.users.indexOf(user._id) < 0) {
 							park.users.push(user._id);
 							park.save(function(err, updated) {
@@ -138,14 +135,14 @@ async function incoming(req, res) {
 		} else {
 			// 'start [parkcode]' equivalent to '[parkcode]' i.e. resubscribe process is same as subscription process
 			// Find the park
-			db.Park.findOne({ parkID: text[text.length - 1] }, function(err, park) {
+			await db.Park.findOne({ parkID: text[text.length - 1] }, async function(err, park) {
 				if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 				if (!park)
 					return respond(res, false, {
 						msg: `${text[text.length - 1]} is not a valid park code. ${defaultResponseMessage}`
 					});
 				// Find user
-				db.User.findOne({ phone: phone }, function(err, user) {
+				await db.User.findOne({ phone: phone }, function(err, user) {
 					if (err) return respond(res, false, { msg: 'Derp! Please text back again later.', error: err });
 					// New user
 					if (!user)
@@ -153,21 +150,9 @@ async function incoming(req, res) {
 							phone: phone,
 							firstName: 'Need2Update',
 							lastName: 'Need2Update',
-							email:
-								'Need2Update@adam.henry' +
-								Math.random()
-									.toString(36)
-									.slice(2),
-							userName:
-								'Need2Update' +
-								Math.random()
-									.toString(36)
-									.slice(2),
-							password:
-								'Need2Update' +
-								Math.random()
-									.toString(36)
-									.slice(2)
+							email: 'Need2Update@adam.henry' + Math.random().toString(36).slice(2),
+							userName: 'Need2Update' + Math.random().toString(36).slice(2),
+							password: 'Need2Update' + Math.random().toString(36).slice(2)
 						});
 					// Already subscribed
 					if (park.users.indexOf(user._id) >= 0)
@@ -249,7 +234,7 @@ async function index(req, res) {
 			.sort({
 				userName: 1
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.log(err);
 				return reject(respond(res, false, err));
 			});
@@ -267,20 +252,17 @@ async function index(req, res) {
  * @desc Create An New user 
  */
 async function create(req, res) {
-	const { errors, isValid, data } = await validateUserInput(req.body);
+	return new Promise(async (resolve, reject) => {
+		const { errors, isValid, data } = await validateUserInput(req.body).catch((err) => console.log(err));
 
-	if (!isValid) {
-		console.log({ success: false, errors });
-		respond(res, false, errors);
-	} else {
-		delete data.queries;
-		console.log(data);
-		var newUser = new db.User(data);
-		await newUser.save().catch(err => console.log(err));
-
-		console.log(newUser);
-		respond(res, true, newUser);
-	}
+		if (!isValid) reject(respond(res, false, errors));
+		else {
+			delete data.queries;
+			var newUser = new db.User(data);
+			await newUser.save().catch((err) => console.log(err));
+			resolve(respond(res, true, newUser));
+		}
+	});
 }
 
 /**  
@@ -316,31 +298,14 @@ async function update(req, res) {
 			strict: false
 		};
 
-		const foundUser = await db.User.findByIdAndUpdate(req.params.id, data, options).catch(err => console.log(err));
+		const foundUser = await db.User
+			.findByIdAndUpdate(req.params.id, data, options)
+			.catch((err) => console.log(err));
+		if (foundUser) {
+			foundUser.save().catch((err) => respond(res, false, errors));
 
-		newPark.users.push(foundUser._id);
-		newPark.save().then(park => foundUser.parks.push(park._id));
-
-		db.Update
-			.findOne({
-				update: data.addUpdate
-			})
-			.exec((err, update) => {
-				if (update) {
-					foundUser.updates.push(update._id);
-				} else if (err || !update) {
-					const newUpdate = new db.Update({
-						author: foundUser._id,
-						update: data.addUpdate
-					});
-					newUpdate.save().then(update => foundUser.updates.push(update._id));
-				}
-			});
-
-		foundUser
-			.save()
-			.then(foundUser => respond(res, true, { msg: `user: ${foundUser._id} was updated with data: ${data}` }))
-			.catch(err => respond(res, false, { msg: err.update }));
+			respond(res, true, foundUser);
+		}
 	}
 }
 
@@ -362,39 +327,39 @@ function destroy(req, res) {
 		.findByIdAndDelete({
 			_id: user._id
 		})
-		.then(user => {
-			user.parks.forEach(park => {
+		.then((user) => {
+			user.parks.forEach((park) => {
 				db.Park
 					.findById(park)
-					.then(doc => {
+					.then((doc) => {
 						doc.users.pop(user._id);
 						doc.save();
 					})
-					.catch(err => console.log(err));
+					.catch((err) => console.log(err));
 			});
 
 			if (user.Updates) {
-				user.Updates.forEach(update => {
+				user.Updates.forEach((update) => {
 					db.Update
 						.find({
 							author: update.author
 						})
-						.then(docs => {
-							docs.forEach(doc => {
+						.then((docs) => {
+							docs.forEach((doc) => {
 								doc.users.pop(user._id);
 								doc.save();
 							});
 						})
-						.catch(err => console.log(err));
+						.catch((err) => console.log(err));
 				});
 			}
 
 			user
 				.remove()
-				.then(removedUser => respond(res, true, removedUser))
-				.catch(err => respond(res, false, err));
+				.then((removedUser) => respond(res, true, removedUser))
+				.catch((err) => respond(res, false, err));
 		})
-		.catch(err => console.log(err));
+		.catch((err) => console.log(err));
 }
 
 /**
@@ -414,11 +379,9 @@ function uploadImage(req, res) {
 		api_secret: process.env.CLOUDINARY_API_SECRET
 	});
 	const values = Object.values(req.files);
-	const promises = values.map(image => cloudinary.uploader.upload(image.path));
+	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises)
-		.then(results => respond(res, true, results))
-		.catch(err => respond(res, false, err));
+	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => respond(res, false, err));
 
 	res.status(200);
 }
@@ -436,10 +399,10 @@ function readAllParks(req, res) {
 	db.User
 		.findById(req.params.userId)
 		.populate('parks')
-		.then(user => {
+		.then((user) => {
 			respond(res, true, user.parks);
 		})
-		.catch(err => respond(res, false, err));
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -455,10 +418,10 @@ function readAllUpdates(req, res) {
 	db.User
 		.findById(req.params.id)
 		.populate('updates')
-		.then(user => {
+		.then((user) => {
 			respond(res, true, user.updates);
 		})
-		.catch(err => respond(res, false, err));
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -473,11 +436,11 @@ function readAllUpdates(req, res) {
 function findPark(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then(user => {
-			const park = user.parks.find(park => park._id === req.params.parkId);
+		.then((user) => {
+			const park = user.parks.find((park) => park._id === req.params.parkId);
 			respond(res, true, { userId: user._id, parkId: park._id });
 		})
-		.catch(err => respond(res, false, err));
+		.catch((err) => respond(res, false, err));
 }
 
 /**
@@ -491,27 +454,20 @@ function findPark(req, res) {
 function findUpdate(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then(user => {
-			const update = user.updates.find(update => update._id === req.params.updateId);
+		.then((user) => {
+			const update = user.updates.find((update) => update._id === req.params.updateId);
 			respond(res, true, { userId: user._id, updateId: update._id });
 		})
-		.catch(err => respond(res, false, err));
+		.catch((err) => respond(res, false, err));
 }
 
 // @route /api/user
-router
-	.route('/')
-	.get(index)
-	.post(create);
+router.route('/').get(index).post(create);
 
 router.route('/uploadImage').post(uploadImage);
 
 // @route /api/user/_id
-router
-	.route('/:userId')
-	.get(read)
-	.put(update)
-	.delete(destroy);
+router.route('/:userId').get(read).put(update).delete(destroy);
 
 // @route /api/users/_id/park
 router.route('/:userId/parks').get(readAllParks);

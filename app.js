@@ -24,6 +24,8 @@ const db = require('./models');
 const router = require('./routes');
 let app = express();
 
+
+
 /** 
   * Configure Passport Strategies 
 	* 
@@ -113,18 +115,18 @@ if (config.keys.prod) {
 	app.set('trust proxy', 1);
 	sessOpts.cookie.secure = true;
 }
+app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
+app.use(morgan('combined'));
 app.use(cors());
+app.use(flash());
 app.set('view engine', 'pug');
 app.use(express.static(path.join(__dirname, config.keys.path)));
 app.use(addRequestId);
-app.use(cookieParser());
-app.use(session(sessOpts));
-app.use(formData.parse());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(flash());
-app.use(morgan('combined'));
-app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
+app.use(formData.parse());
+app.use(session(sessOpts));
+app.use(cookieParser());
 
 /** Passport initialization */
 app.use(passport.initialize());
@@ -149,12 +151,29 @@ app.use(function(req, res, next) {
  * @public
  */
 
+async function login(req, res) {
+  const { email, password } = req.body;
+  const user = await db.User.findOne({ email });
+
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // const isMatch = await user.validatePassword(password);
+  const isMatch = true;
+
+  if (!user || !isMatch)
+    respond(res, false, { message: 'User or Password do not match !' });
+
+  res.cookie('token', user.generateJWT(), {
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+    secure: false //true for production
+  });
+
+  respond(res, true, { user });
+}
+
 // app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }));
 
-
-// app.post('/login_pass_jwt', passport.authenticate('jwt', {	session: false}));
-
-
+/*
 async function login(req, res, next) {
 	const { errors, isValid, data } = validateLoginInput(req.body);
 
@@ -173,6 +192,9 @@ async function login(req, res, next) {
 	}
 }
 
+// app.post('/login_pass_jwt', passport.authenticate('jwt', {	session: false}));
+
+*/
 /**
  * Logout current user
  *
@@ -182,7 +204,15 @@ async function login(req, res, next) {
  * @public
  */
 
- 
+/*
+// Logout current user
+function logout(req, res, next) {
+  res.clearCookie('token');
+  respond(res, true);
+}
+*/
+
+/*
 router.get('/logout', function logout(req, res, next) {
   console.log('[logout] runs')
   res.clearCookie('token');
@@ -194,6 +224,7 @@ router.get('/logout', function logout(req, res, next) {
   req.logout();
   req.flash('You are logged out');
 });
+*/
 
 /*
 function logout(req, res) {
@@ -212,12 +243,24 @@ function logout(req, res) {
  * @param {middleware} next
  * @public
  */
+
+async function ensureAuthenticated(req, res) {
+  const { token } = req.cookies;
+
+  await jwt.verify(token, config.keys.secret, (err, payload) => {
+    if (err) respond(res, false, { message: 'Invalid token' });
+    respond(res, true, { payload });
+  });
+}
+
+ /*
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
 		return next(null);
 	}
 	res.redirect('/error');
 }
+*/
 
 /*
 
@@ -234,7 +277,23 @@ function ensureAuthenticated(req, res) {
 }
 */
 
- 
+/*
+function requireAdminLogin(req, res, next) {
+  if (req.session.admin) next();
+  else res.redirect('/login');
+}
+
+function requireUserLogin(req, res, next) {
+  if (req.session.username) next();
+  else res.redirect('/login');
+}
+*/
+/*
+function loadReactRouter(req, res) {
+	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+}
+*/
+
 app.use('/api', router);
 
 app.get('*', (req, res) => {
