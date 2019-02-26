@@ -1,13 +1,14 @@
 import React from 'react';
 import { Container } from './styles';
-import Topnav from '../TopNav/TopNav';
+import UserLink from '../UserLink';
 import SideBar from '../SideBar';
 
 import ProtectedRoutes from '../Routes/ProtectedRoutes';
 
 const Dashboard = ({ user }) => (
   <>
-    <Topnav user={user} />
+    <UserLink user={user} />
+    {/* <TopBar user={user} /> */}
     <SideBar user={user} />
     <Container>
       <ProtectedRoutes user={user} />

@@ -1,41 +1,41 @@
-import React from "react";
-import NavButton from "../UI/Generic/NavButton";
-import makeRequest from "../../utils/makeRequest";
-import { NavContainer } from "./styles";
+import React from 'react';
+import NavButton from '../UI/Generic/NavButton';
+import makeRequest from '../../utils/makeRequest';
+import { NavContainer } from './styles';
 
 function openNav() {
-  document.getElementById("navbar").style.marginTop = "0px";
-  document.getElementById("hid").style.display = "block";
+  document.getElementById('navbar').style.marginTop = '0px';
+  document.getElementById('hid').style.display = 'block';
 }
 
 function closeNav() {
-  document.getElementById("navbar").style.marginTop = "-400px";
-  document.getElementById("hid").style.display = "none";
+  document.getElementById('navbar').style.marginTop = '-400px';
+  document.getElementById('hid').style.display = 'none';
 }
 
 class SideBar extends React.Component {
   state = {
-    menuIcon: "fa fa-bars",
+    menuIcon: 'fa fa-bars',
     menu: false,
-    active: "Updates"
+    active: 'Updates'
   };
 
   logout = async () => {
-    const request = await makeRequest("/logout");
-    if (request.status === 200) window.location.replace("/login");
+    const request = await makeRequest('/logout');
+    if (request.status === 200) window.location.replace('/login');
   };
 
   toggleMenu = () => {
-    if (this.state.menuIcon === "fa fa-bars") {
+    if (this.state.menuIcon === 'fa fa-bars') {
       openNav();
       this.setState({
-        menuIcon: "fa fa-times",
+        menuIcon: 'fa fa-times',
         menu: true
       });
     } else {
       closeNav();
       this.setState({
-        menuIcon: "fa fa-bars",
+        menuIcon: 'fa fa-bars',
         menu: false
       });
     }
