@@ -28,6 +28,8 @@ requestValidation
 .env.development.local
 .env.test.local
 .env.production.local
+.jshintrc
+.editorconfig
 
 npm-debug.log*
 yarn-debug.log*
