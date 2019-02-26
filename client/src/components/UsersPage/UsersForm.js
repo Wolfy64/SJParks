@@ -1,5 +1,5 @@
 import React from 'react';
-import makeRequest from '../../utils/makeRequest';
+// import makeRequest from '../../utils/makeRequest';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import Input from '../UI/Form/Input';
@@ -25,7 +25,7 @@ const initialState = {
 
 const UsersForm = class userInput extends React.Component {
   state = initialState;
-  
+
   handleChange = e => {
     const { name, type, value } = e.target;
 
@@ -69,8 +69,8 @@ const UsersForm = class userInput extends React.Component {
       });
     }
 
-    if(isValid){
-      this.props.handleSendForm(dataForm)
+    if (isValid) {
+      this.props.handleSendForm(dataForm);
       this.setState(initialState);
     } else {
       this.setState({
@@ -79,41 +79,71 @@ const UsersForm = class userInput extends React.Component {
     }
   };
 
-
   render() {
     const { formErrors, showErrors } = this.state;
     const hasErrors = showErrors && formErrors;
 
     /** [H] I Need to make this match with current BE*/
     return (
-      <form className='usersForm' onSubmit={this.handleSubmit} autoComplete='on' > 
-        < Input  label='Full Name' placeholder='John Doe' name='fullName' type='text' onChange={this.handleChange}
+      <form
+        className="usersForm"
+        onSubmit={this.handleSubmit}
+        autoComplete="on">
+        <Input
+          label="Full Name"
+          placeholder="John Doe"
+          name="fullName"
+          type="text"
+          onChange={this.handleChange}
           value={this.state.fullName}
-          error={ hasErrors ? formErrors.fullName : null }
-        /> 
-        < Input label='Phone' placeholder='4084552057' name='phone' type='text' onChange={this.handleChange}
+          error={hasErrors ? formErrors.fullName : null}
+        />
+        <Input
+          label="Phone"
+          placeholder="4084552057"
+          name="phone"
+          type="text"
+          onChange={this.handleChange}
           value={this.state.phone}
-          error={ hasErrors ? formErrors.phone : null }
-        /> 
-        < Input label='Email' placeholder='john.doe@mail.com' name='email' type='email' onChange={this.handleChange}
+          error={hasErrors ? formErrors.phone : null}
+        />
+        <Input
+          label="Email"
+          placeholder="john.doe@mail.com"
+          name="email"
+          type="email"
+          onChange={this.handleChange}
           value={this.state.email}
-          error={hasErrors  ?formErrors.email : null }
-        /> 
-        < Input label='Password' placeholder='Password' name='password' type='password' onChange={this.handleChange}
+          error={hasErrors ? formErrors.email : null}
+        />
+        <Input
+          label="Password"
+          placeholder="Password"
+          name="password"
+          type="password"
+          onChange={this.handleChange}
           value={this.state.password}
-          error={hasErrors ? formErrors.password : null }
-        /> 
-        < Input suggested='new-password' label='Confirm Password' placeholder='Confirm Password' name='confirmPassword' type='password' onChange={this.handleChange}
+          error={hasErrors ? formErrors.password : null}
+        />
+        <Input
+          suggested="new-password"
+          label="Confirm Password"
+          placeholder="Confirm Password"
+          name="confirmPassword"
+          type="password"
+          onChange={this.handleChange}
           value={this.state.confirmPassword}
-          error={hasErrors ? formErrors.confirmPassword : null }
-        /> 
-        < Select name='access' options={ SELECT_OPTIONS }
-          label='Access Type'
+          error={hasErrors ? formErrors.confirmPassword : null}
+        />
+        <Select
+          name="access"
+          options={SELECT_OPTIONS}
+          label="Access Type"
           onChange={this.handleChange}
           value={this.state.access}
-          error={hasErrors ? formErrors.access : null }
-        /> 
-        < Button name='Create New User' type='submit' /> 
+          error={hasErrors ? formErrors.access : null}
+        />
+        <Button name="Create New User" type="submit" />
       </form>
     );
   }
