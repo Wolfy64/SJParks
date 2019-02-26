@@ -11,10 +11,10 @@ router.route('/users')
 	.get(controllers.users.index)
 	.post(controllers.users.create)
 	.delete(controllers.users.destroy)
-	.put(controllers.users.update)
+	.put(controllers.users.update);
 
 router.route('/users/:userId')
-	.get(controllers.users.read)
+	.get(controllers.users.read);
 
 router.route('/users/:userId/uploadImage').post(controllers.users.uploadImage);
 
@@ -30,7 +30,7 @@ router.route('/users/:userId/updates/:updateId').get(controllers.users.findUpdat
 router.route('/parks')
 	.get(controllers.parks.index)
 	.post(controllers.parks.create)
-	.delete(controllers.parks.destroy)
+	.delete(controllers.parks.destroy);
 
 router.route('/parks/:id').get(controllers.parks.read).put(controllers.parks.update);
 
@@ -63,6 +63,6 @@ router
 	.put(controllers.subscriptionLogs.edit)
 	.delete(controllers.subscriptionLogs.destroy);
 
-router.get('/auth', controllers.admin.ensureAuthenticated)
+router.get('/auth', controllers.admin.ensureAuthenticated);
 
 module.exports = router;

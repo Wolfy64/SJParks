@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 module.exports = {
   User: require("./User"),
   Park: require("./Park"),

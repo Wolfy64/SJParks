@@ -8,6 +8,17 @@ import { Container, Form } from "./styles";
 class Login extends React.Component {
   state = { email: "", password: "" };
 
+  componentDidMount() {
+    const cookies = new Cookies();
+  	console.log('TCL: Login -> componentDidMount -> cookies', cookies)
+    const token = jwt.decode(cookies.get('token'));
+    console.log('TCL: Login -> componentDidMount -> token2', token);
+    if (token) {
+      const userID = token._id;
+      this.props.history.push(`/admin/${userID}/updates`);
+    }
+  }
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
