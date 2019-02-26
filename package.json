@@ -37,7 +37,7 @@
     "jsonwebtoken": "^8.5.0",
     "kleur": "3",
     "mocha": "^5.2.0",
-    "mongoose": "^5.4.15",
+    "mongoose": "^5.4.16",
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "node-pre-gyp": "^0.12.0",
