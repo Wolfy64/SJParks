@@ -38,7 +38,7 @@ function create(req, res) {
 	console.log('> Creating new park');
 	const {errors, isValid, data} = validateParkInput(req.body);
 	console.log('> Passed new park data validation');
-	if (!isValid) {
+	if (isValid/*!isvalid*/) {
 		console.log({ success: false, error: errors });
 		respond(res, false, errors);
 	} else {
@@ -48,7 +48,7 @@ function create(req, res) {
 		NewPark
 			.save()
 			.then((park) => {
-				console.log(`New park created. NewPark._id: ${park._id}`);
+				console.log(`New park created. NewPark: ${park._id}`);
 				respond(res, true, park);
 			})
 			.catch((err) => {

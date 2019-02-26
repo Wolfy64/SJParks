@@ -23,10 +23,13 @@ async function incoming(req, res) {
 	// Get the user's phone number
 	const phone = req.body.From;
 	// Split the user's text message into array of individual words
-	const text = (req.body.Body || 'empty').toLowerCase().split(' ').filter((x) => x);
+	const text = (req.body.Body || 'empty')
+		.toLowerCase()
+		.split(' ')
+		.filter(x => x);
 	// We only handle messages of at most two words
 	// Messages with two words must begin with either the word 'start' or 'stop'
-	if (text[2] || (text[1] && ![ 'start', 'stop' ].includes(text[0]))) return respond(defaultResponseMessage);
+	if (text[2] || (text[1] && !['start', 'stop'].includes(text[0]))) return respond(defaultResponseMessage);
 
 	// Handle user unsubscription requests
 	if (text[0] === 'stop') {
@@ -80,7 +83,7 @@ async function incoming(req, res) {
 					if (!parks)
 						return respond(res, false, { msg: 'Your parks have been destroyed by irrational disaster!' });
 					// Remove the user from each park document as above
-					parks.forEach((park) => {
+					parks.forEach(park => {
 						const index = park.users.indexOf(user._id);
 						if (index >= 0) {
 							park.users.splice(index, 1);
@@ -116,7 +119,7 @@ async function incoming(req, res) {
 					// This shouldn't happen!
 					if (!parks) return respond(res, false, { msg: 'Hmmm? You have no parks to resubscribe to.' });
 					// Resubscribe to all parks in user's list
-					parks.forEach((park) => {
+					parks.forEach(park => {
 						if (park.users.indexOf(user._id) < 0) {
 							park.users.push(user._id);
 							park.save(function(err, updated) {
@@ -150,9 +153,21 @@ async function incoming(req, res) {
 							phone: phone,
 							firstName: 'Need2Update',
 							lastName: 'Need2Update',
-							email: 'Need2Update@adam.henry' + Math.random().toString(36).slice(2),
-							userName: 'Need2Update' + Math.random().toString(36).slice(2),
-							password: 'Need2Update' + Math.random().toString(36).slice(2)
+							email:
+								'Need2Update@adam.henry' +
+								Math.random()
+									.toString(36)
+									.slice(2),
+							userName:
+								'Need2Update' +
+								Math.random()
+									.toString(36)
+									.slice(2),
+							password:
+								'Need2Update' +
+								Math.random()
+									.toString(36)
+									.slice(2)
 						});
 					// Already subscribed
 					if (park.users.indexOf(user._id) >= 0)
@@ -234,7 +249,7 @@ async function index(req, res) {
 			.sort({
 				userName: 1
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log(err);
 				return reject(respond(res, false, err));
 			});
@@ -327,39 +342,39 @@ function destroy(req, res) {
 		.findByIdAndDelete({
 			_id: user._id
 		})
-		.then((user) => {
-			user.parks.forEach((park) => {
+		.then(user => {
+			user.parks.forEach(park => {
 				db.Park
 					.findById(park)
-					.then((doc) => {
+					.then(doc => {
 						doc.users.pop(user._id);
 						doc.save();
 					})
-					.catch((err) => console.log(err));
+					.catch(err => console.log(err));
 			});
 
 			if (user.Updates) {
-				user.Updates.forEach((update) => {
+				user.Updates.forEach(update => {
 					db.Update
 						.find({
 							author: update.author
 						})
-						.then((docs) => {
-							docs.forEach((doc) => {
+						.then(docs => {
+							docs.forEach(doc => {
 								doc.users.pop(user._id);
 								doc.save();
 							});
 						})
-						.catch((err) => console.log(err));
+						.catch(err => console.log(err));
 				});
 			}
 
 			user
 				.remove()
-				.then((removedUser) => respond(res, true, removedUser))
-				.catch((err) => respond(res, false, err));
+				.then(removedUser => respond(res, true, removedUser))
+				.catch(err => respond(res, false, err));
 		})
-		.catch((err) => console.log(err));
+		.catch(err => console.log(err));
 }
 
 /**
@@ -379,9 +394,11 @@ function uploadImage(req, res) {
 		api_secret: process.env.CLOUDINARY_API_SECRET
 	});
 	const values = Object.values(req.files);
-	const promises = values.map((image) => cloudinary.uploader.upload(image.path));
+	const promises = values.map(image => cloudinary.uploader.upload(image.path));
 
-	Promise.all(promises).then((results) => respond(res, true, results)).catch((err) => respond(res, false, err));
+	Promise.all(promises)
+		.then(results => respond(res, true, results))
+		.catch(err => respond(res, false, err));
 
 	res.status(200);
 }
@@ -399,10 +416,10 @@ function readAllParks(req, res) {
 	db.User
 		.findById(req.params.userId)
 		.populate('parks')
-		.then((user) => {
+		.then(user => {
 			respond(res, true, user.parks);
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -418,10 +435,10 @@ function readAllUpdates(req, res) {
 	db.User
 		.findById(req.params.id)
 		.populate('updates')
-		.then((user) => {
+		.then(user => {
 			respond(res, true, user.updates);
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -436,11 +453,11 @@ function readAllUpdates(req, res) {
 function findPark(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then((user) => {
-			const park = user.parks.find((park) => park._id === req.params.parkId);
+		.then(user => {
+			const park = user.parks.find(park => park._id === req.params.parkId);
 			respond(res, true, { userId: user._id, parkId: park._id });
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 /**
@@ -454,20 +471,27 @@ function findPark(req, res) {
 function findUpdate(req, res) {
 	db.User
 		.findById(req.params.userId)
-		.then((user) => {
-			const update = user.updates.find((update) => update._id === req.params.updateId);
+		.then(user => {
+			const update = user.updates.find(update => update._id === req.params.updateId);
 			respond(res, true, { userId: user._id, updateId: update._id });
 		})
-		.catch((err) => respond(res, false, err));
+		.catch(err => respond(res, false, err));
 }
 
 // @route /api/user
-router.route('/').get(index).post(create);
+router
+	.route('/')
+	.get(index)
+	.post(create);
 
 router.route('/uploadImage').post(uploadImage);
 
 // @route /api/user/_id
-router.route('/:userId').get(read).put(update).delete(destroy);
+router
+	.route('/:userId')
+	.get(read)
+	.put(update)
+	.delete(destroy);
 
 // @route /api/users/_id/park
 router.route('/:userId/parks').get(readAllParks);

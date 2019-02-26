@@ -24,8 +24,6 @@ const db = require('./models');
 const router = require('./routes');
 let app = express();
 
-
-
 /** 
   * Configure Passport Strategies 
 	* 

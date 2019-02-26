@@ -9,15 +9,17 @@ const isEmpty = require('is-empty');
  * @param {request.body} props
  * 
  */
-function validateUserInput(props, userId = null) {
+function validateUserInput(props) {
 	return new Promise(async (resolve, reject) => {
-		console.log('> [012:20] Begin user Validation');
+		console.log('> [12:20] Begin user Validation');
 		const errors = [];
 		const data = {};
 		const queries = {};
-		console.log('> [018:19] Preparing Data');
+
+		// prepare data
+		console.log('> [18:19] Preparing Data');
 		data.access = !isEmpty(props.access) ? props.access : 'basic';
-		data.userName = !isEmpty(props.userName) ? props.userName : '';
+		data.userName = !isEmpty(props.userNames) ? props.userName : '';
 		data.password = !isEmpty(props.password) ? props.password : '';
 		data.name = !isEmpty(props.name) ? props.name : '';
 		data.phone = !isEmpty(props.phone) ? props.phone : '';
