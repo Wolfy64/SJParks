@@ -1,8 +1,6 @@
 import React from 'react';
 import Input from '../UI/Form/Input';
 import Message from '../UI/Generic/Message';
-// import errorFormHandler from '../../utils/errorFormHandler';
-import isFormValid from '../../utils/isFormValid';
 import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
@@ -39,35 +37,30 @@ class Subscribe extends React.Component {
   };
 
   handleDeletePark = park => {
-    this.setState({
-      parkSelected: [
-        ...this.state.parkSelected.filter(el => el._id !== park._id)
-      ]
-    });
+    let { parkSelected } = this.state;
+    parkSelected = parkSelected.filter(el => el._id !== park._id);
+
+    this.setState({ parkSelected });
   };
 
   handleDeleteAddAllPark = () => this.setState({ parkSelected: [] });
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    const { phone, formErrors, parkSelected } = this.state;
-    const dataForm = { phone, parkSelected };
-    const isValid = isFormValid(formErrors, dataForm);
-    console.log('TCL: Subscribe -> isValid', isValid);
 
-    isValid
-      ? this.handleSendForm(dataForm)
-      : this.setState({ showErrors: true });
-  };
+    const request = await makeRequest('api/subscriptionLogs', 'POST', {
+      phone: this.state.phone,
+      addParks: this.state.parkSelected,
+      subscribed: true
+    });
 
-  handleSendForm = async dataForm => {
-    const request = await makeRequest('/api/subscribe', 'POST', dataForm);
+    const { success, message } = await request.json();
 
-    this.setState(initialState);
+    success ? this.setState(initialState) : this.setState(message);
   };
 
   render() {
-    const { message } = this.state;
+    const { message, parks, parkSelected, phone } = this.state;
     return (
       <SubscribeContainer>
         <h2>Subscribe</h2>
@@ -76,13 +69,13 @@ class Subscribe extends React.Component {
 
         <Form id="subscribe" onSubmit={this.handleSubmit}>
           <SearchPark
-            parks={this.state.parks}
+            parks={parks}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
 
           <SelectedPark
-            parks={this.state.parkSelected}
+            parks={parkSelected}
             deletePark={park => this.handleDeletePark(park)}
             deleteAllParks={this.handleDeleteAddAllPark}
           />
@@ -94,7 +87,7 @@ class Subscribe extends React.Component {
               name="phone"
               type="tel"
               onChange={this.handleChange}
-              value={this.state.phone}
+              value={phone}
             />
 
             <Button name="I want to be informed!" />
