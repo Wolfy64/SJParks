@@ -1,6 +1,7 @@
 import React from 'react';
 import Input from '../UI/Form/Input';
-import errorFormHandler from '../../utils/errorFormHandler';
+import Message from '../UI/Generic/Message';
+// import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';
 import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
@@ -11,9 +12,7 @@ import { SubscribeContainer, Form } from './styles';
 const initialState = {
   parks: [],
   parkSelected: [],
-  phone: '',
-  showErrors: false,
-  formErrors: false
+  phone: ''
 };
 
 class Subscribe extends React.Component {
@@ -26,17 +25,7 @@ class Subscribe extends React.Component {
     success ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
-  handleChange = e => {
-    const { name, type, value } = e.target;
-
-    this.setState({
-      [name]: value,
-      formErrors: {
-        ...this.state.formErrors,
-        [name]: errorFormHandler(type, value)
-      }
-    });
-  };
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
 
   handleAddPark = park => {
     const { parkSelected } = this.state;
@@ -57,39 +46,34 @@ class Subscribe extends React.Component {
     });
   };
 
-  handleDeleteAddAllPark = () => {
-    this.setState({ parkSelected: [] });
-  };
+  handleDeleteAddAllPark = () => this.setState({ parkSelected: [] });
 
   handleSubmit = e => {
     e.preventDefault();
     const { phone, formErrors, parkSelected } = this.state;
     const dataForm = { phone, parkSelected };
     const isValid = isFormValid(formErrors, dataForm);
+    console.log('TCL: Subscribe -> isValid', isValid);
 
     isValid
       ? this.handleSendForm(dataForm)
       : this.setState({ showErrors: true });
   };
 
-  handleSendForm = dataForm => {
-    makeRequest('/subscriptionLog', 'POST', dataForm)
-      .then(res => res.json())
-      .then(res => {
-        console.log('>> PublicPage/Subscribe POST:', res.json);
-      })
-      .catch(err => err);
+  handleSendForm = async dataForm => {
+    const request = await makeRequest('/api/subscribe', 'POST', dataForm);
 
-    // Reset Form field
     this.setState(initialState);
   };
 
   render() {
-    const { formErrors, showErrors } = this.state;
-    const hasErrors = showErrors && formErrors;
+    const { message } = this.state;
     return (
       <SubscribeContainer>
         <h2>Subscribe</h2>
+
+        {message && <Message error={message} />}
+
         <Form id="subscribe" onSubmit={this.handleSubmit}>
           <SearchPark
             parks={this.state.parks}
@@ -111,7 +95,6 @@ class Subscribe extends React.Component {
               type="tel"
               onChange={this.handleChange}
               value={this.state.phone}
-              error={hasErrors ? formErrors.phone : null}
             />
 
             <Button name="I want to be informed!" />
