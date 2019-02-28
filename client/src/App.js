@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import PublicRoutes from './components/Routes/PublicRoutes';
-import ProtectedRoutes from './components/Routes/ProtectedRoutes';
+import Dashboard from './components/Dashboard';
 import makeRequest from './utils/makeRequest';
 
 class App extends React.Component {
@@ -22,10 +22,11 @@ class App extends React.Component {
   render() {
     const { isAuthenticated, user } = this.state;
     const Routes = isAuthenticated ? (
-      <ProtectedRoutes user={user} />
+      <Dashboard user={user} />
     ) : (
       <PublicRoutes />
     );
+
     return Routes;
   }
 }

@@ -28,6 +28,7 @@ class Updates extends React.Component {
             name='New Text Update'
           />
         </Wrapper>
+
         <Wrapper>
           {this.state.history.map(post => (
             <UpdatePost key={post._id} post={post} />

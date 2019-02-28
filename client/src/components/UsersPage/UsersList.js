@@ -1,18 +1,17 @@
-import React from "react";
-import User from "./User";
-import makeRequest from "../../utils/makeRequest";
+import React from 'react';
+import User from './User';
+// import makeRequest from "../../utils/makeRequest";
 
 class UserList extends React.Component {
   state = { users: [] };
 
-  componentDidUpdate(prevProps){
-    if(prevProps != this.props){
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
       this.setState({
         users: this.props.users
-      })
+      });
     }
   }
-
 
   render() {
     const { users } = this.state;

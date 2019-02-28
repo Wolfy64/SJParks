@@ -7,7 +7,7 @@ import {
   CartesianGrid,
   Tooltip
 } from 'recharts';
-import makeRequest from '../../utils/makeRequest';
+// import makeRequest from '../../utils/makeRequest';
 
 const data = [
   { name: 'Jun', uv: 3000, pv: 2400, amt: 2400 },
@@ -45,15 +45,14 @@ export default class Graph extends Component {
 
   render() {
     return (
-      <div id='graph'>
+      <div id="graph">
         <LineChart
           width={this.state.width || window.innerWidth * 0.3}
           height={this.state.height || window.innerWidth * 0.18}
-          data={this.state.data}
-        >
-          <Line type='monotone' dataKey='uv' stroke='#004A75' />
-          <CartesianGrid stroke='#ddd' strokeDasharray='5 5' />
-          <XAxis dataKey='name' />
+          data={this.state.data}>
+          <Line type="monotone" dataKey="uv" stroke="#004A75" />
+          <CartesianGrid stroke="#ddd" strokeDasharray="5 5" />
+          <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
         </LineChart>
