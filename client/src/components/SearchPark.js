@@ -29,7 +29,8 @@ class SearchPark extends Component {
     const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 5);
+    let showParkList =
+      filterPark || [...parks].splice(0, this.props.numShow || 5);
 
     const parkLi = showParkList.map(el => (
       <ParkLi
@@ -41,22 +42,24 @@ class SearchPark extends Component {
     ));
 
     return (
-      <Container className='searchContainer'>
-      <div className='innerWrapper'>
-        <Input
-          name='filter'
-          value={filter}
-          onChange={this.handleInput}
-          type='text'
-          placeholder='Search Parks by Name'
-          autoComplete='off'
-        />
+      <Container className="searchContainer">
+        <div className="innerWrapper">
+          <Input
+            name="filter"
+            value={filter}
+            onChange={this.handleInput}
+            type="text"
+            placeholder="Search Parks by Name"
+            autoComplete="off"
+          />
 
-        {addAllParks && (
-          <ButtonText onClick={addAllParks}>Select All</ButtonText>
-        )}
+          {addAllParks && (
+            <ButtonText type="button" onClick={addAllParks}>
+              Select All
+            </ButtonText>
+          )}
 
-        <ul>{parkLi}</ul>
+          <ul>{parkLi}</ul>
         </div>
       </Container>
     );
