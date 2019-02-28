@@ -11,6 +11,7 @@ import { SubscribeContainer, Form } from './styles';
 const initialState = {
   parks: [],
   parkSelected: [],
+  parkCode: [],
   phone: '',
   showErrors: false,
   formErrors: false
