@@ -21,10 +21,9 @@ class Subscribe extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/api/parks');
-    const response = await request.json();
-    console.log('TCL: Subscribe -> componentDidMount -> response', response);
+    const { success, message, payload } = await request.json();
 
-    this.setState({ parks: response });
+    success ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
   handleChange = e => {
