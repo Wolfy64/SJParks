@@ -6,7 +6,6 @@ import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
-import { parksDB } from '../../dummyDB';
 import { SubscribeContainer, Form } from './styles';
 
 const initialState = {
@@ -20,15 +19,11 @@ const initialState = {
 class Subscribe extends React.Component {
   state = initialState;
 
-  componentDidMount() {
-    makeRequest('/api/parks');
-    // .then(res => res.json)
-    // .then(res => {
-    //   console.log('>>PublicPage/Subscribe GET,', res);
-    // })
-    // .catch(err => err);
+  async componentDidMount() {
+    const request = await makeRequest('/api/parks');
+    const { success, message, payload } = await request.json();
 
-    this.setState({ parks: parksDB });
+    success ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
   handleChange = e => {
