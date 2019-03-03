@@ -17,103 +17,109 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const FileStore = require('session-file-store')(session);
 
 /** Load Configurations */
-require('dotenv-safe').load();
 morgan.token('id', req => req.sessionID.split('-')[0]);
 const config = require('./configurations');
 const db = require('./models');
 const router = require('./routes');
 let app = express();
 
-/** 
-  * Configure Passport Strategies 
-	* 
-  * @description "The local strategy require a `verify` function 
-	* which receives the credentials (`username` and `password`) 
-	* submitted by the user.  The function must verify that the 
-	* password is correct and then invoke `cb` with a user object, which 
-	* will be set at `req.user` in route handlers after authentication."
-	*
-	*/
+/**
+ * Configure Passport Strategies
+ *
+ * @description "The local strategy require a `verify` function
+ * which receives the credentials (`username` and `password`)
+ * submitted by the user.  The function must verify that the
+ * password is correct and then invoke `cb` with a user object, which
+ * will be set at `req.user` in route handlers after authentication."
+ *
+ */
 
 passport.use(
-	new LocalStrategy(
-		{
-			usernameField: 'user[email]',
-			passwordField: 'user[password]'
-		},
-		async (username, password, done) => {
-			const errorMsg = { message: 'Invalid credentials' };
-			const user = await db.User.findOne({ email: username }).catch(done);
-			if (!user) return done(null, false, errorMsg);
-			const isMatch = await user.validatePassword(password);
-			const token = await user.generateJWT();
-			console.log('[passport] Local strategy configured');
-			return done(null, isMatch ? { token } : false, isMatch ? null : errorMsg);
-		}
-	)
+  new LocalStrategy(
+    {
+      usernameField: 'user[email]',
+      passwordField: 'user[password]'
+    },
+    async (username, password, done) => {
+      const errorMsg = { message: 'Invalid credentials' };
+      const user = await db.User.findOne({ email: username }).catch(done);
+      if (!user) return done(null, false, errorMsg);
+      const isMatch = await user.validatePassword(password);
+      const token = await user.generateJWT();
+      console.log('[passport] Local strategy configured');
+      return done(null, isMatch ? { token } : false, isMatch ? null : errorMsg);
+    }
+  )
 );
-
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = config.keys.secret;
 
 passport.use(
-	new JwtStrategy(opts, async (jwt_payload, done) => {
-		const user = await User.findById(jwt_payload.id).catch(err => console.log(err));
-		if (user) return done(null, user);
-		return done(null, false);
-	})
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    const user = await User.findById(jwt_payload.id).catch(err =>
+      console.log(err)
+    );
+    if (user) return done(null, user);
+    return done(null, false);
+  })
 );
 
 /**
-	 * Configure `Passport` authenticated session persistence.
-	 * 
-	 * @description 
-	 * In order to restore authentication state across HTTP requests, 
-	 * `Passport` needs to `serialize` users into and `deserialize` users 
-	 * out of the `session`.
-	 * 
-	 **/
+ * Configure `Passport` authenticated session persistence.
+ *
+ * @description
+ * In order to restore authentication state across HTTP requests,
+ * `Passport` needs to `serialize` users into and `deserialize` users
+ * out of the `session`.
+ *
+ **/
 passport.serializeUser((user, done) => done(null, user._id));
 passport.deserializeUser(async (userId, done) => {
-	const user = await db.User.findById(userId).catch(err => done(err));
-	console.log(`[passport] A user with userId:${user._id} has been deserialized`);
-	return done(null, user);
+  const user = await db.User.findById(userId).catch(err => done(err));
+  console.log(
+    `[passport] A user with userId:${user._id} has been deserialized`
+  );
+  return done(null, user);
 });
 
-/** 
-	 * Configure all application middleware's
-	 * 
-	 * @description 
-	 * Use `application-level` middleware for common functionality, 
-	 * including: `logging`, `parsing`, and `session` handling. 
-	 * 
-	 * */
+/**
+ * Configure all application middleware's
+ *
+ * @description
+ * Use `application-level` middleware for common functionality,
+ * including: `logging`, `parsing`, and `session` handling.
+ *
+ * */
 
 const sessOpts = {
-	genid: req => {
-		return uuid(); // use UUIDs for session IDs
-	},
-	store: new FileStore(),
-	secret: config.keys.secret,
-	resave: false,
-	saveUninitialized: true,
-	rolling: true,
-	name: 'sid',
-	cookie: {
-		httpOnly: true,
-		maxAge: 20 * 60 * 1000,
-		activeDuration: 5 * 60 * 1000,
-		secure: false
-	}
+  genid: req => {
+    return uuid(); // use UUIDs for session IDs
+  },
+  store: new FileStore(),
+  secret: config.keys.secret,
+  resave: false,
+  saveUninitialized: true,
+  rolling: true,
+  name: 'sid',
+  cookie: {
+    httpOnly: true,
+    maxAge: 20 * 60 * 1000,
+    activeDuration: 5 * 60 * 1000,
+    secure: false
+  }
 };
 
 if (config.keys.prod) {
-	app.set('trust proxy', 1);
-	sessOpts.cookie.secure = true;
+  app.set('trust proxy', 1);
+  sessOpts.cookie.secure = true;
 }
-app.use(morgan('[:date[iso]] :method :url :status :response-time ms - :res[content-length]'));
+app.use(
+  morgan(
+    '[:date[iso]] :method :url :status :response-time ms - :res[content-length]'
+  )
+);
 app.use(morgan('combined'));
 app.use(cors());
 app.use(flash());
@@ -131,13 +137,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function(req, res, next) {
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-token');
-	if (req.method === 'OPTIONS') {
-		res.end();
-	} else {
-		next();
-	}
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, x-token'
+  );
+  if (req.method === 'OPTIONS') {
+    res.end();
+  } else {
+    next();
+  }
 });
 
 /**
@@ -251,7 +260,7 @@ async function ensureAuthenticated(req, res) {
   });
 }
 
- /*
+/*
 function ensureAuthenticated(req, res, next) {
 	if (req.isAuthenticated()) {
 		return next(null);
@@ -295,16 +304,16 @@ function loadReactRouter(req, res) {
 app.use('/api', router);
 
 app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
+  res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
 });
 
 /** Error Handlers */
 app.use((err, req, res, next) => {
-	res.status(500).json({
-		errors: {
-			message: err
-		}
-	});
+  res.status(500).json({
+    errors: {
+      message: err
+    }
+  });
 });
 
 module.exports = app;
