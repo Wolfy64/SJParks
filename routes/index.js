@@ -15,9 +15,19 @@ users.param('userId', async (req, res, next, userId) => {
     .findById(userId)
     .catch(err => {
       req.error = err;
-      next();
+      return next();
     });
   if (user) req.user = user;
+  return next();
+});
+parks.param('parkId', async (req, res, next, parkId) => { 
+  const park = await db.Park
+    .findById(parkId)
+    .catch(err => {
+      req.err = err;
+     return next();
+    });
+  if (park) req.park = park;
   return next();
 });
 apiRouter.use('/users' , users);

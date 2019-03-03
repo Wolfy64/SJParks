@@ -268,7 +268,7 @@ async function index(req, res) {
  */
 async function create(req, res) {
 	return new Promise(async (resolve, reject) => {
-		const { errors, isValid, data } = await validateUserInput(req.body).catch((err) => console.log(err));
+		const { errors, isValid, data } = await validateUserInput(req).catch((err) => console.log(err));
 
 		if (!isValid) reject(respond(res, false, errors));
 		else {
@@ -289,7 +289,7 @@ async function create(req, res) {
  * @method PUT /api/user/:userId
  */
 async function update(req, res) {
-	const { errors, isValid, data } = validateUserInput(req.body);
+	const { errors, isValid, data } = await validateUserInput(req).catch(err => console.log(err));
 
 	if (!isValid) {
 		console.log(errors);
@@ -304,30 +304,23 @@ async function update(req, res) {
 
 		const options = {
 			setDefaultsOnInsert: true,
-			sort: 1,
-			new: false,
-			upsert: false,
-			runValidators: true,
-			select: null,
-			rawResult: false,
-			strict: false
+			new: true,
+			upsert: true,
+			runValidators: true
 		};
 
 		const foundUser = await db.User
-			.findByIdAndUpdate(req.params.id, data, options)
+			.findByIdAndUpdate(data.id, data, options)
 			.catch((err) => console.log(err));
-		if (foundUser) {
-			foundUser.save().catch((err) => respond(res, false, errors));
-
-			respond(res, true, foundUser);
-		}
+		if (foundUser) respond(res, true, foundUser);
+		
 	}
 }
 
 /**  
  * Delete an existing user by id 
  * 
- * @method DELETE api/user/:id 
+ * @method DELETE api/user/:userId 
  * @function destroy
  * @param {request} req 
  * @param {response} res 
@@ -335,46 +328,18 @@ async function update(req, res) {
  * 
  */
 
-function destroy(req, res) {
-	const user = req.body;
+async function destroy(req, res) {
 
-	db.User
-		.findByIdAndDelete({
-			_id: user._id
-		})
-		.then(user => {
-			user.parks.forEach(park => {
-				db.Park
-					.findById(park)
-					.then(doc => {
-						doc.users.pop(user._id);
-						doc.save();
-					})
-					.catch(err => console.log(err));
+	if (req.user){
+		const removedUser = await db.User
+		.findByIdAndRemove(req.user._id)
+			.catch(err => {
+				console.log(err);
+				respond(res, false, err);
 			});
-
-			if (user.Updates) {
-				user.Updates.forEach(update => {
-					db.Update
-						.find({
-							author: update.author
-						})
-						.then(docs => {
-							docs.forEach(doc => {
-								doc.users.pop(user._id);
-								doc.save();
-							});
-						})
-						.catch(err => console.log(err));
-				});
-			}
-
-			user
-				.remove()
-				.then(removedUser => respond(res, true, removedUser))
-				.catch(err => respond(res, false, err));
-		})
-		.catch(err => console.log(err));
+		
+		respond(res, true, removedUser);
+	}	
 }
 
 /**
@@ -388,19 +353,17 @@ function destroy(req, res) {
  * 
  */
 function uploadImage(req, res) {
-	cloudinary.config({
+	cloudinary.config(/*{
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 		api_key: process.env.CLOUDINARY_API_KEY,
 		api_secret: process.env.CLOUDINARY_API_SECRET
-	});
+	}*/);
 	const values = Object.values(req.files);
 	const promises = values.map(image => cloudinary.uploader.upload(image.path));
 
 	Promise.all(promises)
 		.then(results => respond(res, true, results))
 		.catch(err => respond(res, false, err));
-
-	res.status(200);
 }
 
 /**
