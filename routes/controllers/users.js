@@ -4,7 +4,7 @@
 const cloudinary = require('cloudinary');
 const express = require('express');
 const router = express.Router();
-
+const config = require('../../configurations');
 const db = require('../../models');
 const respond = require('../../lib').respond;
 const validateUserInput = require('../../configurations/validator').validateUserInput;
@@ -228,8 +228,11 @@ async function incoming(req, res) {
 async function read(req, res) {
 	return new Promise(async function(resolve, reject) {
 		console.log(req.user);
-		if (req.user) resolve(respond(res, true, req.user));
-		reject(respond(res, false, req.error));
+		if (req.user) {
+			resolve(respond(res, true, req.user));
+		} else {
+			reject(respond(res, false, req.error));
+		}
 	});
 }
 
@@ -268,13 +271,13 @@ async function index(req, res) {
  */
 async function create(req, res) {
 	return new Promise(async (resolve, reject) => {
-		const { errors, isValid, data } = await validateUserInput(req).catch((err) => console.log(err));
+		const { errors, isValid, data } = await validateUserInput(req).catch(err => console.log(err));
 
 		if (!isValid) reject(respond(res, false, errors));
 		else {
 			delete data.queries;
 			var newUser = new db.User(data);
-			await newUser.save().catch((err) => console.log(err));
+			await newUser.save().catch(err => console.log(err));
 			resolve(respond(res, true, newUser));
 		}
 	});
@@ -309,11 +312,8 @@ async function update(req, res) {
 			runValidators: true
 		};
 
-		const foundUser = await db.User
-			.findByIdAndUpdate(data.id, data, options)
-			.catch((err) => console.log(err));
+		const foundUser = await db.User.findByIdAndUpdate(data.id, data, options).catch(err => console.log(err));
 		if (foundUser) respond(res, true, foundUser);
-		
 	}
 }
 
@@ -329,17 +329,14 @@ async function update(req, res) {
  */
 
 async function destroy(req, res) {
+	if (req.user) {
+		const removedUser = await db.User.findByIdAndRemove(req.user._id).catch(err => {
+			console.log(err);
+			respond(res, false, err);
+		});
 
-	if (req.user){
-		const removedUser = await db.User
-		.findByIdAndRemove(req.user._id)
-			.catch(err => {
-				console.log(err);
-				respond(res, false, err);
-			});
-		
 		respond(res, true, removedUser);
-	}	
+	}
 }
 
 /**
@@ -353,11 +350,14 @@ async function destroy(req, res) {
  * 
  */
 function uploadImage(req, res) {
-	cloudinary.config(/*{
+	cloudinary.config(
+		config.keys
+			.cl /*{
 		cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
 		api_key: process.env.CLOUDINARY_API_KEY,
 		api_secret: process.env.CLOUDINARY_API_SECRET
-	}*/);
+	}*/
+	);
 	const values = Object.values(req.files);
 	const promises = values.map(image => cloudinary.uploader.upload(image.path));
 
@@ -441,31 +441,27 @@ function findUpdate(req, res) {
 		.catch(err => respond(res, false, err));
 }
 
-// @route /api/user
 router
 	.route('/')
 	.get(index)
 	.post(create);
 
-router.route('/uploadImage').post(uploadImage);
-
-// @route /api/user/_id
 router
 	.route('/:userId')
 	.get(read)
 	.put(update)
 	.delete(destroy);
+	
+router.route('/incoming').post(incoming);
+	
+router.route('/:userId/uploadImage').post(uploadImage);
 
-// @route /api/users/_id/park
 router.route('/:userId/parks').get(readAllParks);
 
-// @route /api/users/_id/updates
 router.route('/:userId/updates').get(readAllUpdates);
 
-// @route /api/users/_id/park/_id
 router.route('/:userId/parks/:parkId').get(findPark);
 
-// @route /api/user/_id/updates/_id
 router.route('/:userId/updates/:updateId').get(findUpdate);
 
 module.exports = router /*{
