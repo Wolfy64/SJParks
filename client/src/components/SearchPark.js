@@ -14,22 +14,27 @@ const Container = styled.div`
 `;
 
 class SearchPark extends Component {
-  state = { filter: '', filterPark: null };
+  state = { filter: '', filterPark: null, filterParkCode: null };
 
   handleInput = e => {
     const { name, value } = e.target;
     const filterPark = this.props.parks.filter(el =>
       el.name.toLowerCase().includes(value.toLowerCase())
     );
+    const filterParkCode = this.props.parks.filter(el =>
+      el.name.includes(value)
+    );
 
-    this.setState({ [name]: value, filterPark });
+    this.setState({ [name]: value, filterPark, filterParkCode });
   };
 
   render() {
-    const { filter, filterPark } = this.state;
+    const { filter, filterPark, filterParkCode } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
-    let showParkList = filterPark || [...parks].splice(0, this.props.numShow || 5);
+    let showParkList =
+      (filterPark && filterParkCode) ||
+      [...parks].splice(0, this.props.numShow || 5);
 
     const parkLi = showParkList.map(el => (
       <ParkLi
@@ -41,22 +46,22 @@ class SearchPark extends Component {
     ));
 
     return (
-      <Container className='searchContainer'>
-      <div className='innerWrapper'>
-        <Input
-          name='filter'
-          value={filter}
-          onChange={this.handleInput}
-          type='text'
-          placeholder='Search Parks by Name'
-          autoComplete='off'
-        />
+      <Container className="searchContainer">
+        <div className="innerWrapper">
+          <Input
+            name="filter"
+            value={filter}
+            onChange={this.handleInput}
+            type="text"
+            placeholder="Search Parks by Name"
+            autoComplete="off"
+          />
 
-        {addAllParks && (
-          <ButtonText onClick={addAllParks}>Select All</ButtonText>
-        )}
+          {addAllParks && (
+            <ButtonText onClick={addAllParks}>Select All</ButtonText>
+          )}
 
-        <ul>{parkLi}</ul>
+          <ul>{parkLi}</ul>
         </div>
       </Container>
     );
