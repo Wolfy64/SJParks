@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Button from '../UI/Generic/Button';
 import styled from 'styled-components';

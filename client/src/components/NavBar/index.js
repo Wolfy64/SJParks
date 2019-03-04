@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Title from './Title';
 import BurgerIcon from './BurgerIcon';

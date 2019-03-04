@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import UserImage from './UserImage';
 import UserForm from './UserForm';

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 /**
  * Check if form has Errors OR if data is Empty
  * @param {object} formErrors - The formErrors from state form

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 const DefaultHeaders = {
   Accept: 'application/json, text/plain, */*',
   'Content-Type': 'application/json'
@@ -6,7 +7,7 @@ const DefaultHeaders = {
 const makeRequest = (
   path,
   method = 'GET',
-  payload,
+  payload = {},
   headers = DefaultHeaders
 ) => {
   const options = {
@@ -15,7 +16,7 @@ const makeRequest = (
     credentials: 'include'
   };
 
-  if (payload) options.body = JSON.stringify(payload);
+  if (payload !== {}) options.body = JSON.stringify(payload);
   return fetch(path, options);
 };
 
