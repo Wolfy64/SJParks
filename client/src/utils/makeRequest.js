@@ -7,16 +7,18 @@ const DefaultHeaders = {
 const makeRequest = (
   path,
   method = 'GET',
-  payload = {},
+  payload = null,
   headers = DefaultHeaders
 ) => {
+  // Request with GET/HEAD method cannot have body
   const options = {
     method,
     headers,
     credentials: 'include'
   };
 
-  if (payload !== {}) options.body = JSON.stringify(payload);
+  // All Requests except GET/HEAD method will have a JSON payload as body
+  if (payload) options.body = JSON.stringify(payload);
   return fetch(path, options);
 };
 
