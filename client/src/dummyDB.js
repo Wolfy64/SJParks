@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 export const parksDB = [
   {
     _id: '5c1452b40571e5c107c1b43c',

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Input from '../UI/Form/Input';
 import Message from '../UI/Generic/Message';

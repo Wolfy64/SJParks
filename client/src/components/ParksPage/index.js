@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React, { Component } from 'react';
 import errorFormHandler from '../../utils/errorFormHandler';
 import isFormValid from '../../utils/isFormValid';

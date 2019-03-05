@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Textarea from '../UI/Form/Textarea';
 import makeRequest from '../../utils/makeRequest';

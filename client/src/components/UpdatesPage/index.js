@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Graph from './Graph';
 import UpdatePost from './UpdatePost';

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import ButtonText from '../UI/Generic/ButtonText';
 import { Primary, Secondary, MiniLabel, Message } from './styles';

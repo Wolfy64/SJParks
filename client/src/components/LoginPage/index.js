@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from "react";
 import { withRouter } from "react-router";
 import makeRequest from "../../utils/makeRequest";

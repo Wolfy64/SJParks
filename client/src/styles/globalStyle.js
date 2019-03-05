@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import { withRouter } from 'react-router';
 import PublicRoutes from './components/Routes/PublicRoutes';
