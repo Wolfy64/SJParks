@@ -2,6 +2,10 @@
 
 ## Set up
 
+**On root folder:**
+
+To install packages for both server and client `npm run setup`
+
 Add `.env` in root folder with your personnal and private data
 
 ```shell
@@ -17,63 +21,25 @@ TWILIO_NUMBER=
 NODE_ENV=
 ```
 
-Install package with `npm install` on both side Frontend `/client` and Backend `/`.
-
 ## Run App
 
-On root folder: `npm run dev`
+**On root folder:**
 
-Client run on http://localhost:3000
+To run server and client `npm start`
 
-Server run on http://localhost:5000
+To run only the server `npm run server`
 
-## Webapp Structure
+To run only the client `npm run client`
 
-### Public
+To run test into the client `npm test` (Coming soon)
 
-```shell
-|-- About
-|-- Subscribe
-    |-- SelectPark
-    |-- Search
-    |-- ParkListSelect
-    |-- DeselectPark
-    |-- ParkListDeselect
-    |-- PhoneInput
-|-- Contact
-    |-- Survey
-    |-- ContactForm
-```
+**Client run on http://localhost:3000**
+
+**Server run on http://localhost:5000**
+
+## Webapp Specification
 
 ### Admin
-
-```shell
-|-- Topnav
-|-- Profile
-    |-- UploadPicture
-    |-- ProfileEdit
-    |-- PasswordEdit
-
-|-- Sidenav
-|-- Updates
-    |-- Graph
-    |-- Posts
-    |-- NewUpdate
-        |-- SelectPark
-        |-- Search
-            |-- ParkListSelect
-        |-- DeselectPark
-            |-- ParkListDeselect
-        |-- TitleToggle
-        |-- Message
-        |-- MessagePreview
-|-- Parks
-    |-- NewPark
-    |-- ParkListDelete
-|-- Users
-    |-- NewUser
-    |-- UserList
-```
 
 ## Subscriber User Flow
 
@@ -90,10 +56,6 @@ User selects the parks from the Public page and inputs the phone number to subsc
 ### Keywords
 
 userResident gets an automatic response for any text they send to our Twilio number. Special keys are "STOP", "unsubscribe", "HELP", "START", and subscription keys created by the Admin.
-
-## Admin User Flow
-
-### Keywords
 
 userResident gets an automatic response for any text they send to our Twilio number.
 Special keys are:
