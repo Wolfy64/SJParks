@@ -35,3 +35,9 @@ jobs:
 
       # run tests!
       - run: npm test
+
+    deployment:
+      staging:
+        branch: master
+        heroku:
+          appname: sjparks
