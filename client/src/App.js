@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import PublicRoutes from './components/Routes/PublicRoutes';
 import Dashboard from './components/Dashboard';
 // import makeRequest from './utils/makeRequest';
-
+// Test CI
 class App extends React.Component {
   state = { isAuthenticated: false };
 
