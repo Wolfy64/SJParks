@@ -4,7 +4,7 @@
   "description": "An app made to help the City of San Jose communicate with residents a little better. ",
   "main": "server.js",
   "scripts": {
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build",
+    "heroku-postbuild": "npm run setup && cd client && npm run build",
     "setup": "npm install && cd client && npm install",
     "start": "run-p server client",
     "client": "cd client && npm run start",
