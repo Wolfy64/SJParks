@@ -17,13 +17,3 @@ jobs:
             - client/node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
-      - run: git push git@github.com:Wolfy64/SJParks.git master
-
-workflows:
-  version: 2
-  main:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: development
