@@ -17,7 +17,7 @@ jobs:
             - client/node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: npm test
-      - deploy:
+      - run:
         name: Deploy to master branch
         command: git@github.com:Wolfy64/SJParks.git master
 
