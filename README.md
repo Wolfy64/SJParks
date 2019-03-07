@@ -25,13 +25,13 @@ NODE_ENV=
 
 **On root folder:**
 
-To run server and client `npm start`
+To run server and client `npm run dev`
 
 To run only the server `npm run server`
 
 To run only the client `npm run client`
 
-To run test into the client `npm test` (Coming soon)
+To run test into the client `npm test`
 
 **Client run on http://localhost:3000**
 
