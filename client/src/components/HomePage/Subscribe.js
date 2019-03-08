@@ -11,14 +11,7 @@ import { SubscribeContainer, Form } from './styles';
 const initialState = {
   parks: [],
   parkSelected: [],
-<<<<<<< HEAD
-  parkCode: [],
-  phone: '',
-  showErrors: false,
-  formErrors: false
-=======
   phone: ''
->>>>>>> 094bb20233c2dab0d172a5da83b7a76af4742278
 };
 
 class Subscribe extends React.Component {

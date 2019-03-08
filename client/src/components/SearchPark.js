@@ -34,12 +34,7 @@ class SearchPark extends Component {
     const { addPark, parks, selected, addAllParks } = this.props;
 
     let showParkList =
-<<<<<<< HEAD
-      (filterPark && filterParkCode) ||
-      [...parks].splice(0, this.props.numShow || 5);
-=======
       filterPark || [...parks].splice(0, this.props.numShow || 5);
->>>>>>> 094bb20233c2dab0d172a5da83b7a76af4742278
 
     const parkLi = showParkList.map(el => (
       <ParkLi
@@ -63,13 +58,9 @@ class SearchPark extends Component {
           />
 
           {addAllParks && (
-<<<<<<< HEAD
-            <ButtonText onClick={addAllParks}>Select All</ButtonText>
-=======
             <ButtonText type="button" onClick={addAllParks}>
               Select All
             </ButtonText>
->>>>>>> 094bb20233c2dab0d172a5da83b7a76af4742278
           )}
 
           <ul>{parkLi}</ul>
