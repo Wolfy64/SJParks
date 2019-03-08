@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NavContainer } from './styles';

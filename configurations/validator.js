@@ -6,10 +6,11 @@ const isEmpty = require('is-empty');
  * Validates user input provided by an HTTP_request object
  * 
  * @function validateUserInput 
- * @param {request.body} props
+ * @param {request} body
  * 
  */
-function validateUserInput(props) {
+function validateUserInput(httpRequest) {
+	const { body, userId } = httpRequest;
 	return new Promise(async (resolve, reject) => {
 		console.log('> [12:20] Begin user Validation');
 		const errors = [];
@@ -18,25 +19,25 @@ function validateUserInput(props) {
 
 		// prepare data
 		console.log('> [18:19] Preparing Data');
-		data.access = !isEmpty(props.access) ? props.access : 'basic';
-		data.userName = !isEmpty(props.userNames) ? props.userName : '';
-		data.password = !isEmpty(props.password) ? props.password : '';
-		data.name = !isEmpty(props.name) ? props.name : '';
-		data.phone = !isEmpty(props.phone) ? props.phone : '';
-		data.email = !isEmpty(props.email) ? props.email : '';
+		data.access = !isEmpty(body.access) ? body.access : 'basic';
+		data.userName = !isEmpty(body.userName) ? body.userName : '';
+		data.password = !isEmpty(body.password) ? body.password : '';
+		data.name = !isEmpty(body.name) ? body.name : '';
+		data.phone = !isEmpty(body.phone) ? body.phone : '';
+		data.email = !isEmpty(body.email) ? body.email : '';
 
-		if (!isEmpty(props.addPark)) {
-			console.log(`> [27:25] queries.park:${props.addPark}`);
+		if (!isEmpty(body.addPark)) {
+			console.log(`> [27:25] queries.park:${body.addPark}`);
 			queries.park = {};
-			const { code, name } = props.addPark;
+			const { code, name } = body.addPark;
 			if (code) queries.park.code = code;
 			if (name) queries.park.name = name;
 		}
 
-		if (!isEmpty(props.addUpdate)) {
-			console.log(`> [35:26] props.addUpdate:${props.addUpdate}`);
+		if (!isEmpty(body.addUpdate)) {
+			console.log(`> [35:26] body.addUpdate:${body.addUpdate}`);
 			queries.update = {};
-			const { author, message } = props.addUpdate;
+			const { author, message } = body.addUpdate;
 			if (author) queries.update.author = author;
 			if (message) queries.update.message = message;
 		}
@@ -105,7 +106,7 @@ function validateUserInput(props) {
 		}
 
 		if (queries.user) {
-			const user = await db.User.findOne(queries.user).catch(err => console.error(err));
+			const user = await db.User.findOne(queries.user).catch((err) => console.error(err));
 			console.log(`> [071:25] queries.user:${queries.user}`);
 			// console.error(err);
 			if (user) {
@@ -117,33 +118,42 @@ function validateUserInput(props) {
 					console.log(`> [071:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
 				}
 			} else if (!user && userId === null) {
-				
 			}
 		}
 
-		const park = await db.Park.findOne(queries.park).catch(err => {
-			// console.error(err);
-			console.log(`> [075:25] queries.park:${queries.park}`);
-			errors.push(new Error('We had trouble finding that that park'));
-			console.log(`> [075:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
-		});
-		if (park) {
-			data.parks = [park._id];
-		} else {
-			data.parks = [];
+		if (queries.park !== {}) {
+			const park = await db.Park.findOne(queries.park).catch((err) => {
+				console.error(err);
+				console.log(`> [075:25] queries.park:${queries.park}`);
+				errors.push(new Error('We had trouble finding that that park'));
+				console.log(`> [075:25] There are now ${errors.length} errors. ${errors[errors.length - 1]}`);
+			});
+			if (park) {
+				data.parks = [park._id];
+				delete data.queries.park;
+			} else {
+				data.parks = [];
+			}
 		}
 
-		// const update = await db.Update.findOne(queries.update).catch(err => {
-		// 	// console.error(err);
-		// 	console.log(`> [081:25] queries.update:${queries.update}`);
-		// 	if(!update)errors.push(new Error('We had trouble finding that that update'));
-		// 	console.log(`> [081:25] There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`);
-		// });
-		// if (update) data.updates = [update];
+		// if (queries.update !== {}) {
+		// 	const update = await db.Update.findOne(queries.update).catch((err) => {
+		// 		console.error(err);
+		// 		console.log(`> [081:25] queries.update:${queries.update}`);
+		// 		errors.push(new Error('We had trouble finding that that update'));
+		// 		console.log(
+		// 			`> [081:25] There are now ${errors.length} errors. The newest is: ${errors[errors.length - 1]}`
+		// 		);
+		// 	});
+		// 	if (update) {
+		// 		data.updates = [update._id];
+		// 		delete data.queries.update;
+		// 	}else{
+		// 		data.updates = [];
+		// 	}
+		// }
 
-		data.queries = queries;
-
-		const isValid = isEmpty(errors);
+		const isValid = errors.length === 0;
 		console.log(isValid);
 		if (isValid) {
 			console.log(`> [111:25] data: ${data}`);
@@ -158,10 +168,10 @@ function validateUserInput(props) {
 /**
  * Validates park input provided by an HTTP_request object
  * @function validateParkInput 
- * @param {request.body} props
+ * @param {request.body} body
  * @public
  */
-function validateParkInput(props) {
+function validateParkInput(body) {
 	console.log('> validating park');
 	const errors = [];
 	const data = {};
@@ -169,24 +179,24 @@ function validateParkInput(props) {
 
 	// prepare data
 	console.log('> Preparing Data');
-	data.name = !isEmpty(props.newName) ? props.newName : '';
-	data.code = !isEmpty(props.newCode) ? props.newCode : '';
-	if (!isEmpty(props.addSubscriptionLog)) {
+	data.name = !isEmpty(body.newName) ? body.newName : '';
+	data.code = !isEmpty(body.newCode) ? body.newCode : '';
+	if (!isEmpty(body.addSubscriptionLog)) {
 		queries.subscriptionLog = {};
-		const { name, blah } = props.addSubscriptionLog;
+		const { name, blah } = body.addSubscriptionLog;
 		if (code) queries.park.code = code;
 		if (name) queries.park.name = name;
 	}
-	if (!isEmpty(props.addMessageLog)) {
-		// queries.MessageLog = { parks: { $eq: props.addMessageLog.parkId } };
-		const { name, blah } = props.addMessageLog;
+	if (!isEmpty(body.addMessageLog)) {
+		// queries.MessageLog = { parks: { $eq: body.addMessageLog.parkId } };
+		const { name, blah } = body.addMessageLog;
 		if (code) queries.park.code = code;
 		if (name) queries.park.name = name;
 	}
 
 	// prepare validator queries
 	console.log('> Preparing queries');
-	// queries.SubscriptionLog = { park: { $eq: { _id: props.addSubscriptionLog.parkId } } };
+	// queries.SubscriptionLog = { park: { $eq: { _id: body.addSubscriptionLog.parkId } } };
 
 	queries.Park = { name: data.name, code: data.code };
 	console.log(`> Prepared queries: ${JSON.stringify(queries)}`);
@@ -256,6 +266,7 @@ function validateLoginInput(data) {
 	if (validator.isEmpty(data.password)) {
 		errors.password = 'Password field is required';
 	}
+	
 	return {
 		errors,
 		isValid: isEmpty(errors),

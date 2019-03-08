@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 export default {
   colors: {
     primary: '#004A75',

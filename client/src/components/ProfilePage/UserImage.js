@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import { Consumer } from '../../utils/Context';
 import makeRequest from '../../utils/makeRequest';

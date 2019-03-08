@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import UsersForm from './UsersForm';
 import UsersList from './UsersList';

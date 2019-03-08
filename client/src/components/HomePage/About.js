@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import phone from '../../img/phone.png';
 import sms from '../../img/sms.jpg';
@@ -23,7 +24,7 @@ const About = () => (
           Administration
         </li>
         <li>2. Know about events at the park you plan to visit.</li>
-        <li>3. Get involves in San Jose community.</li>
+        <li>3. Get involved in San Jose community.</li>
       </ul>
     </Summary>
 

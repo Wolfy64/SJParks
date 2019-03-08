@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import styled from 'styled-components';
 import ParkLi from './ParkLi';
@@ -23,9 +24,11 @@ const SelectedPark = props => {
   ));
 
   return (
-    <Container className='selectedContainer'>
-      <div className='innerWrapper'>
-        <ButtonText onClick={props.deleteAllParks}>Deselect All</ButtonText>
+    <Container className="selectedContainer">
+      <div className="innerWrapper">
+        <ButtonText type="button" onClick={props.deleteAllParks}>
+          Deselect All
+        </ButtonText>
         <div>{selectedPark}</div>
       </div>
     </Container>

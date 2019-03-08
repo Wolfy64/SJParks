@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 export const msgErr = {
   text: 'Minimum 2 characaters',
   mail: 'Invalid email address',

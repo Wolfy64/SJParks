@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import { msgErr } from '../config/messages';
 import { regex } from '../config/regex';
 

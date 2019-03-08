@@ -1,7 +1,7 @@
+/*jshint esversion: 8 */
 import React from 'react';
 import Input from '../UI/Form/Input';
-import errorFormHandler from '../../utils/errorFormHandler';
-import isFormValid from '../../utils/isFormValid';
+import Message from '../UI/Generic/Message';
 import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
@@ -11,10 +11,14 @@ import { SubscribeContainer, Form } from './styles';
 const initialState = {
   parks: [],
   parkSelected: [],
+<<<<<<< HEAD
   parkCode: [],
   phone: '',
   showErrors: false,
   formErrors: false
+=======
+  phone: ''
+>>>>>>> 094bb20233c2dab0d172a5da83b7a76af4742278
 };
 
 class Subscribe extends React.Component {
@@ -27,17 +31,7 @@ class Subscribe extends React.Component {
     success ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
-  handleChange = e => {
-    const { name, type, value } = e.target;
-
-    this.setState({
-      [name]: value,
-      formErrors: {
-        ...this.state.formErrors,
-        [name]: errorFormHandler(type, value)
-      }
-    });
-  };
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
 
   handleAddPark = park => {
     const { parkSelected } = this.state;
@@ -51,55 +45,45 @@ class Subscribe extends React.Component {
   };
 
   handleDeletePark = park => {
-    this.setState({
-      parkSelected: [
-        ...this.state.parkSelected.filter(el => el._id !== park._id)
-      ]
-    });
+    let { parkSelected } = this.state;
+    parkSelected = parkSelected.filter(el => el._id !== park._id);
+
+    this.setState({ parkSelected });
   };
 
-  handleDeleteAddAllPark = () => {
-    this.setState({ parkSelected: [] });
-  };
+  handleDeleteAddAllPark = () => this.setState({ parkSelected: [] });
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
-    const { phone, formErrors, parkSelected } = this.state;
-    const dataForm = { phone, parkSelected };
-    const isValid = isFormValid(formErrors, dataForm);
 
-    isValid
-      ? this.handleSendForm(dataForm)
-      : this.setState({ showErrors: true });
-  };
+    const request = await makeRequest('api/subscriptionLogs', 'POST', {
+      phone: this.state.phone,
+      addParks: this.state.parkSelected,
+      subscribed: true
+    });
 
-  handleSendForm = dataForm => {
-    makeRequest('/subscriptionLog', 'POST', dataForm)
-      .then(res => res.json())
-      .then(res => {
-        console.log('>> PublicPage/Subscribe POST:', res.json);
-      })
-      .catch(err => err);
+    const { success, message } = await request.json();
 
-    // Reset Form field
-    this.setState(initialState);
+    success ? this.setState(initialState) : this.setState(message);
   };
 
   render() {
-    const { formErrors, showErrors } = this.state;
-    const hasErrors = showErrors && formErrors;
+    const { message, parks, parkSelected, phone } = this.state;
     return (
       <SubscribeContainer>
         <h2>Subscribe</h2>
+
+        {message && <Message error={message} />}
+
         <Form id="subscribe" onSubmit={this.handleSubmit}>
           <SearchPark
-            parks={this.state.parks}
+            parks={parks}
             addPark={park => this.handleAddPark(park)}
             addAllParks={this.handleAddAllPark}
           />
 
           <SelectedPark
-            parks={this.state.parkSelected}
+            parks={parkSelected}
             deletePark={park => this.handleDeletePark(park)}
             deleteAllParks={this.handleDeleteAddAllPark}
           />
@@ -111,8 +95,7 @@ class Subscribe extends React.Component {
               name="phone"
               type="tel"
               onChange={this.handleChange}
-              value={this.state.phone}
-              error={hasErrors ? formErrors.phone : null}
+              value={phone}
             />
 
             <Button name="I want to be informed!" />

@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React, { Component } from 'react';
 import { Provider } from './Context.js';
 

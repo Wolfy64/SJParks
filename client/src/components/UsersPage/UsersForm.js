@@ -1,3 +1,4 @@
+/*jshint esversion: 8 */
 import React from 'react';
 // import makeRequest from '../../utils/makeRequest';
 import errorFormHandler from '../../utils/errorFormHandler';

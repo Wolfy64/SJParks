@@ -30,6 +30,7 @@ requestValidation
 .env.production.local
 .jshintrc
 .editorconfig
+Notes.md
 
 npm-debug.log*
 yarn-debug.log*
