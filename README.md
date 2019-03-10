@@ -1,87 +1,68 @@
-# Text Notification Platform
+# Text Notification Platform for San Jose Parks
 
-## Set up
+## 📦 How to Set up
 
-**On root folder:**
+### From scratch
 
-To install packages for both server and client `npm run setup`
+Assuming your **fork** the project in a folder named "SJParks" on your Desktop.
+
+```shell
+cd ~/Desktop/SJParks
+git checkout -b <NAME__OF_YOUR_BRANCH>
+npm run setup // Install packages
+npm run dev
+```
 
 Add `.env` in root folder with your personnal and private data
 
 ```shell
 APP_SECRET=
+CLIENT_PORT=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_CLOUD_NAME=
 MLAB_URI=
 MONGODB_URI=
-TEST_MONGO_URL=
+NODE_ENV=
 SERVER_PORT=
-CLIENT_PORT=
+TEST_MONGO_URL=
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_NUMBER=
-NODE_ENV=
 ```
-
-## Run App
-
-**On root folder:**
-
-To run server and client `npm run dev`
-
-To run only the server `npm run server`
-
-To run only the client `npm run client`
-
-To run test into the client `npm test`
 
 **Client run on http://localhost:3000**
 
 **Server run on http://localhost:5000**
 
-## Webapp Specification
+## 🎉 How to contribute
 
-### Admin
+Into your branch
 
-## Subscriber User Flow
+```shell
+git remote add upstream git@github.com:Wolfy64/SJParks.git
+git pull upstream development
+// ... Do your work
+npm run test
+git push
+```
 
-### Subscription through Text
+Go to GitHub and [Pull Request 🔗](https://github.com/Wolfy64/SJParks/compare/development...development?expand=1) your branch
 
-User texts the parkID to our Twilio number, and we check if he's the new member for that park.
+If you want to check your tests of your build you can also signup to [CircleCI 🔗](https://circleci.com/signup/) with your GitHub account
 
-- Ex: Texting "ROSE" subscribes the user to Municipal Rose Garden notification list.
+### Other command
 
-### Subscription through the Website
+On root folder:
 
-User selects the parks from the Public page and inputs the phone number to subscribe to Text Notifications.
+To install packages for both server and client `npm run setup`
 
-### Keywords
+To start mango DB `npm run mango`
 
-userResident gets an automatic response for any text they send to our Twilio number. Special keys are "STOP", "unsubscribe", "HELP", "START", and subscription keys created by the Admin.
+To start server and client `npm run dev`
 
-userResident gets an automatic response for any text they send to our Twilio number.
-Special keys are:
+To start only the server `npm run server`
 
-- "STOP"
-- "unsubscribe"
-- "HELP"
-- "START"
-- And subscription keys created by the Admin.
+To start only the client `npm run client`
 
-## Admin User Flow
-
-### Updates
-
-Admin selects the list of Subscribers and sends the message.
-
-### Parks
-
-Premium Access Admin is able to view all lists in the system, add new lists, and delete existing lists.
-
-### Users
-
-Premium Access Admin is able to view all users in the system, add new users, and delete existing users.
-
-Premium Access Admin is able to view:
-
-- All lists in the system
-- Add new lists
-- Delete existing lists
+To run test into the client `npm test`

@@ -1,10 +1,10 @@
 import React from 'react';
 import phone from '../../img/phone.png';
 import sms from '../../img/sms.jpg';
-import {PresentationBox, Summary} from './styles';
+import { PresentationBox, Summary } from './styles';
 
 const About = () => (
-  <PresentationBox id='about'>
+  <PresentationBox id="about">
     <Summary>
       <p>
         Have your visited the park only to find out hat is closed for
@@ -25,7 +25,7 @@ const About = () => (
       </ul>
     </Summary>
 
-    <img src={phone} alt='Phone Eg' />
+    <img src={phone} alt="Phone Eg" />
   </PresentationBox>
 );
 
