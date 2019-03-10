@@ -47,11 +47,9 @@ npm run test
 git push
 ```
 
-Go to GitHub and pull request your branch
-`https://github.com/Wolfy64/SJParks/compare/development...development?expand=1`
+Go to GitHub and [Pull Request 🔗](https://github.com/Wolfy64/SJParks/compare/development...development?expand=1) your branch
 
-If you want to see the test of your build you can also signup to CircleCI with your GitHub account
-`https://circleci.com/signup/`
+If you want to check your tests of your build you can also signup to [CircleCI 🔗](https://circleci.com/signup/) with your GitHub account
 
 ### Other command
 
@@ -68,52 +66,3 @@ To start only the server `npm run server`
 To start only the client `npm run client`
 
 To run test into the client `npm test`
-
-## Webapp Specification
-
-### Admin
-
-## Subscriber User Flow
-
-### Subscription through Text
-
-User texts the parkID to our Twilio number, and we check if he's the new member for that park.
-
-- Ex: Texting "ROSE" subscribes the user to Municipal Rose Garden notification list.
-
-### Subscription through the Website
-
-User selects the parks from the Public page and inputs the phone number to subscribe to Text Notifications.
-
-### Keywords
-
-userResident gets an automatic response for any text they send to our Twilio number. Special keys are "STOP", "unsubscribe", "HELP", "START", and subscription keys created by the Admin.
-
-userResident gets an automatic response for any text they send to our Twilio number.
-Special keys are:
-
-- "STOP"
-- "unsubscribe"
-- "HELP"
-- "START"
-- And subscription keys created by the Admin.
-
-## Admin User Flow
-
-### Updates
-
-Admin selects the list of Subscribers and sends the message.
-
-### Parks
-
-Premium Access Admin is able to view all lists in the system, add new lists, and delete existing lists.
-
-### Users
-
-Premium Access Admin is able to view all users in the system, add new users, and delete existing users.
-
-Premium Access Admin is able to view:
-
-- All lists in the system
-- Add new lists
-- Delete existing lists
