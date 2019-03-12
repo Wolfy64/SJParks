@@ -6,6 +6,8 @@ import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import Button from '../UI/Generic/Button';
+import phoneValidation from '../../utils/phoneValidation';
+import { msgErr } from '../../config/messages';
 import { SubscribeContainer, Form } from './styles';
 
 const initialState = {
@@ -48,10 +50,18 @@ class Subscribe extends React.Component {
 
   handleSubmit = async e => {
     e.preventDefault();
+    const { phone, parkSelected } = this.state;
+
+    // Check if data is correct to send them
+    if (!parkSelected.length) this.setState({ message: msgErr.phone });
+    if (!phoneValidation(phone)) this.setState({ message: msgErr.phone });
+    if (!parkSelected.length || !phoneValidation(phone)) return;
+
+    this.setState({ message: null });
 
     const request = await makeRequest('api/subscriptionLogs', 'POST', {
-      phone: this.state.phone,
-      addParks: this.state.parkSelected,
+      phone,
+      addParks: parkSelected,
       subscribed: true
     });
 
@@ -84,7 +94,7 @@ class Subscribe extends React.Component {
           <div className="phoneField">
             <Input
               label="Phone"
-              placeholder="123-456-7890"
+              placeholder="202-555-1234"
               name="phone"
               type="tel"
               onChange={this.handleChange}
