@@ -23,12 +23,16 @@ const SelectedPark = props => {
     />
   ));
 
+  const button = (
+    <ButtonText type="button" onClick={props.deleteAllParks}>
+      Deselect All
+    </ButtonText>
+  );
+
   return (
     <Container className="selectedContainer">
       <div className="innerWrapper">
-        <ButtonText type="button" onClick={props.deleteAllParks}>
-          Deselect All
-        </ButtonText>
+        {selectedPark.length ? button : ''}
         <div>{selectedPark}</div>
       </div>
     </Container>

@@ -30,7 +30,7 @@ class SearchPark extends Component {
   };
 
   render() {
-    const { filter, filterPark, filterParkCode } = this.state;
+    const { filter, filterPark } = this.state;
     const { addPark, parks, selected, addAllParks } = this.props;
 
     let showParkList =
