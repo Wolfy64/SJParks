@@ -1,11 +1,9 @@
 /*jshint esversion: 8 */
-const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 const flash = require('connect-flash');
 const uuid = require('uuid/v4');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const session = require('express-session');
 const formData = require('express-form-data');
@@ -20,8 +18,11 @@ const FileStore = require('session-file-store')(session);
 morgan.token('id', req => req.sessionID.split('-')[0]);
 const config = require('./configurations');
 const db = require('./models');
-const router = require('./routes');
 let app = express();
+
+/** Load Routers */
+const publicRouter = require('./routes/publicRoutes');
+const apiRouter = require('./routes/apiRoutes');
 
 /**
  * Configure Passport Strategies
@@ -124,7 +125,7 @@ app.use(morgan('combined'));
 app.use(cors());
 app.use(flash());
 app.set('view engine', 'pug');
-app.use(express.static(path.join(__dirname, config.keys.path)));
+// app.use(express.static(path.join(__dirname, config.keys.path)));
 app.use(addRequestId);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -149,67 +150,41 @@ app.use(function(req, res, next) {
   }
 });
 
-/**
- * Login a new user
- *
- * @param {request} req
- * @param {response} res
- * @param {middleware} next
- * @public
- */
+// Routers
+app.use('/api', apiRouter);
+app.use('/', publicRouter);
 
-async function login(req, res) {
-  const { email, password } = req.body;
-  const user = await db.User.findOne({ email });
-
-  // const isMatch = await bcrypt.compare(password, user.password);
-  // const isMatch = await user.validatePassword(password);
-  const isMatch = true;
-
-  if (!user || !isMatch)
-    respond(res, false, { message: 'User or Password do not match !' });
-
-  res.cookie('token', user.generateJWT(), {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-    secure: false //true for production
+/** Error Handlers */
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    errors: {
+      message: err
+    }
   });
+});
 
-  respond(res, true, { user });
-}
+module.exports = app;
+
+// /**
+//  * Login a new user
+//  *
+//  * @param {request} req
+//  * @param {response} res
+//  * @param {middleware} next
+//  * @public
+//  */
 
 // app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }));
-
-/*
-async function login(req, res, next) {
-	const { errors, isValid, data } = validateLoginInput(req.body);
-
-	if (!isValid) {
-		console.log(errors);
-		respond(res, false, errors);
-	} else {
-		let user = await db.User.findOne({ email: data.email }).catch(err => console.log(err));
-		const isMatch = await user.validatePassword(password);
-
-		if (!user || !isMatch) respond(res, false, new Error('User or Password do not match !'));
-
-		// Set JWT into the cookie
-		const token = await user.generateJWT();
-		respond(res.cookie('token', token), true, { user });
-	}
-}
-
 // app.post('/login_pass_jwt', passport.authenticate('jwt', {	session: false}));
 
-*/
-/**
- * Logout current user
- *
- * @param {request} req
- * @param {response} res
- * @param {middleware} next
- * @public
- */
+// /**
+//  * Logout current user
+//  *
+//  * @param {request} req
+//  * @param {response} res
+//  * @param {middleware} next
+//  * @public
+//  */
 
 /*
 // Logout current user
@@ -242,23 +217,23 @@ function logout(req, res) {
 }
 */
 
-/**
- * Verify that current user is authenticated
- *
- * @param {request} req
- * @param {response} res
- * @param {middleware} next
- * @public
- */
+// /**
+//  * Verify that current user is authenticated
+//  *
+//  * @param {request} req
+//  * @param {response} res
+//  * @param {middleware} next
+//  * @public
+//  */
 
-async function ensureAuthenticated(req, res) {
-  const { token } = req.cookies;
+// async function ensureAuthenticated(req, res) {
+//   const { token } = req.cookies;
 
-  await jwt.verify(token, config.keys.secret, (err, payload) => {
-    if (err) respond(res, false, { message: 'Invalid token' });
-    respond(res, true, { payload });
-  });
-}
+//   await jwt.verify(token, config.keys.secret, (err, payload) => {
+//     if (err) respond(res, false, { message: 'Invalid token' });
+//     respond(res, true, { payload });
+//   });
+// }
 
 /*
 function ensureAuthenticated(req, res, next) {
@@ -300,20 +275,3 @@ function loadReactRouter(req, res) {
 	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 */
-
-app.use('/api', router);
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, config.keys.path, 'index.html'));
-});
-
-/** Error Handlers */
-app.use((err, req, res, next) => {
-  res.status(500).json({
-    errors: {
-      message: err
-    }
-  });
-});
-
-module.exports = app;

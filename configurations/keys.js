@@ -6,6 +6,7 @@ payLoad.cloudinaryOptions = {};
 payLoad.dev = process.env.NODE_ENV === 'development';
 payLoad.prod = process.env.NODE_ENV === 'production';
 payLoad.local = process.env.NODE_ENV === 'local';
+payLoad.env = process.env.NODE_ENV;
 payLoad.path = payLoad.prod ? 'client/build' : 'client/public';
 payLoad.url = payLoad.prod
   ? process.env.MONGODB_URI
@@ -20,5 +21,6 @@ payLoad.authToken = process.env.TWILIO_AUTH_TOKEN;
 payLoad.cloudinaryOptions.cloud_name = process.env.CLOUDINARY_CLOUD_NAME;
 payLoad.cloudinaryOptions.api_key = process.env.CLOUDINARY_API_KEY;
 payLoad.cloudinaryOptions.api_secret = process.env.CLOUDINARY_API_SECRET;
+payLoad.expiration = 60 * 60 * 24 * 365;
 
 module.exports = payLoad;

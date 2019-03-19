@@ -3,22 +3,22 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import PublicRoutes from './components/Routes/PublicRoutes';
 import Dashboard from './components/Dashboard';
-// import makeRequest from './utils/makeRequest';
-// Test CI
+import makeRequest from './utils/makeRequest';
+
 class App extends React.Component {
   state = { isAuthenticated: false };
 
-  // async componentDidMount() {
-  //   const request = await makeRequest('/api/auth');
-  //   const { success, payload } = await request.json();
+  async componentDidMount() {
+    const request = await makeRequest('/auth');
+    const { success, payload } = await request.json();
 
-  //   this.setState({
-  //     isAuthenticated: success,
-  //     user: payload
-  //   });
+    this.setState({
+      isAuthenticated: success,
+      user: payload
+    });
 
-  //   if (success) this.props.history.push(`/admin/${payload._id}/updates`);
-  // }
+    if (success) this.props.history.push(`/admin/${payload._id}/updates`);
+  }
 
   render() {
     const { isAuthenticated, user } = this.state;
