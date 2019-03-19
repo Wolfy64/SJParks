@@ -122,9 +122,8 @@ app.use('/', publicRouter);
 /** Error Handlers */
 app.use((err, req, res, next) => {
   res.status(500).json({
-    errors: {
-      message: err
-    }
+    success: false,
+    message: `Something went wrong: ${err}`
   });
 });
 
