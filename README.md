@@ -57,8 +57,6 @@ On root folder:
 
 To install packages for both server and client `npm run setup`
 
-To start mango DB `npm run mango`
-
 To start server and client `npm run dev`
 
 To start only the server `npm run server`
@@ -66,3 +64,11 @@ To start only the server `npm run server`
 To start only the client `npm run client`
 
 To run test into the client `npm test`
+
+### Demo: Admin Dashboard
+
+Connect to: `http://localhost:3000/login`
+
+User ID: `test@test.com`
+
+Password: `123456`
