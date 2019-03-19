@@ -174,47 +174,7 @@ module.exports = app;
 //  * @public
 //  */
 
-// async function login(req, res) {
-//   const { email, password } = req.body;
-//   const user = await db.User.findOne({ email });
-
-//   // const isMatch = await bcrypt.compare(password, user.password);
-//   // const isMatch = await user.validatePassword(password);
-//   const isMatch = true;
-
-//   if (!user || !isMatch)
-//     respond(res, false, { message: 'User or Password do not match !' });
-
-//   res.cookie('token', user.generateJWT(), {
-//     httpOnly: true,
-//     maxAge: 60 * 60 * 24 * 365, // 1 year
-//     secure: false //true for production
-//   });
-
-//   respond(res, true, { user });
-// }
-
 // app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }));
-
-/*
-async function login(req, res, next) {
-	const { errors, isValid, data } = validateLoginInput(req.body);
-
-	if (!isValid) {
-		console.log(errors);
-		respond(res, false, errors);
-	} else {
-		let user = await db.User.findOne({ email: data.email }).catch(err => console.log(err));
-		const isMatch = await user.validatePassword(password);
-
-		if (!user || !isMatch) respond(res, false, new Error('User or Password do not match !'));
-
-		// Set JWT into the cookie
-		const token = await user.generateJWT();
-		respond(res.cookie('token', token), true, { user });
-	}
-}
-
 // app.post('/login_pass_jwt', passport.authenticate('jwt', {	session: false}));
 
 // /**
