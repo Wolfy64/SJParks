@@ -18,9 +18,10 @@ const auth = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  let isMatch = false;
   const { email, password } = req.body;
   const user = await db.User.findOne({ email });
-  const isMatch = await user.validatePassword(password);
+  if (user) isMatch = await user.validatePassword(password);
 
   if (user && isMatch) {
     res.cookie('token', user.generateJWT(), {
