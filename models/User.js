@@ -1,11 +1,10 @@
 /*jshint esversion: 8 */
-// import { jwt } from 'jsonwebtoken';
 const mongoose = require('mongoose');
-// const validator  = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const jwt = require('jsonwebtoken');
-const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
+const keys = require('../configurations/keys');
+const Schema = mongoose.Schema;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -138,17 +137,11 @@ UserSchema.methods.setPassword = async function setPassword(newPassword) {
 
 /**
  * Validate user  password
- *
  * @param {string} candidatePassword
- *
+ * @returns {boolean}
  */
-UserSchema.methods.validatePassword = async function(candidatePassword) {
-  return new Promise(async (resolve, reject) => {
-    await bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-      if (err) return reject(err);
-      resolve(isMatch);
-    });
-  });
+UserSchema.methods.validatePassword = (candidatePassword, passwordHash) => {
+  return bcrypt.compare(candidatePassword, passwordHash);
 };
 
 /**
