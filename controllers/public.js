@@ -10,19 +10,19 @@ const home = (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await db.User.findOne({ email });
-  // const isMatch = await bcrypt.compare(password, user.password);
-  // const isMatch = await user.validatePassword(password);
-  const isMatch = true;
-  if (!user || !isMatch)
-    respond(res, false, { message: 'User or Password do not match !' });
+  const isMatch = await user.validatePassword(password, user.password);
 
-  res.cookie('token', user.generateJWT(), {
-    httpOnly: true,
-    maxAge: keys.expiration,
-    secure: keys.prod ? true : false
-  });
+  if (user && isMatch) {
+    res.cookie('token', user.generateJWT(), {
+      httpOnly: true,
+      maxAge: keys.expiration,
+      secure: keys.prod ? true : false
+    });
 
-  respond(res, true, user._id);
+    return respond(res, true);
+  }
+
+  respond(res, false, null, 'User or Password do not match !');
 };
 
 module.exports = {
