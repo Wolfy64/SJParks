@@ -1,30 +1,26 @@
 /*jshint esversion: 8 */
 /** Load Configurations */
 require('dotenv-safe').config({ allowEmptyValues: true });
-const http = require('http');
+const express = require('express');
 const app = require('./app');
+const server = express(app);
 const config = require('./configurations');
 const mongoose = require('mongoose', { useMongoClient: true });
-console.log(`> Running Server in ${process.env.NODE_ENV} mode...`);
+const { env, port, url } = config.keys;
 
 /** Configure Mongoose Database */
 mongoose.Promise = global.Promise;
-mongoose.set('debug', true);
+mongoose.set('debug', false);
 mongoose
-  .connect(config.keys.url, {
+  .connect(url, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false
   })
-  .then(() => {
-    console.log(`> MongoDB connected...`);
-  })
   .catch(err => console.error(err));
 
 /** Deploy Express Server*/
-const server = http.createServer(app);
-server.listen(config.keys.port, () =>
-  console.log(
-    `> Express Server Deployed @url: http://localhost:${config.keys.port}...`
-  )
+server.use(app);
+server.listen(port, () =>
+  console.log(`> Server in ${env}: http://localhost:${port}`)
 );

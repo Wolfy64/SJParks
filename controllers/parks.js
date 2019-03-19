@@ -1,8 +1,8 @@
 /*jshint esversion: 8 */
-const router = require('express').Router();
-const { validateParkInput } = require('../../configurations');
-const { respond } = require('../../lib');
-const db = require('../../models');
+// const router = require('express').Router();
+const { validator } = require('../configurations');
+const { respond } = require('../lib');
+const db = require('../models');
 
 /**
  * @public
@@ -12,12 +12,12 @@ const db = require('../../models');
  * @method GET /api/parks
  * @desc This will return the index of parks
  */
-async function index(req, res) {
+const getAllParks = async (req, res) => {
   const parks = await db.Park.find({ active: 1 }, { _id: 1, code: 1, name: 1 })
     .sort({ code: 1, name: 1 })
     .catch(err => respond(res, false, err));
   respond(res, true, parks);
-}
+};
 
 /**
  * @public
@@ -32,7 +32,7 @@ function create(req, res) {
     console.log(key, req.query[key]);
   }
   console.log('> Creating new park');
-  const { errors, isValid, data } = validateParkInput(req.body);
+  const { errors, isValid, data } = validator.validateParkInput(req.body);
   console.log('> Passed new park data validation');
   if (isValid /*!isvalid*/) {
     console.log({ success: false, error: errors });
@@ -63,7 +63,7 @@ function create(req, res) {
  */
 
 function update(req, res) {
-  const { errors, isValid, data } = validateParkInput(req.body);
+  const { errors, isValid, data } = validator.validateParkInput(req.body);
   const opts = {
     new: true, // return updated doc
     runValidators: true // validate before update
@@ -125,16 +125,20 @@ function destroy(req, res) {
 }
 
 // @route /api/park
-router
-  .route('/')
-  .get(index)
-  .post(create);
+// router
+//   .route('/')
+//   .get(index)
+//   .post(create);
 
 // @route /api/parks/_id/
-router
-  .route('/:id')
-  .get(read)
-  .put(update)
-  .delete(destroy);
+// router
+//   .route('/:id')
+//   .get(read)
+//   .put(update)
+//   .delete(destroy);
 
-module.exports = router;
+// module.exports = router;
+
+module.exports = {
+  getAllParks
+};
