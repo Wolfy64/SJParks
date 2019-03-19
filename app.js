@@ -217,48 +217,6 @@ function logout(req, res) {
 }
 */
 
-// /**
-//  * Verify that current user is authenticated
-//  *
-//  * @param {request} req
-//  * @param {response} res
-//  * @param {middleware} next
-//  * @public
-//  */
-
-// async function ensureAuthenticated(req, res) {
-//   const { token } = req.cookies;
-
-//   await jwt.verify(token, config.keys.secret, (err, payload) => {
-//     if (err) respond(res, false, { message: 'Invalid token' });
-//     respond(res, true, { payload });
-//   });
-// }
-
-/*
-function ensureAuthenticated(req, res, next) {
-	if (req.isAuthenticated()) {
-		return next(null);
-	}
-	res.redirect('/error');
-}
-*/
-
-/*
-
-function ensureAuthenticated(req, res) {
-  const auth = { isAuthenticated: false };
-  const { token } = req.cookies;
-
-  if (token) {
-    auth.isAuthenticated = true;
-    auth.user = jwt.verify(token, config.keys.secret);
-  }
-
-  res.json({auth})
-}
-*/
-
 /*
 function requireAdminLogin(req, res, next) {
   if (req.session.admin) next();
@@ -268,10 +226,5 @@ function requireAdminLogin(req, res, next) {
 function requireUserLogin(req, res, next) {
   if (req.session.username) next();
   else res.redirect('/login');
-}
-*/
-/*
-function loadReactRouter(req, res) {
-	res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 }
 */
