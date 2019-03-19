@@ -140,15 +140,15 @@ UserSchema.methods.setPassword = async function setPassword(newPassword) {
  * @param {string} candidatePassword
  * @returns {boolean}
  */
-UserSchema.methods.validatePassword = (candidatePassword, passwordHash) => {
-  return bcrypt.compare(candidatePassword, passwordHash);
+UserSchema.methods.validatePassword = function(candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 /**
  * Generate web token
  * @returns {jwt} token
  */
-UserSchema.methods.generateJWT = () => {
+UserSchema.methods.generateJWT = function() {
   const token = jwt.sign(
     {
       _id: this._id,
