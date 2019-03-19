@@ -21,5 +21,6 @@ payLoad.authToken = process.env.TWILIO_AUTH_TOKEN;
 payLoad.cloudinaryOptions.cloud_name = process.env.CLOUDINARY_CLOUD_NAME;
 payLoad.cloudinaryOptions.api_key = process.env.CLOUDINARY_API_KEY;
 payLoad.cloudinaryOptions.api_secret = process.env.CLOUDINARY_API_SECRET;
+payLoad.expiration = 60 * 60 * 24 * 365;
 
 module.exports = payLoad;
