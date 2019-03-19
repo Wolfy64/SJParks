@@ -153,23 +153,18 @@ UserSchema.methods.validatePassword = async function(candidatePassword) {
 
 /**
  * Generate web token
- *
  * @returns {jwt} token
- *
  */
-UserSchema.methods.generateJWT = function() {
-  const today = new Date();
-  const expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + 30);
+UserSchema.methods.generateJWT = () => {
   const token = jwt.sign(
     {
       _id: this._id,
       userName: this.userName,
       access: this.access,
-      expirationDate: parseInt(expirationDate.getTime() / 1000, 10)
+      expirationDate: keys.expiration
     },
-    require('../configurations/keys').secret,
-    { expiresIn: '30 days' }
+    keys.secret,
+    { expiresIn: keys.expiration }
   );
   return token;
 };
