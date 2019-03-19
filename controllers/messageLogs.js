@@ -38,17 +38,17 @@ function destroy(req, res) {}
 
 /** MessageLogs */
 router
-	.route('/api/messageLogs')
-	.get(index)
-	.post(create);
+  .route('/api/messageLogs')
+  .get(index)
+  .post(create);
 
 router
-	.route('/api/messageLogs/:messageLogId')
-	.get(read)
-	.put(update)
-	.delete(destroy);
+  .route('/api/messageLogs/:messageLogId')
+  .get(read)
+  .put(update)
+  .delete(destroy);
 
-module.exports = router/*{
+module.exports = router /*{
 	index,
 	read,
 	create,
