@@ -40,32 +40,3 @@ module.exports = {
   home,
   login
 };
-
-// /**
-//  * Login a new user
-//  *
-//  * @param {request} req
-//  * @param {response} res
-//  * @param {middleware} next
-//  * @public
-//  */
-
-// async function login(req, res) {
-//   const { email, password } = req.body;
-//   const user = await db.User.findOne({ email });
-
-//   // const isMatch = await bcrypt.compare(password, user.password);
-//   // const isMatch = await user.validatePassword(password);
-//   const isMatch = true;
-
-//   if (!user || !isMatch)
-//     respond(res, false, { message: 'User or Password do not match !' });
-
-//   res.cookie('token', user.generateJWT(), {
-//     httpOnly: true,
-//     maxAge: 60 * 60 * 24 * 365, // 1 year
-//     secure: false //true for production
-//   });
-
-//   respond(res, true, { user });
-// }
