@@ -2,17 +2,14 @@
 const cors = require('cors');
 const morgan = require('morgan');
 const flash = require('connect-flash');
-const uuid = require('uuid/v4');
 const cookieParser = require('cookie-parser');
 const express = require('express');
-const session = require('express-session');
 const formData = require('express-form-data');
 const addRequestId = require('express-request-id')();
 const passport = require('passport');
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
-const FileStore = require('session-file-store')(session);
 
 /** Load Configurations */
 morgan.token('id', req => req.sessionID.split('-')[0]);
@@ -85,37 +82,6 @@ passport.deserializeUser(async (userId, done) => {
   return done(null, user);
 });
 
-/**
- * Configure all application middleware's
- *
- * @description
- * Use `application-level` middleware for common functionality,
- * including: `logging`, `parsing`, and `session` handling.
- *
- * */
-
-const sessOpts = {
-  genid: req => {
-    return uuid(); // use UUIDs for session IDs
-  },
-  store: new FileStore(),
-  secret: config.keys.secret,
-  resave: false,
-  saveUninitialized: true,
-  rolling: true,
-  name: 'sid',
-  cookie: {
-    httpOnly: true,
-    maxAge: 20 * 60 * 1000,
-    activeDuration: 5 * 60 * 1000,
-    secure: false
-  }
-};
-
-if (config.keys.prod) {
-  app.set('trust proxy', 1);
-  sessOpts.cookie.secure = true;
-}
 app.use(
   morgan(
     '[:date[iso]] :method :url :status :response-time ms - :res[content-length]'
@@ -130,7 +96,6 @@ app.use(addRequestId);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(formData.parse());
-app.use(session(sessOpts));
 app.use(cookieParser());
 
 /** Passport initialization */
@@ -165,17 +130,58 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-// /**
-//  * Login a new user
-//  *
-//  * @param {request} req
-//  * @param {response} res
-//  * @param {middleware} next
-//  * @public
-//  */
+// ###### SESSION MIDDLEWARE ######
+// const session = require('express-session');
+// const FileStore = require('session-file-store')(session);
+// const uuid = require('uuid/v4');
 
-// app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }));
-// app.post('/login_pass_jwt', passport.authenticate('jwt', {	session: false}));
+/**
+ * Configure all application middleware's
+ *
+ * @description
+ * Use `application-level` middleware for common functionality,
+ * including: `logging`, `parsing`, and `session` handling.
+ *
+ * */
+
+// const sessOpts = {
+//   genid: req => {
+//     return uuid(); // use UUIDs for session IDs
+//   },
+//   store: new FileStore(),
+//   secret: config.keys.secret,
+//   resave: false,
+//   saveUninitialized: true,
+//   rolling: true,
+//   name: 'sid',
+//   cookie: {
+//     httpOnly: true,
+//     maxAge: 20 * 60 * 1000,
+//     activeDuration: 5 * 60 * 1000,
+//     secure: false
+//   }
+// };
+
+// if (config.keys.prod) {
+//   app.set('trust proxy', 1);
+//   sessOpts.cookie.secure = true;
+// }
+
+// app.use(session(sessOpts));
+
+/*
+function requireAdminLogin(req, res, next) {
+  if (req.session.admin) next();
+  else res.redirect('/login');
+}
+
+function requireUserLogin(req, res, next) {
+  if (req.session.username) next();
+  else res.redirect('/login');
+}
+*/
+
+// ###### LOGOUT ######
 
 // /**
 //  * Logout current user
@@ -214,17 +220,5 @@ function logout(req, res) {
 	req.logout();
 	req.flash('success_msg', 'You are logged out');
 	res.redirect('/api/login');
-}
-*/
-
-/*
-function requireAdminLogin(req, res, next) {
-  if (req.session.admin) next();
-  else res.redirect('/login');
-}
-
-function requireUserLogin(req, res, next) {
-  if (req.session.username) next();
-  else res.redirect('/login');
 }
 */
