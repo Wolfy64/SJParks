@@ -36,8 +36,14 @@ const login = async (req, res) => {
   respond(res, false, null, 'User or Password do not match !');
 };
 
+const logout = (req, res) => {
+  res.clearCookie('token');
+  respond(res, true);
+};
+
 module.exports = {
   auth,
   home,
-  login
+  login,
+  logout
 };
