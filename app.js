@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 // const formData = require('express-form-data'); // ⁉️Why do we need it ? we already send an object with react.
 // const addRequestId = require('express-request-id')(); // ⁉️ What do we use that and not the user ID ?
-const passport = require('passport');
+// const passport = require('passport');
 // ⁉️We already use JWT into a cooki Do we need it ?
 // const ExtractJwt = require('passport-jwt').ExtractJwt;
 // const LocalStrategy = require('passport-local').Strategy;
@@ -172,47 +172,5 @@ function requireAdminLogin(req, res, next) {
 function requireUserLogin(req, res, next) {
   if (req.session.username) next();
   else res.redirect('/login');
-}
-*/
-
-// ###### LOGOUT ######
-
-// /**
-//  * Logout current user
-//  *
-//  * @param {request} req
-//  * @param {response} res
-//  * @param {middleware} next
-//  * @public
-//  */
-
-/*
-// Logout current user
-function logout(req, res, next) {
-  res.clearCookie('token');
-  respond(res, true);
-}
-*/
-
-/*
-router.get('/logout', function logout(req, res, next) {
-  console.log('[logout] runs')
-  res.clearCookie('token');
-  res.sendStatus(205);
-  next();
-  req.session.destroy(() => {
-    console.log('User signed out.');
-  });
-  req.logout();
-  req.flash('You are logged out');
-});
-*/
-
-/*
-function logout(req, res) {
-	req.session.destroy(() => console.log('User signed out.'));
-	req.logout();
-	req.flash('success_msg', 'You are logged out');
-	res.redirect('/api/login');
 }
 */
