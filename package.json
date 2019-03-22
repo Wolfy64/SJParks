@@ -2,16 +2,15 @@
   "name": "sjparks",
   "version": "1.1.0",
   "description": "An app made to help the City of San Jose communicate with residents a little better. ",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "heroku-postbuild": "cd client && npm install && npm run build",
     "setup": "npm install && cd client && npm install",
-    "start": "node server.js",
+    "start": "node index.js",
     "dev": "run-p server client",
     "client": "cd client && npm run start",
-    "server": "nodemon server.js",
-    "test": "cd client && npm run test",
-    "mongo": "mongod"
+    "server": "nodemon index.js",
+    "test": "cd client && npm run test"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
