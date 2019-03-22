@@ -68,12 +68,12 @@ app.use((err, req, res, next) => {
 //Configuring CI if in Production Use*
 if (['production', 'ci'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
-
+}
   //Serves Index File to Alll Paths that Have not been set*
   app.get('*', (req, res) => {
     res.sendFile(path.resolve('client', 'build', 'index.html'));
   });
-}
+
 /* Handles Promise Rejection Errors  Important*/
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
