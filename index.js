@@ -1,6 +1,5 @@
 /*jshint esversion: 8 */
 require('dotenv-safe').config({ allowEmptyValues: true });
-require('dotenv').config();
 const express = require('express');
 const config = require('./configurations');
 const mongoose = require('mongoose', { useMongoClient: true });
@@ -13,13 +12,11 @@ const formData = require('express-form-data');
 const addRequestId = require('express-request-id')();
 const passport = require('passport');
 /* FILES TO REQUIRE */
-
+//Passport Auth
 require('./services/passport');
-
+const path = require('path');
 let app = express();
-
 const db = require('./models');
-
 /* Routers */
 const publicRouter = require('./routes/publicRoutes');
 const apiRouter = require('./routes/apiRoutes');
@@ -68,33 +65,29 @@ app.use((err, req, res, next) => {
   });
 });
 
-//Configuring CI if in Production Use
+//Configuring CI if in Production Use*
 if (['production', 'ci'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'));
 
-  //Serves Index File to Alll Paths that Have not been set
-  const path = require('path');
+  //Serves Index File to Alll Paths that Have not been set*
   app.get('*', (req, res) => {
     res.sendFile(path.resolve('client', 'build', 'index.html'));
   });
 }
-/* Handles Promise Rejection Errors */
+/* Handles Promise Rejection Errors  Important*/
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
   // Application specific logging, throwing an error, or other logic here
 });
 /* Handles Closing DB Connection On Exit or CTRL-D  */
-function handleExit() {
+const handleExit = () => {
   mongoose.connection.close();
-  console.log('DB Connection Closed');
-
+  console.log(' Server Shutting Down, Sockets Closed, DB Connection Closed');
   process.exit(0);
-}
-// exit process
-// this may close kept alive sockets
-// eslint-disable-next-line no-process-exit
+};
 
-/* Shunts Down Connections Correctly on Exit Important */
+/* Shunts Down Connections Correctly on Exit Important
+ exit process this may close kept alive sockets */
 process.on('SIGINT', handleExit);
 process.on('exit', handleExit);
 
