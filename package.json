@@ -10,8 +10,7 @@
     "dev": "run-p server client",
     "client": "cd client && npm run start",
     "server": "nodemon index.js",
-    "test": "cd client && npm run test",
-    "mongo": "mongod"
+    "test": "cd client && npm run test"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",

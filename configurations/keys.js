@@ -15,7 +15,8 @@ payLoad.url = payLoad.prod
   : process.env.TEST_MONGO_URL;
 payLoad.secret =
   process.env.APP_SECRET || 'Sick as the rhymes, of that kid thats behind';
-payLoad.port = payLoad.prod ? process.env.SERVER_PORT : 5000;
+payLoad.port =
+  payLoad.prod && process.env.PORT ? process.env.PORT : process.env.SERVER_PORT;
 payLoad.accountSid = process.env.TWILIO_ACCOUNT_SID;
 payLoad.authToken = process.env.TWILIO_AUTH_TOKEN;
 payLoad.cloudinaryOptions.cloud_name = process.env.CLOUDINARY_CLOUD_NAME;
