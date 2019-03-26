@@ -10,6 +10,8 @@ class App extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/auth');
+    if (!request.ok) return console.error(request.statusText);
+
     const { success, payload } = await request.json();
 
     this.setState({
