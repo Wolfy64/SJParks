@@ -21,6 +21,7 @@ class Subscribe extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/api/parks');
+    if (!request.ok) return this.setState({ message: request.statusText });
     const { success, message, payload } = await request.json();
 
     success ? this.setState({ parks: payload }) : this.setState({ message });
