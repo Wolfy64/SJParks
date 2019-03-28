@@ -1,26 +1,21 @@
 /*jshint esversion: 8 */
 import React from 'react';
-import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
 import SelectedPark from '../SelectedPark';
 import EditMessage from './EditMessage';
 import { Container } from './styles';
-
+import { fetchParks } from '../../helperMethods/fetchParks';
 class NewUpdate extends React.Component {
   state = {
     parks: [],
     parkSelected: []
   };
 
-  componentDidMount() {
-    makeRequest('/api/parks')
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          parks: res
-        })
-      })
-      .catch(err => err);
+  async componentDidMount() {
+    const json = await fetchParks();
+    this.setState({
+      parks: json
+    });
   }
 
   handleAddPark = park => {
@@ -81,7 +76,7 @@ class NewUpdate extends React.Component {
           />
         </Container>
         <Container>
-          <div className='col3'>
+          <div className="col3">
             {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
             ) : (

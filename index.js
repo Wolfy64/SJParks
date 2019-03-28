@@ -18,7 +18,7 @@ const path = require('path');
 let app = express();
 const db = require('./models');
 /* Routers */
-const publicRouter = require('./routes/publicRoutes');
+const authRouter = require('./routes/authRoutes');
 const apiRouter = require('./routes/apiRoutes');
 
 morgan.token('id', req => req.sessionID.split('-')[0]);
@@ -43,19 +43,21 @@ app.use(
 app.use(morgan('combined'));
 app.use(cors());
 app.use(flash());
-app.set('view engine', 'pug');
-// app.use(express.static(path.join(__dirname, config.keys.path)));
 app.use(addRequestId);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(formData.parse());
 app.use(cookieParser());
 /** Passport initialization */
+
 app.use(passport.initialize());
 app.use(passport.session());
-//*  */ Routers
+
+// Routes
 app.use('/api', apiRouter);
-app.use('/', publicRouter);
+
+/* Auth Routes */
+app.use('/auth', authRouter);
 
 /** Error Handlers */
 app.use((err, req, res, next) => {
@@ -63,6 +65,10 @@ app.use((err, req, res, next) => {
     success: false,
     message: `Something went wrong: ${err}`
   });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve('client', 'public', 'index.html'));
 });
 
 //Configuring CI if in Production Use*

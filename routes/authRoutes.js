@@ -1,22 +1,10 @@
-/*
-router.get('/logout', function logout(req, res, next) {
-  console.log('[logout] runs')
-  res.clearCookie('token');
-  res.sendStatus(205);
-  next();
-  req.session.destroy(() => {
-    console.log('User signed out.');
-  });
-  req.logout();
-  req.flash('You are logged out');
-});
-*/
+const express = require('express');
+const { auth } = require('../controllers');
+const router = express.Router();
 
-/*
-function logout(req, res) {
-	req.session.destroy(() => console.log('User signed out.'));
-	req.logout();
-	req.flash('success_msg', 'You are logged out');
-	res.redirect('/api/login');
-}
-*/
+router.get('/auth', auth.auth);
+router.post('/login', auth.login);
+router.get('/logout', auth.logout);
+router.use(auth.home);
+
+module.exports = router;

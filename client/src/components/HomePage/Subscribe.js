@@ -9,6 +9,7 @@ import Button from '../UI/Generic/Button';
 import phoneValidation from '../../utils/phoneValidation';
 import { msgErr } from '../../config/messages';
 import { SubscribeContainer, Form } from './styles';
+import { fetchParks } from '../../helperMethods/fetchParks';
 
 const initialState = {
   parks: [],
@@ -20,10 +21,8 @@ class Subscribe extends React.Component {
   state = initialState;
 
   async componentDidMount() {
-    const request = await makeRequest('/api/parks');
-    const { success, message, payload } = await request.json();
-
-    success ? this.setState({ parks: payload }) : this.setState({ message });
+    const { success, message, payload } = await fetchParks();
+    payload ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -48,26 +47,26 @@ class Subscribe extends React.Component {
 
   handleDeleteAddAllPark = () => this.setState({ parkSelected: [] });
 
-  handleSubmit = async e => {
-    e.preventDefault();
-    const { phone, parkSelected } = this.state;
+  handleSubmit = () => {
+    console.log('SUBMITTED');
+    // const { phone, parkSelected } = this.state;
 
-    // Check if data is correct to send them
-    if (!parkSelected.length) this.setState({ message: msgErr.phone });
-    if (!phoneValidation(phone)) this.setState({ message: msgErr.phone });
-    if (!parkSelected.length || !phoneValidation(phone)) return;
+    // // Check if data is correct to send them
+    // if (!parkSelected.length) this.setState({ message: msgErr.phone });
+    // if (!phoneValidation(phone)) this.setState({ message: msgErr.phone });
+    // if (!parkSelected.length || !phoneValidation(phone)) return;
 
-    this.setState({ message: null });
+    // this.setState({ message: null });
 
-    const request = await makeRequest('api/subscriptionLogs', 'POST', {
-      phone,
-      addParks: parkSelected,
-      subscribed: true
-    });
+    // const request = await makeRequest('api/subscriptionLogs', 'POST', {
+    //   phone,
+    //   addParks: parkSelected,
+    //   subscribed: true
+    // });
 
-    const { success, message } = await request.json();
+    // const { success, message } = await request.json();
 
-    success ? this.setState(initialState) : this.setState(message);
+    // success ? this.setState(initialState) : this.setState(message);
   };
 
   render() {
