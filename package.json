@@ -10,7 +10,7 @@
     "dev": "run-p server client",
     "client": "cd client && npm run start",
     "server": "nodemon index.js",
-    "test": "cd client && npm run test"
+    "test": "client/node_modules/.bin/jest"
   },
   "dependencies": {
     "bcrypt": "^3.0.4",
@@ -31,6 +31,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "puppeteer": "^1.13.0",
     "session-file-store": "^1.2.0",
     "twilio": "^3.28.1",
     "uuid": "^3.3.2",
