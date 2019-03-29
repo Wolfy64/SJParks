@@ -234,7 +234,7 @@ const FooterContainer = styled.footer`
   }
 `;
 
-// Need to pass defaultThemeProps to avoid error test
+// Need to add defaultThemeProps to avoid error test
 Jumbotron.defaultProps = defaultThemeProps;
 Nav.defaultProps = defaultThemeProps;
 PresentationBox.defaultProps = defaultThemeProps;
