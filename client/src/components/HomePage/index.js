@@ -7,7 +7,7 @@ import Contact from './Contact';
 import Footer from './Footer';
 import { Jumbotron } from './styles';
 
-const PublicPage = () => (
+const HomePage = () => (
   <>
     <NavBar />
     <Jumbotron />
@@ -17,4 +17,4 @@ const PublicPage = () => (
     <Footer />
   </>
 );
-export default PublicPage;
+export default HomePage;

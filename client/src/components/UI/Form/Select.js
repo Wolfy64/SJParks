@@ -1,22 +1,5 @@
-/*jshint esversion: 8 */
 import React from 'react';
-import styled from 'styled-components';
-
-const Wrapper = styled.div`
-  select {
-    border: solid 1px ${props => props.theme.colors.lightbg};
-    width: 100%;
-    padding: 0.3rem;
-    font-size: 0.7em;
-    margin: 0.3rem 0;
-    max-width: 300px;
-  }
-  label {
-    color: ${props => props.theme.colors.secondary};
-    margin: 0.6rem 0 0 0.3rem;
-  }
-  margin: 0.6rem 0 0;
-`;
+import { Wrapper } from './styles';
 
 const Select = props => {
   const optionsList = Object.entries(props.options).map(([key, value]) => (
@@ -34,7 +17,8 @@ const Select = props => {
         id={props.name}
         name={props.name}
         value={props.value}
-        onChange={props.onChange}>
+        onChange={props.onChange}
+      >
         <option>Choose an option</option>
         {optionsList}
       </select>

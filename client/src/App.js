@@ -24,13 +24,13 @@ class App extends React.Component {
 
   render() {
     const { isAuthenticated, user } = this.state;
-    const Routes = isAuthenticated ? (
+    const routes = isAuthenticated ? (
       <Dashboard user={user} />
     ) : (
       <PublicRoutes />
     );
 
-    return Routes;
+    return routes;
   }
 }
 
