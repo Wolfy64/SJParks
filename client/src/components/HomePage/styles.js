@@ -1,7 +1,7 @@
-/*jshint esversion: 8 */
 import styled from 'styled-components';
+import { defaultThemeProps } from '../../styles/theme';
 
-export const Jumbotron = styled.div`
+const Jumbotron = styled.div`
   background-color: ${props => props.theme.colors.primary};
   height: 40vh;
 
@@ -13,7 +13,7 @@ export const Jumbotron = styled.div`
 /********  NavBar  *******/
 /********* {Nav} *********/
 
-export const Nav = styled.nav`
+const Nav = styled.nav`
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding-top: 1.2rem;
@@ -64,7 +64,7 @@ export const Nav = styled.nav`
 /*************  About  ************/
 /*** {PresentationBox, Summary} ***/
 
-export const PresentationBox = styled.main`
+const PresentationBox = styled.main`
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-items: center;
@@ -95,7 +95,7 @@ export const PresentationBox = styled.main`
   }
 `;
 
-export const Summary = styled.div`
+const Summary = styled.div`
   align-self: center;
   padding-left: 5rem;
 
@@ -121,7 +121,7 @@ export const Summary = styled.div`
 /***********  Subscribe  **********/
 /*** {SubscribeContainer, Form} ***/
 
-export const SubscribeContainer = styled.div`
+const SubscribeContainer = styled.div`
   h2 {
     display: none;
   }
@@ -142,7 +142,7 @@ export const SubscribeContainer = styled.div`
   }
 `;
 
-export const Form = styled.form`
+const Form = styled.form`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   justify-items: center;
@@ -158,7 +158,6 @@ export const Form = styled.form`
   @media screen and (max-width: ${props => props.theme.displays.tablet}) {
     height: auto;
     .searchContainer {
-      
     }
   }
 `;
@@ -166,7 +165,7 @@ export const Form = styled.form`
 /************  Contact  ***********/
 /*** {ContactContainer, Survey} ***/
 
-export const ContactContainer = styled.div`
+const ContactContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   grid-gap: 1rem;
@@ -190,7 +189,8 @@ export const ContactContainer = styled.div`
     }
   }
 `;
-export const Survey = styled.article`
+
+const Survey = styled.article`
   width: 500px;
 
   p {
@@ -219,7 +219,7 @@ export const Survey = styled.article`
 /********  Footer  *******/
 /*** {FooterContainer} ***/
 
-export const FooterContainer = styled.footer`
+const FooterContainer = styled.footer`
   font-size: 0.8rem;
   color: ${props => props.theme.colors.light};
   background-color: ${props => props.theme.colors.primary};
@@ -233,3 +233,26 @@ export const FooterContainer = styled.footer`
     height: auto;
   }
 `;
+
+// Need to pass defaultThemeProps to avoid error test
+Jumbotron.defaultProps = defaultThemeProps;
+Nav.defaultProps = defaultThemeProps;
+PresentationBox.defaultProps = defaultThemeProps;
+Summary.defaultProps = defaultThemeProps;
+SubscribeContainer.defaultProps = defaultThemeProps;
+Form.defaultProps = defaultThemeProps;
+ContactContainer.defaultProps = defaultThemeProps;
+Survey.defaultProps = defaultThemeProps;
+FooterContainer.defaultProps = defaultThemeProps;
+
+export {
+  Jumbotron,
+  Nav,
+  PresentationBox,
+  Summary,
+  SubscribeContainer,
+  Form,
+  ContactContainer,
+  Survey,
+  FooterContainer
+};
