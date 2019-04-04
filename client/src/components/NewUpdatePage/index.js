@@ -1,4 +1,3 @@
-/*jshint esversion: 8 */
 import React from 'react';
 import makeRequest from '../../utils/makeRequest';
 import SearchPark from '../SearchPark';
@@ -12,15 +11,12 @@ class NewUpdate extends React.Component {
     parkSelected: []
   };
 
-  componentDidMount() {
-    makeRequest('/api/parks')
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          parks: res
-        })
-      })
-      .catch(err => err);
+  async componentDidMount() {
+    const request = await makeRequest(`${window.origin}/api/parks`);
+    if (!request.ok) return this.setState({ message: request.statusText });
+    const { success, message, payload } = await request.json();
+
+    success ? this.setState({ parks: payload }) : this.setState({ message });
   }
 
   handleAddPark = park => {
@@ -81,7 +77,7 @@ class NewUpdate extends React.Component {
           />
         </Container>
         <Container>
-          <div className='col3'>
+          <div className="col3">
             {this.state.parkSelected.length === 0 ? (
               <p>Select parks you want to reach</p>
             ) : (
