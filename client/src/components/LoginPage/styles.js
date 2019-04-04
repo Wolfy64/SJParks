@@ -1,7 +1,7 @@
-/*jshint esversion: 8 */
 import styled from 'styled-components';
+import { defaultThemeProps } from '../../styles/theme';
 
-export const Container = styled.div`
+const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: ${props => props.theme.colors.dark};
@@ -9,7 +9,7 @@ export const Container = styled.div`
   align-content: center;
 `;
 
-export const Form = styled.form`
+const Form = styled.form`
   display: grid;
   width: 80%;
   height: 250px;
@@ -27,3 +27,7 @@ export const Form = styled.form`
     color: ${props => props.theme.colors.danger};
   }
 `;
+
+Container.defaultProps = defaultThemeProps;
+Form.defaultProps = defaultThemeProps;
+export { Container, Form };
