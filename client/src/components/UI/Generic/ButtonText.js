@@ -1,16 +1,4 @@
-/*jshint esversion: 8 */
 import React from 'react';
-import styled from 'styled-components';
+import { BtnText } from './styles';
 
-const Btn = styled.button`
-  background: inherit;
-  margin: 3px;
-  color: ${props => props.theme.colors.info};
-  border: none;
-  :hover{
-    text-decoration: underline;
-  }
-`;
-
-const ButtonText = props => <Btn {...props}>{props.children}</Btn>;
-export default ButtonText;
+export default props => <BtnText {...props}>{props.children}</BtnText>;

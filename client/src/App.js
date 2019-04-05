@@ -10,6 +10,8 @@ class App extends React.Component {
 
   async componentDidMount() {
     const request = await makeRequest('/auth');
+    if (!request.ok) return console.error(request.statusText);
+
     const { success, payload } = await request.json();
 
     this.setState({
@@ -22,13 +24,13 @@ class App extends React.Component {
 
   render() {
     const { isAuthenticated, user } = this.state;
-    const Routes = isAuthenticated ? (
+    const routes = isAuthenticated ? (
       <Dashboard user={user} />
     ) : (
       <PublicRoutes />
     );
 
-    return Routes;
+    return routes;
   }
 }
 

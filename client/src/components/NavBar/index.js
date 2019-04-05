@@ -1,13 +1,15 @@
-/*jshint esversion: 8 */
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import Title from './Title';
 import BurgerIcon from './BurgerIcon';
 import makeRequest from '../../utils/makeRequest';
 import { NavContainer } from './styles';
 
-import { NavLink } from 'react-router-dom';
-
 class NavBar extends React.Component {
+  static defaultProps = {
+    user: { _id: 'fake_id' }
+  };
+
   state = {
     isMobile: false,
     show: true

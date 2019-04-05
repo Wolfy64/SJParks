@@ -1,7 +1,16 @@
-/*jshint esversion: 8 */
 import styled from 'styled-components';
+import { defaultThemeProps } from '../../styles/theme';
 
-export const NavContainer = styled.div`
+const BurgerIcon = styled.div`
+  height: 20px;
+  width: 30px;
+  padding: 40px 20px;
+  position: fixed;
+  right: 0px;
+  justify-content: center;
+`;
+
+const NavContainer = styled.div`
   border-right: solid 3px ${props => props.theme.colors.primary};
   position: fixed;
   top: 0;
@@ -50,3 +59,20 @@ export const NavContainer = styled.div`
     background-color: ${props => props.theme.colors.primary};
   }
 `;
+
+const Title = styled.div`
+  text-align: center;
+  margin: 1rem 0;
+  background: ${props => props.theme.colors.dark};
+
+  h1 {
+    font-size: 1.8em;
+    margin-bottom: 0.3rem;
+  }
+`;
+
+BurgerIcon.defaultProps = defaultThemeProps;
+NavContainer.defaultProps = defaultThemeProps;
+Title.defaultProps = defaultThemeProps;
+
+export { BurgerIcon, NavContainer, Title };
