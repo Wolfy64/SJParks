@@ -19,15 +19,14 @@ const initialState = {
 export default class Parks extends Component {
   state = initialState;
 
-  componentDidMount() {
-    makeRequest('/api/parks', 'GET')
-      .then(res => res.json())
-      .then(res => {
-        this.setState({ parks: res });
-      })
-      .catch(err => err);
+  async componentDidMount() {
+    const request = await makeRequest(`${window.origin}/api/parks`);
+    if (!request.ok) return this.setState({ message: request.statusText });
+    const { success, message, payload } = await request.json();
+
+    success ? this.setState({ parks: payload }) : this.setState({ message });
   }
-  
+
   handleDeletePark = park => {
     if (
       window.confirm(
@@ -38,15 +37,15 @@ export default class Parks extends Component {
           )
       )
     ) {
-      console.log(park._id)
-      makeRequest('/api/parks', 'DELETE', {_id: park._id})
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          parks: this.state.parks.filter(e => e._id !== park._id)
+      console.log(park._id);
+      makeRequest('/api/parks', 'DELETE', { _id: park._id })
+        .then(res => res.json())
+        .then(res => {
+          this.setState({
+            parks: this.state.parks.filter(e => e._id !== park._id)
+          });
         })
-      })
-      .catch(err => err);
+        .catch(err => err);
     }
   };
 
@@ -77,17 +76,17 @@ export default class Parks extends Component {
     makeRequest('/api/parks', 'POST', dataForm)
       .then(res => res.json())
       .then(park => {
-        if(park._id) {
-          const parks = this.state.parks
-          parks.unshift(park)
+        if (park._id) {
+          const parks = this.state.parks;
+          parks.unshift(park);
           console.log('[ParksPage] POST,', parks);
           this.setState({
             parks,
             newName: '',
             newCode: ''
-          })
+          });
         } else {
-          console.log('[ParksPage] POST,', park.message)
+          console.log('[ParksPage] POST,', park.message);
         }
       })
       .catch(err => err);

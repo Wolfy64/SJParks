@@ -1,4 +1,3 @@
-/*jshint esversion: 8 */
 import React from 'react';
 import Textarea from '../UI/Form/Textarea';
 import makeRequest from '../../utils/makeRequest';
@@ -77,7 +76,7 @@ class EditMessage extends React.Component {
   };
 
   handleSendForm = payload => {
-    console.log('[NewUpdate] payload', payload)
+    console.log('[NewUpdate] payload', payload);
     makeRequest('/api/updates', 'POST', payload)
       .then(res => res.json())
       .then(res => {
@@ -98,24 +97,24 @@ class EditMessage extends React.Component {
     const hasErrors = showErrors && formErrors;
 
     return (
-      <form className='editMessage' onSubmit={this.handleSubmit}>
+      <form className="editMessage" onSubmit={this.handleSubmit}>
         <Title>
-          <label className='label'>Add Title(s)</label>
-          <label className='switch'>
+          <label className="label">Add Title(s)</label>
+          <label className="switch">
             <input
-              name='title'
-              type='checkbox'
-              value='title'
+              name="title"
+              type="checkbox"
+              value="title"
               onChange={this.toggleTitle}
               {...this.state.hasTitle}
             />
-            <span className='slider round' />
+            <span className="slider round" />
           </label>
         </Title>
 
         <Textarea
-          placeholder='Write your message here'
-          name='message'
+          placeholder="Write your message here"
+          name="message"
           onChange={this.handleChange}
           value={message}
           error={hasErrors && formErrors.message}
@@ -131,7 +130,7 @@ class EditMessage extends React.Component {
             <p>...Message Preview</p>
           </Preview>
         )}
-        <Button className='button' name='SUBMIT' />
+        <Button className="button" name="SUBMIT" />
       </form>
     );
   }
